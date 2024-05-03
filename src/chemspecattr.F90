@@ -1,0 +1,84 @@
+!>
+!! \file catchem_species_obj.F90
+!! \brief This file contains the module for catchem species
+!! \author Barry Baker
+!! \date 05/2023
+!! \version 0.1
+!!
+!! This file contains the module for catchem species
+!!
+ 
+module ChemSpecAttr
+
+    implicit none
+  
+    type :: Species
+       private
+
+       ! Names 
+       character(len=30) :: long_name  !< long name for species used for netcdf attribute "long_name"
+       character(len=30) :: short_name !< short name for species
+
+       ! Logcial switches
+       logical :: is_gas               !< if true, species is a gas and not an aerosol
+       logical :: is_aero              !< if true, species is aerosol and not a gas
+       logical :: is_tracer            !< if true, species is a tracer and not an aerosol or gas that undergoes chemistry or photolysis
+       logical :: is_advected          !< if true, species is advected
+       logical :: is_drydep            !< if true, species undergoes dry depotiion
+       logical :: is_photolysis        !< if true, species undergoes photolysis
+       logical :: is_gocart_aero       !< if true, species is a GOCART aerosol species
+
+       ! Numerical properties
+       integer :: mw_g                 !< gaseos molecular weight
+       integer :: density              !< particle density (kg/m3)
+       integer :: radius               !< mean molecular diameter in meters
+       integer :: lower_radius         !< lower radius in meters
+       integer :: upper_radius         !< upper radius in meters
+       integer :: viscosity            !< kinematic viscosity (m2/s)
+
+
+       ! Default background concentration
+       real(kind_chem) :: BackgroundVV        !< Background conc [v/v]
+
+       ! Indices
+       integer :: species_index        !< species index in species array
+       integer :: drydep_index         !< drydep index in drydep array
+       integer :: photolysis_index     !< photolysis index in photolysis array
+       integer :: gocart_aero_index    !< gocart_aero index in gocart_aero array
+    end type Species 
+
+  !
+  ! !DEFINED PARAMETERS:
+  !
+  !=========================================================================
+  ! Missing species concentration value if not in restart file and special
+  ! background value not defined
+  !=========================================================================
+  REAL(fp), PARAMETER, PUBLIC :: MISSING_VV  = 1.0e-20_fp ! Missing spc conc
+  
+  contains
+  
+    subroutine init(sp, species_name, atomic_num)
+      class(Species), intent(out) :: sp
+      character(len=*), intent(in) :: species_name
+      integer, intent(in) :: atomic_num
+  
+      sp%name = species_name
+      sp%atomic_number = atomic_num
+    end subroutine init
+  
+    function get_name(this) result(species_name)
+      class(Species), intent(in) :: this
+      character(len=30) :: species_name
+  
+      species_name = this%name
+    end function get_name
+  
+    function get_atomic_number(this) result(atomic_num)
+      class(Species), intent(in) :: this
+      integer :: atomic_num
+  
+      atomic_num = this%atomic_number
+    end function get_atomic_number
+  
+  end module ChemicalSpecies
