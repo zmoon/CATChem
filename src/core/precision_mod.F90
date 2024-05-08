@@ -1,7 +1,7 @@
 !>
 !! \file precision_mod.F90
 !! \brief Module PRECISION\_MOD is used to change the precision of
-!  many variables throughout GEOS-Chem at compile-time.  Also contains
+!  many variables throughout catchem at compile-time.  Also contains
 !  parameters that can be used to represent missing values.
 !! \author Barry Baker
 !! \date 05/2023

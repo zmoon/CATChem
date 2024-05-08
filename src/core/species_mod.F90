@@ -1,5 +1,5 @@
 !>
-!! \file catchem_species_obj.F90
+!! \file species_mod.F90
 !! \brief This file contains the module for catchem species
 !! \author Barry Baker
 !! \date 05/2023
@@ -8,11 +8,12 @@
 !! This file contains the module for catchem species
 !!
  
-module ChemSpecAttr
+module species_mod
 
-    implicit none
+  use precision_mod
+  implicit none
   
-    type :: Species
+  type :: Species
        private
 
        ! Names 
@@ -38,7 +39,7 @@ module ChemSpecAttr
 
 
        ! Default background concentration
-       real(kind_chem) :: BackgroundVV        !< Background conc [v/v]
+       real(kind=fp) :: BackgroundVV        !< Background conc [v/v]
 
        ! Indices
        integer :: species_index        !< species index in species array
@@ -63,8 +64,8 @@ module ChemSpecAttr
       character(len=*), intent(in) :: species_name
       integer, intent(in) :: atomic_num
   
-      sp%name = species_name
-      sp%atomic_number = atomic_num
+      sp%short_name = species_name
+      sp%mw_g = atomic_num
     end subroutine init
   
     function get_name(this) result(species_name)
@@ -81,4 +82,4 @@ module ChemSpecAttr
       atomic_num = this%atomic_number
     end function get_atomic_number
   
-  end module ChemicalSpecies
+  end module species_mod
