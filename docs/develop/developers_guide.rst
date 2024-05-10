@@ -74,4 +74,3 @@ changes.
    you can still clone the repositories via HTTPS, e.g. ::
 
        $ git clone https://github.com/ufs-community/CATChem.git
-
