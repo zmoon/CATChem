@@ -22,7 +22,9 @@ repos:
             (?x)^(
                 src/core/charpak_mod\.F90|
                 src/core/yaml_parser\.F90|
-                src/process/.*\.F90
+                src/process/.*\.F90|
+                drivers/ccpp/.*\.F90|
+                parameters/.*\.F90
             )$
 
   - repo: https://github.com/cheshirekow/cmake-format-precommit
