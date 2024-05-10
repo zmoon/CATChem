@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(
+  CATChem
+  VERSION 0.1.0
+  LANGUAGES Fortran)
+
+include(CMakePrintHelpers)
+
+# If GNU compiler and Debug build type, add extra debug flags
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
+cmake_print_variables(CMAKE_Fortran_COMPILER CMAKE_Fortran_COMPILER_ID CMAKE_BUILD_TYPE)
+if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95" AND CMAKE_BUILD_TYPE MATCHES "Debug")
+  add_compile_options(
+    -g
+    -Wall
+    -Wextra
+    -Og
+    -pedantic
+    -fcheck=all
+    -ffpe-trap=invalid,zero,overflow
+    -fbacktrace
+    -fmax-errors=1)
+endif()
+
+add_subdirectory(src)
