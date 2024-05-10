@@ -15,14 +15,29 @@ cmake_print_variables(CMAKE_Fortran_COMPILER CMAKE_Fortran_COMPILER_ID CMAKE_BUI
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95" AND CMAKE_BUILD_TYPE MATCHES "Debug")
   add_compile_options(
     -g
+    -Og
     -Wall
     -Wextra
-    -Og
     -pedantic
     -fcheck=all
     -ffpe-trap=invalid,zero,overflow
     -fbacktrace
-    -fmax-errors=1)
+    -fmax-errors=0)
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel" AND CMAKE_BUILD_TYPE MATCHES "Debug")
+  add_compile_options(
+    -g
+    -O0
+    -warn
+    all
+    -check
+    all
+    -implicitnone
+    -fpe0
+    -traceback
+    -error-limit
+    0
+    -diag-disable
+    10448)
 endif()
 
 add_subdirectory(src)
