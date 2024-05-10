@@ -128,7 +128,7 @@ MODULE QFYAML_Mod
       CHARACTER(LEN=1),  PARAMETER :: QFYAML_category_separator = "%"
 
       ! The default string for data that is not yet stored
-      CHARACTER(LEN=21), PARAMETER :: unstored_data_string="__UNSTORED_DATA_STRING"
+      CHARACTER(LEN=22), PARAMETER :: unstored_data_string="__UNSTORED_DATA_STRING"
 
       ! Type for a single variable
       TYPE, PRIVATE :: QFYAML_var_t

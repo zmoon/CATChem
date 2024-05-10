@@ -33,7 +33,7 @@ contains
    end subroutine defineByLongName
 
    subroutine defineByShortName(diag, shortName, longName, units)
-      class(DiagnosticType), intent(inout) :: this
+      class(DiagnosticType), intent(inout) :: diag
       character(len=*), intent(in) :: shortName, longName, units
 
       diag%shortName = shortName
@@ -42,7 +42,7 @@ contains
    end subroutine defineByShortName
 
    subroutine defineByUnits(diag, units, longName, shortName)
-      class(DiagnosticType), intent(inout) :: this
+      class(DiagnosticType), intent(inout) :: diag
       character(len=*), intent(in) :: units, longName, shortName
 
       diag%units = units

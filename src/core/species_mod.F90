@@ -72,14 +72,14 @@ contains
       class(Species), intent(in) :: this
       character(len=30) :: species_name
 
-      species_name = this%name
+      species_name = this%short_name
    end function get_name
 
-   function get_atomic_number(this) result(atomic_num)
-      class(Species), intent(in) :: this
-      integer :: atomic_num
+   ! function get_atomic_number(this) result(atomic_num)
+   !    class(Species), intent(in) :: this
+   !    integer :: atomic_num
 
-      atomic_num = this%atomic_number
-   end function get_atomic_number
+   !    atomic_num = this%atomic_number
+   ! end function get_atomic_number
 
 end module species_mod
