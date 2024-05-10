@@ -1,7 +1,7 @@
 module plume_rise_mod
 
   use catchem_constants, only : kind_chem,g => con_g, cp => con_cp, &
-                                 r_d => con_rd, r_v => con_rv 
+                                 r_d => con_rd, r_v => con_rv
 
   use catchem_config
 
@@ -68,7 +68,7 @@ contains
 
 
 !     integer, parameter :: nspecies=num_ebu
-      real(kind=kind_chem), dimension (num_ebu) :: eburn_in 
+      real(kind=kind_chem), dimension (num_ebu) :: eburn_in
       real(kind=kind_chem), dimension (kte,num_ebu) :: eburn_out
       real(kind=kind_chem), dimension (kte) :: u_in ,v_in ,w_in ,theta_in ,pi_in  &
                               ,rho_phyin ,qv_in ,zmid    &
@@ -189,7 +189,7 @@ contains
             enddo
           enddo
        enddo
-       
+
        do j=jts,jte
           do i=its,ite
             select case (plumerise_flag)
@@ -271,7 +271,7 @@ is_mozcart : &
                 do k = kts,kte
                   sum = sum + ebu(i,k,j,p_ebu_co)
                 end do
-                if( sum > 0. ) then             
+                if( sum > 0. ) then
                   ratio = ebu(i,kts,j,p_ebu_co)/sum
                 else
                   ratio = 0.

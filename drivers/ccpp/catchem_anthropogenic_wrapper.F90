@@ -32,7 +32,7 @@ contains
 
 !> \defgroup catchem_anthropogenic_group CATChem anthro wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_anthropogenic_wrapper CATChem anthro  wrapper Module  
+!>\defgroup catchem_anthropogenic_wrapper CATChem anthro  wrapper Module
 !> \ingroup catchem_anthropogenic_group
 !! This is the CATChem anthro  wrapper Module
 !! \section arg_table_catchem_anthropogenic_wrapper_run Argument Table
@@ -87,7 +87,7 @@ contains
 
     integer :: i, j, jp, k, kp, n
     real(kind_phys) :: random_factor(ims:im,jms:jme)
-  
+
 
     errmsg = ''
     errflg = 0
@@ -96,7 +96,7 @@ contains
     kemit             = kemit_in
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -126,7 +126,7 @@ contains
         jdate,garea,rlat,rlon, &
         xlat,xlong,dxy,  &
         pr3d,ph3d,phl3d,tk3d,prl3d,spechum,emi_in,                      &
-        rri,t_phy,p_phy,rho_phy,dz8w,p8w,z_at_w,                        & 
+        rri,t_phy,p_phy,rho_phy,dz8w,p8w,z_at_w,                        &
         ntso2,ntsulf,ntpp25,ntbc1,ntoc1,ntpp10,ntrac,gq0,               &
         num_chem, num_ebu_in,num_emis_ant,                              &
         emis_ant,ppm2ugkg,chem,random_factor,                           &
@@ -206,8 +206,8 @@ contains
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
 
     real(kind_phys), dimension(ims:ime, kms:kemit, jms:jme, num_emis_ant), intent(inout) :: emis_ant
-    
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, p_phy, rho_phy, dz8w, p8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) :: xlat, xlong, dxy
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
@@ -255,7 +255,7 @@ contains
     xlong          = 0._kind_phys
     dxy            = 0._kind_phys
     chem           = 0._kind_phys
-    
+
     emiss_ash_dtt  = 0._kind_phys
     num_emis_voll  =0._kind_phys
     so2_mass       = 0._kind_phys
@@ -268,7 +268,7 @@ contains
     curr_mth = jdate(2)
     curr_day = jdate(3)
     ! -- initialize local arrays
-    !idate=20220115  
+    !idate=20220115
     if (curr_yr==2022.and. curr_mth==1.and. curr_day==15) then
     erup_beg=3*3600.
     erup_dt=18000. !second
@@ -309,7 +309,7 @@ contains
       emis_ant = 0.
       emis_vol = 0.
     end if
-    
+
     do i=its,ite
      dxy  (i,1)=garea(i)
      xlat (i,1)=rlat(i)*180./pi
@@ -387,7 +387,7 @@ contains
        !emiss_ash_height(igbox,jgbox)  = 18000.
        emiss_ash_height(igbox,jgbox)  = 12000.
     endif
-    endif !num_emis_voll 
+    endif !num_emis_voll
 
     ! -- anthropagenic
     emiss_ab  = 0.   ! background
@@ -417,7 +417,7 @@ contains
         enddo
       enddo
     endif
-  
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))
@@ -588,7 +588,7 @@ contains
           !end if
 ! now we got volcanoc emissions, they need to be added to chem array
 !
-!       write(message,'(" Do volcanic emissions ")') 
+!       write(message,'(" Do volcanic emissions ")')
 !       CALL WRF_MESSAGE (message)
 
       do j=jts,jte

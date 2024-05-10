@@ -97,7 +97,7 @@ contains
       case default
         ! -- not yet implemented
     end select
-    
+
   end subroutine gocart_diag_cmass
 
 
@@ -124,7 +124,7 @@ contains
       m = m + 1
       w(:,:,m,ipos) = ugkg*v(:,:,n) !kg/m2/s
     end do
-    
+
   end subroutine gocart_diag_store
 
 end module gocart_diag_mod

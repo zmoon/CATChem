@@ -36,7 +36,7 @@ CONTAINS
                                             frocean,fraci,        &
                                             xlat,xlong,           &
                                             area,random_factor
-                                             
+
      REAL(kind=kind_chem), DIMENSION( num_chem ),                 &
            INTENT(INOUT ) ::                                   chem_arr
      REAL(kind=kind_chem), DIMENSION( num_emis_seas),                    &
@@ -69,7 +69,7 @@ CONTAINS
 
 ! -- NGAC sea salt scheme
 !Grid box efficiency to emission (fraction of sea water)
-              
+
     deep_lakes_mask=1.0
     dummylon = xlong
 
@@ -166,7 +166,7 @@ CONTAINS
    real(kind=kind_chem),    intent(inout)        :: nemissions      ! Number Emissions Flux [# m-2 s-1]
    integer, intent(out)          :: rc              ! Error return code:
                                                     !  0 - all is well
-                                                    !  1 - 
+                                                    !  1 -
 ! !Local Variables
    integer       :: ir
    real(kind=kind_chem)          :: w                               ! Intermediary wind speed [m s-1]

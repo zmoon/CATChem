@@ -22,7 +22,7 @@ MODULE CCPR_<yourname>_mod
     !   USE TOOLS_MOD
       USE State_MOD, ONLY : Ext_State
       USE State_MOD,  ONLY : State
-    
+
       IMPLICIT NONE
       PRIVATE
     !
@@ -56,16 +56,16 @@ MODULE CCPR_<yourname>_mod
        CHARACTER(LEN=31), ALLOCATABLE  :: SpcNames(:)
        CHARACTER(LEN=61), ALLOCATABLE  :: SpcScalFldNme(:) ! Names of scale factor fields
        TYPE(MyInst), POINTER           :: NextInst => NULL()
-    
+
         !=================================================================
         ! Module specific variables/arrays/data pointers come below
         !=================================================================
-    
+
       END TYPE MyInst
-    
+
       ! Pointer to all instances
       TYPE(MyInst), POINTER            :: AllInst => NULL()
-    
+
     CONTAINS
     !EOC
     !------------------------------------------------------------------------------
@@ -109,19 +109,19 @@ MODULE CCPR_<yourname>_mod
     !
         TYPE(MyInst), POINTER :: Inst => NULL()
         CHARACTER(LEN=255)    :: MSG, LOC
-    
+
         !=================================================================
         ! CCPR_<yourname>_RUN begins here!
         !=================================================================
         LOC = 'CCPR_<yourname>_RUN (CCPR_<yourname>_MOD.F90)'
-    
+
         ! Enter
         CALL ENTER( HcoState%Config%Err, LOC, RC )
         IF ( RC /= SUCCESS ) THEN
             CALL ERROR( 'ERROR 0', RC, THISLOC=LOC )
             RETURN
         ENDIF
-    
+
         ! Get pointer to this instance. Varible Inst contains all module
         ! variables for the current instance. The instance number is
         ! ExtState%<yourname>.
@@ -131,18 +131,18 @@ MODULE CCPR_<yourname>_mod
            CALL ERROR(MSG,RC)
            RETURN
         ENDIF
-    
+
         !=================================================================
         ! Module code comes below
         !=================================================================
-    
-    
+
+
         ! Cleanup
         Inst => NULL()
-    
+
         ! Return w/ success
         CALL LEAVE( HcoState%Config%Err, RC )
-    
+
       END SUBROUTINE CCPR_AeroCom_Run
     !EOC
     !------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ MODULE CCPR_<yourname>_mod
     !
         TYPE(State),  POINTER       :: HcoState   ! CATChem state
         INTEGER,          INTENT(INOUT) :: RC
-    
+
     ! !REVISION HISTORY:
     !  04 Jun 2015 - C. Keller   - Initial version
     !  See https://github.com/ufs-community/CATChem for complete history
@@ -188,23 +188,23 @@ MODULE CCPR_<yourname>_mod
         TYPE(MyInst), POINTER          :: Inst => NULL()
         INTEGER                        :: ExtNr, N
         CHARACTER(LEN=255)             :: MSG, LOC
-    
+
         !=================================================================
         ! CCPR_<yourname>_INIT begins here!
         !=================================================================
         LOC = 'CCPR_<yourname>_INIT (CCPR_<yourname>_MOD.F90)'
-    
+
         ! process Nr.
         ExtNr = GetExtNr( HcoState%Config%ExtList, TRIM(ExtName) )
         IF ( ExtNr <= 0 ) RETURN
-    
+
         ! Enter
         CALL ENTER( HcoState%Config%Err, LOC, RC )
         IF ( RC /= SUCCESS ) THEN
             CALL ERROR( 'ERROR 1', RC, THISLOC=LOC )
             RETURN
         ENDIF
-    
+
         ! Create instance for this simulation. Link instance number to the ExtState object
         ! for future reference to the instance. See InstCreate for more details.
         CALL InstCreate ( ExtNr, ExtState%<yourname>, Inst, RC )
@@ -212,20 +212,20 @@ MODULE CCPR_<yourname>_mod
            CALL ERROR ( 'Cannot create <yourname> instance', RC )
            RETURN
         ENDIF
-    
+
         ! Get species IDs.
         CALL GetExtHcoID( HcoState, ExtNr, Inst%SpcIDs, Inst%SpcNames, Inst%nSpc, RC )
         IF ( RC /= SUCCESS ) THEN
             CALL ERROR( 'ERROR 2', RC, THISLOC=LOC )
             RETURN
         ENDIF
-    
+
         ! There must be at least one species
         IF ( Inst%nSpc == 0 ) THEN
            CALL ERROR ( 'No <yourname> species specified', RC )
            RETURN
         ENDIF
-    
+
         ! Determine scale factor to be applied to each species. This is 1.00
         ! by default, but can be set in the CATChem configuration file via setting
         ! Scaling_<SpcName>.
@@ -235,7 +235,7 @@ MODULE CCPR_<yourname>_mod
             CALL ERROR( 'ERROR 3', RC, THISLOC=LOC )
             RETURN
         ENDIF
-    
+
         ! Get species mask fields
         CALL GetExtSpcVal( HcoState%Config, ExtNr, Inst%nSpc, &
                            Inst%SpcNames, 'ScaleField', CCPR_NOSCALE, Inst%SpcScalFldNme, RC )
@@ -243,18 +243,18 @@ MODULE CCPR_<yourname>_mod
             CALL ERROR( 'ERROR 4', RC, THISLOC=LOC )
             RETURN
         ENDIF
-    
+
         ! Add conversion factor from kg S to kg of emitted species
         DO N = 1, Inst%nSpc
            Inst%SpcScl(N) = Inst%SpcScl(N) * HcoState%Spc(Inst%SpcIDs(N))%MW_g &
                           * HcoState%Spc(Inst%SpcIDs(N))%MolecRatio / MW_S
         ENDDO
-    
+
         ! Verbose mode
         IF ( HcoState%amIRoot ) THEN
            MSG = 'Use emissions process <yourname>:'
            CALL MSG( HcoState%Config%Err,  MSG )
-    
+
            MSG = ' - use the following species (Name, HcoID, Scaling):'
            CALL MSG( HcoState%Config%Err, MSG)
            DO N = 1, Inst%nSpc
@@ -264,16 +264,16 @@ MODULE CCPR_<yourname>_mod
               CALL MSG( HcoState%Config%Err, MSG)
            ENDDO
         ENDIF
-    
+
         !=================================================================
         ! Module code comes below
         !=================================================================
-    
-    
+
+
         ! Cleanup
         Inst => NULL()
         CALL LEAVE( HcoState%Config%Err, RC )
-    
+
       END SUBROUTINE CCPR_<yourname>_Init
     !EOC
     !------------------------------------------------------------------------------
@@ -304,7 +304,7 @@ MODULE CCPR_<yourname>_mod
         ! CCPR_<yourname>_FINAL begins here!
         !=================================================================
         CALL InstRemove ( ExtState%<yourname> )
-    
+
       END SUBROUTINE CCPR_<yourname>_Final
     !EOC
     !------------------------------------------------------------------------------
@@ -335,11 +335,11 @@ MODULE CCPR_<yourname>_mod
     !------------------------------------------------------------------------------
     !BOC
         TYPE(MyInst),     POINTER    :: PrvInst
-    
+
         !=================================================================
         ! InstGet begins here!
         !=================================================================
-    
+
         ! Get instance. Also archive previous instance.
         PrvInst => NULL()
         Inst    => AllInst
@@ -352,14 +352,14 @@ MODULE CCPR_<yourname>_mod
            RC = FAIL
            RETURN
         ENDIF
-    
+
         ! Pass output arguments
         IF ( PRESENT(PrevInst) ) PrevInst => PrvInst
-    
+
         ! Cleanup & Return
         PrvInst => NULL()
         RC = SUCCESS
-    
+
       END SUBROUTINE InstGet
     !EOC
     !------------------------------------------------------------------------------
@@ -399,18 +399,18 @@ MODULE CCPR_<yourname>_mod
     !BOC
         TYPE(MyInst), POINTER          :: TmpInst  => NULL()
         INTEGER                        :: nnInst
-    
+
         !=================================================================
         ! InstCreate begins here!
         !=================================================================
-    
+
         ! ----------------------------------------------------------------
         ! Generic instance initialization
         ! ----------------------------------------------------------------
-    
+
         ! Initialize
         Inst => NULL()
-    
+
         ! Get number of already existing instances
         TmpInst => AllInst
         nnInst = 0
@@ -418,26 +418,26 @@ MODULE CCPR_<yourname>_mod
            nnInst  =  nnInst + 1
            TmpInst => TmpInst%NextInst
         END DO
-    
+
         ! Create new instance
         ALLOCATE(Inst)
         Inst%Instance = nnInst + 1
         Inst%ExtNr    = ExtNr
-    
+
         ! Attach to instance list
         Inst%NextInst => AllInst
         AllInst       => Inst
-    
+
         ! Update output instance
         Instance = Inst%Instance
-    
+
         ! ----------------------------------------------------------------
         ! Type specific initialization statements follow below
         ! ----------------------------------------------------------------
-    
+
         ! Return w/ success
         RC = SUCCESS
-    
+
       END SUBROUTINE InstCreate
     !EOC
     !------------------------------------------------------------------------------
@@ -468,21 +468,21 @@ MODULE CCPR_<yourname>_mod
         INTEGER                     :: RC
         TYPE(MyInst), POINTER       :: PrevInst
         TYPE(MyInst), POINTER       :: Inst
-    
+
         !=================================================================
         ! InstRemove begins here!
         !=================================================================
-    
+
         ! Initialize
         PrevInst => NULL()
         Inst     => NULL()
-    
+
         ! Get instance. Also archive previous instance.
         CALL InstGet ( Instance, Inst, RC, PrevInst=PrevInst )
-    
+
         ! Instance-specific deallocation
         IF ( ASSOCIATED(Inst) ) THEN
-    
+
            !---------------------------------------------------------------------
            ! Deallocate fields of Inst before popping off from the list
            ! in order to avoid memory leaks (Bob Yantosca (17 Aug 2022)
@@ -490,24 +490,24 @@ MODULE CCPR_<yourname>_mod
            IF ( ALLOCATED( Inst%SpcIDs ) ) THEN
               DEALLOCATE ( Inst%SpcIDs )
            ENDIF
-    
+
            IF ( ALLOCATED( Inst%SpcScl ) ) THEN
               DEALLOCATE ( Inst%SpcScl )
            ENDIF
-    
+
            IF ( ALLOCATED( Inst%SpcNames ) ) THEN
               DEALLOCATE ( Inst%SpcNames )
            ENDIF
-    
+
            IF ( ALLOCATED( Inst%SpcScalFldNme ) ) THEN
               DEALLOCATE( Inst%SpcScalFldNme  )
            ENDIF
-    
+
            ! ----------------------------------------------------------------
            ! Type specific initialization statements follow below
            ! ----------------------------------------------------------------
-    
-    
+
+
            ! ----------------------------------------------------------------
            ! Pop off instance from list
            ! ----------------------------------------------------------------
@@ -518,11 +518,11 @@ MODULE CCPR_<yourname>_mod
            ENDIF
            DEALLOCATE(Inst)
         ENDIF
-    
+
         ! Free pointers before exiting
         PrevInst => NULL()
         Inst     => NULL()
-    
+
        END SUBROUTINE InstRemove
     !EOC
     END MODULE CCPR_yourname_Mod

@@ -130,7 +130,7 @@ contains
 
   subroutine wetdep_ls(dt,var,rain,moist_arr,rho,var_rmv,lat,       &
                        p_qc,p_qi,dz8w,vvel,  &
-                       kms,kme,kts,kte) 
+                       kms,kme,kts,kte)
     IMPLICIT NONE
 
     INTEGER,      INTENT(IN   ) :: p_qc, p_qi,    &
@@ -182,7 +182,7 @@ contains
            var_sum=var_sum+var(k,nv)*rho(k) !lzhang
         enddo
            if(var_sum.gt.1.e-10 .and. var_sum_clw.gt.1.e-10 ) then
-   !        assuming that frc is onstant, it is my conversion factor 
+   !        assuming that frc is onstant, it is my conversion factor
               frc=rain_clw/var_sum_clw
 !    write(0,*)'frc ', frc(i,j),var_sum_clw(i,j),var_sum(i,j)
               if (lat<=-65.) then
@@ -210,7 +210,7 @@ contains
            var(k,nv)=var(k,nv)-dvar
         endif
         !var_rmv(i,j,nv)=var_rmv(i,j,nv)+var_rmvl(i,k,j)
-        !!convert wetdeposition into ug/m2/s  
+        !!convert wetdeposition into ug/m2/s
         var_rmv(nv)=var_rmv(nv)+(var_rmvl(k)*rho(k)*dz8w(k)/dt) !lzhang
         endif
        enddo

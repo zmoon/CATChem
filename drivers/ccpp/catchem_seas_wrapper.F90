@@ -36,7 +36,7 @@ contains
 
 !> \defgroup catchem_seas_group CATChem seas wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_seas_wrapper CATChem seas wrapper Module  
+!>\defgroup catchem_seas_wrapper CATChem seas wrapper Module
 !> \ingroup catchem_seas_group
 !! This is the CATChem seas wrapper Module
 !! \section arg_table_catchem_seas_wrapper_run Argument Table
@@ -48,7 +48,7 @@ contains
                    land, oceanfrac, fice, u10m, v10m, ustar, rlat, rlon, tskin,  &
                    pr3d, ph3d,prl3d, tk3d, us3d, vs3d, spechum,                  &
                    nseasalt,ntrac,ntss1,ntss2,ntss3,ntss4,ntss5,                 &
-                   gq0,qgrs,ssem,seas_opt_in, sstemisFlag,seas_emis_scale,       & 
+                   gq0,qgrs,ssem,seas_opt_in, sstemisFlag,seas_emis_scale,       &
                    pert_scale_seas,       &
                    emis_amp_seas, do_sppt_emis, sppt_wts, errmsg, errflg)
 
@@ -86,7 +86,7 @@ contains
                      xland, frocean,fraci,xlat, xlong, dxy
 
 !>- sea salt & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
     real(kind_phys), dimension(ims:im, 1, jms:jme, 1:num_emis_seas  ) :: emis_seas
     real(kind_phys), dimension(ims:im, jms:jme) :: seashelp
@@ -97,14 +97,14 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-    real(kind_phys) :: delp 
+    real(kind_phys) :: delp
 
     errmsg = ''
     errflg = 0
 
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -157,7 +157,7 @@ contains
               endif
             enddo
           enddo
- 
+
         case default
           ! based on seas_opt
           select case (seas_opt_in)
@@ -168,7 +168,7 @@ contains
                   ! -- only use sea salt scheme over water
                   if (xland(i,j).lt.0.5) then
                     delp = p8w(i,kts,j)-p8w(i,kts+1,j)
-         
+
                     call gocart_seas_default(ktau,dt,u_phy(i,kts,j),              &
                       v_phy(i,kts,j),chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),            &
                       v10(i,j),delp,tsk(i,j),dxy(i,j),           &
@@ -176,7 +176,7 @@ contains
                   endif
                 enddo
               enddo
-  
+
             case (2)
               ! -- NGAC sea salt scheme
               do j=jts,jte
@@ -205,7 +205,7 @@ contains
       end select
 
     endif
- 
+
     ! -- put chem stuff back into tracer array
     do k=kts,kte
      do i=its,ite
@@ -253,7 +253,7 @@ contains
     !FV3 input variables
     integer, dimension(ims:ime), intent(in) :: land
     integer, intent(in) :: ntrac,ntss1,ntss2,ntss3,ntss4,ntss5
-    real(kind=kind_phys), dimension(ims:ime), intent(in) ::oceanfrac,fice, & 
+    real(kind=kind_phys), dimension(ims:ime), intent(in) ::oceanfrac,fice, &
          u10m, v10m, ustar, garea, rlat, rlon, ts2d
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) :: pr3d,ph3d
     real(kind=kind_phys), dimension(ims:ime, kts:kte), intent(in) ::       &
@@ -269,7 +269,7 @@ contains
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
 
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, u_phy, v_phy, rho_phy, dz8w, p8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          u10, v10, ust, tsk, xland, frocean,fraci, xlat, xlong, dxy
@@ -299,7 +299,7 @@ contains
     xlat           = 0._kind_phys
     xlong          = 0._kind_phys
     dxy            = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
 
 
@@ -315,7 +315,7 @@ contains
      xlat (i,1)=rlat(i)*180./pi
      xlong(i,1)=rlon(i)*180./pi
     enddo
-   
+
     do j=jts,jte
       jp = j - jts + 1
       do i=its,ite
@@ -377,7 +377,7 @@ contains
       enddo
     enddo
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_seas_1)=max(epsilc,gq0(i,k,ntss1  )/ppm2ugkg(p_seas_1))

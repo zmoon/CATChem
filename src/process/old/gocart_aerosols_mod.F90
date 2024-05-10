@@ -64,7 +64,7 @@ CONTAINS
        chmlos = 0.
        bchmlos = 0.
        do j=jts,jte
-       do k=kts,kte 
+       do k=kts,kte
        do i=its,ite
           airmas(1,1,1)=-(p8w(i,k+1,j)-p8w(i,k,j))*area(i,j)/g
           pc2(1,1,1,1)=0.
@@ -100,7 +100,7 @@ end subroutine gocart_aerosols_driver
                                   ims,ime, jms,jme, kms,kme,               &
                                   its,ite, jts,jte, kts,kte,num_chem
     REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme ),                          &
-         INTENT(INOUT ) :: pm2_5_dry, pm2_5_dry_ec, pm10     
+         INTENT(INOUT ) :: pm2_5_dry, pm2_5_dry_ec, pm10
     REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme ),                          &
          INTENT(IN ) :: alt
     REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),                 &
@@ -119,12 +119,12 @@ end subroutine gocart_aerosols_driver
       pm10(its:ite, kts:kte, jts:jte)    = 0.
       pm2_5_dry_ec(its:ite, kts:kte, jts:jte) = 0.
 
-      do j=jts,jte                    
+      do j=jts,jte
          do k=kts,kte
          do i=its,ite
             sulfate=chem(i,k,j,p_sulf)*mwso4/mwdry*1.e3
             do n=p_p25,p_dust_1
-               pm2_5_dry(i,k,j) = pm2_5_dry(i,k,j)+chem(i,k,j,n)        
+               pm2_5_dry(i,k,j) = pm2_5_dry(i,k,j)+chem(i,k,j,n)
             enddo
             if(chem_opt.eq.300.or.chem_opt.eq.301)then
                pm2_5_dry(i,k,j) = pm2_5_dry(i,k,j)+chem(i,k,j,p_dust_2)*d_2_5     &
@@ -140,10 +140,10 @@ end subroutine gocart_aerosols_driver
 !                                            +chem(i,k,j,p_vash_1)           &
                                             +sulfate
             else
-               pm2_5_dry(i,k,j) = pm2_5_dry(i,k,j)+chem(i,k,j,p_seas_1)           &        
+               pm2_5_dry(i,k,j) = pm2_5_dry(i,k,j)+chem(i,k,j,p_seas_1)           &
                                             +sulfate
             endif
-   
+
             !Convert the units from mixing ratio to concentration (ug m^-3)
             pm2_5_dry(i,k,j)    = pm2_5_dry(i,k,j) / alt(i,k,j)
       enddo
@@ -157,10 +157,10 @@ end subroutine gocart_aerosols_driver
             do i=its,ite
                sulfate=chem(i,k,j,p_sulf)*mwso4/mwdry*1.e3
                do n=p_p25,maxd
-                  pm10(i,k,j) = pm10(i,k,j)+chem(i,k,j,n)        
+                  pm10(i,k,j) = pm10(i,k,j)+chem(i,k,j,n)
                enddo
                do n=p_seas_1,maxs
-                  pm10(i,k,j) = pm10(i,k,j)+chem(i,k,j,n)        
+                  pm10(i,k,j) = pm10(i,k,j)+chem(i,k,j,n)
                enddo
                pm10(i,k,j) = pm10(i,k,j) + sulfate                 &
                             +chem(i,k,j,maxp)*d_10
@@ -201,7 +201,7 @@ SUBROUTINE chem_1(imx,jmx,lmx, nmx, &
   ! executable statements
 
   r1 = 4.63E-6
-  
+
   DO n = 1,nmx
      IF (n == NBC1 .OR. n == NOC1) THEN
         IF (n == NBC1) np = 1
@@ -209,20 +209,20 @@ SUBROUTINE chem_1(imx,jmx,lmx, nmx, &
         DO l = 1,lmx
            DO j = 1,jmx
               DO i = 1,imx
-                 
+
                  c0 = tc(i,j,l,n)
                  r2 = 0.0 ! used to be loss due to dry dep
                  rkt = (r1 + r2) * REAL(ndt1)
-                 
+
                  c1 = c0 *  EXP(-rkt)
                  c1 = MAX(c1, 1.0D-32)
                  tc(i,j,l,n) = c1
-                 
+
                  pc2(i,j,l,np) = (c0 - c1) * r1/(r1 + r2)
-                 
-                 !   Diagnostics:  
+
+                 !   Diagnostics:
                  chmlos(i,j,l,n) = chmlos(i,j,l,n) + pc2(i,j,l,np)*airm(i,j,l)
-                 
+
               END DO
            END DO
         END DO
@@ -235,7 +235,7 @@ SUBROUTINE chem_1(imx,jmx,lmx, nmx, &
 
      END IF
   END DO
-  
+
 END SUBROUTINE chem_1
 
 SUBROUTINE chem_2(imx,jmx,lmx, nmx, &
@@ -259,7 +259,7 @@ SUBROUTINE chem_2(imx,jmx,lmx, nmx, &
   REAL(kind_chem)  :: c0, pp, rkt, c1
 
   ! executable statements
-  
+
   DO n = 1,nmx
      IF (n == NBC2 .OR. n == NOC2) THEN
         IF (n == NBC2) np = 1
@@ -268,21 +268,21 @@ SUBROUTINE chem_2(imx,jmx,lmx, nmx, &
         DO l = 1,lmx
            DO j = 1,jmx
               DO i = 1,imx
-                 
+
                  c0 = tc(i,j,l,n)
                  pp = pc2(i,j,l,np)
                  c1 = c0 + pp
-                 
+
                  c1 = MAX(c1, 1.0D-32)
                  tc(i,j,l,n) = c1
-                 
-                 
+
+
               END DO
            END DO
         END DO
      END IF
   END DO
-  
+
 END SUBROUTINE chem_2
 
 end module gocart_aerosols_mod

@@ -22,8 +22,8 @@ contains
          INTENT(INOUT ) ::                                   chem_arr
    REAL(kind_chem), INTENT(IN ) :: dt, u_phy,v_phy, &
                                    dz8w,u10,v10,  &
-                                   delp,dms_0,tsk, area 
-  
+                                   delp,dms_0,tsk, area
+
 !
 ! local variables
 !
@@ -68,7 +68,7 @@ end subroutine gocart_dmsemis
 
 SUBROUTINE srcdms(imx, jmx, lmx, nmx, ndt1, tc,airmw, &
                   tskin, ilwi, dmso, w10m, airmas, dxy, emsdms, bems)
- 
+
   ! **************************************************************************
   ! **                                                                      **
   ! **  This subroutine calculates DMS emissions from the ocean.            **
@@ -105,7 +105,7 @@ SUBROUTINE srcdms(imx, jmx, lmx, nmx, ndt1, tc,airmw, &
         ! convert tskin (=sst over water) from K to degC
         sst = tskin(i,j) - 273.15
 !       if_water: IF (ilwi(i,j) == 0) THEN
-           
+
            ! -- Schmidt number for DMS (Saltzman et al., 1993)
            sc = 2674.0 - 147.12*sst + 3.726*(sst**2) - 0.038*(sst**3)
 
@@ -180,8 +180,8 @@ SUBROUTINE srcdms(imx, jmx, lmx, nmx, ndt1, tc,airmw, &
 !       ELSE   ! ilwi /= 0 (water)
 
 !          dmssrc = 0.0
-           
-!       END IF if_water 
+
+!       END IF if_water
 
 ! ****************************************************************************
 ! *  Update DMS concentration in level 1 (where emission occurs)             *
@@ -192,7 +192,7 @@ SUBROUTINE srcdms(imx, jmx, lmx, nmx, ndt1, tc,airmw, &
         tc(i,j,1,NDMS) = tc(i,j,1,NDMS) + c
 
         !    ---------------------------------------------------------------
-        !     Diagnostics:      DMS surface emission in kgS/timestep     
+        !     Diagnostics:      DMS surface emission in kgS/timestep
         !    ---------------------------------------------------------------
         emsdms(i,j) = emsdms(i,j) + dmssrc * smw / tcmw(NDMS) ! kgS
 !        bems(i,j,NDMS) = c * airmas(i,j,1) / airmw * smw ! kgS

@@ -4,7 +4,7 @@ module vash_settling_mod
   use catchem_config
 
   implicit none
- 
+
   private
   public :: vash_settling_driver, &
             vashshort_settling_driver
@@ -39,7 +39,7 @@ SUBROUTINE vash_settling_driver(dt,t_phy,moist,            &
   real(kind_chem), DIMENSION (1,1,kte-kts+1,10) :: ash
   real(kind_chem), DIMENSION (10), PARAMETER :: den_ash(10)=(/2500.,2500.,2500.,2500.,2500., &
                                                      2500.,2500.,2500.,2500.,2500. /)
-  real(kind_chem), DIMENSION (10), PARAMETER :: reff_ash(10)=(/0.5000D-3,&! 1.00 mm diameter 
+  real(kind_chem), DIMENSION (10), PARAMETER :: reff_ash(10)=(/0.5000D-3,&! 1.00 mm diameter
                                                       0.3750D-3,&! 0.75 mm
                               0.1875D-3,&!
                               93.750D-6,&!
@@ -66,10 +66,10 @@ SUBROUTINE vash_settling_driver(dt,t_phy,moist,            &
           kk=0
           are=area
       bstl_ash(:)=0.
-          do k=kts,kte 
+          do k=kts,kte
           kk=kk+1
-          p_mid(1,1,kk)=.01*p_phy(kte-k+kts) 
-          delz(1,1,kk)=dz8w(kte-k+kts) 
+          p_mid(1,1,kk)=.01*p_phy(kte-k+kts)
+          delz(1,1,kk)=dz8w(kte-k+kts)
           airmas(1,1,kk)=-(p8w(k+1)-p8w(k))/g
           airden(1,1,kk)=rho_phy(k)
           tmp(1,1,kk)=t_phy(k)
@@ -178,7 +178,7 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
   real(kind_chem), DIMENSION (1,1,kte-kts+1,5) :: dust
   real(kind_chem), DIMENSION (1,1,kte-kts+1,4) :: sea_salt
 !srf
-  real(kind_chem), DIMENSION (1,1,kte-kts+1,10) :: ash 
+  real(kind_chem), DIMENSION (1,1,kte-kts+1,10) :: ash
   real(kind_chem), DIMENSION (4), PARAMETER :: den_ash(4)=(/2500.,2500.,2500.,2500. /)
   real(kind_chem), DIMENSION (4), PARAMETER :: reff_ash(4)=(/ 11.719D-6,&!
                               05.859D-6,&!
@@ -202,10 +202,10 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
           kk=0
           are=area
       bstl_ash(:)=0.
-          do k=kts,kte 
+          do k=kts,kte
           kk=kk+1
-          p_mid(1,1,kk)=.01*p_phy(kte-k+kts) 
-          delz(1,1,kk)=dz8w(kte-k+kts) 
+          p_mid(1,1,kk)=.01*p_phy(kte-k+kts)
+          delz(1,1,kk)=dz8w(kte-k+kts)
           airmas(1,1,kk)=-(p8w(k+1)-p8w(k))/g
           airden(1,1,kk)=rho_phy(k)
           tmp(1,1,kk)=t_phy(k)
@@ -215,7 +215,7 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
                (t_phy(k)-36.))/(.01*p_phy(k))))
           rh(1,1,kk)=max(1.0D-1,rh(1,1,kk))
           enddo
-     
+
 
 !ash settling
           kk=0
@@ -248,7 +248,7 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
 
           if(p_vash_4.gt.1)then
           kk=0
-          do k=kts,kte 
+          do k=kts,kte
           kk=kk+1
           if(chem_arr(k,p_vash_1).le.1.e-10)chem_arr(k,p_vash_1)=0.
           if(chem_arr(k,p_vash_2).le.1.e-10)chem_arr(k,p_vash_2)=0.
@@ -264,7 +264,7 @@ SUBROUTINE vashshort_settling_driver(dt,t_phy,moist,            &
 !
           else if(p_bc2.gt.1)then
              kk=0
-             do k=kts,kte 
+             do k=kts,kte
                 kk=kk+1
                 ash(1,1,kk,1)=0.
                 ash(1,1,kk,4)=chem_arr(k,p_p25)*conver
@@ -322,7 +322,7 @@ END SUBROUTINE vashshort_settling_driver
 ! *    TMP(i,j,k)      - Air temperature  (K)                                *
 ! *    CT(i,j)         - Surface exchange coeff for moisture
 ! *                                                                          *
-! **************************************************************************** 
+! ****************************************************************************
 
 
   IMPLICIT  NONE
@@ -343,7 +343,7 @@ END SUBROUTINE vashshort_settling_driver
   REAL(kind_chem),    PARAMETER :: dyn_visc = 1.5E-5
   INTEGER :: iprt,k, n, i, j, l, l2
   ! for sea-salt:
-  REAL(kind_chem), PARAMETER :: c1=0.7674, c2=3.079, c3=2.573E-11, c4=-1.424 
+  REAL(kind_chem), PARAMETER :: c1=0.7674, c2=3.079, c3=2.573E-11, c4=-1.424
 
   ! for OMP:
   REAL(kind_chem) :: rwet_priv(nmx), rho_priv(nmx),vsettl_max(nmx)
@@ -406,7 +406,7 @@ END SUBROUTINE vashshort_settling_driver
 
   ! Loop over latitudes
   DO j = 1,jmx
- 
+
      DO k = 1,nmx
         IF (idust.eq.1 .or. iash==1) THEN
            rwet_priv(k) = rwet(k)
@@ -416,7 +416,7 @@ END SUBROUTINE vashshort_settling_driver
         DO n = 1,ndt_settl(k)
 
            ! Solve each vertical layer successively (layer l)
-      
+
            DO l = lmx,1,-1
               l2 = lmx - l + 1
 
@@ -424,9 +424,9 @@ END SUBROUTINE vashshort_settling_driver
               DO i = 1,imx
 
                  ! Dynamic viscosity
-                 c_stokes = 1.458E-6 * tmp(i,j,l)**1.5/(tmp(i,j,l) + 110.4) 
+                 c_stokes = 1.458E-6 * tmp(i,j,l)**1.5/(tmp(i,j,l) + 110.4)
 
-                 ! Mean free path as a function of pressure (mb) and 
+                 ! Mean free path as a function of pressure (mb) and
                  ! temperature (K)
                  ! order of p_mid is top->sfc
                  free_path = 1.1E-3/p_mid(i,j,l2)/SQRT(tmp(i,j,l))
@@ -499,7 +499,7 @@ END SUBROUTINE vashshort_settling_driver
         END DO
      END DO
   END DO
-  
+
 END SUBROUTINE vsettling
 
 end module vash_settling_mod

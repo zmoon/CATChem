@@ -34,7 +34,7 @@ contains
 
 !> \defgroup catchem_group CATChem rad wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_rad_wrapper CATChem rad wrapper Module  
+!>\defgroup catchem_rad_wrapper CATChem rad wrapper Module
 !> \ingroup catchem_rad_group
 !! This is the CATChem rad wrapper Module
 !! \section arg_table_catchem_rad_wrapper_run Argument Table
@@ -96,7 +96,7 @@ contains
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:nbands) :: asympar
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:4) ::                   &
         tauaersw, gaersw, waersw, bscoefsw,                                        &
-        l2aer,  l3aer, l4aer, l5aer, l6aer, l7aer           
+        l2aer,  l3aer, l4aer, l5aer, l6aer, l7aer
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:16) :: tauaerlw
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_ext_coef) :: ext_coeff
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_bscat_coef) :: bscat_coeff
@@ -112,7 +112,7 @@ contains
     logical :: store_arrays
     integer :: nbegin, nv, nvv
     integer :: i, j, jp, k, kp, n
-  
+
 
     errmsg = ''
     errflg = 0
@@ -131,7 +131,7 @@ contains
     curr_secs = ktau * dt
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -279,7 +279,7 @@ contains
                            its,ite, jts,jte, kts,kte
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
-    
+
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) :: rri, dz8w, relhum
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
 
@@ -348,7 +348,7 @@ contains
       enddo
     enddo
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))

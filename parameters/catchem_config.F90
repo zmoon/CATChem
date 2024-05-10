@@ -1,5 +1,5 @@
 !
-! Haiqin.Li@noaa.gov  
+! Haiqin.Li@noaa.gov
 ! 01/2020
 ! constant parameters and chemistry configurations and tracers
 ! (This will be splited into three subroutine for configuration, constant and tracers later)
@@ -83,7 +83,7 @@ module catchem_config
   integer :: numgas = 0
 
 
-  !integer :: num_plume_data  
+  !integer :: num_plume_data
 
 
   real(kind=kind_chem) :: wetdep_ls_alpha(chem_tune_tracers)=-999.
@@ -113,7 +113,7 @@ module catchem_config
 
   integer, parameter :: p_edust1=1,p_edust2=2,p_edust3=3,p_edust4=4,p_edust5=5
   integer, parameter :: p_eseas1=1,p_eseas2=2,p_eseas3=3,p_eseas4=4,p_eseas5=5
- 
+
   integer :: p_ho=0,p_h2o2=0,p_no3=0
 
   ! constants
@@ -125,21 +125,21 @@ module catchem_config
 !  <mw>d is the molecular weight of dry air (28.966), <mw>w/<mw>d = 0.62197, and
 !  (<mw>d - <mw>w)/<mw>d = 0.37803
 !  http://atmos.nmsu.edu/education_and_outreach/encyclopedia/humidity.htm
-  !-----------------------------------------------------------------------  
+  !-----------------------------------------------------------------------
   ! tracer info
   !-----------------------------------------------------------------------
   ! Tracer index:
   ! default initialization for all sulfur and carbon species is 0 (undefined)
-  !     1. DMS       = Dimethyl sulfide            = CH3SCH3  
-  !     2. SO2       = Sulfur dioxide              = SO2               
-  !     3. SO4       = Sulfate                     = SO4            
-  !     4. MSA       = Methane sulfonic acid       = CH3SO3H             
+  !     1. DMS       = Dimethyl sulfide            = CH3SCH3
+  !     2. SO2       = Sulfur dioxide              = SO2
+  !     3. SO4       = Sulfate                     = SO4
+  !     4. MSA       = Methane sulfonic acid       = CH3SO3H
   integer            :: ndms=1, nso2=2, nso4=3, nmsa=4
 
   ! optical
   integer :: nbands   = 14
   integer :: nbandlw  = 16
-  REAL,    PARAMETER :: oc_mfac = 1.8 
+  REAL,    PARAMETER :: oc_mfac = 1.8
   REAL,    PARAMETER :: nh4_mfac = 1.375
 
 
@@ -177,7 +177,7 @@ module catchem_config
   INTEGER, PARAMETER :: cb05_sorg_aq_kpp = 131
   INTEGER, PARAMETER :: cb05_sorg_vbs_aq_kpp = 132
 
-  !-- plumerise 
+  !-- plumerise
   integer, parameter :: p_e_bc  =1
   integer, parameter :: p_e_oc  =2
   integer, parameter :: p_e_sulf=3

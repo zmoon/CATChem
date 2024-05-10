@@ -24,7 +24,7 @@ CONTAINS
          INTENT(IN    ) :: dz8w
    REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 16 ),        &
          INTENT(IN    ) :: tauaerlw
-   real(kind_chem) :: ang,slope,slopeg,slopessa,onemang    
+   real(kind_chem) :: ang,slope,slopeg,slopessa,onemang
    integer :: i,j,k,ib
    real(kind_chem), dimension(NBANDS) :: midbands  ! jcb
    REAL(kind_chem),    PARAMETER ::   thresh=1.e-9
@@ -49,17 +49,17 @@ CONTAINS
       do i = its,ite
         if(tauaersw(i,k,j,1).gt.thresh .and. tauaersw(i,k,j,4).gt.thresh) then
            ang=log(tauaersw(i,k,j,1)/tauaersw(i,k,j,4))/log(999./300.)
-           extt(i,k,j,ib)=tauaersw(i,k,j,2)*(0.4/midbands(ib))**ang 
+           extt(i,k,j,ib)=tauaersw(i,k,j,2)*(0.4/midbands(ib))**ang
 
 ! ssa - linear interpolation; extrapolation
            slope=(waersw(i,k,j,3)-waersw(i,k,j,2))/.2
-           ssca(i,k,j,ib) = slope*(midbands(ib)-.6)+waersw(i,k,j,3) 
+           ssca(i,k,j,ib) = slope*(midbands(ib)-.6)+waersw(i,k,j,3)
            if(ssca(i,k,j,ib).lt.0.4) ssca(i,k,j,ib)=0.4
            if(ssca(i,k,j,ib).ge.1.0) ssca(i,k,j,ib)=1.0
 
 ! g - linear interpolation;extrapolation
            slope=(gaersw(i,k,j,3)-gaersw(i,k,j,2))/.2
-           asympar(i,k,j,ib) = slope*(midbands(ib)-.6)+gaersw(i,k,j,3) 
+           asympar(i,k,j,ib) = slope*(midbands(ib)-.6)+gaersw(i,k,j,3)
            if(asympar(i,k,j,ib).lt.0.5) asympar(i,k,j,ib)=0.5
            if(asympar(i,k,j,ib).ge.1.0) asympar(i,k,j,ib)=1.0
         else

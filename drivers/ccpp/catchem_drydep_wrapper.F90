@@ -36,7 +36,7 @@ contains
 
 !> \defgroup catchem_group CATChem drydep wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_drydep_wrapper CATChem drydep wrapper Module  
+!>\defgroup catchem_drydep_wrapper CATChem drydep wrapper Module
 !> \ingroup catchem_drydep_group
 !! This is the CATChem drydep wrapper Module
 !! \section arg_table_catchem_drydep_wrapper_run Argument Table
@@ -46,7 +46,7 @@ contains
     subroutine catchem_drydep_wrapper_run(im, kte, kme, ktau, dt, land,      &
                    ustar, rlat, rlon, tskin, julian, rainc_cpl, hf2d, pb2d,   &
                    pr3d, ph3d, phl3d, prl3d, tk3d, spechum, exch,             &
-                   vegtype, sigmaf, jdate, idat, dswsfc, zorl, snow_cplchm,      & 
+                   vegtype, sigmaf, jdate, idat, dswsfc, zorl, snow_cplchm,      &
                    ntrac,ntso2,ntsulf,ntDMS,ntmsa,ntpp25,                     &
                    ntbc1,ntbc2,ntoc1,ntoc2,ntss1,ntss2,ntss3,ntss4,ntss5,     &
                    ntdust1,ntdust2,ntdust3,ntdust4,ntdust5,ntpp10,            &
@@ -67,7 +67,7 @@ contains
     integer, parameter :: ims=1,jms=1,jme=1, kms=1
     integer, parameter :: its=1,jts=1,jte=1, kts=1
 
-    integer, dimension(im), intent(in) :: land, vegtype     
+    integer, dimension(im), intent(in) :: land, vegtype
     real(kind_phys), dimension(im), intent(in) :: ustar,                  &
                 rlat,rlon, tskin, rainc_cpl,                              &
                 hf2d, pb2d, sigmaf, dswsfc, zorl, snow_cplchm
@@ -80,13 +80,13 @@ contains
     integer,          intent(out) :: errflg
 
     real(kind_phys), dimension(1:im, 1:kme,jms:jme) :: rri, t_phy,        &
-                     p_phy, z_at_w, dz8w, p8w, t8w, rho_phy, zmid, exch_h 
+                     p_phy, z_at_w, dz8w, p8w, t8w, rho_phy, zmid, exch_h
 
     real(kind_phys), dimension(ims:im, jms:jme) :: ust, tsk,              &
                      xland, xlat, xlong, rcav, hfx, pbl
 
 !>- chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
 
     real(kind_phys), dimension(ims:im, jms:jme, 1:num_chem )  :: dry_fall
@@ -95,7 +95,7 @@ contains
     integer :: ide, ime, ite, kde, julday
 
     real(kind_phys), dimension(ims:im, jms:jme) :: vegfrac, rmol, gsw, znt
-    real(kind_phys), dimension(ims:im, jms:jme) :: snowh  
+    real(kind_phys), dimension(ims:im, jms:jme) :: snowh
     integer,         dimension(ims:im, jms:jme) :: ivgtyp
 
     integer :: current_month
@@ -136,12 +136,12 @@ contains
     ddvel(:,:,:) = 0.
 
     gmt = real(idat(5))
-    julday = real(julian)                                       
+    julday = real(julian)
 
     current_month=jdate(2)
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -187,7 +187,7 @@ contains
         !We will not based on chem_opt, but on gas/aero schemes
 
         IF( chem_opt /= GOCART_SIMPLE ) THEN
-          ! wesely for gases 
+          ! wesely for gases
           call wesely_driver(current_month,julday, &
               t_phy(i,kts,j),moist(i,kts,j,:),p8w(i,kts,j),     &
               rcav(i,j),p_phy(i,kts,j),ddvel(i,j,:),     &
@@ -224,7 +224,7 @@ contains
 !!               its,ite, jts,jte, kts,kte                       )
 ! limit aerosol ddvels to <= 0.5 m/s
 ! drydep routines occasionally produce unrealistically-large particle
-! diameter leading to unrealistically-large sedimentation velocity 
+! diameter leading to unrealistically-large sedimentation velocity
           ddvel(i,j,numgas+1:num_chem) = min( 0.50, ddvel(i,j,numgas+1:num_chem))
         ELSE
           !Set dry deposition velocity to zero when using the
@@ -268,7 +268,7 @@ contains
           enddo
           ekmfull(kte+1)=0.
         end if
- 
+
         do k=kts,kte
            zz(k)=zmid(i,k,j)-z_at_w(i,kts,j)
         enddo
@@ -301,7 +301,7 @@ contains
            do k=kts,kte
               chem(i,k,j,nv)=max(epsilc,pblst(k))
            enddo
-        enddo 
+        enddo
       enddo
     enddo
 
@@ -310,7 +310,7 @@ contains
      do i=its,ite
        gq0(i,k,ntso2  )=ppm2ugkg(p_so2   ) * max(epsilc,chem(i,k,1,p_so2))
        gq0(i,k,ntsulf )=ppm2ugkg(p_sulf  ) * max(epsilc,chem(i,k,1,p_sulf))
-       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms)) 
+       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms))
        gq0(i,k,ntmsa  )=ppm2ugkg(p_msa   ) * max(epsilc,chem(i,k,1,p_msa))
        gq0(i,k,ntpp25 )=ppm2ugkg(p_p25   ) * max(epsilc,chem(i,k,1,p_p25))
        gq0(i,k,ntbc1  )=ppm2ugkg(p_bc1   ) * max(epsilc,chem(i,k,1,p_bc1))
@@ -387,7 +387,7 @@ contains
     integer, intent(in) :: ntdust1,ntdust2,ntdust3,ntdust4,ntdust5
     integer, intent(in) :: ntso2,ntpp25,ntbc1,ntoc1,ntpp10
     integer, intent(in) :: ntsulf,ntbc2,ntoc2,ntDMS,ntmsa
-    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                & 
+    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                &
          ustar, rlat, rlon, ts2d, sigmaf, dswsfc, zorl, snow_cplchm, hf2d, pb2d
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) :: pr3d,ph3d
     real(kind=kind_phys), dimension(ims:ime, kts:kte), intent(in) :: phl3d,tk3d,prl3d,spechum,exch
@@ -402,9 +402,9 @@ contains
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
 
-    
+
     integer,dimension(ims:ime, jms:jme), intent(out) :: ivgtyp
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, p_phy, rho_phy, dz8w, p8w, t8w, zmid,         &
          exch_h
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
@@ -442,7 +442,7 @@ contains
     hfx            = 0._kind_phys
     pbl            = 0._kind_phys
     snowh          = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
     z_at_w         = 0._kind_phys
 
@@ -461,7 +461,7 @@ contains
      ivgtyp (i,1)=vegtype(i)
      vegfrac(i,1)=sigmaf (i)
     enddo
-   
+
     rmol=0.
 
     do j=jts,jte
@@ -552,7 +552,7 @@ contains
       enddo
     enddo
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))

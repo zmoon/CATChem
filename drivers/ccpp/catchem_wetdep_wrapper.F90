@@ -36,7 +36,7 @@ contains
 
 !> \defgroup catchem_group CATChem wetdep wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_wetdep_wrapper CATChem wetdep wrapper Module  
+!>\defgroup catchem_wetdep_wrapper CATChem wetdep wrapper Module
 !> \ingroup catchem_wetdep_group
 !! This is the CATChem wetdep wrapper Module
 !! \section arg_table_catchem_wetdep_wrapper_run Argument Table
@@ -85,7 +85,7 @@ contains
     real(kind_phys), dimension(ims:im, jms:jme) :: rcav, rnav,xlat
 
 !>- vapor & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
     real(kind_phys), dimension(ims:im, jms:jme, 1:num_chem )  :: var_rmv
 
@@ -100,7 +100,7 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-  
+
 
     errmsg = ''
     errflg = 0
@@ -108,7 +108,7 @@ contains
     wetdep_ls_opt     = wetdep_ls_opt_in
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -196,7 +196,7 @@ contains
      do i=its,ite
        gq0(i,k,ntso2  )=ppm2ugkg(p_so2   ) * max(epsilc,chem(i,k,1,p_so2))
        gq0(i,k,ntsulf )=ppm2ugkg(p_sulf  ) * max(epsilc,chem(i,k,1,p_sulf))
-       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms)) 
+       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms))
        gq0(i,k,ntmsa  )=ppm2ugkg(p_msa   ) * max(epsilc,chem(i,k,1,p_msa))
        gq0(i,k,ntpp25 )=ppm2ugkg(p_p25   ) * max(epsilc,chem(i,k,1,p_p25))
        gq0(i,k,ntbc1  )=ppm2ugkg(p_bc1   ) * max(epsilc,chem(i,k,1,p_bc1))
@@ -288,8 +288,8 @@ contains
                            its,ite, jts,jte, kts,kte
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
-    
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, u_phy, v_phy, p_phy, rho_phy, dz8w, p8w, t8w, vvel, dqdti
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
@@ -315,7 +315,7 @@ contains
     t8w            = 0._kind_phys
     vvel           = 0._kind_phys
     dqdti          = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
     z_at_w         = 0._kind_phys
     xlat           = 0._kind_phys
@@ -372,7 +372,7 @@ contains
           v_phy(i,k,j)=vs3d(ip,kkp)
           rho_phy(i,k,j)=p_phy(i,k,j)/(287.04*t_phy(i,k,j)*(1.+.608*spechum(ip,kkp)))
           rri(i,k,j)=1./rho_phy(i,k,j)
-          vvel(i,k,j)=-w(ip,kkp)*rri(i,k,j)/g 
+          vvel(i,k,j)=-w(ip,kkp)*rri(i,k,j)/g
           moist(i,k,j,:)=0.
           moist(i,k,j,1)=gq0(ip,kkp,p_atm_shum)
           if (t_phy(i,k,j) > 265.) then
@@ -405,7 +405,7 @@ contains
       enddo
     enddo
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))

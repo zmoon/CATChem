@@ -35,7 +35,7 @@ contains
 
 !> \defgroup catchem_group CATChem settling wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_settling_wrapper CATChem settling wrapper Module  
+!>\defgroup catchem_settling_wrapper CATChem settling wrapper Module
 !> \ingroup catchem_settling_group
 !! This is the CATChem settling wrapper Module
 !! \section arg_table_catchem_settling_wrapper_run Argument Table
@@ -79,7 +79,7 @@ contains
     real(kind_phys), dimension(ims:im, jms:jme) :: dxy
 
 !>- sea salt & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
     real(kind_phys), dimension(ims:im, jms:jme, 1:num_chem )  :: sedim
     real(kind_phys), dimension(ims:im, jms:jme) :: seashelp, dusthelp
@@ -87,17 +87,17 @@ contains
     integer :: ide, ime, ite, kde
 
     real(kind_phys), dimension(ims:im, jms:jme) :: ash_fall
-    real(kind_phys), dimension(im, 1, ntchmdiag, 4) :: trdf 
+    real(kind_phys), dimension(im, 1, ntchmdiag, 4) :: trdf
 
     real(kind_phys), dimension(1:num_chem) :: ppm2ugkg
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-  
+
 
     errmsg = ''
     errflg = 0
- 
+
     dust_opt          = dust_opt_in
     seas_opt          = seas_opt_in
 
@@ -105,7 +105,7 @@ contains
     trdf       = 0.
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -204,7 +204,7 @@ contains
      enddo
     enddo
 
-    ! -- output sedimentation 
+    ! -- output sedimentation
     call gocart_diag_store(1, sedim, trdf)
 
     sedimio(:,:)=trdf(:,1,:,1)
@@ -245,7 +245,7 @@ contains
                            its,ite, jts,jte, kts,kte
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
-    
+
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) :: t_phy, p_phy, rho_phy, dz8w, p8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) :: dxy
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
@@ -262,13 +262,13 @@ contains
     dz8w           = 0._kind_phys
     p8w            = 0._kind_phys
     dxy            = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
 
     do i=its,ite
      dxy  (i,1)=garea(i)
     enddo
-   
+
     do j=jts,jte
       jp = j - jts + 1
       do i=its,ite
