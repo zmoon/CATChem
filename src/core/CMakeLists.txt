@@ -5,6 +5,6 @@ set(_srcs
     error_mod.F90
     precision_mod.F90
     species_mod.F90
-    yaml_parser.F90)
+    qfyaml_mod.F90)
 
 add_library(CATChem_core STATIC ${_srcs})
