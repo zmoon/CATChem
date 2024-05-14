@@ -48,7 +48,7 @@ MODULE Charpak_Mod
     !
       ! Maximum string length
       INTEGER, PARAMETER, PUBLIC :: MAXSTRLEN = 500
-    
+
     CONTAINS
     !EOC
     !------------------------------------------------------------------------------
@@ -87,16 +87,16 @@ MODULE Charpak_Mod
         ! Scalars
         INTEGER :: L1, L2, i, j
         LOGICAL :: again
-    
+
         ! Arrays
         INTEGER :: TmpLocations(255)
-    
+
         ! Initialize
         TmpLocations = 0
         L1           = MAX(1,LEN_TRIM(str1))
         L2           = LEN(str2)
         imat         = 0
-    
+
         DO i=1,L1
            again = .true.
            j = 1
@@ -112,10 +112,10 @@ MODULE Charpak_Mod
               ENDIF
            ENDDO
         ENDDO
-    
+
         ! Return positions where matches occured (OPTIONAL)
         IF ( PRESENT( Locations ) ) Locations = TmpLocations
-    
+
       END SUBROUTINE CntMat
     !EOC
     !------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
         INTEGER :: ilt1,i1,i,j,ic
-    
+
         i1 = LEN(str2)
         IF (i1.GT.0) THEN
            ilt1 = LEN(str1)
@@ -170,7 +170,7 @@ MODULE Charpak_Mod
               ENDDO
            ENDIF
         ENDIF
-    
+
       END SUBROUTINE CopyTxt
     !EOC
     !------------------------------------------------------------------------------
@@ -210,22 +210,22 @@ MODULE Charpak_Mod
     !
         INTEGER          :: ilen, iasc, icnt, i, Start
         CHARACTER(LEN=1) :: ch
-    
+
         ! Default: Skip space characters
         Start = 32
-    
+
         ! If KEEPSPACES=T then skip all non-printing characters,
         ! but keep space characters. (bmy, 1/30/18)
         IF ( PRESENT( KeepSpaces ) ) THEN
            IF ( KeepSpaces ) Start = 31
         ENDIF
-    
+
         ilen = LEN(text)
         IF (ilen.GT.1) THEN
            icnt = 1
            DO i=1,ilen
               iasc = ICHAR(text(i:i))
-    
+
               ! Keep characters between these limits
               IF ( ( iasc > Start ).AND. (iasc < 255 ) ) THEN
                  ch = text(i:i)
@@ -238,7 +238,7 @@ MODULE Charpak_Mod
               text(i:i) = ' '
            ENDDO
         ENDIF
-    
+
       END SUBROUTINE CStrip
     !EOC
     !------------------------------------------------------------------------------
@@ -273,13 +273,13 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
         INTEGER iasc
-    
+
         iasc = ICHAR(ch)
         lnum = .FALSE.
         IF ((iasc.GE.48).AND.(iasc.LE.57)) THEN
            lnum = .TRUE.
         ENDIF
-    
+
       END FUNCTION IsDigit
     !EOC
     !------------------------------------------------------------------------------
@@ -316,24 +316,24 @@ MODULE Charpak_Mod
     !
         ! Local variables
         INTEGER :: I1, I2
-    
+
         !=================================================================
         ! StrRepl begins here!
         !=================================================================
         DO
-    
+
            ! I1 is the first character that matches the search pattern;
            ! it must be 1 or larger.  Otherwise exit the routine.
            I1 = INDEX( Str, Pattern )
            IF ( I1 < 1 ) RETURN
-    
+
            ! Replace the text.  I2 is the starting position of the
            ! string following the point of text replacement.
            I2 = I1 + LEN( Pattern )
            Str = Str(1:I1-1) // ReplTxt // Str(I2:)
-    
+
         ENDDO
-    
+
       END SUBROUTINE StrRepl
     !EOC
     !------------------------------------------------------------------------------
@@ -372,32 +372,32 @@ MODULE Charpak_Mod
     !
         INTEGER             :: I, IFLAG, COL
         CHARACTER(LEN=2047) :: WORD
-    
+
         !=======================================================================
         ! STRSPLIT begins here!
         !=======================================================================
-    
+
         ! Initialize
         I         = 0
         COL       = 1
         IFLAG     = 0
         RESULT(:) = ''
-    
+
         ! Loop until all matches found, or end of string
         DO WHILE ( IFLAG == 0 )
-    
+
            ! Look for strings beteeen separator string
            CALL TXTEXT ( SEP, TRIM( STR ), COL, WORD, IFLAG )
-    
+
            ! Store substrings in RESULT array
            I         = I + 1
            RESULT(I) = TRIM( WORD )
-    
+
         ENDDO
-    
+
         ! Optional argument: return # of substrings found
         IF ( PRESENT( N_SUBSTRS ) ) N_SUBSTRS = I
-    
+
       END SUBROUTINE StrSplit
     !EOC
     !------------------------------------------------------------------------------
@@ -431,7 +431,7 @@ MODULE Charpak_Mod
         !=================================================================
         Str = ADJUSTR( TRIM( Str ) )
         Str = ADJUSTL( TRIM( Str ) )
-    
+
       END SUBROUTINE StrSqueeze
     !EOC
     !------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
         INTEGER :: iasc,i,ilen
-    
+
         ilen = LEN(text)
         DO I=1,ilen
            iasc = ICHAR(text(i:i))
@@ -470,7 +470,7 @@ MODULE Charpak_Mod
               text(i:i) = CHAR(iasc+32)
            ENDIF
         ENDDO
-    
+
       END SUBROUTINE TRANLC
     !EOC
     !------------------------------------------------------------------------------
@@ -504,7 +504,7 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
         INTEGER :: iasc,i,ilen
-    
+
         ilen = LEN(text)
         DO i=1,ilen
            iasc = ICHAR(text(i:i))
@@ -512,7 +512,7 @@ MODULE Charpak_Mod
               text(i:i) = CHAR(iasc-32)
            ENDIF
         ENDDO
-    
+
       END SUBROUTINE TRANUC
     !EOC
     !------------------------------------------------------------------------------
@@ -585,13 +585,13 @@ MODULE Charpak_Mod
     !
         INTEGER :: Tmax,T1,T2,imat
         LOGICAL :: again,prev
-    
+
         ! Length of text
         Tmax = LEN(text)
-    
+
         ! Fill Word with blanks
         WORD = REPEAT( ' ', LEN( WORD ) )
-    
+
         IF (col.GT.Tmax) THEN
            ! Text does not contain any characters past Tmax.
            ! Reset col to one and return flag = {error condition}
@@ -620,7 +620,7 @@ MODULE Charpak_Mod
            ENDIF
            T1=col
            T2 = T1
-    
+
            again = .true.
            DO WHILE (again)
               ! Check for a match with a character in ch
@@ -658,7 +658,7 @@ MODULE Charpak_Mod
                  iflg=-1
               ENDIF
            ENDDO
-    
+
            IF (iflg.EQ.0) THEN
               ! Copy characters into WORD and set col for return
               CALL CopyTxt(1,Text(T1:T2),Word)
@@ -669,7 +669,7 @@ MODULE Charpak_Mod
               col = 1
            ENDIF
         ENDIF
-    
+
       END SUBROUTINE TxtExt
     !EOC
     !------------------------------------------------------------------------------
@@ -705,26 +705,26 @@ MODULE Charpak_Mod
     !
         ! Scalars
         INTEGER :: C, Ascii
-    
+
         !=======================================================================
         ! Convert to uppercase
         !=======================================================================
-    
+
         ! Initialize
         UpCaseText = Text
-    
+
         ! Loop over all characters
         DO C = 1, LEN_TRIM( UpCaseText )
-    
+
            ! Get the ASCII code for each character
            Ascii = ICHAR( UpCaseText(C:C) )
-    
+
            ! If lowercase, convert to uppercase
            IF ( Ascii > 96 .and. Ascii < 123 ) THEN
               UpCaseText(C:C) = CHAR( Ascii - 32 )
            ENDIF
         ENDDO
-    
+
       END FUNCTION To_UpperCase
     !EOC
     !------------------------------------------------------------------------------
@@ -764,34 +764,34 @@ MODULE Charpak_Mod
     !EOP
     !------------------------------------------------------------------------------
     !BOC
-    
+
         !=================================================================
         ! Initialize
         !=================================================================
         EndOfFile = .FALSE.
         IoStatus  = 0
         Line      = ''
-    
+
         !=================================================================
         ! Read data from the file
         !=================================================================
-    
+
         ! Read a line from the file
         READ( fId, '(a)', IOSTAT=IoStatus ) Line
-    
+
         ! IO Status < 0: EOF condition
         IF ( IoStatus < 0 ) THEN
            EndOfFile = .TRUE.
            RETURN
         ENDIF
-    
+
         ! If desired, call StrSqueeze to strip leading and trailing blanks
         IF ( PRESENT( Squeeze ) ) THEN
            IF ( Squeeze ) THEN
               CALL StrSqueeze( Line )
            ENDIF
         ENDIF
-    
+
       END FUNCTION ReadOneLine
     !EOC
     !------------------------------------------------------------------------------
@@ -821,20 +821,20 @@ MODULE Charpak_Mod
     !EOP
     !------------------------------------------------------------------------------
     !BOC
-    
+
         ! Initialize
         CleanStr = Str
-    
+
         ! Strip out non-printing characters (e.g. tabs)
         CALL CStrip    ( CleanStr           )
-    
+
         ! Remove commas and quotes
         CALL StrRepl   ( CleanStr, ",", " " )
         CALL StrRepl   ( CleanStr, "'", " " )
-    
+
         ! Remove leading and trailing spaces
         CALL StrSqueeze( CleanStr           )
-    
+
       END FUNCTION CleanText
     !EOC
     !------------------------------------------------------------------------------
@@ -868,55 +868,55 @@ MODULE Charpak_Mod
     !
         ! Scalars
         INTEGER          :: C, S, B, Matches, Length
-    
+
         ! Arrays
         INTEGER          :: BreakPts(100)
         INTEGER          :: SpaceLoc(500)
-    
+
         ! Strings
         CHARACTER(LEN=1) :: Delim
-    
+
         !=======================================================================
         ! WordWrapPrint begins here!
         !=======================================================================
-    
+
         ! SpaceLoc is the array of where delimiters (usually the " "
         ! character) occur in the text, and S is its index.
         S           = 1
         SpaceLoc    = 0
-    
+
         ! BreakPts is the array of where line breaks occur
         ! and B is its index.
         BreakPts    = 0
         B           = 1
         BreakPts(B) = 1
-    
+
         ! Delimiter for separating words (will be the space character by default)
         IF ( PRESENT( Delimiter ) ) THEN
            Delim = Delimiter
         ELSE
            Delim = ' '
         ENDIF
-    
+
         ! Find the Location of spaces in the text
         CALL CntMat( Text, ' ', Matches, SpaceLoc )
-    
+
         ! Loop through the number of matches
         DO
-    
+
            ! Move to the next delimiter location
            S = S + 1
-    
+
            ! Compute the length of the line
            Length = SpaceLoc(S) - BreakPts(B)
-    
+
            ! If the length of this segment is greater than the requested
            ! line length, store the position of this line break
            IF ( Length > LineWidth ) THEN
               B           = B             + 1
               BreakPts(B) = SpaceLoc(S-1) + 1
            ENDIF
-    
+
            ! If we have exceeded the number of delimiters in the text, then set
            ! the last breakpoint at the end of the text and exit the loop.
            IF ( S > Matches ) THEN
@@ -924,14 +924,14 @@ MODULE Charpak_Mod
               BreakPts(B) = LEN_TRIM( Text ) + 1
               EXIT
            ENDIF
-    
+
         ENDDO
-    
+
         ! Print each line
         DO C = 1, B-1
            WRITE( 6, '(a)' ) Text( BreakPts(C):BreakPts(C+1)-1 )
         ENDDO
-    
+
       END SUBROUTINE WordWrapPrint
     !EOC
     !------------------------------------------------------------------------------
@@ -966,24 +966,24 @@ MODULE Charpak_Mod
     !
         integer :: i,num
         logical,dimension(size(vec)) :: mask
-    
+
         mask = .false.
-    
+
         !=======================================================================
         ! Unique begins here!
         !=======================================================================
-    
+
         ! Loop over all elements
         do i = 1, SIZE( vec )
-    
+
            ! Assume that all valid array elements are located
            ! contiguously  Exit upon the encountering the
-           ! first null character. 
+           ! first null character.
            IF ( LEN_TRIM( vec(I) ) == 0 ) EXIT
-    
+
            !count the number of occurrences of this element:
            num = count( vec(i)==vec )
-    
+
            if (num==1) then
               !there is only one, flag it:
               mask(i) = .true.
@@ -991,18 +991,18 @@ MODULE Charpak_Mod
               !flag this value only if it hasn't already been flagged:
               if (.not. any(vec(i)==vec .and. mask) ) mask(i) = .true.
            end if
-    
+
         end do
-    
+
         !return only flagged elements:
         IF ( ALLOCATED(  vec_unique ) ) DEALLOCATE( vec_unique )
         ALLOCATE( vec_unique(count(mask)) )
         vec_unique = PACK( vec, mask )
-    
+
         !if you also need it sorted, then do so.
         ! For example, with slatec routine:
         !call ISORT (vec_unique, [0], size(vec_unique), 1)
-    
+
       END SUBROUTINE Unique
     !
     !------------------------------------------------------------------------------
@@ -1020,7 +1020,7 @@ MODULE Charpak_Mod
     !
       FUNCTION charArr2Str( charArray, N ) RESULT( string )
     !
-    ! !INPUT PARAMETERS: 
+    ! !INPUT PARAMETERS:
     !
         INTEGER,          INTENT(IN) :: N              ! Dimension of charArray
         CHARACTER(LEN=1), INTENT(IN) :: charArray(N)   ! Character array
@@ -1038,22 +1038,22 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
         INTEGER :: C
-        
+
         !=======================================================================
         ! charArray2str begins here!
         !=======================================================================
-    
+
         ! Initialize the string
         string = ""
-    
-    
-        ! Copy as much of the charArray to the string, until we hit the 
+
+
+        ! Copy as much of the charArray to the string, until we hit the
         ! null byte (ASCII character 0), which denotes the end of characters
         DO C = 1, N
            IF ( chararray(C) == ACHAR(0) ) EXIT
            string(C:C) = chararray(C)
         ENDDO
-    
+
       END FUNCTION charArr2Str
     !EOC
     !
@@ -1064,17 +1064,17 @@ MODULE Charpak_Mod
     !
     ! !IROUTINE: str2CharArr
     !
-    ! !DESCRIPTION: Converts a string of length N to a character array of 
+    ! !DESCRIPTION: Converts a string of length N to a character array of
     !  dimension N.  Useful for writing character strings to netCDF files.
-    
-    ! !DESCRIPTION: 
+
+    ! !DESCRIPTION:
     !\\
     !\\
     ! !INTERFACE:
     !
       FUNCTION str2CharArr( string, N ) RESULT( charArray )
     !
-    ! !INPUT PARAMETERS: 
+    ! !INPUT PARAMETERS:
     !
         INTEGER,          INTENT(IN) :: N              ! Length of string
         CHARACTER(LEN=N), INTENT(IN) :: string         ! Input string
@@ -1092,18 +1092,18 @@ MODULE Charpak_Mod
     ! !LOCAL VARIABLES:
     !
        INTEGER :: C,  L
-    
+
        ! Length of the string without trailing whitespace
        L = LEN_TRIM( string )
-       
+
        ! Copy the non-whitespace characters to chararray
        DO C = 1, L
           chararray(C) = string(C:C)
        ENDDO
-       
+
        ! Pad the remaining elements with the null byte
        charArray(L+1:) = ACHAR(0)
-    
+
      END FUNCTION str2CharArr
     !EOC
     END MODULE CharPak_Mod

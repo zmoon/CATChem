@@ -65,10 +65,10 @@ contains
       xmin=60.*gmt+(xtime-xhour*60.)
       gmtp=mod(xhour,24.)
       gmtp=gmtp+xmin/60.
-     
-      oh_t(:,:,:)=0.0 
-      h2o2_t(:,:,:)=0.0 
-      no3_t(:,:,:)=0.0 
+
+      oh_t(:,:,:)=0.0
+      h2o2_t(:,:,:)=0.0
+      no3_t(:,:,:)=0.0
 !
 ! following arrays for busget stuff only
 !
@@ -92,7 +92,7 @@ contains
         !--use physics inst cosine zenith --hli 03/06/2020
 !        cossza(1,1)=xcosz(i,j)
 !
-       do k=kts,kte 
+       do k=kts,kte
        chldms_oh=0.
        chldms_no3=0.
        chldms_x=0.
@@ -162,7 +162,7 @@ endif
         xlonn=xlong(i,j)
         CALL szangle(1, 1, julday, gmtp, sza, cosszax,xlonn,rlat)
         cossza(1,1)=cosszax(1,1)
-       do k=kts,kte 
+       do k=kts,kte
        chldms_oh=0.
        chldms_no3=0.
        chldms_x=0.
@@ -188,7 +188,7 @@ endif
           oh(1,1,1)=chem(i,k,j,p_ho)*1.d-6
           h2o2(1,1,1)=chem(i,k,j,p_h2o2)*1.d-6
           xno3(1,1,1) = chem(i,k,j,p_no3)*1.d-6
-          IF (COSSZA(1,1) > 0.0)xno3(1,1,1) = 0. 
+          IF (COSSZA(1,1) > 0.0)xno3(1,1,1) = 0.
 !         if(i.eq.19.and.j.eq.19.and.k.eq.kts)then
 !          write(0,*)backg_oh(i,k,j),backg_no3(i,k,j),ttday(i,j),tcosz(i,j)
 !         endif
@@ -230,7 +230,7 @@ SUBROUTINE chmdrv_su( imx,jmx,lmx,&
 ! ****************************************************************************
 
 ! USE module_data_gocart
-  
+
   IMPLICIT NONE
 
   INTEGER, INTENT(IN) :: nmx,imx,jmx,lmx
@@ -267,7 +267,7 @@ SUBROUTINE chmdrv_su( imx,jmx,lmx,&
      CALL chem_msa(imx,jmx,lmx,nmx, ndt1, airmas, tc, tdry, cossza,&
           pmsa_dms)
 !          depmsa, pmsa_dms)
-  
+
 END SUBROUTINE chmdrv_su
 
 !=============================================================================
@@ -304,7 +304,7 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
 ! *  for use in CHEM_SO2 and CHEM_MSA subroutines as a source term.  They    *
 ! *  are in unit of MixingRatio/timestep.                                    *
 ! *                                                                          *
-! **************************************************************************** 
+! ****************************************************************************
 
 ! USE module_data_gocart_chem
 
@@ -319,31 +319,31 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
   REAL(kind_chem), DIMENSION(imx,jmx,lmx), INTENT(OUT)   :: pso2_dms, pmsa_dms
   real(kind_chem), DIMENSION (imx,jmx),INTENT(IN) :: cossza
 
-  REAL(kind_chem), PARAMETER :: fx = 1.0 
+  REAL(kind_chem), PARAMETER :: fx = 1.0
   REAL(kind_chem), PARAMETER :: a = 0.75
   REAL(kind_chem), PARAMETER :: b = 0.25
-  
-  ! From D4: only 0.8 efficiency, also some goes to DMSO and lost. 
-  ! So we assume 0.75 efficiency for DMS addtion channel to form    
-  ! products.                                                       
-  
+
+  ! From D4: only 0.8 efficiency, also some goes to DMSO and lost.
+  ! So we assume 0.75 efficiency for DMS addtion channel to form
+  ! products.
+
   REAL(kind_chem), PARAMETER :: eff = 1.0
-  ! -- Factor to convert AIRDEN from kgair/m3 to molecules/cm3: 
+  ! -- Factor to convert AIRDEN from kgair/m3 to molecules/cm3:
   REAL(kind_chem), PARAMETER :: f = 1000.0 / airmw * 6.022D23 * 1.0D-6
   INTEGER :: i, j, l
   REAL(kind_chem) :: tk, o2, dms0, rk1, rk2, rk3, dms_oh, dms, xoh, xn3, xx
-  
+
   ! executable statements
-  
+
   DO l = 1,lmx
 !CMIC$ doall autoscope
      DO j = 1,jmx
         DO i = 1,imx
-           
+
            tk = tmp(i,j,l)
            o2 = airden(i,j,l) * f * 0.21
            dms0 = tc(i,j,l,NDMS)
-           
+
 ! ****************************************************************************
 ! *  (1) DMS + OH:  RK1 - addition channel;  RK2 - abstraction channel.      *
 ! ****************************************************************************
@@ -351,7 +351,7 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
            rk1 = 0.0d0
            rk2 = 0.0d0
            rk3 = 0.0d0
-           
+
            IF (oh(i,j,l) > 0.0) THEN
 !             IF (TRIM(oh_units) == 'mol/mol') THEN
                  ! mozech: oh is in mol/mol
@@ -363,10 +363,10 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
 !             ELSE
 !                rk1 = (1.7D-42 * EXP(7810.0/tk) * o2) / &
 !                     (1.0 + 5.5D-31 * EXP(7460.0/tk) * o2 ) * oh(i,j,l)
-!                rk2 = 1.2D-11*EXP(-260.0/tk) * oh(i,j,l) 
+!                rk2 = 1.2D-11*EXP(-260.0/tk) * oh(i,j,l)
 !             END IF
            END IF
-           
+
 ! ****************************************************************************
 ! *  (2) DMS + NO3 (only happens at night):                                  *
 ! ****************************************************************************
@@ -374,16 +374,16 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
            IF (cossza(i,j) <= 0.0) THEN
 
 !             IF (TRIM(no3_units) == 'cm-3') THEN
-!                ! IMAGES: XNO3 is in molecules/cm3.     
+!                ! IMAGES: XNO3 is in molecules/cm3.
 !                rk3 = 1.9D-13 * EXP(500.0/tk) * xno3(i,j,l)
 
 !             ELSE
                  ! GEOSCHEM (mergechem) and mozech: XNO3 is in mol/mol (v/v)
-                 ! convert xno3 from volume mixing ratio to molecules/cm3 
+                 ! convert xno3 from volume mixing ratio to molecules/cm3
                  rk3 = 1.9D-13 * EXP(500.0/tk) * xno3(i,j,l) * &
                       airden(i,j,l) * f
 !             END IF
-              
+
            END IF
 
 ! ****************************************************************************
@@ -398,11 +398,11 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
            dms_oh = dms0   * EXP( -(rk1 + rk2) * fx * REAL(ndt1) )
            dms    = dms_oh * EXP( -(rk3) * fx * REAL(ndt1) )
            dms    = MAX(dms, 1.0D-16)
-           
+
            tc(i,j,l,NDMS) = dms
-           
+
 ! ****************************************************************************
-! *  Save SO2 and MSA production from DMS oxidation                          * 
+! *  Save SO2 and MSA production from DMS oxidation                          *
 ! *  (in MixingRatio/timestep):                                              *
 ! *                                                                          *
 ! *  SO2 is formed in DMS + OH addition (0.85) and abstraction (1.0)         *
@@ -410,7 +410,7 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
 ! *      SO2 yield from DMS + X is 1.0.                                      *
 ! *  MSA is formed in DMS + OH addition (0.15) channel.                      *
 ! ****************************************************************************
-       
+
            IF ((rk1 + rk2) == 0.0) THEN
               pmsa_dms(i,j,l) = 0.0
            ELSE
@@ -421,9 +421,9 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
 !      pso2_dms(i,j,l) =  (dms0 - dms - pmsa_dms(i,j,l)/eff) * eff
 
            !    ------------------------------------------------------------
-           !    DIAGNOSTICS:      DMS loss       (kgS/timstep)          
-           !                      SO2 production (kgS/timestep)         
-           !                      MSA production (kgS/timestep)         
+           !    DIAGNOSTICS:      DMS loss       (kgS/timstep)
+           !                      SO2 production (kgS/timestep)
+           !                      MSA production (kgS/timestep)
            !    ------------------------------------------------------------
            xoh  = (dms0   - dms_oh) / fx  * airmas(i,j,l)/airmw*smw
            xn3  = (dms_oh - dms)    / fx  * airmas(i,j,l)/airmw*smw
@@ -432,18 +432,18 @@ SUBROUTINE chem_dms( imx,jmx,lmx,&
            chldms_oh (i,j,l) = chldms_oh (i,j,l) + xoh
            chldms_no3(i,j,l) = chldms_no3(i,j,l) + xn3
            chldms_x  (i,j,l) = chldms_x  (i,j,l) + xx
-           
+
            chpso2(i,j,l) = chpso2(i,j,l) + pso2_dms(i,j,l) &
                 * airmas(i,j,l) / airmw * smw
            chpmsa(i,j,l) = chpmsa(i,j,l) + pmsa_dms(i,j,l) &
                 * airmas(i,j,l) / airmw * smw
-           
+
         END DO
      END DO
   END DO
-  
+
 END SUBROUTINE chem_dms
-      
+
 !=============================================================================
 
 SUBROUTINE chem_so2( imx,jmx,lmx,&
@@ -457,9 +457,9 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
 ! *  This is SO2 chemistry subroutine.                                       *
 ! *                                                                          *
 ! *  SO2 production:                                                         *
-! *    DMS + OH, DMS + NO3 (saved in CHEM_DMS)                               * 
+! *    DMS + OH, DMS + NO3 (saved in CHEM_DMS)                               *
 ! *                                                                          *
-! *  SO2 loss:                                                               * 
+! *  SO2 loss:                                                               *
 ! *    SO2 + OH  -> SO4                                                      *
 ! *    SO2       -> drydep (NOT USED IN WRF/CHEM                             *
 ! *    SO2 + H2O2 or O3 (aq) -> SO4                                          *
@@ -496,7 +496,7 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
   REAL(kind_chem), INTENT(OUT) :: pso4_so2(imx,jmx,lmx)
 
   REAL(kind_chem) ::  k0, kk, m, l1, l2, ld
-  ! Factor to convert AIRDEN from kgair/m3 to molecules/cm3: 
+  ! Factor to convert AIRDEN from kgair/m3 to molecules/cm3:
   REAL(kind_chem), PARAMETER :: f  = 1000. / airmw * 6.022D23 * 1.0D-6
   REAL(kind_chem), PARAMETER :: ki = 1.5D-12
   INTEGER :: i, j, l
@@ -507,16 +507,16 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
   DO l = 1,lmx
      DO j = 1,jmx
         DO i = 1,imx
-           
+
            so20 = tc(i,j,l,NSO2)
 
-           ! RK1: SO2 + OH(g), in s-1 
+           ! RK1: SO2 + OH(g), in s-1
            tk = tmp(i,j,l)
            k0 = 3.0D-31 * (300.0/tk)**3.3
            m  = airden(i,j,l) * f
            kk = k0 * m / ki
            f1 = ( 1.0+ ( LOG10(kk) )**2 )**(-1)
-!          IF (TRIM(oh_units) == 'mol/mol') THEN 
+!          IF (TRIM(oh_units) == 'mol/mol') THEN
               ! mozech: oh is in mol/mol
               ! convert to molecules/cm3
               rk1 = ( k0 * m / (1.0 + kk) ) * 0.6**f1 * &
@@ -524,14 +524,14 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
 !          ELSE
 !             rk1 = ( k0 * m / (1.0 + kk) ) * 0.6**f1 * oh(i,j,l)
 !          END IF
-      
-           ! RK2: SO2 drydep frequency, s-1 
+
+           ! RK2: SO2 drydep frequency, s-1
 !           IF (l == 1) THEN ! at the surface
 !              rk2 = drydf(i,j,NSO2)
 !           ELSE
               rk2 = 0.0
 !           END IF
-           
+
            rk  = (rk1 + rk2)
            rkt =  rk * REAL(ndt1)
 
@@ -558,7 +558,7 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
 ! *  SO2 chemical loss rate  = SO4 production rate (MixingRatio/timestep).   *
 ! ****************************************************************************
 
-           ! Cloud chemistry (above 258K): 
+           ! Cloud chemistry (above 258K):
            fc = cldf(i,j,l)
            IF (fc > 0.0 .AND. so2_cd > 0.0 .AND. tk > 258.0) THEN
 
@@ -570,8 +570,8 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
                       (1.0 - cldf(i,j,l)*so2_cd/h2o2(i,j,l))
               END IF
               so2 = so2_cd * (1.0 - fc)
-              ! Aqueous phase SO2 loss rate (MixingRatio/timestep): 
-              l2  = so2_cd * fc 
+              ! Aqueous phase SO2 loss rate (MixingRatio/timestep):
+              l2  = so2_cd * fc
            ELSE
               so2 = so2_cd
               l2 = 0.0
@@ -587,10 +587,10 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
            pso4_so2(i,j,l) = l1 + l2
 
            !    ---------------------------------------------------------------
-           !    DIAGNOSTICS:      SO2 gas-phase loss       (kgS/timestep)  
-           !                      SO2 aqueous-phase loss   (kgS/timestep) 
-           !                      SO2 dry deposition loss  (kgS/timestep) 
-           !                      SO4 production           (kgS/timestep) 
+           !    DIAGNOSTICS:      SO2 gas-phase loss       (kgS/timestep)
+           !                      SO2 aqueous-phase loss   (kgS/timestep)
+           !                      SO2 dry deposition loss  (kgS/timestep)
+           !                      SO4 production           (kgS/timestep)
            !    ---------------------------------------------------------------
            chlso2_oh(i,j,l) = chlso2_oh(i,j,l) &
                 + l1 * airmas(i,j,l) / airmw * smw
@@ -601,7 +601,7 @@ SUBROUTINE chem_so2( imx,jmx,lmx,&
 
            chpso4(i,j,l) = chpso4(i,j,l) + pso4_so2(i,j,l) &
                 * airmas(i,j,l) / airmw * smw
-           
+
         END DO
      END DO
   END DO
@@ -644,7 +644,7 @@ SUBROUTINE chem_so4( imx,jmx,lmx,&
   real(kind_chem), DIMENSION (imx,jmx),INTENT(IN) :: cossza
 
   INTEGER :: i, j, l
-  REAL(kind_chem) :: so40, rk, rkt, so4 
+  REAL(kind_chem) :: so40, rk, rkt, so4
 
   ! executable statements
 
@@ -654,7 +654,7 @@ SUBROUTINE chem_so4( imx,jmx,lmx,&
 
            so40 = tc(i,j,l,NSO4)
 
-           ! RK: SO4 drydep frequency, s-1 
+           ! RK: SO4 drydep frequency, s-1
 !           IF (l == 1) THEN
 !              rk  = drydf(i,j,NSO4)
 !              rkt = rk * REAL(ndt1)
@@ -667,13 +667,13 @@ SUBROUTINE chem_so4( imx,jmx,lmx,&
            so4    = MAX(so4, 1.0D-16)
            tc(i,j,l,NSO4) = so4
 
-           !  -------------------------------------------------------------- 
-           !  DIAGNOSTICS:      SO4 dry deposition  (kgS/timestep)      
-           !  -------------------------------------------------------------- 
+           !  --------------------------------------------------------------
+           !  DIAGNOSTICS:      SO4 dry deposition  (kgS/timestep)
+           !  --------------------------------------------------------------
 !           IF (l == 1) &
 !                depso4(i,j) = depso4(i,j) + (so40 - so4 + pso4_so2(i,j,l)) &
 !                * airmas(i,j,l) / airmw * smw
-           
+
         END DO
      END DO
   END DO
@@ -716,16 +716,16 @@ SUBROUTINE chem_msa( imx,jmx,lmx,&
 
   REAL(kind_chem) :: msa0, msa, rk, rkt
   INTEGER :: i, j, l
-  
+
   ! executable statements
-  
+
   DO l = 1,lmx
      DO j = 1,jmx
         DO i = 1,imx
 
            msa0 = tc(i,j,l,NMSA)
 
-           ! RK: MSA drydep frequency, s-1 
+           ! RK: MSA drydep frequency, s-1
 !           IF (l == 1) THEN
 !              rk  = drydf(i,j,NMSA)
 !              rkt = rk * REAL(ndt1)
@@ -739,10 +739,10 @@ SUBROUTINE chem_msa( imx,jmx,lmx,&
 
            msa    = MAX(msa, 1.0D-16)
            tc(i,j,l,NMSA) = msa
-           
-           !  -------------------------------------------------------------- 
-           !  DIAGNOSTICS:      MSA dry deposition  (kgS/timestep)     
-           !  -------------------------------------------------------------- 
+
+           !  --------------------------------------------------------------
+           !  DIAGNOSTICS:      MSA dry deposition  (kgS/timestep)
+           !  --------------------------------------------------------------
 !           IF (l == 1) &
 !                depmsa(i,j) = depmsa(i,j) + (msa0 - msa + pmsa_dms(i,j,l)) &
 !                * airmas(i,j,l) / airmw * smw
@@ -817,7 +817,7 @@ SUBROUTINE szangle(imx, jmx, doy, xhour, sza, cossza,xlon,rlat)
      ahr = ABS(timloc - 12.0) * 15.0 * pi/180.0
      !
      DO j = 1,jmx
-        ! -- Solar zenith angle      
+        ! -- Solar zenith angle
         cossza(i,j) = SIN(rlat) * SIN(dec) + &
                       COS(rlat) * COS(dec) * COS(ahr)
         sza(i,j)    = ACOS(cossza(i,j)) * 180.0/pi
@@ -825,7 +825,7 @@ SUBROUTINE szangle(imx, jmx, doy, xhour, sza, cossza,xlon,rlat)
         !
      END do
   END DO
-     
+
 END subroutine szangle
 
 end module gocart_chem_mod

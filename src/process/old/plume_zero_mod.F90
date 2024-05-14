@@ -19,7 +19,7 @@ real(kind=kind_chem),dimension(nkp) ::  ucon,vcon,wcon,thtcon ,rvcon,picon,tmpco
                        ,zcon,zzcon,scon ! environment at RAMS  grid
 
 !
-real(kind=kind_chem) :: DZ,DQSDZ,VISC(nkp),VISCOSITY,TSTPF   
+real(kind=kind_chem) :: DZ,DQSDZ,VISC(nkp),VISCOSITY,TSTPF
 integer :: N,NM1,L
 !
 real(kind=kind_chem) :: ADVW,ADVT,ADVV,ADVC,ADVH,ADVI,CVH(nkp),CVI(nkp),ADIABAT,&
@@ -58,17 +58,17 @@ est=0.0;qsat=0.0;qpas=0.0;qtotal=0.0
 wc=0.0;wt=0.0;wpass=0.0;tt=0.0;qvt=0.0;qct=0.0;qht=0.0;qit=0.0;sct=0.0
 dzm=0.0;dzt=0.0;zm=0.0;zt=0.0;vctr1=0.0;vctr2=0.0
 vt3dc=0.0;vt3df=0.0;vt3dk=0.0;vt3dg=0.0;scr1=0.0
-pke=0.0;the=0.0;thve=0.0;thee=0.0;pe=0.0;te=0.0;qvenv=0.0;rhe=0.0;dne=0.0;sce=0.0 
-ucon=0.0;vcon=0.0;wcon=0.0;thtcon =0.0;rvcon=0.0;picon=0.0;tmpcon=0.0;dncon=0.0;prcon=0.0 
-zcon=0.0;zzcon=0.0;scon=0.0 
+pke=0.0;the=0.0;thve=0.0;thee=0.0;pe=0.0;te=0.0;qvenv=0.0;rhe=0.0;dne=0.0;sce=0.0
+ucon=0.0;vcon=0.0;wcon=0.0;thtcon =0.0;rvcon=0.0;picon=0.0;tmpcon=0.0;dncon=0.0;prcon=0.0
+zcon=0.0;zzcon=0.0;scon=0.0
 dz=0.0;dqsdz=0.0;visc=0.0;viscosity=0.0;tstpf=0.0
 advw=0.0;advt=0.0;advv=0.0;advc=0.0;advh=0.0;advi=0.0;cvh=0.0;cvi=0.0;adiabat=0.0
-wbar=0.0;alast=0.0;vhrel=0.0;virel=0.0  
+wbar=0.0;alast=0.0;vhrel=0.0;virel=0.0
 zsurf=0.0;zbase=0.0;ztop=0.0;area=0.0;rsurf=0.0;alpha=0.0;radius=0.0;heating=0.0
 fmoist=0.0;bload=0.0;dt=0.0;time=0.0;tdur=0.0
 ztop_=0.0
-upe =0.0  
-vpe =0.0  
+upe =0.0
+vpe =0.0
 vel_e =0.0
 vel_p =0.0
 rad_p =0.0

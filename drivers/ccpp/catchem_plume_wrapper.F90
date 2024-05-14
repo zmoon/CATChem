@@ -34,7 +34,7 @@ contains
 
 !> \defgroup catchem_plume_group CATChem plume wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_plume_wrapper CATChem plume wrapper Module  
+!>\defgroup catchem_plume_wrapper CATChem plume wrapper Module
 !> \ingroup catchem_plume_group
 !! This is the CATChem plume wrapper Module
 !! \section arg_table_catchem_plume_wrapper_run Argument Table
@@ -64,7 +64,7 @@ contains
 
     logical,        intent(in) :: do_sppt_emis, do_ca, ca_sgs_emis, ca_sgs
     real(kind_phys), intent(in) :: sppt_wts(:,:), ca_emis_plume(:)
-    integer, dimension(im), intent(in) :: vegtype    
+    integer, dimension(im), intent(in) :: vegtype
     integer, dimension(im), intent(out) :: vegtype_cpl
     real(kind_phys), dimension(im,    5), intent(in) :: fire_GBBEPx
     real(kind_phys), dimension(im,   13), intent(in) :: fire_MODIS
@@ -83,7 +83,7 @@ contains
                      p_phy, z_at_w, dz8w, p8w, rho_phy, vvel
 
 !>- sea salt & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
 
     integer :: ide, ime, ite, kde
@@ -109,7 +109,7 @@ contains
     real(kind_phys) :: factor, factor2, factor3, random_factor(ims:im)
     integer :: nbegin
     integer :: i, j, jp, k, kp, n
-  
+
 
     errmsg = ''
     errflg = 0
@@ -122,7 +122,7 @@ contains
     doing_sgs_emis = do_ca .and. ca_sgs_emis .and. .not. ca_sgs
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -326,11 +326,11 @@ contains
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
     real(kind_phys), dimension(:, :), intent(out) :: ca_sgs_gbbepx_frp_with_j
     real(kind_phys), dimension(ims:ime, jms:jme, num_ebu_in),intent(out) :: ebu_in
-    
+
     integer,dimension(ims:ime, jms:jme), intent(out) :: ivgtyp
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, u_phy, v_phy, p_phy, rho_phy, dz8w, p8w, vvel
-         
+
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_moist), intent(out) :: moist
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme, num_chem),  intent(out) :: chem
 
@@ -338,7 +338,7 @@ contains
     real(kind_phys), dimension(ims:ime, jms:jme, num_frp_plume), intent(out) :: plumedist
     real(kind_phys), dimension(ims:ime, jms:jme   ), intent(out) ::                    &
                    mean_fct_agtf,mean_fct_agef,mean_fct_agsv,mean_fct_aggr,            &
-                   firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr       
+                   firesize_agtf,firesize_agef,firesize_agsv,firesize_aggr
     real(kind_phys), dimension(ims:ime, jms:jme, num_ebu_in) :: emiss_abu
     real(kind_phys), dimension(ims:ime, jms:jme, num_plume_data) :: plume
     real(kind_phys), parameter :: frp2plume = 1.e+06_kind_phys  ! FRP-to-plume conversion factor
@@ -361,7 +361,7 @@ contains
     dz8w           = 0._kind_phys
     p8w            = 0._kind_phys
     vvel           = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
     z_at_w         = 0._kind_phys
 
@@ -381,7 +381,7 @@ contains
     do i=its,ite
      ivgtyp (i,1)=vegtype(i)
     enddo
-   
+
 
     if (ktau <= 1) then
      !emis_vol = 0.
@@ -432,7 +432,7 @@ contains
           v_phy(i,k,j)=vs3d(ip,kkp)
           rho_phy(i,k,j)=p_phy(i,k,j)/(287.04*t_phy(i,k,j)*(1.+.608*spechum(ip,kkp)))
           rri(i,k,j)=1./rho_phy(i,k,j)
-          vvel(i,k,j)=-w(ip,kkp)*rri(i,k,j)/g 
+          vvel(i,k,j)=-w(ip,kkp)*rri(i,k,j)/g
           moist(i,k,j,:)=0.
           moist(i,k,j,1)=gq0(ip,kkp,p_atm_shum)
           if (t_phy(i,k,j) > 265.) then
@@ -541,7 +541,7 @@ contains
         enddo
       enddo
     endif
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))

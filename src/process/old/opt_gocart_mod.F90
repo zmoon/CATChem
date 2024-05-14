@@ -7,7 +7,7 @@
 
 ! Module; module_gocart_opt
 ! use; This module compute optical properties of GOCART aerosols for
-!      radiation. 
+!      radiation.
 !----------------------------------------------------------------------
 
 
@@ -24,12 +24,12 @@
   integer,parameter :: nrmx = 99         !maximu RH
 ! integer,parameter :: waven(nwl_lw) = (/250, 340, 540, 800, 980, 1100, &
 !                      1215, 1380, 1900, 3000/) ! Wavenumber intervals for goddard LW scheme
-                                                ! It actually starts from 0 but adjusted for smallest value 
-                                                ! in mie table (wn=250).  
+                                                ! It actually starts from 0 but adjusted for smallest value
+                                                ! in mie table (wn=250).
 
-  real(kind_chem), dimension(11) :: midbands 
-  data midbands/.2,.235,.27,.2875,.3025,.305,.3625,.55,1.92,1.745,6.135/ 
-  !real,parameter :: frac(4)=(/ 0.01053,0.08421,0.25263,0.65263 /) !fraction for fine dust 
+  real(kind_chem), dimension(11) :: midbands
+  data midbands/.2,.235,.27,.2875,.3025,.305,.3625,.55,1.92,1.745,6.135/
+  !real,parameter :: frac(4)=(/ 0.01053,0.08421,0.25263,0.65263 /) !fraction for fine dust
   !real,parameter :: frac(4)=(/0.0054,0.0257,0.1923,0.7766/) !fraction for fine dust !lzhang Kok
   real(kind_chem),parameter :: frac(4)=(/0.06,0.12,0.24,0.58/) !fraction for fine dust !lzhang GEOS-Chem
   !real,parameter :: frac(4)=(/0.0070,0.0332,0.2487,0.7111/) !fraction for fine dust !lzhang IMP
@@ -40,7 +40,7 @@
 
   real(kind_chem),save :: Bex_lw(tgmx,nwl_lw,0:nrmx) ! LW Mass extinction coefficient [m2/g]
   real(kind_chem),save :: w0_lw(tgmx,nwl_lw,0:nrmx)  ! LW single scattering albedo [-]
-  real(kind_chem),save :: g_lw(tgmx,nwl_lw,0:nrmx)   ! LW asymetry factor [-] 
+  real(kind_chem),save :: g_lw(tgmx,nwl_lw,0:nrmx)   ! LW asymetry factor [-]
 
 
 !
@@ -8547,7 +8547,7 @@
  .4592E+00,.5048E+00,.6980E+00,.6575E+00,.6399E+00,.8711E+00,.8660E+00,.7663E+00,.7222E+00,.7096E+00,&
  .4592E+00,.5048E+00,.6980E+00,.6575E+00,.6399E+00,.8711E+00,.8660E+00,.7663E+00,.7222E+00,.7096E+00/
 
- private 
+ private
 
  public :: aero_opt, aero_opt_new
 
@@ -8559,7 +8559,7 @@
                    ,num_chem,ids,ide, jds,jde, kds,kde                     &
                    ,ims,ime, jms,jme, kms,kme                     &
                    ,its,ite, jts,jte, kts,kte )
-!       USE module_initial_chem_namelists 
+!       USE module_initial_chem_namelists
         USE catchem_config,  only:  p_bc1,p_bc2,p_oc1,p_oc2,      &
               p_msa,p_dust_1,p_dust_2,p_dust_3,p_seas_1,p_seas_2,p_seas_3,&
               p_sulf,p_p25,p_so2,p_seas_4,p_seas_5,p_p10,p_dust_4,p_dust_5,&
@@ -8586,7 +8586,7 @@
 ! Subroutine aero_opt compute the optical properties from the model input.
 ! All the dimension here is model (WRF) dimension. Not GOCART dimension.
 ! Note that tgmx = 14 : aerosol type (see below), and aero must be in the following order.
-!  #   
+!  #
 !  1 = SO4      ! sulfur and its precure
 !  2 = BC1+BC2  ! black carbon (soot)
 !  3 = OC1      ! non hygroscopic OC
@@ -8687,9 +8687,9 @@
             do t = 1,tgmx !aerosol type loop
                !if(rhi == 99) then
                if(rhi == 99.or.tgmx>6) then
-                  ext        = Bex(t,n,rhi) 
+                  ext        = Bex(t,n,rhi)
                   tau_typ(t) = ext * aero(k,t) * dz(k)
-                  ssa_typ(t) = w0(t,n,rhi) 
+                  ssa_typ(t) = w0(t,n,rhi)
                   asy_typ(t) = g(t,n,rhi)
                else
                   if (tgmx<=6)  then
@@ -8699,7 +8699,7 @@
                   asy_typ(t) = w1*g(t,n,rhi) + w2*g(t,n,rhi+1)
                   endif
                endif
-           
+
              enddo !t
         case ('lw')  !longwave radiation
              do t = 1,tgmx !aerosol type loop
@@ -8726,7 +8726,7 @@
                        /  max(tau(i,k,j,n)*ssa(i,k,j,n),1e-08)
 
       enddo !n
-    
+
 !     if(iprt(i,j).eq.1)then
 !      write(6,111)'8tau,ssa,asy=',k,tau(i,k,j,8),ssa(i,k,j,8),asy(i,k,j,8),chem(i,k,j,p_bc1),chem(i,k,j,p_oc1),chem(i,k,j,p_sulf),chem(i,k,j,p_dust_1)
 !11    format(A,1x,i4,3(2x,f6.4),2x,4e12.3)
@@ -8849,7 +8849,7 @@
       integer, parameter :: KCM2 = 10
 !> num of gocart aerosols
       integer, parameter :: KCM  = KCM1 + KCM2
-      real (kind=kind_chem), dimension(KRHLEV) :: rhlev_grt             
+      real (kind=kind_chem), dimension(KRHLEV) :: rhlev_grt
       data  rhlev_grt / .00, .05, .10, .15, .20, .25, .30, .35,      &
      &      .40, .45, .50, .55, .60, .65, .70, .75, .80, .81, .82,      &
      &      .83, .84, .85, .86, .87, .88, .89, .90, .91, .92, .93,      &
@@ -8858,7 +8858,7 @@
       real (kind=kind_chem),allocatable,save,dimension(:,:) ::          &
      &   extrhi_grt, extrhi_grt_550, scarhi_grt, ssarhi_grt, asyrhi_grt
       real (kind=kind_chem),allocatable,save,dimension(:,:,:) ::        &
-     &   extrhd_grt, extrhd_grt_550, scarhd_grt, ssarhd_grt, asyrhd_grt   
+     &   extrhd_grt, extrhd_grt_550, scarhd_grt, ssarhd_grt, asyrhd_grt
       real (kind=kind_chem), dimension(kaerbndd) :: wavelength
       real (kind=kind_chem), dimension(kaerbndi) :: wavelength_du
       real (kind=kind_chem), dimension(kaerbndi,kcm1)       ::          &
@@ -8943,11 +8943,11 @@
         do k = kts,kte
           rh1(k) = rhlay(i,k,j)          !
           !dz1(k) = 1000.*dz (i,k)      ! thickness converted from km to m
-          dz1(k) = dz (i,k,j)      
+          dz1(k) = dz (i,k,j)
          ! plv = 100.*prsl(i,k)         ! convert pressure from mb to Pa
          ! tv =  tvly(i,k)              ! virtual temp in K
           rho = 1.0/rri (i,k,j)   ! air density in kg/m3
-          convsulf = rho * mw_so4_aer / mwdry  
+          convsulf = rho * mw_so4_aer / mwdry
           do m = 1, KCM1
              nn=p_dust_1+m-1
            aerms(k,m) = 1.e-9* chem(i,k,j,nn)*rho  ! dry mass (kg/m3)
@@ -9107,7 +9107,7 @@
          do nc = 1, kcm1
          extrhi_grt_550(nc,1) = rhidext0_grt(id550,nc)
          enddo
-      
+
          do nc = 1, kcm2         !  ---  for rh dependent aerosol species
          do nh = 1, krhlev
          extrhd_grt_550(nh,nc,1) = rhdpext0_grt(i550,nh,nc)

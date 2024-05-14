@@ -35,7 +35,7 @@ contains
 
 !> \defgroup catchem_group CATChem gocart wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_gocart_wrapper CATChem gocart wrapper Module  
+!>\defgroup catchem_gocart_wrapper CATChem gocart wrapper Module
 !> \ingroup catchem_gocart_group
 !! This is the CATChem gocart wrapper Module
 !! \section arg_table_catchem_gocart_wrapper_run Argument Table
@@ -49,7 +49,7 @@ contains
                    ntso2, ntsulf, ntDMS, ntmsa, ntpp25,                     &
                    ntbc1, ntbc2, ntoc1, ntoc2, ntpp10,                      &
                    chem_in_opt,chem_opt_in,                                 &
-                   gq0, qgrs, tile_num, errmsg, errflg) 
+                   gq0, qgrs, tile_num, errmsg, errflg)
 
     implicit none
 
@@ -80,7 +80,7 @@ contains
     real(kind_phys), dimension(ims:im, jms:jme) :: xlat, xlong, dxy
 
 !>- chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
 
     integer :: ide, ime, ite, kde, julday
@@ -89,7 +89,7 @@ contains
 !   integer, parameter :: chem_in_opt = 0  ! 0 for coldstart, 1 for restart
     logical, parameter :: readrestart = .false.
     integer, parameter :: nvl_gocart  = 64  ! number of input levels from gocart file
-   
+
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme) :: pm10, pm2_5_dry, pm2_5_dry_ec
 
 !>- chemical background variables
@@ -102,14 +102,14 @@ contains
     real(kind_phys), dimension(1:num_chem) :: ppm2ugkg
 
     ! -- output tracers
-    real(kind_phys), dimension(ims:im, jms:jme, 1:kme) :: p10, pm25!, ebu_oc 
+    real(kind_phys), dimension(ims:im, jms:jme, 1:kme) :: p10, pm25!, ebu_oc
     real(kind_phys), dimension(ims:im, jms:jme, 1:kme) :: oh_bg, h2o2_bg, no3_bg
 
 
 !>-- local variables
     logical :: call_gocart
     integer :: i, j, jp, k, kp, n
-  
+
 
     errmsg = ''
     errflg = 0
@@ -117,10 +117,10 @@ contains
     chem_opt          = chem_opt_in
 
     gmt = real(idat(5))
-    julday = real(julian)                                       
+    julday = real(julian)
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -218,7 +218,7 @@ contains
      do i=its,ite
        gq0(i,k,ntso2  )=ppm2ugkg(p_so2   ) * max(epsilc,chem(i,k,1,p_so2))
        gq0(i,k,ntsulf )=ppm2ugkg(p_sulf  ) * max(epsilc,chem(i,k,1,p_sulf))
-       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms)) 
+       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms))
        gq0(i,k,ntmsa  )=ppm2ugkg(p_msa   ) * max(epsilc,chem(i,k,1,p_msa))
        gq0(i,k,ntpp25 )=ppm2ugkg(p_p25   ) * max(epsilc,chem(i,k,1,p_p25))
        gq0(i,k,ntbc1  )=ppm2ugkg(p_bc1   ) * max(epsilc,chem(i,k,1,p_bc1))
@@ -298,8 +298,8 @@ contains
     real(kind_phys), dimension(ims:ime, kms:kme, jms:jme),    intent(out) ::          &
                            backg_oh,backg_h2o2,backg_no3
 
-    
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, p_phy, rho_phy, dz8w, p8w, t8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          xlat, xlong, dxy,       &
@@ -326,7 +326,7 @@ contains
 
     ! -- initialize output arrays
     backg_oh       = 0._kind_phys
-    backg_h2o2     = 0._kind_phys 
+    backg_h2o2     = 0._kind_phys
     backg_no3      = 0._kind_phys
     rri            = 0._kind_phys
     t_phy          = 0._kind_phys
@@ -340,7 +340,7 @@ contains
     dxy            = 0._kind_phys
     ttday          = 0._kind_phys
     tcosz          = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
     z_at_w         = 0._kind_phys
 
@@ -350,7 +350,7 @@ contains
      xlat (i,1)=rlat(i)*180./pi
      xlong(i,1)=rlon(i)*180./pi
     enddo
-   
+
     do j=jts,jte
       jp = j - jts + 1
       do i=its,ite
@@ -427,7 +427,7 @@ contains
     enddo
 
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_so2   )=max(epsilc,gq0(i,k,ntso2  )/ppm2ugkg(p_so2))

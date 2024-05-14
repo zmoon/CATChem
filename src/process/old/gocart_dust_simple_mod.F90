@@ -97,13 +97,13 @@ CONTAINS
 
   end subroutine gocart_dust_simple
 
-                                                  
-  SUBROUTINE source_du( nmx, dt1, tc, & 
+
+  SUBROUTINE source_du( nmx, dt1, tc, &
                      erod, ilwi, dxy, w10m, gwet, airden, airmas, &
-                     bems,srce_out,month,g0,ipr) 
+                     bems,srce_out,month,g0,ipr)
 
 ! ****************************************************************************
-! *  Evaluate the source of each dust particles size classes  (kg/m3)        
+! *  Evaluate the source of each dust particles size classes  (kg/m3)
 ! *  by soil emission.
 ! *  Input:
 ! *         EROD      Fraction of erodible grid cell                (-)
@@ -115,9 +115,9 @@ CONTAINS
 ! *         W10m      Velocity at the anemometer level (10meters)   (m/s)
 ! *         u_tresh   Threshold velocity for particule uplifting    (m/s)
 ! *         CH_dust   Constant to fudge the total emission of dust  (s2/m2)
-! *      
+! *
 ! *  Output:
-! *         DSRC      Source of each dust type           (kg/timestep/cell) 
+! *         DSRC      Source of each dust type           (kg/timestep/cell)
 ! *
 ! *  Working:
 ! *         SRC       Potential source                   (kg/m/timestep/cell)
@@ -136,9 +136,9 @@ CONTAINS
   REAL(kind=kind_chem), INTENT(OUT)   :: srce_out(nmx) !dust source
   INTEGER,            INTENT(OUT)   :: ipr
 
-  !-----------------------------------------------------------------------  
+  !-----------------------------------------------------------------------
   ! local variables
-  !-----------------------------------------------------------------------  
+  !-----------------------------------------------------------------------
   INTEGER            :: i, j, n, m, k
   REAL(kind=kind_chem) :: g
   REAL(kind=kind_chem) :: den(nmx), diam(nmx)
@@ -163,12 +163,12 @@ CONTAINS
     m = ipoint(n)
     tsrc = 0.0_kind_chem
     DO k = 1, ndsrc
-      ! No flux if wet soil 
+      ! No flux if wet soil
       rhoa = airden*1.0D-3
       u_ts0 = 0.13*1.0D-2*SQRT(den(n)*g*diam(n)/rhoa)* &
                    SQRT(1.0+0.006/den(n)/g/(diam(n))**2.5)/ &
-                   SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0) 
-              
+                   SQRT(1.928*(1331.0*(diam(n))**1.56+0.38)**0.092-1.0)
+
       ! Case of surface dry enough to erode
       IF (gwet < gthresh) THEN
          u_ts = MAX(0.0D+0,u_ts0*(1.2D+0+2.0D-1*LOG10(MAX(1.0D-3, gwet))))
@@ -181,11 +181,11 @@ CONTAINS
       IF (ilwi == 1 ) THEN
         dsrc = ch_dust(n,month)*srce*w10m**2 &
                      * (w10m - u_ts)*dt1  ! (kg)
-      ELSE 
+      ELSE
         dsrc = 0.0_kind_chem
       END IF
       IF (dsrc < 0.0_kind_chem) dsrc = 0.0_kind_chem
-              
+
         ! Update dust mixing ratio at first model level.
         ! scale down dust by .7
         tc(n) = tc(n) + .7*dsrc / airmas

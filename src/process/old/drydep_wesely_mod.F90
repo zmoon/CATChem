@@ -36,7 +36,7 @@ module drydep_wesely_mod
 
       INTEGER :: month = 0
       INTEGER :: ixxxlu(nlu)
-!     include modis landuse 
+!     include modis landuse
 !--
 
       REAL    :: kpart(nlu)
@@ -68,7 +68,7 @@ module drydep_wesely_mod
 !--------------------------------------------------
 ! .. Default Accessibility ..
 !--------------------------------------------------
-    PUBLIC 
+    PUBLIC
 
     logical, allocatable :: is_aerosol(:) ! true if field is aerosol (any phase)
 
@@ -89,12 +89,12 @@ SUBROUTINE wesely_driver( current_month, julday, &
 ! advected moisture variables
 !--------------------------------------------------
    REAL, DIMENSION( num_moist ), INTENT(IN ) :: &
-                                                      moist  
+                                                      moist
 !--------------------------------------------------
 ! deposition velocities
 !--------------------------------------------------
    REAL, DIMENSION( num_chem ), INTENT(INOUT ) ::      &
-                                                      ddvel                     
+                                                      ddvel
 !--------------------------------------------------
 ! input from met model
 !--------------------------------------------------
@@ -118,16 +118,16 @@ SUBROUTINE wesely_driver( current_month, julday, &
       REAL :: aer_res_zcen
 
 !-----------------------------------------------------------
-! necessary for aerosols (module dependent)         
+! necessary for aerosols (module dependent)
 !-----------------------------------------------------------
       real :: rcx(numgas)
 
 !-----------------------------------------------------------
 ! .. Intrinsic Functions
 !-----------------------------------------------------------
-!      integer :: chem_opt 
- 
-      INTRINSIC max, min                             
+!      integer :: chem_opt
+
+      INTRINSIC max, min
 
 !      chem_opt = chem_opt
 
@@ -158,20 +158,20 @@ SUBROUTINE wesely_driver( current_month, julday, &
           chem_opt == MOZCART_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP) then
-         if( snowh  < .01 ) then 
+         if( snowh  < .01 ) then
             !iseason = seasonal_pft%seasonal_wes(i,j,iland,current_month)
             if (current_month.GE.3 .AND. CURRENT_MONTH .LE.5) then
                 iseason=1
             else if &
                (current_month.GE.6 .AND. CURRENT_MONTH .LE.8) then
                 iseason=2
-            else if & 
+            else if &
                (current_month.GE.9 .AND. CURRENT_MONTH .LE.11) then
                iseason=3
             else
                iseason=4
             endif
-                                  
+
          else
             iseason = 4
          endif
@@ -241,7 +241,7 @@ SUBROUTINE wesely_driver( current_month, julday, &
            (chem_opt == RADM2SORG_AQCHEM) ) then
 !               ddvel(i,j,p_hcl)         = ddvel(i,j,p_hno3)
       end if
-     
+
 !-----------------------------------------------------------
 ! For the additional CBMZ species, assign similar RADM counter parts for
 ! now. Short lived species get a zero velocity since dry dep should be
@@ -495,7 +495,7 @@ SUBROUTINE wesely_driver( current_month, julday, &
 !         end do
       end if
 
-      
+
 !-----------------------------------------------------------
 ! For CRI
 !-----------------------------------------------------------
@@ -507,120 +507,120 @@ SUBROUTINE wesely_driver( current_month, julday, &
 ! need to add deposition rates for crimech species here
 
 !               ddvel(i,j,p_ch3co2h)  = 0.
-!               ddvel(i,j,p_clno2)    = 0. 
-!               !ddvel(i,j,p_n2o5 )    = 0. 
-!               !ddvel(i,j,p_o1d)    = 0. 
-!               !ddvel(i,j,p_o3p)    = 0. 
-!               ddvel(i,j,p_c2h6)    = 0. 
-!               ddvel(i,j,p_aco3)    = 0. 
-!               !ddvel(i,j,p_ch3oo)    = 0. 
-!               ddvel(i,j,p_hso3)    = 0. 
-!               ddvel(i,j,p_so3)    = 0.       
-!               ddvel(i,j,p_c3h8)    = 0. 
-!               ddvel(i,j,p_nc4h10)    = 0. 
-!               ddvel(i,j,p_c5h8)    = 0. 
-!               ddvel(i,j,p_benzene)    = 0. 
-!               ddvel(i,j,p_toluene)    = 0. 
-!               ddvel(i,j,p_oxyl)    = 0. 
-!               ddvel(i,j,p_npropol)    = 0. 
-!!               ddvel(i,j,p_c2h2)    = 0. 
-!               ddvel(i,j,p_c3h6)    = 0. 
-!               ddvel(i,j,p_c2h4) = 0.                
-!               ddvel(i,j,p_tbut2ene)    = 0. 
-!               ddvel(i,j,p_mek)    = 0. 
-!               ddvel(i,j,p_ipropol)    = 0. 
-!               ddvel(i,j,p_apinene)    = 0.   
-!               ddvel(i,j,p_bpinene)    = 0.      
-!               !ddvel(i,j,p_c2h5co3)    = 0.       
-!               !ddvel(i,j,p_hoch2co3)    = 0.               
-!               ddvel(i,j,p_ch3cl)    = 0.   
-!               ddvel(i,j,p_ch2cl2)    = 0.   
-!               ddvel(i,j,p_chcl3)    = 0.   
-!               ddvel(i,j,p_ch3ccl3)    = 0.  
-!               ddvel(i,j,p_cdicleth)    = 0.  
-!               ddvel(i,j,p_tdicleth)    = 0.  
-!               ddvel(i,j,p_tricleth )    = 0.  
-!               ddvel(i,j,p_tce)    = 0.   
-!               ddvel(i,j,p_noa)    = 0.    
-!               ddvel(i,j,p_aroh14)    = 0.    
-!               ddvel(i,j,p_raroh14)    = 0.   
-!               ddvel(i,j,p_arnoh14)    = 0.  
-!               ddvel(i,j,p_aroh17)    = 0.    
-!               ddvel(i,j,p_raroh17)    = 0.   
-!               ddvel(i,j,p_arnoh17)    = 0.  
-!               ddvel(i,j,p_anhy)    = 0.  
-!               ddvel(i,j,p_ch4)    = 0.  
-!               ddvel(i,j,p_sulf) = ddvel(i,j,p_hno3) 
-!               ddvel(i,j,p_hcl)    = ddvel(i,j,p_hno3)  
-!               ddvel(i,j,p_h2)    = 0.  
-!               ddvel(i,j,p_tm123b)    = 0. 
-!               ddvel(i,j,p_tm124b)    = 0. 
-!               ddvel(i,j,p_tm135b)    = 0. 
-!               ddvel(i,j,p_oethtol)    = 0. 
-!               ddvel(i,j,p_methtol)    = 0. 
-!               ddvel(i,j,p_pethtol)    = 0. 
-!               ddvel(i,j,p_dime35eb)    = 0. 
-!               ddvel(i,j,p_dms) = 0. 
+!               ddvel(i,j,p_clno2)    = 0.
+!               !ddvel(i,j,p_n2o5 )    = 0.
+!               !ddvel(i,j,p_o1d)    = 0.
+!               !ddvel(i,j,p_o3p)    = 0.
+!               ddvel(i,j,p_c2h6)    = 0.
+!               ddvel(i,j,p_aco3)    = 0.
+!               !ddvel(i,j,p_ch3oo)    = 0.
+!               ddvel(i,j,p_hso3)    = 0.
+!               ddvel(i,j,p_so3)    = 0.
+!               ddvel(i,j,p_c3h8)    = 0.
+!               ddvel(i,j,p_nc4h10)    = 0.
+!               ddvel(i,j,p_c5h8)    = 0.
+!               ddvel(i,j,p_benzene)    = 0.
+!               ddvel(i,j,p_toluene)    = 0.
+!               ddvel(i,j,p_oxyl)    = 0.
+!               ddvel(i,j,p_npropol)    = 0.
+!!               ddvel(i,j,p_c2h2)    = 0.
+!               ddvel(i,j,p_c3h6)    = 0.
+!               ddvel(i,j,p_c2h4) = 0.
+!               ddvel(i,j,p_tbut2ene)    = 0.
+!               ddvel(i,j,p_mek)    = 0.
+!               ddvel(i,j,p_ipropol)    = 0.
+!               ddvel(i,j,p_apinene)    = 0.
+!               ddvel(i,j,p_bpinene)    = 0.
+!               !ddvel(i,j,p_c2h5co3)    = 0.
+!               !ddvel(i,j,p_hoch2co3)    = 0.
+!               ddvel(i,j,p_ch3cl)    = 0.
+!               ddvel(i,j,p_ch2cl2)    = 0.
+!               ddvel(i,j,p_chcl3)    = 0.
+!               ddvel(i,j,p_ch3ccl3)    = 0.
+!               ddvel(i,j,p_cdicleth)    = 0.
+!               ddvel(i,j,p_tdicleth)    = 0.
+!               ddvel(i,j,p_tricleth )    = 0.
+!               ddvel(i,j,p_tce)    = 0.
+!               ddvel(i,j,p_noa)    = 0.
+!               ddvel(i,j,p_aroh14)    = 0.
+!               ddvel(i,j,p_raroh14)    = 0.
+!               ddvel(i,j,p_arnoh14)    = 0.
+!               ddvel(i,j,p_aroh17)    = 0.
+!               ddvel(i,j,p_raroh17)    = 0.
+!               ddvel(i,j,p_arnoh17)    = 0.
+!               ddvel(i,j,p_anhy)    = 0.
+!               ddvel(i,j,p_ch4)    = 0.
+!               ddvel(i,j,p_sulf) = ddvel(i,j,p_hno3)
+!               ddvel(i,j,p_hcl)    = ddvel(i,j,p_hno3)
+!               ddvel(i,j,p_h2)    = 0.
+!               ddvel(i,j,p_tm123b)    = 0.
+!               ddvel(i,j,p_tm124b)    = 0.
+!               ddvel(i,j,p_tm135b)    = 0.
+!               ddvel(i,j,p_oethtol)    = 0.
+!               ddvel(i,j,p_methtol)    = 0.
+!               ddvel(i,j,p_pethtol)    = 0.
+!               ddvel(i,j,p_dime35eb)    = 0.
+!               ddvel(i,j,p_dms) = 0.
 !               ddvel(i,j,p_ch3sch2oo) = 0.
-!               ddvel(i,j,p_dmso) = 0. 
-!               ddvel(i,j,p_ch3s) = 0. 
+!               ddvel(i,j,p_dmso) = 0.
+!               ddvel(i,j,p_ch3s) = 0.
 !               ddvel(i,j,p_ch3so) = 0.
 !               ddvel(i,j,p_ch3so3) = 0.
-!               ddvel(i,j,p_msa) = 0. 
+!               ddvel(i,j,p_msa) = 0.
 !               ddvel(i,j,p_msia) = 0.
-!               ddvel(i,j,p_ho) = 0. 
+!               ddvel(i,j,p_ho) = 0.
 !               ddvel(i,j,p_ho2) = 0.
-!               ddvel(i,j,p_ch3oo) = 0. 
-!               ddvel(i,j,p_c2h5o2) = 0.       
+!               ddvel(i,j,p_ch3oo) = 0.
+!               ddvel(i,j,p_c2h5o2) = 0.
 !               ddvel(i,j,p_hoch2ch2o2) = 0.
 !               ddvel(i,j,p_ic3h7o2) = 0.
-!               ddvel(i,j,p_rn10o2) = 0.    
-!               ddvel(i,j,p_rn13o2) = 0.           
-!               ddvel(i,j,p_rn16o2) = 0.     
-!               ddvel(i,j,p_rn19o2) = 0.   
-!               ddvel(i,j,p_rn9o2) = 0.       
-!               ddvel(i,j,p_rn12o2) = 0.       
-!               ddvel(i,j,p_rn15o2) = 0.     
-!               ddvel(i,j,p_rn18o2) = 0.      
-!               ddvel(i,j,p_nrn6o2) = 0.    
-!               ddvel(i,j,p_nrn9o2) = 0.      
-!               ddvel(i,j,p_nrn12o2) = 0.        
-!               ddvel(i,j,p_rn11o2) = 0.      
-!               ddvel(i,j,p_rn14o2) = 0.      
-!               ddvel(i,j,p_rn8o2) = 0.       
-!               ddvel(i,j,p_rn17o2) = 0.     
-!               ddvel(i,j,p_rn13ao2) = 0.  
-!               ddvel(i,j,p_rn16ao2) = 0.      
-!               ddvel(i,j,p_rn15ao2) = 0.     
-!               ddvel(i,j,p_rn18ao2) = 0.     
-!               ddvel(i,j,p_ru14o2) = 0.  
-!               ddvel(i,j,p_ru12o2) = 0.  
-!               ddvel(i,j,p_ru10o2) = 0.  
-!               ddvel(i,j,p_nru14o2) = 0. 
-!               ddvel(i,j,p_nru12o2) = 0.  
-!               ddvel(i,j,p_ra13o2) = 0.  
-!               ddvel(i,j,p_ra16o2) = 0.  
-!               ddvel(i,j,p_ra19ao2) = 0.   
-!               ddvel(i,j,p_ra19co2) = 0.   
-!               ddvel(i,j,p_rtn28o2) = 0.  
-!               ddvel(i,j,p_rtn26o2) = 0. 
-!               ddvel(i,j,p_nrtn28o2) = 0. 
-!               ddvel(i,j,p_rtn25o2) = 0.  
-!               ddvel(i,j,p_rtn24o2) = 0. 
-!               ddvel(i,j,p_rtn23o2) = 0.  
-!               ddvel(i,j,p_rtn14o2) = 0.  
-!               ddvel(i,j,p_rtn10o2) = 0.  
-!               ddvel(i,j,p_rtx28o2) = 0.  
-!               ddvel(i,j,p_rtx24o2) = 0.  
-!               ddvel(i,j,p_rtx22o2) = 0. 
-!               ddvel(i,j,p_nrtx28o2) = 0. 
-!               ddvel(i,j,p_ch3o2no2) = 0. 
+!               ddvel(i,j,p_rn10o2) = 0.
+!               ddvel(i,j,p_rn13o2) = 0.
+!               ddvel(i,j,p_rn16o2) = 0.
+!               ddvel(i,j,p_rn19o2) = 0.
+!               ddvel(i,j,p_rn9o2) = 0.
+!               ddvel(i,j,p_rn12o2) = 0.
+!               ddvel(i,j,p_rn15o2) = 0.
+!               ddvel(i,j,p_rn18o2) = 0.
+!               ddvel(i,j,p_nrn6o2) = 0.
+!               ddvel(i,j,p_nrn9o2) = 0.
+!               ddvel(i,j,p_nrn12o2) = 0.
+!               ddvel(i,j,p_rn11o2) = 0.
+!               ddvel(i,j,p_rn14o2) = 0.
+!               ddvel(i,j,p_rn8o2) = 0.
+!               ddvel(i,j,p_rn17o2) = 0.
+!               ddvel(i,j,p_rn13ao2) = 0.
+!               ddvel(i,j,p_rn16ao2) = 0.
+!               ddvel(i,j,p_rn15ao2) = 0.
+!               ddvel(i,j,p_rn18ao2) = 0.
+!               ddvel(i,j,p_ru14o2) = 0.
+!               ddvel(i,j,p_ru12o2) = 0.
+!               ddvel(i,j,p_ru10o2) = 0.
+!               ddvel(i,j,p_nru14o2) = 0.
+!               ddvel(i,j,p_nru12o2) = 0.
+!               ddvel(i,j,p_ra13o2) = 0.
+!               ddvel(i,j,p_ra16o2) = 0.
+!               ddvel(i,j,p_ra19ao2) = 0.
+!               ddvel(i,j,p_ra19co2) = 0.
+!               ddvel(i,j,p_rtn28o2) = 0.
+!               ddvel(i,j,p_rtn26o2) = 0.
+!               ddvel(i,j,p_nrtn28o2) = 0.
+!               ddvel(i,j,p_rtn25o2) = 0.
+!               ddvel(i,j,p_rtn24o2) = 0.
+!               ddvel(i,j,p_rtn23o2) = 0.
+!               ddvel(i,j,p_rtn14o2) = 0.
+!               ddvel(i,j,p_rtn10o2) = 0.
+!               ddvel(i,j,p_rtx28o2) = 0.
+!               ddvel(i,j,p_rtx24o2) = 0.
+!               ddvel(i,j,p_rtx22o2) = 0.
+!               ddvel(i,j,p_nrtx28o2) = 0.
+!               ddvel(i,j,p_ch3o2no2) = 0.
 !               ddvel(i,j,p_ra22ao2) = 0.
 !               ddvel(i,j,p_ra22bo2) = 0.
 !               ddvel(i,j,p_ra25o2) = 0.
 !               ddvel(i,j,p_ch3so2) = 0.
-!               ddvel(i,j,p_dmso2 ) = 0. 
-!               
+!               ddvel(i,j,p_dmso2 ) = 0.
+!
 
 !            end do
 !         end do
@@ -804,7 +804,7 @@ END SUBROUTINE wesely_driver
 !                    FOR MM5 VERSION 3
 !----------------------------------------------------------------------
 
-!  USE module_state_description                       
+!  USE module_state_description
 !  USE module_initial_chem_namelists
 
 !----------------------------------------------------------------------
@@ -1529,7 +1529,7 @@ is_nh3: if( p_nh3 > 1 ) then
 
 !
 !JianHe: 06/2023,dep_init needs attention in the future for gasdep
-! Maybe we can have a sperate file for these parameters 
+! Maybe we can have a sperate file for these parameters
 !
 
 !      SUBROUTINE dep_init( id, numgas, mminlu_loc, &
@@ -1576,7 +1576,7 @@ is_nh3: if( p_nh3 > 1 ) then
           chem_opt == MOZCART_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_KPP .or. &
           chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
-         print *, 'dep_init: mozart,mozcart chem option requires netcdf' 
+         print *, 'dep_init: mozart,mozcart chem option requires netcdf'
          stop
       end if
 
@@ -1901,7 +1901,7 @@ is_cbm4_kpp : &
  !              hstar(p_cvbsoa3) = 9.33E+07
  !              hstar(p_cvbsoa4) = 1.24E+07
               endif
-              
+
      else if( chem_opt == crimech_kpp .or. &
           chem_opt == cri_mosaic_8bin_aq_kpp .or. &
           chem_opt == cri_mosaic_4bin_aq_kpp )   then
@@ -1915,14 +1915,14 @@ is_cbm4_kpp : &
 !              hstar(p_ket)    = 27.
 !              hstar(p_paa)     = 837.
 !               hstar(p_c2h5co3h)    = 837.
-!               hstar(p_hoch2co3h)    = 837.               
+!               hstar(p_hoch2co3h)    = 837.
 !              hstar(p_c3h6ooh) = 220.
 !              hstar(p_pan)     = 5.
 !              hstar(p_mpan)    = 1.15e-2
 !              hstar(p_ru12pan)    = 1.15e-2
 !              hstar(p_rtn26pan)    = 1.15e-2
-!               hstar(p_phan)    = 1.15e-2  
-!               hstar(p_ppn)    = 1.15e-2 
+!               hstar(p_phan)    = 1.15e-2
+!               hstar(p_ppn)    = 1.15e-2
 !              hstar(p_c2h5oh)  = 200.
 !              hstar(p_c2h5ooh)   = 336.
 !              hstar(p_ic3h7ooh)   = 336.
@@ -1932,102 +1932,102 @@ is_cbm4_kpp : &
 !              hstar(p_acetol)  = 6.3e3
 !              hstar(p_glyald)  = 4.14e4
 !              hstar(p_hydrald) = 70.
-!               hstar(p_hcooh) = 311. 
-!               hstar(p_prooh) = 311. 
-!               hstar(p_hoc2h4ooh) = 311. 
-!               hstar(p_rn10ooh) = 311. 
-!               hstar(p_rn13ooh) = 311. 
-!               hstar(p_rn16ooh) = 311. 
-!               hstar(p_rn19ooh) = 311. 
-!               hstar(p_rn8ooh) = 311. 
-!               hstar(p_rn11ooh) = 311. 
-!               hstar(p_rn14ooh) = 311. 
-!               hstar(p_rn17ooh) = 311. 
-!               hstar(p_rn9ooh) = 311. 
-!               hstar(p_rn12ooh) = 311. 
-!               hstar(p_rn15ooh) = 311. 
-!               hstar(p_rn18ooh) = 311. 
-!               hstar(p_nrn6ooh) = 311. 
-!               hstar(p_nrn9ooh) = 311. 
-!               hstar(p_nrn12ooh) = 311. 
-!               hstar(p_ru14ooh) = 311. 
-!               hstar(p_ru12ooh) = 311. 
-!               hstar(p_ru10ooh) = 311. 
-!               hstar(p_nru14ooh) = 311. 
-!               hstar(p_nru12ooh) = 311. 
-!               hstar(p_ra13ooh) = 311. 
-!               hstar(p_ra16ooh) = 311. 
-!               hstar(p_ra19ooh) = 311. 
-!               hstar(p_rtn28ooh) = 311. 
-!               hstar(p_rtn26ooh) = 311. 
-!               hstar(p_nrtn28ooh) = 311. 
-!               hstar(p_rtn25ooh) = 311. 
-!               hstar(p_rtn24ooh) = 311. 
-!               hstar(p_rtn23ooh) = 311. 
-!               hstar(p_rtn14ooh) = 311. 
-!               hstar(p_rtn10ooh) = 311. 
-!               hstar(p_rcooh25) = 311. 
-!               hstar(p_rtx28ooh) = 311. 
-!               hstar(p_rtx24ooh) = 311. 
-!               hstar(p_rtx22ooh) = 311. 
-!               hstar(p_nrtx28ooh) = 311. 
-!               hstar(p_ra22ooh) = 311. 
-!               hstar(p_ra25ooh) = 311. 
-!               hstar(p_ch3no3) =  1.e3 
-!               hstar(p_c2h5no3) =  1.e3 
-!               hstar(p_hoc2h4no3) =  1.e3 
-!               hstar(p_rn10no3) =  1.e3 
-!               hstar(p_rn13no3) =  1.e3 
-!               hstar(p_rn19no3) =  1.e3 
-!               hstar(p_rn9no3) =  1.e3 
-!               hstar(p_rn12no3) =  1.e3 
-!               hstar(p_rn15no3) =  1.e3 
-!               hstar(p_rn18no3) =  1.e3 
-!               hstar(p_rn16no3) =  1.e3 
-!               hstar(p_ru14no3) =  1.e3 
-!               hstar(p_ra13no3) =  1.e3 
-!               hstar(p_ra16no3) =  1.e3 
-!               hstar(p_ra19no3) =  1.e3 
-!               hstar(p_rtn28no3) =  1.e3 
-!               hstar(p_rtn25no3) =  1.e3 
-!               hstar(p_rtx28no3) =  1.e3 
-!               hstar(p_rtx24no3) =  1.e3 
-!               hstar(p_rtx22no3) =  1.e3 
-!               hstar(p_rtn23no3) =  1.e3 
-!               hstar(p_ra22no3) =  1.e3 
-!               hstar(p_ra25no3) =  1.e3 
+!               hstar(p_hcooh) = 311.
+!               hstar(p_prooh) = 311.
+!               hstar(p_hoc2h4ooh) = 311.
+!               hstar(p_rn10ooh) = 311.
+!               hstar(p_rn13ooh) = 311.
+!               hstar(p_rn16ooh) = 311.
+!               hstar(p_rn19ooh) = 311.
+!               hstar(p_rn8ooh) = 311.
+!               hstar(p_rn11ooh) = 311.
+!               hstar(p_rn14ooh) = 311.
+!               hstar(p_rn17ooh) = 311.
+!               hstar(p_rn9ooh) = 311.
+!               hstar(p_rn12ooh) = 311.
+!               hstar(p_rn15ooh) = 311.
+!               hstar(p_rn18ooh) = 311.
+!               hstar(p_nrn6ooh) = 311.
+!               hstar(p_nrn9ooh) = 311.
+!               hstar(p_nrn12ooh) = 311.
+!               hstar(p_ru14ooh) = 311.
+!               hstar(p_ru12ooh) = 311.
+!               hstar(p_ru10ooh) = 311.
+!               hstar(p_nru14ooh) = 311.
+!               hstar(p_nru12ooh) = 311.
+!               hstar(p_ra13ooh) = 311.
+!               hstar(p_ra16ooh) = 311.
+!               hstar(p_ra19ooh) = 311.
+!               hstar(p_rtn28ooh) = 311.
+!               hstar(p_rtn26ooh) = 311.
+!               hstar(p_nrtn28ooh) = 311.
+!               hstar(p_rtn25ooh) = 311.
+!               hstar(p_rtn24ooh) = 311.
+!               hstar(p_rtn23ooh) = 311.
+!               hstar(p_rtn14ooh) = 311.
+!               hstar(p_rtn10ooh) = 311.
+!               hstar(p_rcooh25) = 311.
+!               hstar(p_rtx28ooh) = 311.
+!               hstar(p_rtx24ooh) = 311.
+!               hstar(p_rtx22ooh) = 311.
+!               hstar(p_nrtx28ooh) = 311.
+!               hstar(p_ra22ooh) = 311.
+!               hstar(p_ra25ooh) = 311.
+!               hstar(p_ch3no3) =  1.e3
+!               hstar(p_c2h5no3) =  1.e3
+!               hstar(p_hoc2h4no3) =  1.e3
+!               hstar(p_rn10no3) =  1.e3
+!               hstar(p_rn13no3) =  1.e3
+!               hstar(p_rn19no3) =  1.e3
+!               hstar(p_rn9no3) =  1.e3
+!               hstar(p_rn12no3) =  1.e3
+!               hstar(p_rn15no3) =  1.e3
+!               hstar(p_rn18no3) =  1.e3
+!               hstar(p_rn16no3) =  1.e3
+!               hstar(p_ru14no3) =  1.e3
+!               hstar(p_ra13no3) =  1.e3
+!               hstar(p_ra16no3) =  1.e3
+!               hstar(p_ra19no3) =  1.e3
+!               hstar(p_rtn28no3) =  1.e3
+!               hstar(p_rtn25no3) =  1.e3
+!               hstar(p_rtx28no3) =  1.e3
+!               hstar(p_rtx24no3) =  1.e3
+!               hstar(p_rtx22no3) =  1.e3
+!               hstar(p_rtn23no3) =  1.e3
+!               hstar(p_ra22no3) =  1.e3
+!               hstar(p_ra25no3) =  1.e3
 !               hstar(p_ic3h7no3) =  1.e3
 !		       hstar(p_ch3cho)    = 1.14E+1
 !        	   hstar(p_c2h5cho)    = 1.14E+1
 !        	   hstar(p_hoch2cho)    = 1.14E+1
-!               hstar(p_carb14)    = 1.14E+1  
-!               hstar(p_carb17)    = 1.14E+1       
-!               hstar(p_carb7)    = 1.14E+1        
-!               hstar(p_carb10)    = 1.14E+1       
-!               hstar(p_carb13)    = 1.14E+1       
-!               hstar(p_carb16)    = 1.14E+1    
-!               hstar(p_carb3)    = 1.14E+1        
-!               hstar(p_carb6)    = 1.14E+1        
-!               hstar(p_carb9)    = 1.14E+1  
-!               hstar(p_carb12)    = 1.14E+1       
-!               hstar(p_carb15)    = 1.14E+1     
-!               hstar(p_ccarb12)    = 1.14E+1   
-!               hstar(p_ucarb12)    = 1.14E+1  
-!               hstar(p_ucarb10)    = 1.14E+1  
-!               hstar(p_nucarb12)    = 1.14E+1  
-!               hstar(p_udcarb8)    = 1.14E+1   
-!               hstar(p_udcarb11)    = 1.14E+1    
-!               hstar(p_udcarb14)    = 1.14E+1   
-!               hstar(p_tncarb26)    = 1.14E+1  
-!               hstar(p_tncarb10)    = 1.14E+1   
-!               hstar(p_tncarb15)    = 1.14E+1  
-!               hstar(p_txcarb24)    = 1.14E+1   
-!               hstar(p_txcarb22)    = 1.14E+1  
-!               hstar(p_carb11a)    = 1.14E+1 
-!               hstar(p_tncarb12)    = 1.14E+1 
-!               hstar(p_tncarb11)    = 1.14E+1 
-!               hstar(p_udcarb17)    = 1.14E+1 
-!        
+!               hstar(p_carb14)    = 1.14E+1
+!               hstar(p_carb17)    = 1.14E+1
+!               hstar(p_carb7)    = 1.14E+1
+!               hstar(p_carb10)    = 1.14E+1
+!               hstar(p_carb13)    = 1.14E+1
+!               hstar(p_carb16)    = 1.14E+1
+!               hstar(p_carb3)    = 1.14E+1
+!               hstar(p_carb6)    = 1.14E+1
+!               hstar(p_carb9)    = 1.14E+1
+!               hstar(p_carb12)    = 1.14E+1
+!               hstar(p_carb15)    = 1.14E+1
+!               hstar(p_ccarb12)    = 1.14E+1
+!               hstar(p_ucarb12)    = 1.14E+1
+!               hstar(p_ucarb10)    = 1.14E+1
+!               hstar(p_nucarb12)    = 1.14E+1
+!               hstar(p_udcarb8)    = 1.14E+1
+!               hstar(p_udcarb11)    = 1.14E+1
+!               hstar(p_udcarb14)    = 1.14E+1
+!               hstar(p_tncarb26)    = 1.14E+1
+!               hstar(p_tncarb10)    = 1.14E+1
+!               hstar(p_tncarb15)    = 1.14E+1
+!               hstar(p_txcarb24)    = 1.14E+1
+!               hstar(p_txcarb22)    = 1.14E+1
+!               hstar(p_carb11a)    = 1.14E+1
+!               hstar(p_tncarb12)    = 1.14E+1
+!               hstar(p_tncarb11)    = 1.14E+1
+!               hstar(p_udcarb17)    = 1.14E+1
+!
            else
 !              hstar(p_o3)   = 1.13E-2
 !              hstar(p_co)   = 8.20E-3
@@ -2069,13 +2069,13 @@ is_cbm4_kpp : &
 !        hstar(p_n2o5) = 1.00E+10
 !        if(p_ol2 > 1) hstar(p_ol2) = 4.67E-3
 !        if(p_par > 1) hstar(p_par) = 1.13E-3  !wig, 1-May-2007: for CBMZ
-!        if(p_ch4 > 1) then 
+!        if(p_ch4 > 1) then
 !           hstar(p_ch4) = 1.50E-3
 !           dhr(p_ch4)   = 0.
 !           f0(p_ch4)    = 0.
 !           dvj(p_ch4)   = 0.250
 !        end if
-!        if(p_co2 > 1) then 
+!        if(p_co2 > 1) then
 !           hstar(p_co2) = 1.86E-1
 !           dhr(p_co2)   = 1636.
 !           f0(p_co2)    = 0.
@@ -2177,14 +2177,14 @@ is_cbm4_kpp : &
 !           dhr(p_ket)    = 5300.
 !           dhr(p_paa)     = 5308.
 !            dhr(p_c2h5co3h)    = 5308.
-!            dhr(p_hoch2co3h)    = 5308.           
+!            dhr(p_hoch2co3h)    = 5308.
 !           dhr(p_c3h6ooh) = 5653.
 !           dhr(p_pan)     = 0.
 !           dhr(p_mpan)    = 2560.
 !           dhr(p_ru12pan)    = 2560.
 !           dhr(p_rtn26pan)    = 2560.
-!           dhr(p_phan)    = 2560. 
-!           dhr(p_ppn)    = 2560.           
+!           dhr(p_phan)    = 2560.
+!           dhr(p_ppn)    = 2560.
 !           dhr(p_c2h5oh)  = 6500.
 !!              dhr(p_c3h6ooh) = 220.
 !           dhr(p_c2h5ooh)   = 5995.
@@ -2237,56 +2237,56 @@ is_cbm4_kpp : &
 !               dhr(p_nrtx28ooh) =  5241.
 !               dhr(p_ra22ooh) =  5241.
 !               dhr(p_ra25ooh) =  5241.
-!               dhr(p_ch3no3) = 6000. 
-!               dhr(p_c2h5no3) = 6000. 
-!               dhr(p_hoc2h4no3) = 6000. 
-!               dhr(p_rn10no3) = 6000. 
-!               dhr(p_rn13no3) = 6000. 
-!               dhr(p_rn19no3) = 6000. 
-!               dhr(p_rn9no3) = 6000. 
-!               dhr(p_rn12no3) = 6000. 
-!               dhr(p_rn15no3) = 6000. 
-!               dhr(p_rn18no3) = 6000. 
-!               dhr(p_rn16no3) = 6000. 
-!               dhr(p_ru14no3) = 6000. 
-!               dhr(p_ra13no3) = 6000. 
-!               dhr(p_ra16no3) = 6000. 
-!               dhr(p_ra19no3) = 6000. 
-!               dhr(p_rtn28no3) = 6000. 
-!               dhr(p_rtn25no3) = 6000. 
-!               dhr(p_rtx28no3) = 6000. 
-!               dhr(p_rtx24no3) = 6000. 
-!               dhr(p_rtx22no3) = 6000. 
-!               dhr(p_rtn23no3) = 6000. 
-!               dhr(p_ra22no3) = 6000. 
-!               dhr(p_ra25no3) = 6000. 
+!               dhr(p_ch3no3) = 6000.
+!               dhr(p_c2h5no3) = 6000.
+!               dhr(p_hoc2h4no3) = 6000.
+!               dhr(p_rn10no3) = 6000.
+!               dhr(p_rn13no3) = 6000.
+!               dhr(p_rn19no3) = 6000.
+!               dhr(p_rn9no3) = 6000.
+!               dhr(p_rn12no3) = 6000.
+!               dhr(p_rn15no3) = 6000.
+!               dhr(p_rn18no3) = 6000.
+!               dhr(p_rn16no3) = 6000.
+!               dhr(p_ru14no3) = 6000.
+!               dhr(p_ra13no3) = 6000.
+!               dhr(p_ra16no3) = 6000.
+!               dhr(p_ra19no3) = 6000.
+!               dhr(p_rtn28no3) = 6000.
+!               dhr(p_rtn25no3) = 6000.
+!               dhr(p_rtx28no3) = 6000.
+!               dhr(p_rtx24no3) = 6000.
+!               dhr(p_rtx22no3) = 6000.
+!               dhr(p_rtn23no3) = 6000.
+!               dhr(p_ra22no3) = 6000.
+!               dhr(p_ra25no3) = 6000.
 !               dhr(p_ic3h7no3) = 6000.
 !        	   dhr(p_ch3cho)    = 6266.
 !        	   dhr(p_c2h5cho)    = 6266.
-!        	   dhr(p_hoch2cho)    = 6266.   
-!               dhr(p_carb14)    = 6266. 
-!               dhr(p_carb17)    = 6266.      
-!               dhr(p_carb7)    = 6266.       
-!               dhr(p_carb10)    = 6266.      
-!               dhr(p_carb13)    = 6266.      
-!               dhr(p_carb16)    = 6266.   
-!               dhr(p_carb3)    = 6266.       
-!               dhr(p_carb6)    = 6266.       
-!               dhr(p_carb9)    = 6266. 
-!               dhr(p_carb12)    = 6266.      
-!               dhr(p_carb15)    = 6266.    
-!               dhr(p_ccarb12)    = 6266.  
-!               dhr(p_ucarb12)    = 6266. 
-!               dhr(p_ucarb10)    = 6266. 
-!               dhr(p_nucarb12)    = 6266. 
-!               dhr(p_udcarb8)    = 6266.  
-!               dhr(p_udcarb11)    = 6266.   
-!               dhr(p_udcarb14)    = 6266.  
-!               dhr(p_tncarb26)    = 6266. 
-!               dhr(p_tncarb10)    = 6266.  
-!               dhr(p_tncarb15)    = 6266. 
-!               dhr(p_txcarb24)    = 6266.  
-!               dhr(p_txcarb22)    = 6266. 
+!        	   dhr(p_hoch2cho)    = 6266.
+!               dhr(p_carb14)    = 6266.
+!               dhr(p_carb17)    = 6266.
+!               dhr(p_carb7)    = 6266.
+!               dhr(p_carb10)    = 6266.
+!               dhr(p_carb13)    = 6266.
+!               dhr(p_carb16)    = 6266.
+!               dhr(p_carb3)    = 6266.
+!               dhr(p_carb6)    = 6266.
+!               dhr(p_carb9)    = 6266.
+!               dhr(p_carb12)    = 6266.
+!               dhr(p_carb15)    = 6266.
+!               dhr(p_ccarb12)    = 6266.
+!               dhr(p_ucarb12)    = 6266.
+!               dhr(p_ucarb10)    = 6266.
+!               dhr(p_nucarb12)    = 6266.
+!               dhr(p_udcarb8)    = 6266.
+!               dhr(p_udcarb11)    = 6266.
+!               dhr(p_udcarb14)    = 6266.
+!               dhr(p_tncarb26)    = 6266.
+!               dhr(p_tncarb10)    = 6266.
+!               dhr(p_tncarb15)    = 6266.
+!               dhr(p_txcarb24)    = 6266.
+!               dhr(p_txcarb22)    = 6266.
 !               dhr(p_carb11a)    = 6266.
 !               dhr(p_tncarb12)    = 6266.
 !               dhr(p_tncarb11)    = 6266.
@@ -2365,7 +2365,7 @@ is_cbm4_kpp : &
               chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
              f0(p_sulf) = 0.
             end if
-           
+
            if (chem_opt == MOZART_MOSAIC_4BIN_AQ_KPP ) then
 !             f0(p_cvasoaX) = 0.
 !             f0(p_cvasoa1) = 0.
@@ -2396,7 +2396,7 @@ is_cbm4_kpp : &
 !           f0(p_ru12pan)    = .1
 !           f0(p_rtn26pan)    = .1
 !           f0(p_phan)    = .1
-!           f0(p_ppn)    = .1           
+!           f0(p_ppn)    = .1
 !           f0(p_c2h5oh)  = small_value
 !!              f0(p_c3h6ooh) = .1
 !           f0(p_c2h5ooh)   = .1
@@ -2477,33 +2477,33 @@ is_cbm4_kpp : &
 !               f0(p_c2h5cho)    = 0.
 !               f0(p_hoch2cho)    = 0.
 !               f0(p_carb14)    = 0.
-!               f0(p_carb17)    = 0.     
-!               f0(p_carb7)    = 0.      
-!               f0(p_carb10)    = 0.     
-!               f0(p_carb13)    = 0.     
-!               f0(p_carb16)    = 0.  
-!               f0(p_carb3)    = 0.      
-!               f0(p_carb6)    = 0.      
+!               f0(p_carb17)    = 0.
+!               f0(p_carb7)    = 0.
+!               f0(p_carb10)    = 0.
+!               f0(p_carb13)    = 0.
+!               f0(p_carb16)    = 0.
+!               f0(p_carb3)    = 0.
+!               f0(p_carb6)    = 0.
 !               f0(p_carb9)    = 0.
-!               f0(p_carb12)    = 0.     
-!               f0(p_carb15)    = 0.   
-!               f0(p_ccarb12)    = 0. 
+!               f0(p_carb12)    = 0.
+!               f0(p_carb15)    = 0.
+!               f0(p_ccarb12)    = 0.
 !               f0(p_ucarb12)    = 0.
 !               f0(p_ucarb10)    = 0.
 !               f0(p_nucarb12)    = 0.
-!               f0(p_udcarb8)    = 0. 
-!               f0(p_udcarb11)    = 0.  
-!               f0(p_udcarb14)    = 0. 
+!               f0(p_udcarb8)    = 0.
+!               f0(p_udcarb11)    = 0.
+!               f0(p_udcarb14)    = 0.
 !               f0(p_tncarb26)    = 0.
-!               f0(p_tncarb10)    = 0. 
+!               f0(p_tncarb10)    = 0.
 !               f0(p_tncarb15)    = 0.
-!               f0(p_txcarb24)    = 0. 
+!               f0(p_txcarb24)    = 0.
 !               f0(p_txcarb22)    = 0.
 !               f0(p_carb11a)    = 0.
 !               f0(p_tncarb12)    = 0.
 !               f0(p_tncarb11)    = 0.
 !               f0(p_udcarb17)    = 0.
-!        
+!
         else
 !           f0(p_hcho) = 0.
 !           f0(p_onit) = 0.
@@ -2607,13 +2607,13 @@ is_cbm4_kpp : &
 !           dvj(p_ket)    = 0.1312
 !           dvj(p_paa)     = 0.1147
 !            dvj(p_c2h5co3h)    = 0.1147
-!            dvj(p_hoch2co3h)    = 0.1147           
+!            dvj(p_hoch2co3h)    = 0.1147
 !!           dvj(p_c3h6ooh) = 0.1042
 !           dvj(p_mpan)    = 0.0825
 !            dvj(p_ru12pan)    = 0.0825
 !            dvj(p_rtn26pan)    = 0.0825
 !            dvj(p_phan)    = 0.0825
-!            dvj(p_ppn)    = 0.0825            
+!            dvj(p_ppn)    = 0.0825
 !           dvj(p_c2h5oh)  = 0.1473
 !
 !              dvj(p_c3h6ooh) = 0.0916
@@ -2693,35 +2693,35 @@ is_cbm4_kpp : &
 !               dvj(p_ic3h7no3) = 0.0916
 !               dvj(p_ch3cho)    = 0.151
 !               dvj(p_c2h5cho)    = 0.151
-!               dvj(p_hoch2cho)    = 0.151    
+!               dvj(p_hoch2cho)    = 0.151
 !               dvj(p_carb14)    = 0.151
-!               dvj(p_carb17)    = 0.151     
-!               dvj(p_carb7)    = 0.151      
-!               dvj(p_carb10)    = 0.151     
-!               dvj(p_carb13)    = 0.151     
-!               dvj(p_carb16)    = 0.151  
-!               dvj(p_carb3)    = 0.151      
-!               dvj(p_carb6)    = 0.151      
+!               dvj(p_carb17)    = 0.151
+!               dvj(p_carb7)    = 0.151
+!               dvj(p_carb10)    = 0.151
+!               dvj(p_carb13)    = 0.151
+!               dvj(p_carb16)    = 0.151
+!               dvj(p_carb3)    = 0.151
+!               dvj(p_carb6)    = 0.151
 !               dvj(p_carb9)    = 0.151
-!               dvj(p_carb12)    = 0.151     
-!               dvj(p_carb15)    = 0.151   
-!               dvj(p_ccarb12)    = 0.151 
+!               dvj(p_carb12)    = 0.151
+!               dvj(p_carb15)    = 0.151
+!               dvj(p_ccarb12)    = 0.151
 !               dvj(p_ucarb12)    = 0.151
 !               dvj(p_ucarb10)    = 0.151
 !               dvj(p_nucarb12)    = 0.151
-!               dvj(p_udcarb8)    = 0.151 
-!               dvj(p_udcarb11)    = 0.151  
-!               dvj(p_udcarb14)    = 0.151 
+!               dvj(p_udcarb8)    = 0.151
+!               dvj(p_udcarb11)    = 0.151
+!               dvj(p_udcarb14)    = 0.151
 !               dvj(p_tncarb26)    = 0.151
-!               dvj(p_tncarb10)    = 0.151 
+!               dvj(p_tncarb10)    = 0.151
 !               dvj(p_tncarb15)    = 0.151
-!               dvj(p_txcarb24)    = 0.151 
+!               dvj(p_txcarb24)    = 0.151
 !               dvj(p_txcarb22)    = 0.151
 !               dvj(p_carb11a)    = 0.151
 !               dvj(p_tncarb12)    = 0.151
 !               dvj(p_tncarb11)    = 0.151
 !               dvj(p_udcarb17)    = 0.151
-!        
+!
         else
 !           dvj(p_o3)   = 0.175
 !           dvj(p_h2o2) = 0.171
@@ -3305,7 +3305,7 @@ is_cbm4_kpp : &
 
 
         DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary              
+          hstar4(l) = hstar(l) ! preliminary
 !--------------------------------------------------
 ! Correction of diff. coefficient
 !--------------------------------------------------
@@ -3642,7 +3642,7 @@ is_cbm4_kpp : &
 !        hstar(p_hno3)  = 2.69E+13
 !        hstar(p_nh3)   = 1.04E+4
 !        hstar(p_n2o5)  = 1.00E+10
-!        hstar(p_par)   = 1.13E-3  
+!        hstar(p_par)   = 1.13E-3
 
 !     -DH/R (for temperature correction)
 !     [-DH/R]=K
@@ -3668,7 +3668,7 @@ is_cbm4_kpp : &
 !        dhr(p_hno3) = 8684.
 !        dhr(p_nh3)  = 3660.
 !        dhr(p_n2o5) = 0.
-!        dhr(p_par)  = 0.  
+!        dhr(p_par)  = 0.
 !     REACTIVITY FACTORS
 !!     [f0]=1
 
@@ -3693,7 +3693,7 @@ is_cbm4_kpp : &
 !        f0(p_hno3) = 0.
 !        f0(p_nh3)  = 0.
 !        f0(p_n2o5) = 1.
-!        f0(p_par)  = 0.   
+!        f0(p_par)  = 0.
 !!     DIFFUSION COEFFICIENTS
 !     [DV]=cm2/s (assumed: 1/SQRT(molar mass) when not known)
 
@@ -3718,9 +3718,9 @@ is_cbm4_kpp : &
 !        dvj(p_hno3) = 0.126
 !        dvj(p_nh3)  = 0.227
 !        dvj(p_n2o5) = 0.110
-!        dvj(p_par)  = 0.118  
+!        dvj(p_par)  = 0.118
         DO l = 1, numgas
-          hstar4(l) = hstar(l) ! preliminary              
+          hstar4(l) = hstar(l) ! preliminary
 ! Correction of diff. coeff
           dvj(l) = dvj(l)*(293.15/298.15)**1.75
           sc = 0.15/dvj(l) ! Schmidt Number at 20C
@@ -3740,53 +3740,53 @@ is_cbm4_kpp : &
 !     vd = (u* / k) * CORRECTION FACTORS
 
 !     CONSTANT K FOR LANDUSE TYPES:
-! urban and built-up land                  
+! urban and built-up land
         kpart(1) = 500.
-! dryland cropland and pasture             
+! dryland cropland and pasture
         kpart(2) = 500.
-! irrigated cropland and pasture           
+! irrigated cropland and pasture
         kpart(3) = 500.
 ! mixed dryland/irrigated cropland and past
         kpart(4) = 500.
-! cropland/grassland mosaic                
+! cropland/grassland mosaic
         kpart(5) = 500.
-! cropland/woodland mosaic                 
+! cropland/woodland mosaic
         kpart(6) = 100.
-! grassland                                
+! grassland
         kpart(7) = 500.
-! shrubland                                
+! shrubland
         kpart(8) = 500.
-! mixed shrubland/grassland                
+! mixed shrubland/grassland
         kpart(9) = 500.
-! savanna                                  
+! savanna
         kpart(10) = 500.
-! deciduous broadleaf forest               
+! deciduous broadleaf forest
         kpart(11) = 100.
-! deciduous needleleaf forest              
+! deciduous needleleaf forest
         kpart(12) = 100.
-! evergreen broadleaf forest               
+! evergreen broadleaf forest
         kpart(13) = 100.
-! evergreen needleleaf forest              
+! evergreen needleleaf forest
         kpart(14) = 100.
-! mixed forest                             
+! mixed forest
         kpart(15) = 100.
-! water bodies                             
+! water bodies
         kpart(16) = 500.
-! herbaceous wetland                       
+! herbaceous wetland
         kpart(17) = 500.
-! wooded wetland                           
+! wooded wetland
         kpart(18) = 500.
-! barren or sparsely vegetated             
+! barren or sparsely vegetated
         kpart(19) = 500.
-! herbaceous tundra                        
+! herbaceous tundra
         kpart(20) = 500.
-! wooded tundra                            
+! wooded tundra
         kpart(21) = 100.
-! mixed tundra                             
+! mixed tundra
         kpart(22) = 500.
-! bare ground tundra                       
+! bare ground tundra
         kpart(23) = 500.
-! snow or ice                              
+! snow or ice
         kpart(24) = 500.
 !     Comments:
         kpart(25) = 500.
@@ -3833,7 +3833,7 @@ is_cbm4_kpp : &
 !     The Sizes of Particulate Sulfate and Nitrate in the Atmosphere
 !     - A Review
 !     JAPCA 37 (1987), 125-134
-! no data                                  
+! no data
 !       WRITE (0,*) ' return from rcread '
 !     *********************************************************
 

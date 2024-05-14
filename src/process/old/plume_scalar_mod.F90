@@ -23,7 +23,7 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
                     ,nspecies,eburn_in,eburn_out              &
                     ,up,vp,wp,theta,pp,dn0,rv,zt_rams,zm_rams &
                     ,plume_frp,plumerise_flag)
-  
+
   implicit none
 
   ! arguments
@@ -39,7 +39,7 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
   ! local variables
   integer :: i,j,k,iveg_ag,imm,ispc,ixx,k1,k2,kmt
   integer :: iloop
-  integer :: ncall = 0 
+  integer :: ncall = 0
 
   real(kind=kind_chem)               :: burnt_area,dz_flam,rhodzi,dzi,frp
   real(kind=kind_chem)               :: q_smold_kgm2
@@ -49,11 +49,11 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
   !Fator de conversao de unidades
   !!fcu=1.      !=> kg [gas/part] /kg [ar]
   !!fcu =1.e+12   !=> ng [gas/part] /kg [ar]
-  !!real(kind=kind_chem),parameter :: fcu =1.e+6 !=> mg [gas/part] /kg [ar] 
+  !!real(kind=kind_chem),parameter :: fcu =1.e+6 !=> mg [gas/part] /kg [ar]
   !----------------------------------------------------------------------
-  !               indexacao para o array "plume(k,i,j)" 
-  ! k 
-  ! 1   => area media (m^2) dos focos  em biomas floresta dentro do gribox i,j 
+  !               indexacao para o array "plume(k,i,j)"
+  ! k
+  ! 1   => area media (m^2) dos focos  em biomas floresta dentro do gribox i,j
   ! 2   => area media (m^2) dos focos  em biomas savana dentro do gribox i,j
   ! 3   => area media (m^2) dos focos  em biomas pastagem dentro do gribox i,j
   ! 4   => desvio padrao da area media (m^2) dos focos : floresta
@@ -62,12 +62,12 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
   ! 7 a 9 =>  sem uso
   !10(=k_CO_smold) => parte da emissao total de CO correspondente a fase smoldering
   !11, 12 e 13 => este array guarda a relacao entre
-  !               qCO( flaming, floresta) e a quantidade total emitida 
+  !               qCO( flaming, floresta) e a quantidade total emitida
   !               na fase smoldering, isto e;
   !               qCO( flaming, floresta) =  plume(11,i,j)*plume(10,i,j)
   !               qCO( flaming, savana  ) =  plume(12,i,j)*plume(10,i,j)
   !               qCO( flaming, pastagem) =  plume(13,i,j)*plume(10,i,j)
-  !20(=k_PM25_smold),21,22 e 23 o mesmo para PM25               
+  !20(=k_PM25_smold),21,22 e 23 o mesmo para PM25
   !
   !24-n1 =>  sem uso
   !----------------------------------------------------------------------
@@ -79,13 +79,13 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
     ncall = 1
     call zero_plumegen_coms
   endif
-  
-    
+
+
   j=1
   i=1
 ! do j = ja,jz           ! loop em j
 !   do i = ia,iz         ! loop em i
-     
+
      !- if the max value of flaming is close to zero => there is not emission with
      !- plume rise => cycle
 
@@ -122,7 +122,7 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
             !- verifica a existencia de emissao flaming para um bioma especifico
             !orig: if( plume( k_CO_smold + iveg_ag ,i,j) < 1.e-6 ) cycle
             if(mean_fct(iveg_ag) < 1.e-6 ) cycle
- 
+
             ! burnt area and standard deviation
             burnt_area    = firesize(iveg_ag)
 
@@ -164,7 +164,7 @@ subroutine plumerise(m1,m2,m3,ia,iz,ja,jz,firesize,mean_fct   &
 
           !- get fire properties (burned area, plume radius, heating rates ...)
           call get_fire_properties(imm,iveg_ag,burnt_area,frp,plumerise_flag)
-     
+
           !------  generates the plume rise    ------
 
           !-- only one value for eflux of GRASSLAND
@@ -229,7 +229,7 @@ subroutine get_env_condition(k1,k2,kmt,wind_eff)
 implicit none
 integer :: k1,k2,k,kcon,klcl,kmt,nk,nkmid,i
 real(kind=kind_chem) :: znz,themax,tlll,plll,rlll,zlll,dzdd,dzlll,tlcl,plcl,dzlcl,dummy
-integer :: n_setgrid = 0 
+integer :: n_setgrid = 0
 integer :: wind_eff
 
 
@@ -237,7 +237,7 @@ if( n_setgrid == 0) then
   n_setgrid = 1
   call set_grid ! define vertical grid of plume model
                 ! zt(k) =  thermo and water levels
-                ! zm(k) =  dynamical levels 
+                ! zm(k) =  dynamical levels
 endif
 
 znz=zcon(k2)
@@ -268,7 +268,7 @@ do k=2,kmt
         /(thve(k)+thve(k-1))
 enddo
 do k=1,kmt
-  te(k)  = the(k)*pke(k)/cp         ! temperature (K) 
+  te(k)  = the(k)*pke(k)/cp         ! temperature (K)
   pe(k)  = (pke(k)/cp)**cpor*p00    ! pressure (Pa)
   dne(k)= pe(k)/(rgas*te(k)*(1.+.61*qvenv(k))) !  dry air density (kg/m3)
 !-srf-mb
@@ -297,15 +297,15 @@ if(wind_eff < 1)  vel_e(1:kmt) = 0.
 !--------- converte press de Pa para kPa para uso modelo de plumerise
 do k=1,kmt
  pe(k) = pe(k)*1.e-3
-enddo 
+enddo
 
-return 
+return
 end subroutine get_env_condition
 
 !-------------------------------------------------------------------------
 
 subroutine set_grid()
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 implicit none
 integer :: k,mzp
 
@@ -322,14 +322,14 @@ do k=3,mzp
 enddo
 do k = 1,mzp-1
    dzm(k) = 1. / (zt(k+1) - zt(k))
-enddo 
+enddo
 dzm(mzp)=dzm(mzp-1)
 
 do k = 2,mzp
    dzt(k) = 1. / (zm(k) - zm(k-1))
 enddo
 dzt(1) = dzt(2) * dzt(2) / dzt(3)
-   
+
 !   dzm(1) = 0.5/dz
 !   dzm(2:mzp) = 1./dz
 return
@@ -357,7 +357,7 @@ end subroutine set_grid
 
     !- version 1
     DO imm=1,2
-       ! checar 
+       ! checar
        !    do k=1,m1-1
        DO k=1,nkp-1
           IF(zzcon(k) > ztopmax(imm) ) EXIT
@@ -371,37 +371,37 @@ end subroutine set_grid
        k2=k1
        !stop 1234
     ENDIF
-    
-    !- version 2    
+
+    !- version 2
     !- vertical mass distribution
-    !- 
+    !-
     w_thresold = 1.
     DO imm=1,2
 
-    
+
        VMD(1:nkp,imm)= 0.
        xxx=0.
        k_initial= 0
        k_final  = 0
-    
+
        !- define range of the upper detrainemnt layer
        do ko=nkp-10,2,-1
-     
+
         if(w_vmd(ko,imm) < w_thresold) cycle
-     
+
         if(k_final==0) k_final=ko
-     
+
         if(w_vmd(ko,imm)-1. > w_vmd(ko-1,imm)) then
           k_initial=ko
           exit
         endif
-      
+
        enddo
-       !- if there is a non zero depth layer, make the mass vertical distribution 
-       if(k_final > 0 .and. k_initial > 0) then 
-       
+       !- if there is a non zero depth layer, make the mass vertical distribution
+       if(k_final > 0 .and. k_initial > 0) then
+
            k_initial=int((k_final+k_initial)*0.5)
-       
+
            !- parabolic vertical distribution between k_initial and k_final
            kk4 = k_final-k_initial+2
            do ko=1,kk4-1
@@ -415,10 +415,10 @@ end subroutine set_grid
             enddo
                !pause
            endif
-        endif !k_final > 0 .and. k_initial > 
+        endif !k_final > 0 .and. k_initial >
 
     ENDDO
-    
+
   END SUBROUTINE set_flam_vert
 !-------------------------------------------------------------------------
 
@@ -469,10 +469,10 @@ select case (plumerise_flag)
 end select
 
 mdur = 53        ! duration of burn, minutes
-bload = 10.      ! total loading, kg/m**2 
+bload = 10.      ! total loading, kg/m**2
 moist = 10       ! fuel moisture, %. average fuel moisture,percent dry
 maxtime =mdur+2  ! model time, min
-!heat = 21.e6    !- joules per kg of fuel consumed                   
+!heat = 21.e6    !- joules per kg of fuel consumed
 !heat = 15.5e6   !joules/kg - cerrado
 heat = 19.3e6    !joules/kg - floresta em alta floresta (mt)
 !alpha = 0.1      !- entrainment constant
@@ -480,14 +480,14 @@ alpha = 0.05      !- entrainment constant
 
 !-------------------- printout ----------------------------------------
 
-!!WRITE ( * ,  * ) ' SURFACE =', ZSURF, 'M', '  LCL =', ZBASE, 'M'  
+!!WRITE ( * ,  * ) ' SURFACE =', ZSURF, 'M', '  LCL =', ZBASE, 'M'
 !
 !PRINT*,'======================================================='
-!print * , ' FIRE BOUNDARY CONDITION   :'  
-!print * , ' DURATION OF BURN, MINUTES =',MDUR  
+!print * , ' FIRE BOUNDARY CONDITION   :'
+!print * , ' DURATION OF BURN, MINUTES =',MDUR
 !print * , ' AREA OF BURN, HA          =',AREA*1.e-4
 !print * , ' HEAT FLUX, kW/m^2          =',heat_fluxW*1.e-3
-!print * , ' TOTAL LOADING, KG/M**2    =',BLOAD  
+!print * , ' TOTAL LOADING, KG/M**2    =',BLOAD
 !print * , ' FUEL MOISTURE, %          =',MOIST !average fuel moisture,percent dry
 !print * , ' MODEL TIME, MIN.          =',MAXTIME
 !
@@ -495,9 +495,9 @@ alpha = 0.05      !- entrainment constant
 !
 ! ******************** fix up inputs *********************************
 !
-                                             
+
 !IF (MOD (MAXTIME, 2) .NE.0) MAXTIME = MAXTIME+1  !make maxtime even
-                                                  
+
 MAXTIME = MAXTIME * 60  ! and put in seconds
 !
 RSURF = SQRT (AREA / 3.14159) !- entrainment surface radius (m)
@@ -510,51 +510,51 @@ FMOIST   = MOIST / 100.       !- fuel moisture fraction
 ! in the program. whatever is input has to be adjusted to a one
 ! minute timescale.
 !
-                        
+
   DO I = 1, ntime         !- make sure of energy release
     HEATING (I) = 0.0001  !- avoid possible divide by 0
-  enddo  
-!                                  
+  enddo
+!
   TDUR = MDUR * 60.       !- number of seconds in the burn
 
   bfract = 1.             !- combustion factor
 
   EFFLOAD = BLOAD * BFRACT  !- patchy burning
-  
+
 !     spread the burning evenly over the interval
 !     except for the first few minutes for stability
-  ICOUNT = 1  
+  ICOUNT = 1
 !
   if(MDUR > NTIME) STOP 'Increase time duration (ntime) in min - see file "plumerise_mod.f90"'
 
-  DO WHILE (ICOUNT.LE.MDUR)                             
-!  HEATING (ICOUNT) = HEAT * EFFLOAD / TDUR  ! W/m**2 
-!  HEATING (ICOUNT) = 80000.  * 0.55         ! W/m**2 
+  DO WHILE (ICOUNT.LE.MDUR)
+!  HEATING (ICOUNT) = HEAT * EFFLOAD / TDUR  ! W/m**2
+!  HEATING (ICOUNT) = 80000.  * 0.55         ! W/m**2
 
    HEATING (ICOUNT) = heat_fluxW  * 0.55     ! W/m**2 (0.55 converte para energia convectiva)
-   ICOUNT = ICOUNT + 1  
-  ENDDO  
+   ICOUNT = ICOUNT + 1
+  ENDDO
 !     ramp for 5 minutes
  IF(use_last /= 1) THEN
 
-    HINC = HEATING (1) / 4.  
-    HEATING (1) = 0.1  
-    HEATING (2) = HINC  
-    HEATING (3) = 2. * HINC  
-    HEATING (4) = 3. * HINC  
+    HINC = HEATING (1) / 4.
+    HEATING (1) = 0.1
+    HEATING (2) = HINC
+    HEATING (3) = 2. * HINC
+    HEATING (4) = 3. * HINC
  ELSE
     IF(imm==1) THEN
-       HINC = HEATING (1) / 4.  
-       HEATING (1) = 0.1  
-       HEATING (2) = HINC  
-       HEATING (3) = 2. * HINC  
-       HEATING (4) = 3. * HINC 
-    ELSE 
+       HINC = HEATING (1) / 4.
+       HEATING (1) = 0.1
+       HEATING (2) = HINC
+       HEATING (3) = 2. * HINC
+       HEATING (4) = 3. * HINC
+    ELSE
        HINC = (HEATING (1) - heat_flux(imm-1,iveg_ag) * 1000. *0.55)/ 4.
-       HEATING (1) = heat_flux(imm-1,iveg_ag) * 1000. *0.55 + 0.1  
-       HEATING (2) = HEATING (1)+ HINC  
-       HEATING (3) = HEATING (2)+ HINC  
-       HEATING (4) = HEATING (3)+ HINC 
+       HEATING (1) = heat_flux(imm-1,iveg_ag) * 1000. *0.55 + 0.1
+       HEATING (2) = HEATING (1)+ HINC
+       HEATING (3) = HEATING (2)+ HINC
+       HEATING (4) = HEATING (3)+ HINC
     ENDIF
  ENDIF
 
@@ -562,7 +562,7 @@ return
 end subroutine get_fire_properties
 !-------------------------------------------------------------------------------
 !
-SUBROUTINE MAKEPLUME ( kmt,ztopmax,ixx,imm)  
+SUBROUTINE MAKEPLUME ( kmt,ztopmax,ixx,imm)
 !
 ! *********************************************************************
 !
@@ -621,10 +621,10 @@ SUBROUTINE MAKEPLUME ( kmt,ztopmax,ixx,imm)
 !
 !
 !**********************************************************************
-!**********************************************************************               
-!use module_zero_plumegen_coms 
-implicit none 
-!logical :: endspace  
+!**********************************************************************
+!use module_zero_plumegen_coms
+implicit none
+!logical :: endspace
 character (len=10) :: varn
 integer ::  izprint, iconv,  itime, k, kk, kkmax, deltak,ilastprint,kmt &
            ,ixx,nrectotal,i_micro,n_sub_step
@@ -633,7 +633,7 @@ real(kind=kind_chem) ::  vc, g,  r,  cp,  eps,  &
          ztopmax, wmax, rmaxtime, es, esat, heat,dt_save !ESAT_PR,
 character (len=2) :: cixx
 ! Set threshold to be the same as dz=100., the constant grid spacing of plume grid model(meters) found in set_grid()
-    REAL(kind=kind_chem) :: DELZ_THRESOLD = 100. 
+    REAL(kind=kind_chem) :: DELZ_THRESOLD = 100.
 
     INTEGER     :: imm
 
@@ -644,10 +644,10 @@ character (len=2) :: cixx
 !      XNO=10.0E06 median volume diameter raindrop (K table 4)
 !      VC = 38.3/(XNO**.125) mean volume fallspeed eqn. (K)
 !
-parameter (vc = 5.107387)  
+parameter (vc = 5.107387)
 parameter (g = 9.80796, r = 287.04, cp = 1004., eps = 0.622,  tmelt = 273.3)
 parameter (heatsubl = 2.834e6, heatfus = 3.34e5, heatcond = 2.501e6)
-parameter (tfreeze = 269.3)  
+parameter (tfreeze = 269.3)
 !
 tstpf = 2.0      !- timestep factor
 viscosity = 500.!- viscosity constant (original value: 0.001)
@@ -655,25 +655,25 @@ viscosity = 500.!- viscosity constant (original value: 0.001)
 nrectotal=150
 !
 !*************** PROBLEM SETUP AND INITIAL CONDITIONS *****************
-mintime = 1  
-ztopmax = 0. 
-ztop    = 0. 
-   time = 0.  
+mintime = 1
+ztopmax = 0.
+ztop    = 0.
+   time = 0.
      dt = 1.
-   wmax = 1. 
+   wmax = 1.
 kkmax   = 10
 deltaK  = 20
 ilastprint=0
 L       = 1   ! L initialization
 
 !--- initialization
-CALL INITIAL(kmt)  
+CALL INITIAL(kmt)
 
 !--- initial print fields:
 izprint  = 0          ! if = 0 => no printout
 if (izprint.ne.0) then
  write(cixx(1:2),'(i2.2)') ixx
- open(2, file = 'debug.'//cixx//'.dat')  
+ open(2, file = 'debug.'//cixx//'.dat')
  open(19,file='plumegen9.'//cixx//'.gra',         &
      form='unformatted',access='direct',status='unknown',  &
      recl=4*nrectotal)  !PC
@@ -710,11 +710,11 @@ rmaxtime = float(maxtime)
     L=1
     call lbound()
 
-!-- dynamics for the level k>1 
-!-- W advection 
+!-- dynamics for the level k>1
+!-- W advection
 !   call vel_advectc_plumerise(NM1,WC,WT,DNE,DZM)
     call vel_advectc_plumerise(NM1,WC,WT,RHO,DZM)
-  
+
 !-- scalars advection 1
     call scl_advectc_plumerise('SC',NM1)
 
@@ -723,7 +723,7 @@ rmaxtime = float(maxtime)
 
 !-- scalars entrainment, adiabatic
     call scl_misc(NM1)
-    
+
 !-- scalars dinamic entrainment
      call  scl_dyn_entrain(NM1,nkp,wbar,w,adiabat,alpha,radius,tt,t,te,qvt,qv,qvenv,qct,qc,qht,qh,qit,qi,&
                     vel_e,vel_p,vel_t,rad_p,rad_t)
@@ -763,24 +763,24 @@ rmaxtime = float(maxtime)
 !
 !   101 continue
 !
-!-- W-viscosity for stability 
+!-- W-viscosity for stability
     call visc_W(nm1,deltak,kmt)
 
 !-- update scalars
     call update_plumerise(nm1,'S')
-    
-    call hadvance_plumerise(1,nm1,dt,WC,WT,W,mintime) 
+
+    call hadvance_plumerise(1,nm1,dt,WC,WT,W,mintime)
 
 !-- Buoyancy
     call buoyancy_plumerise(NM1, T, TE, QV, QVENV, QH, QI, QC, WT, SCR1)
- 
-!-- Entrainment 
+
+!-- Entrainment
     call entrainment(NM1,W,WT,RADIUS,ALPHA)
 
 !-- update W
     call update_plumerise(nm1,'W')
 
-    call hadvance_plumerise(2,nm1,dt,WC,WT,W,mintime) 
+    call hadvance_plumerise(2,nm1,dt,WC,WT,W,mintime)
 
 
 !-- misc
@@ -790,13 +790,13 @@ rmaxtime = float(maxtime)
 !    rotina do plumegen calcula em kPa
      es       = esat_pr (t(k))  !blob saturation vapor pressure, em kPa
      qsat(k) = (eps * es) / (pe(k) - es)  !blob saturation lwc g/g dry air
-     est (k) = es  
+     est (k) = es
      txs (k) = t(k) - te(k)
      rho (k) = 3483.8 * pe (k) / t (k) ! air parcel density , g/m**3
                                        ! no pressure diff with radius
 
      if((abs(wc(k))).gt.wmax) wmax = abs(wc(k)) ! keep wmax largest w
-    enddo  
+    enddo
 
 ! Gravity wave damping using Rayleigh friction layer for W
     call damp_grav_wave(2,nm1,deltak,dt,zt,zm,w,t,tt,qv,qh,qi,qc,te,pe,qvenv)
@@ -807,21 +807,21 @@ rmaxtime = float(maxtime)
        enddo
       !-- try to find the plume top (above surface height)
        kk = 1
-       DO WHILE (w (kk) .GT. 1.)  
-          kk = kk + 1  
-          ztop =  zm(kk) 
+       DO WHILE (w (kk) .GT. 1.)
+          kk = kk + 1
+          ztop =  zm(kk)
        ENDDO
        !
        ztop_(mintime) = ztop
-       ztopmax = MAX (ztop, ztopmax) 
-       kkmax   = MAX (kk  , kkmax  ) 
+       ztopmax = MAX (ztop, ztopmax)
+       kkmax   = MAX (kk  , kkmax  )
 
        !
        ! if the solution is going to a stationary phase, exit
-       IF(mintime > 10) THEN                 
-          !   if(mintime > 20) then                     
-          !    if( abs(ztop_(mintime)-ztop_(mintime-10)) < DZ ) exit   
-          IF( ABS(ztop_(mintime)-ztop_(mintime-10)) < DELZ_THRESOLD) then 
+       IF(mintime > 10) THEN
+          !   if(mintime > 20) then
+          !    if( abs(ztop_(mintime)-ztop_(mintime-10)) < DZ ) exit
+          IF( ABS(ztop_(mintime)-ztop_(mintime-10)) < DELZ_THRESOLD) then
 
              !- determine W parameter to determine the VMD
                  do k=2,nm1
@@ -841,28 +841,28 @@ rmaxtime = float(maxtime)
               enddo
 
     if(ilastprint == mintime) then
-      call printout (izprint,nrectotal)  
+      call printout (izprint,nrectotal)
       ilastprint = mintime+1
-    endif      
-                               
+    endif
+
 
 ENDDO   !do next timestep
 
 !the last printout
 if (izprint.ne.0) then
- call printout (izprint,nrectotal)  
- close (2)            
- close (19)            
+ call printout (izprint,nrectotal)
+ close (2)
+ close (19)
 endif
 
-RETURN  
+RETURN
 END SUBROUTINE MAKEPLUME
 !-------------------------------------------------------------------------------
 !
-SUBROUTINE BURN(EFLUX, WATER)  
+SUBROUTINE BURN(EFLUX, WATER)
 !
 !- calculates the energy flux and water content at lboundary
-!use module_zero_plumegen_coms                               
+!use module_zero_plumegen_coms
 !real(kind=kind_chem), parameter :: HEAT = 21.E6 !Joules/kg
 !real(kind=kind_chem), parameter :: HEAT = 15.5E6 !Joules/kg - cerrado
 real(kind=kind_chem), parameter :: HEAT = 19.3E6 !Joules/kg - floresta em Alta Floresta (MT)
@@ -874,25 +874,25 @@ real(kind=kind_chem) :: eflux,water
 ! fuel burned is AREA*BLOAD*(DT/TDUR) kg. this amount of fuel is
 ! considered to be spread over area AREA and so the mass burned per
 ! unit area is BLOAD*(DT/TDUR), and the rate is BLOAD/TDUR.
-!        
-IF (TIME.GT.TDUR) THEN !is the burn over?   
+!
+IF (TIME.GT.TDUR) THEN !is the burn over?
    EFLUX = 0.000001    !prevent a potential divide by zero
-   WATER = 0.  
-   RETURN  
-ELSE  
-!                                                   
-   EFLUX = HEATING (MINTIME)                          ! Watts/m**2                                                   
-!  WATER = EFLUX * (DT / HEAT) * (0.5 + FMOIST)       ! kg/m**2 
-   WATER = EFLUX * (DT / HEAT) * (0.5 + FMOIST) /0.55 ! kg/m**2 
+   WATER = 0.
+   RETURN
+ELSE
+!
+   EFLUX = HEATING (MINTIME)                          ! Watts/m**2
+!  WATER = EFLUX * (DT / HEAT) * (0.5 + FMOIST)       ! kg/m**2
+   WATER = EFLUX * (DT / HEAT) * (0.5 + FMOIST) /0.55 ! kg/m**2
    WATER = WATER * 1000.                              ! g/m**2
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 END SUBROUTINE BURN
 !-------------------------------------------------------------------------------
 !
-SUBROUTINE LBOUND ()  
+SUBROUTINE LBOUND ()
 !
 ! ********** BOUNDARY CONDITIONS AT ZSURF FOR PLUME AND CLOUD ********
 !
@@ -907,41 +907,41 @@ SUBROUTINE LBOUND ()
 ! QC(1).
 ! EFLUX = energy flux at ground,watt/m**2 for the last DT
 !
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 implicit none
 real(kind=kind_chem), parameter :: g = 9.80796, r = 287.04, cp = 1004.6, eps = 0.622,tmelt = 273.3
 real(kind=kind_chem), parameter :: tfreeze = 269.3, pi = 3.14159, e1 = 1./3., e2 = 5./3.
 real(kind=kind_chem) :: es,  esat, eflux, water,  pres, c1,  c2, f, zv,  denscor, xwater !,ESAT_PR
 !  real(kind=kind_chem), external:: esat_pr!
 
-!            
+!
 QH (1) = QH (2)   !soak up hydrometeors
-QI (1) = QI (2)              
+QI (1) = QI (2)
 QC (1) = 0.       !no cloud here
 !
 !
-   CALL BURN (EFLUX, WATER)  
+   CALL BURN (EFLUX, WATER)
 !
 !  calculate parameters at boundary from a virtual buoyancy point source
 !
    PRES = PE (1) * 1000.   !need pressure in N/m**2
-                              
+
    C1 = 5. / (6. * ALPHA)  !alpha is entrainment constant
 
-   C2 = 0.9 * ALPHA  
+   C2 = 0.9 * ALPHA
 
-   F = EFLUX / (PRES * CP * PI)  
-                             
+   F = EFLUX / (PRES * CP * PI)
+
    F = G * R * F * AREA  !buoyancy flux
-                 
+
    ZV = C1 * RSURF  !virtual boundary height
-                                   
+
    W (1) = C1 * ( (C2 * F) **E1) / ZV**E1  !boundary velocity
-                                         
+
    DENSCOR = C1 * F / G / (C2 * F) **E1 / ZV**E2   !density correction
 
    T (1) = TE (1) / (1. - DENSCOR)    !temperature of virtual plume at zsurf
-   
+
 !
    WC(1) = W(1)
     VEL_P(1) = 0.
@@ -952,24 +952,24 @@ QC (1) = 0.       !no cloud here
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !     match dw/dz,dt/dz at the boundary. F is conserved.
 !
-   !WBAR = W (1) * (1. - 1. / (6. * ZV) )  
-   !ADVW = WBAR * W (1) / (3. * ZV)  
-   !ADVT = WBAR * (5. / (3. * ZV) ) * (DENSCOR / (1. - DENSCOR) )  
-   !ADVC = 0.  
-   !ADVH = 0.  
-   !ADVI = 0.  
-   !ADIABAT = - WBAR * G / CP  
-   VTH (1) = - 4.  
-   VTI (1) = - 3.  
-   TXS (1) = T (1) - TE (1)  
+   !WBAR = W (1) * (1. - 1. / (6. * ZV) )
+   !ADVW = WBAR * W (1) / (3. * ZV)
+   !ADVT = WBAR * (5. / (3. * ZV) ) * (DENSCOR / (1. - DENSCOR) )
+   !ADVC = 0.
+   !ADVH = 0.
+   !ADVI = 0.
+   !ADIABAT = - WBAR * G / CP
+   VTH (1) = - 4.
+   VTI (1) = - 3.
+   TXS (1) = T (1) - TE (1)
 
-   VISC (1) = VISCOSITY  
+   VISC (1) = VISCOSITY
 
    RHO (1) = 3483.8 * PE (1) / T (1)   !air density at level 1, g/m**3
 
    XWATER = WATER / (W (1) * DT * RHO (1) )   !firewater mixing ratio
-                                            
-   QV (1) = XWATER + QVENV (1)  !plus what's already there 
+
+   QV (1) = XWATER + QVENV (1)  !plus what's already there
 
 
 !  PE esta em kPa  - ESAT do RAMS esta em mbar = 100 Pa = 0.1 kPa
@@ -977,7 +977,7 @@ QC (1) = 0.       !no cloud here
 !  rotina do plumegen ja calcula em kPa
    ES       = ESAT_PR (T(1))  !blob saturation vapor pressure, em kPa
 
-   EST  (1)  = ES                                  
+   EST  (1)  = ES
    QSAT (1) = (EPS * ES) / (PE (1) - ES)   !blob saturation lwc g/g dry air
 
    IF (QV (1) .gt. QSAT (1) ) THEN
@@ -994,8 +994,8 @@ END SUBROUTINE LBOUND
 SUBROUTINE INITIAL ( kmt)
 !
 ! ************* SETS UP INITIAL CONDITIONS FOR THE PROBLEM ************
-!use module_zero_plumegen_coms 
-implicit none 
+!use module_zero_plumegen_coms
+implicit none
 real(kind=kind_chem), parameter :: tfreeze = 269.3
 integer ::  isub,  k,  n1,  n2,  n3,  lbuoy,  itmp,  isubm1 ,kmt
 real(kind=kind_chem) ::     xn1,  xi,  es,  esat!,ESAT_PR
@@ -1018,12 +1018,12 @@ N=kmt
 !  ES       = 0.1*ESAT (T(k)) !blob saturation vapor pressure, em kPa
 !  rotina do plumegen calcula em kPa
    ES       = ESAT_PR (T(k))  !blob saturation vapor pressure, em kPa
-   EST  (k) = ES  
+   EST  (k) = ES
    QSAT (k) = (.622 * ES) / (PE (k) - ES) !saturation lwc g/g
    RHO  (k) = 3483.8 * PE (k) / T (k)     !dry air density g/m**3
        VEL_P(k) = 0.
        rad_p(k) = 0.
-  enddo  
+  enddo
 
 ! Initialize the entrainment radius, Turner-style plume
   radius(1) = rsurf
@@ -1037,7 +1037,7 @@ N=kmt
        radius(k) = radius(k-1)+(6./5.)*alpha*(zt(k)-zt(k-1))
        rad_p(k)  = radius(k)
    ENDDO
-    
+
 !  Initialize the viscosity
    VISC (1) = VISCOSITY
    do k=2,N
@@ -1052,7 +1052,7 @@ N=kmt
 
    CALL LBOUND()
 
-RETURN  
+RETURN
 END SUBROUTINE INITIAL
 !-------------------------------------------------------------------------------
 !
@@ -1066,7 +1066,7 @@ if(ifrom==1) then
  call friction(ifrom,nm1,deltak,dt,zt,zm,t,tt    ,te)
 !call friction(ifrom,nm1,dt,zt,zm,qv,qvt,qvenv)
  return
-endif 
+endif
 
 dummy(:) = 0.
 if(ifrom==2) call friction(ifrom,nm1,deltak,dt,zt,zm,w,dummy ,dummy)
@@ -1097,7 +1097,7 @@ ztop = zm(nm1)
 c1 = 1. / (distim * (ztop - zmkf))
 c2 = dt * c1
 
-if(ifrom == 1) then  
+if(ifrom == 1) then
   do k = nm1,2,-1
    if (zt(k) .le. zmkf) cycle
    vart(k) = vart(k)   + c1 * (zt(k) - zmkf)*(var2(k) - var1(k))
@@ -1124,7 +1124,7 @@ real(kind=kind_chem) :: c1z
 
 dn0(1:m1)=rho(1:m1)*1.e-3 ! converte de cgs para mks
 
-flxw(1) = wc(1) * dn0(1) 
+flxw(1) = wc(1) * dn0(1)
 
 do k = 2,m1-1
    flxw(k) = wc(k) * .5 * (dn0(k) + dn0(k+1))
@@ -1132,7 +1132,7 @@ enddo
 
 ! Compute advection contribution to W tendency
 
-c1z = .5 
+c1z = .5
 
 do k = 2,m1-2
 
@@ -1222,7 +1222,7 @@ integer :: k,m1
 real(kind=kind_chem), parameter :: g = 9.8, eps = 0.622, gama = 0.5 ! mass virtual coeff.
 real(kind=kind_chem), dimension(m1) :: T, TE, QV, QVENV, QH, QI, QC, WT, scr1
 real(kind=kind_chem) :: TV,TVE,QWTOTL,umgamai
-real(kind=kind_chem), parameter :: mu = 0.15 
+real(kind=kind_chem), parameter :: mu = 0.15
 
 !- orig
 umgamai = 1./(1.+gama) ! compensa a falta do termo de aceleracao associado `as
@@ -1238,8 +1238,8 @@ do k = 2,m1-1
 
     QWTOTL = QH(k) + QI(k) + QC(k)                       ! QWTOTL*G is drag
 !- orig
-   !scr1(k)= G*( umgamai*(  TV - TVE) / TVE   - QWTOTL) 
-    scr1(k)= G*  umgamai*( (TV - TVE) / TVE   - QWTOTL) 
+   !scr1(k)= G*( umgamai*(  TV - TVE) / TVE   - QWTOTL)
+    scr1(k)= G*  umgamai*( (TV - TVE) / TVE   - QWTOTL)
 enddo
 
 do k = 2,m1-2
@@ -1269,8 +1269,8 @@ umgamai = 1./(1.+gama) ! compensa a falta do termo de aceleracao associado `as
   do k=2,m1-1
 
 !-- for W: WBAR is only W(k)
-!     WBAR=0.5*(W(k)+W(k-1))           
-      WBAR=W(k)          
+!     WBAR=0.5*(W(k)+W(k-1))
+      WBAR=W(k)
       RADIUS_BAR = 0.5*(RADIUS(k) + RADIUS(k-1))
 ! orig
      !DMDTM =           2. * ALPHA * ABS (WBAR) / RADIUS_BAR  != (1/M)DM/DT
@@ -1278,14 +1278,14 @@ umgamai = 1./(1.+gama) ! compensa a falta do termo de aceleracao associado `as
 
 !--  DMDTM*W(L) entrainment,
       wt(k) = wt(k)  - DMDTM*ABS (WBAR)
-      
+
       !if(VEL_P (k) - VEL_E (k) > 0.) cycle
 
        !-   dynamic entrainment
        DYN_ENTR =  (2./3.1416)*0.5*ABS (VEL_P(k)-VEL_E(k)+VEL_P(k-1)-VEL_E(k-1)) /RADIUS_BAR
 
        wt(k) = wt(k)  - DYN_ENTR*ABS (WBAR)
-       
+
        !- entraiment acceleration for output only
        !dwdt_entr(k) =  - DMDTM*ABS (WBAR)- DYN_ENTR*ABS (WBAR)
   enddo
@@ -1313,7 +1313,7 @@ integer :: k
       vt3df(k) =  (w(k) + wc(k)) * dtlto2 *.5 *  dzm(k)
    enddo
 
- 
+
 !-srf-24082005
 !  do k = 1,mzp-1
   do k = 1,mzp
@@ -1410,7 +1410,7 @@ integer :: k
                        ,vt3dc (1) ,vt3df (1)  &
                        ,vt3dg (1) ,vt3dk (1)  &
                        ,vctr1,vctr2         )
-   
+
    call advtndc_plumerise(mzp,SC,scr1(1),SCT,dt)
 
 
@@ -1435,7 +1435,7 @@ dfact = .5
                   +  vctr2(k) * scr1(k+1)      &
                   +  vt3df(k) * (scr1(k) - scr1(k+1)))
       enddo
-      
+
 ! Modify fluxes to retain positive-definiteness on scalar quantities.
 !    If a flux will remove 1/2 quantity during a timestep,
 !    reduce to first order flux. This will remain positive-definite
@@ -1503,15 +1503,15 @@ integer m1,k
 real(kind=kind_chem) dmdtm
 
  do k=2,m1-1
-      WBAR    = 0.5*(W(k)+W(k-1))  
+      WBAR    = 0.5*(W(k)+W(k-1))
 !-- dry adiabat
-      ADIABAT = - WBAR * G / CP 
-!      
-!-- entrainment     
+      ADIABAT = - WBAR * G / CP
+!
+!-- entrainment
       DMDTM = 2. * ALPHA * ABS (WBAR) / RADIUS (k)  != (1/M)DM/DT
-      
+
 !-- tendency temperature = adv + adiab + entrainment
-      TT(k) = TT(K) + ADIABAT - DMDTM * ( T  (k) -    TE (k) ) 
+      TT(k) = TT(K) + ADIABAT - DMDTM * ( T  (k) -    TE (k) )
 
 !-- tendency water vapor = adv  + entrainment
       QVT(K) = QVT(K)         - DMDTM * ( QV (k) - QVENV (k) )
@@ -1540,9 +1540,9 @@ end subroutine scl_misc
 
     ! plumegen_coms
     INTEGER , INTENT(IN)    :: nkp
-    REAL(kind=kind_chem)    , INTENT(INOUT) :: wbar 
+    REAL(kind=kind_chem)    , INTENT(INOUT) :: wbar
     REAL(kind=kind_chem)    , INTENT(IN)    :: w(nkp)
-    REAL(kind=kind_chem)    , INTENT(INOUT) :: adiabat 
+    REAL(kind=kind_chem)    , INTENT(INOUT) :: adiabat
     REAL(kind=kind_chem)    , INTENT(IN)    :: alpha
     REAL(kind=kind_chem)    , INTENT(IN)    :: radius(nkp)
     REAL(kind=kind_chem)    , INTENT(INOUT) :: tt(nkp)
@@ -1570,33 +1570,33 @@ end subroutine scl_misc
     real(kind=kind_chem) dmdtm
 
     DO k=2,m1-1
-      !      
+      !
       !-- tendency horizontal radius from dyn entrainment
             !rad_t(K) = rad_t(K)   +    (vel_e(k)-vel_p(k)) /pi
              rad_t(K) = rad_t(K)   + ABS((vel_e(k)-vel_p(k)))/pi
-      
+
       !-- entrainment
             !DMDTM = (2./3.1416)  *     (VEL_E (k) - VEL_P (k)) / RADIUS (k)
              DMDTM = (2./3.1416)  *  ABS(VEL_E (k) - VEL_P (k)) / RADIUS (k)
-      
+
       !-- tendency horizontal speed  from dyn entrainment
              VEL_T(K) = VEL_T(K)     - DMDTM * ( VEL_P (k) - VEL_E (k) )
-      
+
       !     if(VEL_P (k) - VEL_E (k) > 0.) cycle
-      
+
       !-- tendency temperature  from dyn entrainment
              TT(k) = TT(K)        - DMDTM * ( T (k) - TE  (k) )
-      
+
       !-- tendency water vapor  from dyn entrainment
            QVT(K) = QVT(K)        - DMDTM * ( QV (k) - QVENV (k) )
-      
+
              QCT(K) = QCT(K)        - DMDTM * ( QC (k)  )
              QHT(K) = QHT(K)        - DMDTM * ( QH (k)  )
              QIT(K) = QIT(K)        - DMDTM * ( QI (k)  )
-      
+
       !-- tendency gas/particle  from dyn entrainment
       !     SCT(K) = SCT(K)     - DMDTM * ( SC (k) - SCE (k) )
-    
+
     ENDDO
    END SUBROUTINE scl_dyn_entrain
 
@@ -1617,29 +1617,29 @@ m2=min(m1,kmt)
 !do k=2,m1-1
 do k=2,m2-1
  DZ1T   = 0.5*(ZT(K+1)-ZT(K-1))
- DZ2T   = VISC (k) / (DZ1T * DZ1T)  
+ DZ2T   = VISC (k) / (DZ1T * DZ1T)
  DZ1M   = 0.5*(ZM(K+1)-ZM(K-1))
- DZ2M   = VISC (k) / (DZ1M * DZ1M)  
- D2WDZ  = (W  (k + 1) - 2 * W  (k) + W  (k - 1) ) * DZ2M  
- D2TDZ  = (T  (k + 1) - 2 * T  (k) + T  (k - 1) ) * DZ2T  
- D2QVDZ = (QV (k + 1) - 2 * QV (k) + QV (k - 1) ) * DZ2T  
- D2QHDZ = (QH (k + 1) - 2 * QH (k) + QH (k - 1) ) * DZ2T 
- D2QCDZ = (QC (k + 1) - 2 * QC (k) + QC (k - 1) ) * DZ2T  
- D2QIDZ = (QI (k + 1) - 2 * QI (k) + QI (k - 1) ) * DZ2T  
- !D2SCDZ = (SC (k + 1) - 2 * SC (k) + SC (k - 1) ) * DZ2T 
+ DZ2M   = VISC (k) / (DZ1M * DZ1M)
+ D2WDZ  = (W  (k + 1) - 2 * W  (k) + W  (k - 1) ) * DZ2M
+ D2TDZ  = (T  (k + 1) - 2 * T  (k) + T  (k - 1) ) * DZ2T
+ D2QVDZ = (QV (k + 1) - 2 * QV (k) + QV (k - 1) ) * DZ2T
+ D2QHDZ = (QH (k + 1) - 2 * QH (k) + QH (k - 1) ) * DZ2T
+ D2QCDZ = (QC (k + 1) - 2 * QC (k) + QC (k - 1) ) * DZ2T
+ D2QIDZ = (QI (k + 1) - 2 * QI (k) + QI (k - 1) ) * DZ2T
+ !D2SCDZ = (SC (k + 1) - 2 * SC (k) + SC (k - 1) ) * DZ2T
  d2vel_pdz=(vel_P  (k + 1) - 2 * vel_P  (k) + vel_P  (k - 1) ) * DZ2T
  d2rad_dz =(rad_p  (k + 1) - 2 * rad_p  (k) + rad_p  (k - 1) ) * DZ2T
- 
-  WT(k) =   WT(k) + D2WDZ 
-  TT(k) =   TT(k) + D2TDZ                          
- QVT(k) =  QVT(k) + D2QVDZ 
- QCT(k) =  QCT(k) + D2QCDZ 
- QHT(k) =  QHT(k) + D2QHDZ 
- QIT(k) =  QIT(k) + D2QIDZ     
+
+  WT(k) =   WT(k) + D2WDZ
+  TT(k) =   TT(k) + D2TDZ
+ QVT(k) =  QVT(k) + D2QVDZ
+ QCT(k) =  QCT(k) + D2QCDZ
+ QHT(k) =  QHT(k) + D2QHDZ
+ QIT(k) =  QIT(k) + D2QIDZ
  vel_t(k) =   vel_t(k) + d2vel_pdz
  rad_t(k) =   rad_t(k) + d2rad_dz
  !SCT(k) =  SCT(k) + D2SCDZ
-enddo  
+enddo
 
 end subroutine visc_W
 
@@ -1649,33 +1649,33 @@ subroutine update_plumerise(m1,varn)
 !use module_zero_plumegen_coms
 integer m1,k
 character(len=*) :: varn
- 
+
 if(varn == 'W') then
 
  do k=2,m1-1
-   W(k) =  W(k) +  WT(k) * DT  
+   W(k) =  W(k) +  WT(k) * DT
  enddo
  return
 
-else 
+else
 do k=2,m1-1
-   T(k) =  T(k) +  TT(k) * DT  
+   T(k) =  T(k) +  TT(k) * DT
 
-  QV(k) = QV(k) + QVT(k) * DT  
+  QV(k) = QV(k) + QVT(k) * DT
 
-  QC(k) = QC(k) + QCT(k) * DT !cloud drops travel with air 
-  QH(k) = QH(k) + QHT(k) * DT  
-  QI(k) = QI(k) + QIT(k) * DT 
-! SC(k) = SC(k) + SCT(k) * DT 
+  QC(k) = QC(k) + QCT(k) * DT !cloud drops travel with air
+  QH(k) = QH(k) + QHT(k) * DT
+  QI(k) = QI(k) + QIT(k) * DT
+! SC(k) = SC(k) + SCT(k) * DT
 
-!srf---18jun2005  
+!srf---18jun2005
   QV(k) = max(0., QV(k))
   QC(k) = max(0., QC(k))
   QH(k) = max(0., QH(k))
   QI(k) = max(0., QI(k))
-  
-  VEL_P(k) =  VEL_P(k) + VEL_T(k) * DT  
-  rad_p(k) =  rad_p(k) + rad_t(k) * DT  
+
+  VEL_P(k) =  VEL_P(k) + VEL_T(k) * DT
+  rad_p(k) =  rad_p(k) + rad_t(k) * DT
 ! SC(k) = max(0., SC(k))
 
  enddo
@@ -1688,8 +1688,8 @@ subroutine fallpart(m1)
 integer m1,k
 real(kind=kind_chem) vtc, dfhz,dfiz,dz1
 !srf==================================
-!   verificar se o gradiente esta correto 
-!  
+!   verificar se o gradiente esta correto
+!
 !srf==================================
 !
 !     XNO=1.E7  [m**-4] median volume diameter raindrop,Kessler
@@ -1697,46 +1697,46 @@ real(kind=kind_chem) vtc, dfhz,dfiz,dz1
 !     for ice, see (OT18), use F0=0.75 per argument there. rho*q
 !     values are in g/m**3, velocities in m/s
 
-real(kind=kind_chem), PARAMETER :: VCONST = 5.107387, EPS = 0.622, F0 = 0.75  
+real(kind=kind_chem), PARAMETER :: VCONST = 5.107387, EPS = 0.622, F0 = 0.75
 real(kind=kind_chem), PARAMETER :: G = 9.81, CP = 1004.
 !
 do k=2,m1-1
 
    VTC = VCONST * RHO (k) **.125   ! median volume fallspeed (KTable4)
-                                
+
 !  hydrometeor assembly velocity calculations (K Table4)
-!  VTH(k)=-VTC*QH(k)**.125  !median volume fallspeed, water            
+!  VTH(k)=-VTC*QH(k)**.125  !median volume fallspeed, water
    VTH (k) = - 4.        !small variation with qh
-   
+
    VHREL = W (k) + VTH (k)  !relative to surrounding cloud
- 
+
 !  rain ventilation coefficient for evaporation
-   CVH(k) = 1.6 + 0.57E-3 * (ABS (VHREL) ) **1.5  
+   CVH(k) = 1.6 + 0.57E-3 * (ABS (VHREL) ) **1.5
 !
-!  VTI(k)=-VTC*F0*QI(k)**.125    !median volume fallspeed,ice             
+!  VTI(k)=-VTC*F0*QI(k)**.125    !median volume fallspeed,ice
    VTI (k) = - 3.                !small variation with qi
 
    VIREL = W (k) + VTI (k)       !relative to surrounding cloud
 !
 !  ice ventilation coefficient for sublimation
-   CVI(k) = 1.6 + 0.57E-3 * (ABS (VIREL) ) **1.5 / F0  
+   CVI(k) = 1.6 + 0.57E-3 * (ABS (VIREL) ) **1.5 / F0
 !
 !
-   IF (VHREL.GE.0.0) THEN  
+   IF (VHREL.GE.0.0) THEN
     DFHZ=QH(k)*(RHO(k  )*VTH(k  )-RHO(k-1)*VTH(k-1))/RHO(k-1)
-   ELSE  
+   ELSE
     DFHZ=QH(k)*(RHO(k+1)*VTH(k+1)-RHO(k  )*VTH(k  ))/RHO(k)
-   ENDIF  
+   ENDIF
    !
    !
-   IF (VIREL.GE.0.0) THEN  
+   IF (VIREL.GE.0.0) THEN
     DFIZ=QI(k)*(RHO(k  )*VTI(k  )-RHO(k-1)*VTI(k-1))/RHO(k-1)
-   ELSE  
+   ELSE
     DFIZ=QI(k)*(RHO(k+1)*VTI(k+1)-RHO(k  )*VTI(k  ))/RHO(k)
    ENDIF
-   
+
    DZ1=ZM(K)-ZM(K-1)
-   
+
    qht(k) = qht(k) - DFHZ / DZ1 !hydrometeors don't
 
    qit(k) = qit(k) - DFIZ / DZ1  !nor does ice? hail, what about
@@ -1746,8 +1746,8 @@ end subroutine fallpart
 !-------------------------------------------------------------------------------
 !-------------------------------------------------------------------------------
 !
-subroutine printout (izprint,nrectotal)  
-!use module_zero_plumegen_coms  
+subroutine printout (izprint,nrectotal)
+!use module_zero_plumegen_coms
 real(kind=kind_chem), parameter :: tmelt = 273.3
 integer, save :: nrec
 data nrec/0/
@@ -1756,18 +1756,18 @@ real(kind=kind_chem) :: pea, btmp,etmp,vap1,vap2,gpkc,gpkh,gpki,deficit
 interval = 1              !debug time interval,min
 
 !
-IF (IZPRINT.EQ.0) RETURN  
+IF (IZPRINT.EQ.0) RETURN
 
 IF(MINTIME == 1) nrec = 0
 !
-WRITE (2, 430) MINTIME, DT, TIME  
-WRITE (2, 431) ZTOP  
-WRITE (2, 380)  
+WRITE (2, 430) MINTIME, DT, TIME
+WRITE (2, 431) ZTOP
+WRITE (2, 380)
 !
 ! do the print
 !
- DO 390 KO = 1, nrectotal, interval  
-                             
+ DO 390 KO = 1, nrectotal, interval
+
    PEA = PE (KO) * 10.       !pressure is stored in decibars(kPa),print in mb;
    BTMP = T (KO) - TMELT     !temps in Celsius
    ETMP = T (KO) - TE (KO)   !temperature excess
@@ -1775,7 +1775,7 @@ WRITE (2, 380)
    VAP2 = QSAT (KO) * 1000.  !vapor (internal storage is in g/g)
    GPKC = QC (KO)   * 1000.  !cloud water
    GPKH = QH (KO)   * 1000.  !raindrops
-   GPKI = QI (KO)   * 1000.  !ice particles 
+   GPKI = QI (KO)   * 1000.  !ice particles
    DEFICIT = VAP2 - VAP1     !vapor deficit
 !
    WRITE (2, 400) zt(KO)/1000., PEA, W (KO), BTMP, ETMP, VAP1, &
@@ -1783,7 +1783,7 @@ WRITE (2, 380)
 !
 !
 !                                    !end of printout
-   
+
   390 CONTINUE
 
    nrec=nrec+1
@@ -1806,57 +1806,57 @@ WRITE (2, 380)
    nrec=nrec+1
    write (19,rec=nrec) (QVENV(KO)*1000., KO=1,nrectotal)
 !
-RETURN  
+RETURN
 !
 ! ************** FORMATS *********************************************
 !
   380 FORMAT(/,' Z(KM) P(MB) W(MPS) T(C)  T-TE   VAP   SAT   QC    QH'// &
 '     QI    VTH(MPS) SCAL'/)
 !
-  400 FORMAT(1H , F4.1,F7.2,F7.2,F6.1,6F6.2,F7.2,1X,F6.2)  
+  400 FORMAT(1H , F4.1,F7.2,F7.2,F6.1,6F6.2,F7.2,1X,F6.2)
 !
   430 FORMAT(1H ,//I5,' MINUTES       DT= ',F6.2,' SECONDS   TIME= ' &
         ,F8.2,' SECONDS')
-  431 FORMAT(' ZTOP= ',F10.2)  
+  431 FORMAT(' ZTOP= ',F10.2)
 !
 end subroutine printout
 !
 ! *********************************************************************
-SUBROUTINE WATERBAL  
-!use module_zero_plumegen_coms  
-!
-                                        
-IF (QC (L) .LE.1.0E-10) QC (L) = 0.  !DEFEAT UNDERFLOW PROBLEM
-IF (QH (L) .LE.1.0E-10) QH (L) = 0.  
-IF (QI (L) .LE.1.0E-10) QI (L) = 0.  
-!
-CALL EVAPORATE    !vapor to cloud,cloud to vapor  
-!                             
-CALL SUBLIMATE    !vapor to ice  
-!                            
-CALL GLACIATE     !rain to ice 
-                           
-CALL MELT         !ice to rain
-!         
-!if(ak1 > 0. .or. ak2 > 0.) &
-CALL CONVERT () !(auto)conversion and accretion 
-!CALL CONVERT2 () !(auto)conversion and accretion 
+SUBROUTINE WATERBAL
+!use module_zero_plumegen_coms
 !
 
-RETURN  
+IF (QC (L) .LE.1.0E-10) QC (L) = 0.  !DEFEAT UNDERFLOW PROBLEM
+IF (QH (L) .LE.1.0E-10) QH (L) = 0.
+IF (QI (L) .LE.1.0E-10) QI (L) = 0.
+!
+CALL EVAPORATE    !vapor to cloud,cloud to vapor
+!
+CALL SUBLIMATE    !vapor to ice
+!
+CALL GLACIATE     !rain to ice
+
+CALL MELT         !ice to rain
+!
+!if(ak1 > 0. .or. ak2 > 0.) &
+CALL CONVERT () !(auto)conversion and accretion
+!CALL CONVERT2 () !(auto)conversion and accretion
+!
+
+RETURN
 END SUBROUTINE WATERBAL
 ! *********************************************************************
-SUBROUTINE EVAPORATE  
+SUBROUTINE EVAPORATE
 !
 !- evaporates cloud,rain and ice to saturation
 !
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 implicit none
 !
 !     XNO=10.0E06
 !     HERC = 1.93*1.E-6*XN035        !evaporation constant
 !
-real(kind=kind_chem), PARAMETER :: HERC = 5.44E-4, CP = 1.004, HEATCOND = 2.5E3  
+real(kind=kind_chem), PARAMETER :: HERC = 5.44E-4, CP = 1.004, HEATCOND = 2.5E3
 real(kind=kind_chem), PARAMETER :: HEATSUBL = 2834., TMELT = 273., TFREEZE = 269.3
 
 real(kind=kind_chem), PARAMETER :: FRC = HEATCOND / CP, SRC = HEATSUBL / CP
@@ -1866,48 +1866,48 @@ real(kind=kind_chem) :: evhdt, evidt, evrate, evap, sd,    quant, dividend, divi
 !
 !
 SD = QSAT (L) - QV (L)  !vapor deficit
-IF (SD.EQ.0.0)  RETURN  
-!IF (abs(SD).lt.1.e-7)  RETURN  
+IF (SD.EQ.0.0)  RETURN
+!IF (abs(SD).lt.1.e-7)  RETURN
 
 
-EVHDT = 0.  
-EVIDT = 0.  
+EVHDT = 0.
+EVIDT = 0.
 !evrate =0.; evap=0.; sd=0.0; quant=0.0; dividend=0.0; divisor=0.0; devidt=0.0
-                                 
+
 EVRATE = ABS (WBAR * DQSDZ)   !evaporation rate (Kessler 8.32)
 EVAP = EVRATE * DT            !what we can get in DT
-                                  
+
 
 IF (SD.LE.0.0) THEN  !     condense. SD is negative
 
    IF (EVAP.GE.ABS (SD) ) THEN    !we get it all
-                                  
+
       QC (L) = QC  (L) - SD  !deficit,remember?
-      QV (L) = QSAT(L)       !set the vapor to saturation  
+      QV (L) = QSAT(L)       !set the vapor to saturation
       T  (L) = T   (L) - SD * FRC  !heat gained through condensation
                                 !per gram of dry air
-      RETURN  
+      RETURN
 
-   ELSE  
-                                 
-      QC (L) = QC (L) + EVAP         !get what we can in DT 
+   ELSE
+
+      QC (L) = QC (L) + EVAP         !get what we can in DT
       QV (L) = QV (L) - EVAP         !remove it from the vapor
       T  (L) = T  (L) + EVAP * FRC   !get some heat
 
-      RETURN  
+      RETURN
 
-   ENDIF  
+   ENDIF
 !
 ELSE                                !SD is positive, need some water
 !
 ! not saturated. saturate if possible. use everything in order
 ! cloud, rain, ice. SD is positive
-                                         
+
    IF (EVAP.LE.QC (L) ) THEN        !enough cloud to last DT
 !
-                                         
+
       IF (SD.LE.EVAP) THEN          !enough time to saturate
-                                         
+
          QC (L) = QC (L) - SD       !remove cloud
          QV (L) = QSAT (L)          !saturate
          T (L) = T (L) - SD * FRC   !cool the parcel
@@ -1915,30 +1915,30 @@ ELSE                                !SD is positive, need some water
 !
 
       ELSE   !not enough time
-                                        
+
          SD = SD-EVAP               !use what there is
          QV (L) = QV (L) + EVAP     !add vapor
          T (L) = T (L) - EVAP * FRC !lose heat
          QC (L) = QC (L) - EVAP     !lose cloud
                                 !go on to rain.
-      ENDIF     
+      ENDIF
 !
    ELSE                !not enough cloud to last DT
-!      
+!
       IF (SD.LE.QC (L) ) THEN   !but there is enough to sat
-                                          
+
          QV (L) = QSAT (L)  !use it
-         QC (L) = QC (L) - SD  
-         T  (L) = T (L) - SD * FRC  
-         RETURN  
+         QC (L) = QC (L) - SD
+         T  (L) = T (L) - SD * FRC
+         RETURN
 
       ELSE            !not enough to sat
-         SD = SD-QC (L)  
-         QV (L) = QV (L) + QC (L)  
-         T  (L) = T (L) - QC (L) * FRC         
+         SD = SD-QC (L)
+         QV (L) = QV (L) + QC (L)
+         T  (L) = T (L) - QC (L) * FRC
          QC (L) = 0.0  !all gone
-                                          
-      ENDIF       !on to rain                           
+
+      ENDIF       !on to rain
    ENDIF          !finished with cloud
 !
 !  but still not saturated, so try to use some rain
@@ -1950,7 +1950,7 @@ ELSE                                !SD is positive, need some water
 !  sd is still positive or we wouldn't be here.
 
 
-   IF (QH (L) .LE.1.E-10) GOTO 33                                  
+   IF (QH (L) .LE.1.E-10) GOTO 33
 
 !srf-25082005
 !  QUANT = ( QC (L)  + QV (L) - QSAT (L) ) * RHO (L)   !g/m**3
@@ -1958,7 +1958,7 @@ ELSE                                !SD is positive, need some water
 !
    EVHDT = (DT * HERC * (QUANT) * (QH (L) * RHO (L) ) **.65) / RHO (L)
 !             rain evaporation in time DT
-                                         
+
    IF (EVHDT.LE.QH (L) ) THEN           !enough rain to last DT
 
       IF (SD.LE.EVHDT) THEN          !enough time to saturate
@@ -1967,7 +1967,7 @@ ELSE                                !SD is positive, need some water
          T (L) = T (L) - SD * FRC      !cool the parcel
 
      RETURN              !done
-!                       
+!
       ELSE                               !not enough time
          SD = SD-EVHDT           !use what there is
          QV (L) = QV (L) + EVHDT       !add vapor
@@ -1975,24 +1975,24 @@ ELSE                                !SD is positive, need some water
          QH (L) = QH (L) - EVHDT       !lose rain
 
       ENDIF                    !go on to ice.
-!                                    
+!
    ELSE  !not enough rain to last DT
 !
       IF (SD.LE.QH (L) ) THEN             !but there is enough to sat
          QV (L) = QSAT (L)                !use it
-         QH (L) = QH (L) - SD  
-         T (L) = T (L) - SD * FRC  
-         RETURN  
-!                            
+         QH (L) = QH (L) - SD
+         T (L) = T (L) - SD * FRC
+         RETURN
+!
       ELSE                              !not enough to sat
-         SD = SD-QH (L)  
-         QV (L) = QV (L) + QH (L)  
-         T (L) = T (L) - QH (L) * FRC    
+         SD = SD-QH (L)
+         QV (L) = QV (L) + QH (L)
+         T (L) = T (L) - QH (L) * FRC
          QH (L) = 0.0                   !all gone
-                                          
+
       ENDIF                             !on to ice
 !
-                                          
+
    ENDIF                                !finished with rain
 !
 !
@@ -2004,19 +2004,19 @@ ELSE                                !SD is positive, need some water
 !
    DIVIDEND = ( (1.E6 / RHO (L) ) **0.475) * (SD / QSAT (L) &
             - 1) * (QI (L) **0.525) * 1.13
-   DIVISOR = 7.E5 + 4.1E6 / (10. * EST (L) )  
-                                                 
+   DIVISOR = 7.E5 + 4.1E6 / (10. * EST (L) )
+
    DEVIDT = - CVI(L) * DIVIDEND / DIVISOR   !rate of change
-                                                  
+
    EVIDT = DEVIDT * DT                      !what we could get
 !
 ! logic here is identical to rain. could get fancy and make subroutine
 ! but duplication of code is easier. God bless the screen editor.
 !
-                                         
+
    IF (EVIDT.LE.QI (L) ) THEN             !enough ice to last DT
 !
-                                         
+
       IF (SD.LE.EVIDT) THEN            !enough time to saturate
          QI (L) = QI (L) - SD         !remove ice
          QV (L) = QSAT (L)            !saturate
@@ -2024,54 +2024,54 @@ ELSE                                !SD is positive, need some water
 
          RETURN                !done
 !
-                                          
+
       ELSE                                !not enough time
-                                          
+
          SD = SD-EVIDT            !use what there is
          QV (L) = QV (L) + EVIDT        !add vapor
           T (L) =  T (L) - EVIDT * SRC        !lose heat
          QI (L) = QI (L) - EVIDT        !lose ice
-                                          
-      ENDIF                    !go on,unsatisfied
-!                                          
-   ELSE                                   !not enough ice to last DT
-!                                         
-      IF (SD.LE.QI (L) ) THEN             !but there is enough to sat
-                                          
-         QV (L) = QSAT (L)                !use it
-         QI (L) = QI   (L) - SD  
-          T (L) =  T   (L) - SD * SRC  
 
-         RETURN  
+      ENDIF                    !go on,unsatisfied
+!
+   ELSE                                   !not enough ice to last DT
+!
+      IF (SD.LE.QI (L) ) THEN             !but there is enough to sat
+
+         QV (L) = QSAT (L)                !use it
+         QI (L) = QI   (L) - SD
+          T (L) =  T   (L) - SD * SRC
+
+         RETURN
 !
       ELSE                                 !not enough to sat
-         SD = SD-QI (L)  
-         QV (L) = QV (L) + QI (L)  
-         T (L) = T (L) - QI (L) * SRC             
+         SD = SD-QI (L)
+         QV (L) = QV (L) + QI (L)
+         T (L) = T (L) - QI (L) * SRC
          QI (L) = 0.0                      !all gone
 
       ENDIF                                !on to better things
                                            !finished with ice
-   ENDIF  
-!                                 
+   ENDIF
+!
 ENDIF                                      !finished with the SD decision
 !
-RETURN  
+RETURN
 !
 END SUBROUTINE EVAPORATE
 !
 ! *********************************************************************
-SUBROUTINE CONVERT ()  
+SUBROUTINE CONVERT ()
 !
 !- ACCRETION AND AUTOCONVERSION
 !
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 !
 real(kind=kind_chem),      PARAMETER ::  AK1 = 0.001    !conversion rate constant
 real(kind=kind_chem),      PARAMETER ::  AK2 = 0.0052   !collection (accretion) rate
 real(kind=kind_chem),      PARAMETER ::  TH  = 0.5      !Kessler threshold
 integer,   PARAMETER ::iconv = 1        !- Kessler conversion (=0)
-                                     
+
 !real(kind=kind_chem), parameter :: ANBASE =  50.!*1.e+6 !Berry-number at cloud base #/m^3(maritime)
  real(kind=kind_chem), parameter :: ANBASE =100000.!*1.e+6 !Berry-number at cloud base #/m^3(continental)
 !real(kind=kind_chem), parameter :: BDISP = 0.366       !Berry--size dispersion (maritime)
@@ -2083,7 +2083,7 @@ real(kind=kind_chem) ::   accrete, con, q, h, bc1,   bc2,  total
 
 IF (T (L)  .LE. TFREEZE) RETURN  !process not allowed above ice
 !
-IF (QC (L) .EQ. 0.     ) RETURN  
+IF (QC (L) .EQ. 0.     ) RETURN
 
 ACCRETE = 0.
 CON = 0.
@@ -2103,52 +2103,52 @@ IF (ICONV.NE.0) THEN   !select Berry or Kessler
 
    CON = Q*Q*Q*BDISP/(60.*(5.*Q*BDISP+0.0366*ANBASE))
 !
-ELSE  
-!                             
+ELSE
+!
 !   CON = AK1 * (Q - TH)   !Kessler autoconversion rate
-!      
+!
 !   IF (CON.LT.0.0) CON = 0.0   !havent reached threshold
- 
+
    CON = max(0.,AK1 * (Q - TH)) ! versao otimizada
 !
-ENDIF  
+ENDIF
 !
 !
-TOTAL = (CON + ACCRETE) * DT / RHO (L)  
+TOTAL = (CON + ACCRETE) * DT / RHO (L)
 
 !
-IF (TOTAL.LT.QC (L) ) THEN  
+IF (TOTAL.LT.QC (L) ) THEN
 !
-   QC (L) = QC (L) - TOTAL  
+   QC (L) = QC (L) - TOTAL
    QH (L) = QH (L) + TOTAL    !no phase change involved
-   RETURN  
+   RETURN
 !
-ELSE  
-!              
+ELSE
+!
    QH (L) = QH (L) + QC (L)    !uses all there is
-   QC (L) = 0.0  
+   QC (L) = 0.0
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 !
 END SUBROUTINE CONVERT
 !
 !**********************************************************************
 !
-SUBROUTINE CONVERT2 ()  
-!use module_zero_plumegen_coms  
+SUBROUTINE CONVERT2 ()
+!use module_zero_plumegen_coms
 implicit none
 LOGICAL  AEROSOL
 parameter(AEROSOL=.true.)
 !
 real(kind=kind_chem), parameter :: TNULL=273.16, LAT=2.5008E6 &
-                  ,EPSI=0.622 ,DB=1. ,NB=1500. !ALPHA=0.2 
+                  ,EPSI=0.622 ,DB=1. ,NB=1500. !ALPHA=0.2
 real(kind=kind_chem) :: KA,KEINS,KZWEI,KDREI,VT
 real(kind=kind_chem) :: A,B,C,D, CON,ACCRETE,total
 
 real(kind=kind_chem) Y(6),ROH
-      
+
 A=0.
 B=0.
 Y(1) = T(L)
@@ -2161,10 +2161,10 @@ ROH =  RHO(L)*1.e-3 ! dens (MKS) ??
 
 ! autoconversion
 
-KA = 0.0005 
+KA = 0.0005
 IF( Y(1) .LT. 258.15 )THEN
 !   KEINS=0.00075
-    KEINS=0.0009 
+    KEINS=0.0009
     KZWEI=0.0052
     KDREI=15.39
 ELSE
@@ -2172,11 +2172,11 @@ ELSE
     KZWEI=0.00696
     KDREI=11.58
 ENDIF
-      
+
 !   ROH=PE/RD/TE
 VT=-KDREI* (Y(3)/ROH)**0.125
 
- 
+
 IF (Y(4).GT.0.0 ) THEN
  IF (AEROSOL) THEN
    A = 1/y(4)  *  y(2)*y(2)*1000./( 60. *( 5. + 0.0366*NB/(y(2)*1000.*DB) )  )
@@ -2197,62 +2197,62 @@ IF(y(4).GT.0.0) THEN
 ELSE
    B = 0.0
 ENDIF
-   
-   
+
+
       !PSATW=610.7*EXP( 17.25 *( Y(1) - TNULL )/( Y(1)-36. ) )
       !PSATE=610.7*EXP( 22.33 *( Y(1) - TNULL )/( Y(1)- 2. ) )
 
       !QSATW=EPSI*PSATW/( PE-(1.-EPSI)*PSATW )
       !QSATE=EPSI*PSATE/( PE-(1.-EPSI)*PSATE )
-      
+
       !MU=2.*ALPHA/Y(5)
 
       !C = MU*( ROH*QSATW - ROH*QVE + y(2) )
       !D = ROH*LAT*QSATW*EPSI/Y1/Y1/RD *DYDX1
 
-      
+
       !DYDX(2) = - A - B - C - D  ! d rc/dz
       !DYDX(3) = A + B            ! d rh/dz
- 
- 
+
+
       ! rc=rc+dydx(2)*dz
       ! rh=rh+dydx(3)*dz
- 
+
 CON      = A
 ACCRETE  = B
- 
-TOTAL = (CON + ACCRETE) *(1/DZM(L)) /ROH     ! DT / RHO (L)  
+
+TOTAL = (CON + ACCRETE) *(1/DZM(L)) /ROH     ! DT / RHO (L)
 
 !
-IF (TOTAL.LT.QC (L) ) THEN  
+IF (TOTAL.LT.QC (L) ) THEN
 !
-   QC (L) = QC (L) - TOTAL  
+   QC (L) = QC (L) - TOTAL
    QH (L) = QH (L) + TOTAL    !no phase change involved
-   RETURN  
+   RETURN
 !
-ELSE  
-!              
+ELSE
+!
    QH (L) = QH (L) + QC (L)    !uses all there is
-   QC (L) = 0.0  
+   QC (L) = 0.0
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 !
 END SUBROUTINE CONVERT2
 ! ice - effect on temperature
-!      TTD = 0.0 
-!      TTE = 0.0  
+!      TTD = 0.0
+!      TTE = 0.0
 !       CALL ICE(QSATW,QSATE,Y(1),Y(2),Y(3), &
 !               TTA,TTB,TTC,DZ,ROH,D,C,TTD,TTE)
 !       DYDX(1) = DYDX(1) + TTD  + TTE ! DT/DZ on Temp
 !
 !**********************************************************************
 !
-SUBROUTINE SUBLIMATE  
+SUBROUTINE SUBLIMATE
 !
 ! ********************* VAPOR TO ICE (USE EQUATION OT22)***************
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 !
 real(kind=kind_chem), PARAMETER :: EPS = 0.622, HEATFUS = 334., HEATSUBL = 2834., CP = 1.004
 real(kind=kind_chem), PARAMETER :: SRC = HEATSUBL / CP, FRC = HEATFUS / CP, TMELT = 273.3
@@ -2260,107 +2260,107 @@ real(kind=kind_chem), PARAMETER :: TFREEZE = 269.3
 
 real(kind=kind_chem) ::dtsubh,  dividend,divisor, subl
 !
-DTSUBH = 0.  
+DTSUBH = 0.
 !
 !selection criteria for sublimation
-IF (T (L)  .GT. TFREEZE  ) RETURN  
-IF (QV (L) .LE. QSAT (L) ) RETURN  
+IF (T (L)  .GT. TFREEZE  ) RETURN
+IF (QV (L) .LE. QSAT (L) ) RETURN
 !
 !     from (OT); correction factors for units applied
 !
  DIVIDEND = ( (1.E6 / RHO (L) ) **0.475) * (QV (L) / QSAT (L) &
             - 1) * (QI (L) **0.525) * 1.13
- DIVISOR = 7.E5 + 4.1E6 / (10. * EST (L) )  
+ DIVISOR = 7.E5 + 4.1E6 / (10. * EST (L) )
 !
-                                         
+
  DTSUBH = ABS (DIVIDEND / DIVISOR)   !sublimation rate
  SUBL = DTSUBH * DT                  !and amount possible
 !
 !     again check the possibilities
 !
-IF (SUBL.LT.QV (L) ) THEN  
+IF (SUBL.LT.QV (L) ) THEN
 !
    QV (L) = QV (L) - SUBL             !lose vapor
    QI (L) = QI (L) + SUBL            !gain ice
    T (L) = T (L) + SUBL * SRC         !energy change, warms air
 
-   RETURN  
+   RETURN
 !
-ELSE  
-!                                     
+ELSE
+!
    QI (L) = QV (L)                    !use what there is
    T  (L) = T (L) + QV (L) * SRC      !warm the air
-   QV (L) = 0.0  
+   QV (L) = 0.0
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 END SUBROUTINE SUBLIMATE
 !
 ! *********************************************************************
 !
-SUBROUTINE GLACIATE  
+SUBROUTINE GLACIATE
 !
 ! *********************** CONVERSION OF RAIN TO ICE *******************
 !     uses equation OT 16, simplest. correction from W not applied, but
 !     vapor pressure differences are supplied.
 !
-!use module_zero_plumegen_coms  
+!use module_zero_plumegen_coms
 !
 real(kind=kind_chem), PARAMETER :: HEATFUS = 334., CP = 1.004, EPS = 0.622, HEATSUBL = 2834.
 real(kind=kind_chem), PARAMETER :: FRC = HEATFUS / CP, FRS = HEATSUBL / CP, TFREEZE =  269.3
 real(kind=kind_chem), PARAMETER :: GLCONST = 0.025   !glaciation time constant, 1/sec
 real(kind=kind_chem) dfrzh
 !
-                                    
+
  DFRZH = 0.    !rate of mass gain in ice
 !
 !selection rules for glaciation
-IF (QH (L) .LE. 0.       ) RETURN  
-IF (QV (L) .LT. QSAT (L) ) RETURN                                        
-IF (T  (L) .GT. TFREEZE  ) RETURN  
+IF (QH (L) .LE. 0.       ) RETURN
+IF (QV (L) .LT. QSAT (L) ) RETURN
+IF (T  (L) .GT. TFREEZE  ) RETURN
 !
 !      NT=TMELT-T(L)
 !      IF (NT.GT.50) NT=50
 !
-                                    
+
  DFRZH = DT * GLCONST * QH (L)    ! from OT(16)
 !
-IF (DFRZH.LT.QH (L) ) THEN  
+IF (DFRZH.LT.QH (L) ) THEN
 !
-   QI (L) = QI (L) + DFRZH  
-   QH (L) = QH (L) - DFRZH  
+   QI (L) = QI (L) + DFRZH
+   QH (L) = QH (L) - DFRZH
    T (L) = T (L) + FRC * DFRZH  !warms air
-   
-   RETURN  
+
+   RETURN
 !
-ELSE  
+ELSE
 !
-   QI (L) = QI (L) + QH (L)  
-   T  (L) = T  (L) + FRC * QH (L)  
-   QH (L) = 0.0  
+   QI (L) = QI (L) + QH (L)
+   T  (L) = T  (L) + FRC * QH (L)
+   QH (L) = 0.0
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 !
 END SUBROUTINE GLACIATE
 !
 !
 ! *********************************************************************
-SUBROUTINE MELT  
+SUBROUTINE MELT
 !
 ! ******************* MAKES WATER OUT OF ICE **************************
-!use module_zero_plumegen_coms  
-!                                              
+!use module_zero_plumegen_coms
+!
 real(kind=kind_chem), PARAMETER :: FRC = 332.27, TMELT = 273., F0 = 0.75   !ice velocity factor
 real(kind=kind_chem) DTMELT
-!                                    
+!
  DTMELT = 0.   !conversion,ice to rain
 !
 !selection rules
-IF (QI (L) .LE. 0.0  ) RETURN  
-IF (T (L)  .LT. TMELT) RETURN  
+IF (QI (L) .LE. 0.0  ) RETURN
+IF (T (L)  .LT. TMELT) RETURN
 !
                                                       !OT(23,24)
  DTMELT = DT * (2.27 / RHO (L) ) * CVI(L) * (T (L) - TMELT) * ( (RHO(L)  &
@@ -2369,23 +2369,23 @@ IF (T (L)  .LT. TMELT) RETURN
 !
 !     check the possibilities
 !
-IF (DTMELT.LT.QI (L) ) THEN  
+IF (DTMELT.LT.QI (L) ) THEN
 !
-   QH (L) = QH (L) + DTMELT  
-   QI (L) = QI (L) - DTMELT  
+   QH (L) = QH (L) + DTMELT
+   QI (L) = QI (L) - DTMELT
    T  (L) = T (L) - FRC * DTMELT     !cools air
-   
-   RETURN  
+
+   RETURN
 !
-ELSE  
+ELSE
 !
    QH (L) = QH (L) + QI (L)   !get all there is to get
-   T  (L) = T (L) - FRC * QI (L)  
-   QI (L) = 0.0  
+   T  (L) = T (L) - FRC * QI (L)
+   QI (L) = 0.0
 !
-ENDIF  
+ENDIF
 !
-RETURN  
+RETURN
 !
 END SUBROUTINE MELT
 
@@ -2430,7 +2430,7 @@ SUBROUTINE htint (nzz1, vctra, eleva, nzz2, vctrb, elevb)
   END DO
 END SUBROUTINE htint
 !-----------------------------------------------------------------------------
-FUNCTION ESAT_PR (TEM)  
+FUNCTION ESAT_PR (TEM)
 !
 ! ******* Vapor Pressure  A.L. Buck JAM V.20 p.1527. (1981) ***********
 !
@@ -2446,9 +2446,9 @@ real(kind=kind_chem) temc , tem,esatm
 !     good to -40C so:
 !
 !
-TEMC = TEM - TMELT  
-IF (TEMC.GT. - 40.0) GOTO 230  
-ESATM = CI1 * EXP (CI2 * TEMC / (TEMC + CI3) )  !ice, millibars  
+TEMC = TEM - TMELT
+IF (TEMC.GT. - 40.0) GOTO 230
+ESATM = CI1 * EXP (CI2 * TEMC / (TEMC + CI3) )  !ice, millibars
 ESAT_PR = ESATM / 10.    !kPa
 
 RETURN

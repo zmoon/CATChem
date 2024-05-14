@@ -41,7 +41,7 @@ subroutine gocart_drydep_driver(               &
   imx=1
   jmx=1
   lmx=1
-  
+
 
   dvel(1,1)=0.
   ilwi(1,1)=0
@@ -92,7 +92,7 @@ SUBROUTINE depvel_gocart(      &
 ! *  Determined in this subroutine (local):                                  *
 ! *    OBK             - Monin-Obukhov length (m): set to 1.E5 m under       *
 ! *                      neutral conditions                                  *
-! *    Rs(ldt)         - Bulk surface resistance(s m-1) for species k to     * 
+! *    Rs(ldt)         - Bulk surface resistance(s m-1) for species k to     *
 ! *                      surface ldt                                         *
 ! *    Ra              - Aerodynamic resistance.                             *
 ! *    Rb              - Sublayer resistance.                                *
@@ -105,7 +105,7 @@ SUBROUTINE depvel_gocart(      &
 ! *    DRYDf(i,j,k)    - Deposition frequency (s-1) of species k,            *
 ! *                    = DVEL / DELZ_SFC                                     *
 ! *                                                                          *
-! **************************************************************************** 
+! ****************************************************************************
 
 
   IMPLICIT NONE
@@ -119,9 +119,9 @@ SUBROUTINE depvel_gocart(      &
   REAL(kind_chem),    INTENT(IN)  :: z0(imx,jmx)
   REAL(kind_chem),    INTENT(IN)  :: g0
   REAL(kind_chem),    INTENT(OUT) :: dvel(imx,jmx), drydf(imx,jmx)
-  
+
   REAL(kind_chem)    :: obk, vds, czh, rttl, frac, logmfrac, psi_h, cz, eps
-  REAL(kind_chem)    :: vd, ra, rb, rs  
+  REAL(kind_chem)    :: vd, ra, rb, rs
   INTEGER :: i, j, k, ldt, iolson, ii
   CHARACTER(LEN=50) :: msg
   REAL(kind_chem)     :: prss, tempk, tempc, xnu, ckustr, reyno, aird, diam, xm, z
@@ -132,9 +132,9 @@ SUBROUTINE depvel_gocart(      &
 
    psi_h=0.0
   ! executable statements
-  j_loop: DO j = 1,jmx               
-     i_loop: DO i = 1,imx            
-        vk=.4                                     
+  j_loop: DO j = 1,jmx
+     i_loop: DO i = 1,imx
+        vk=.4
         vd    = 0.0
         ra    = 0.0
         rb    = 0.0 ! only required for gases (SO2)
@@ -157,11 +157,11 @@ SUBROUTINE depvel_gocart(      &
         ELSE
            ! MINVAL(hflux), MINVAL(airden), MINVAL(ustar) =??
            obk = -airden(i,j) * 1000.0 * ts(i,j) * (ustar(i,j))**3 &
-                / (vk * g0 * hflux(i,j)) 
+                / (vk * g0 * hflux(i,j))
 ! -- debug:
            IF ( obk == 0.0 ) WRITE(*,211) obk, i, j
 211        FORMAT(1X,'OBK=', E11.2, 1X,' i,j = ', 2I4)
-           
+
         END IF
 
         cz = delz_sfc(i,j) / 2.0 ! center of the grid box above surface
@@ -209,7 +209,7 @@ SUBROUTINE depvel_gocart(      &
 
         frac = cz / obk
         IF (frac > 1.0) frac = 1.0
-        IF (frac > 0.0 .AND. frac <= 1.0) THEN 
+        IF (frac > 0.0 .AND. frac <= 1.0) THEN
            psi_h = -5.0*frac
         ELSE IF (frac < 0.0) THEN
            eps = MIN(1.0D0, -frac)
@@ -236,7 +236,7 @@ SUBROUTINE depvel_gocart(      &
            else
               rs=1.0/MIN(vds,2.0D-3)
            endif
-           
+
 
         ! ------ Set max and min values for bulk surface resistances ------
 

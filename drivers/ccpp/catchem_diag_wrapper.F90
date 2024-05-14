@@ -33,7 +33,7 @@ contains
 
 !> \defgroup catchem_group CATChem diag wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_diag_wrapper CATChem diag wrapper Module  
+!>\defgroup catchem_diag_wrapper CATChem diag wrapper Module
 !> \ingroup catchem_diag_group
 !! This is the CATChem diag wrapper Module
 !! \section arg_table_catchem_diag_wrapper_run Argument Table
@@ -69,7 +69,7 @@ contains
 
     ! -- for diagnostics
     real(kind_phys), dimension(ims:im, jms:jme, 6) :: trcm  ! inst tracer column mass density
-    real(kind_phys), dimension(ims:im, jms:jme, ntchmdiag, 4) :: trdf 
+    real(kind_phys), dimension(ims:im, jms:jme, ntchmdiag, 4) :: trdf
     real(kind_phys), dimension(im,jme,kte,ntrac) :: gq0j
     real(kind_phys), dimension(im,jme,kme) :: pr3dj
     real(kind_phys), dimension(ims:im, jms:jme, 1:ntchm) :: wet_dep
@@ -77,7 +77,7 @@ contains
     integer :: ide, ime, ite, kde
 
     integer :: i, j, jp, k, kp, n, nbegin
-  
+
 
     errmsg = ''
     errflg = 0
@@ -85,7 +85,7 @@ contains
     chem_opt          = chem_opt_in
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -107,7 +107,7 @@ contains
     elseif (imfdeepcnv == imfdeepcnv_gf) then
      do n=1,ntchm
       do i=1,im
-       wet_dep(i,1,n) = (max(0.,wetdpc_deep(i,n))+max(0.,wetdpc_mid(i,n)) +max(0.,wetdpc_shal(i,n))) 
+       wet_dep(i,1,n) = (max(0.,wetdpc_deep(i,n))+max(0.,wetdpc_mid(i,n)) +max(0.,wetdpc_shal(i,n)))
       enddo
      enddo
     endif

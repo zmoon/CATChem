@@ -12,7 +12,7 @@ CONTAINS
 !  !! input is lower case
 !  !! output is upper case
 !
-!  !! modifications by R Easter, May 2006 
+!  !! modifications by R Easter, May 2006
 !  !!    added dryrho so this routine conserves column mass burde
 !  !!       when dry deposition velocity is zero
 !  !!    changed "kte" to "ktem1" for consistency with the kte in WRF
@@ -28,7 +28,7 @@ CONTAINS
 ! vd = dry deposition velocity (m/s)
 ! kts, ktem1 = vertical indices of bottom and top "T" points
 !
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
 ! .. Scalar Arguments ..
       INTEGER, INTENT(IN) :: kts,ktem1
@@ -72,7 +72,7 @@ CONTAINS
   !! conventions used:
   !! input is lower case
   !! output is upper case
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
 ! .. Scalar Arguments ..
       INTEGER, INTENT(IN) :: kts,ktem1
@@ -133,7 +133,7 @@ CONTAINS
   !! conventions used:
   !! input is lower case
   !! output is upper case
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
 ! .. Scalar Arguments ..
       INTEGER, INTENT(IN) :: kts,ktem1
@@ -174,7 +174,7 @@ CONTAINS
 ! !! input is lower case
 ! !! output is upper case
 ! .. Scalar Arguments ..
-      IMPLICIT NONE 
+      IMPLICIT NONE
 
       INTEGER, INTENT(IN) :: kts,ktem1
 ! ..

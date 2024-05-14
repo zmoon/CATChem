@@ -78,7 +78,7 @@ CONTAINS
     chem_arr(p_seas_1)=(tc(1)+.75*tc(2))*converi
     chem_arr(p_seas_2)=(tc(3)+.25*tc(2))*converi
     seashelp=tc(2)*converi
-     
+
 
   end subroutine gocart_seas_simple
 
@@ -87,16 +87,16 @@ CONTAINS
                        bems,ipr)
 
 ! ****************************************************************************
-! *  Evaluate the source of each seasalt particles size classes  (kg/m3) 
+! *  Evaluate the source of each seasalt particles size classes  (kg/m3)
 ! *  by soil emission.
 ! *  Input:
 ! *         SSALTDEN  Sea salt density                               (kg/m3)
 ! *         DXY       Surface of each grid cell                     (m2)
 ! *         NDT1      Time step                                     (s)
 ! *         W10m      Velocity at the anemometer level (10meters)   (m/s)
-! *      
+! *
 ! *  Output:
-! *         DSRC      Source of each sea salt bins       (kg/timestep/cell) 
+! *         DSRC      Source of each sea salt bins       (kg/timestep/cell)
 ! *
 ! *
 ! * Number flux density: Original formula by Monahan et al. (1986) adapted
@@ -117,7 +117,7 @@ CONTAINS
 ! *               where rho_p is particle density [kg/m3]
 ! *    The factor 1.e-18 is to convert in micro-meter r_d^3
 ! ****************************************************************************
-   
+
 
     IMPLICIT NONE
 
@@ -129,14 +129,14 @@ CONTAINS
     REAL(kind=kind_chem),    INTENT(OUT)   :: bems(nmx)
 
     REAL(kind=kind_chem) :: c0(5), b0(2)
-!  REAL(kind=kind_chem), PARAMETER :: c_old(5)=(/1.373, 3.41, 0.057, 1.05, 1.190/) 
+!  REAL(kind=kind_chem), PARAMETER :: c_old(5)=(/1.373, 3.41, 0.057, 1.05, 1.190/)
 !  REAL(kind=kind_chem), PARAMETER :: c_new(5)=(/1.373, 3.41, 0.057, 3.45, 1.607/)
     ! Change suggested by MC
-    REAL(kind=kind_chem), PARAMETER :: c_old(5)=(/1.373, 3.2, 0.057, 1.05, 1.190/) 
+    REAL(kind=kind_chem), PARAMETER :: c_old(5)=(/1.373, 3.2, 0.057, 1.05, 1.190/)
     REAL(kind=kind_chem), PARAMETER :: c_new(5)=(/1.373, 3.2, 0.057, 3.45, 1.607/)
     REAL(kind=kind_chem), PARAMETER :: b_old(2)=(/0.380, 0.650/)
     REAL(kind=kind_chem), PARAMETER :: b_new(2)=(/0.433, 0.433/)
-    REAL(kind=kind_chem), PARAMETER :: dr=5.0D-2 ! um   
+    REAL(kind=kind_chem), PARAMETER :: dr=5.0D-2 ! um
     REAL(kind=kind_chem), PARAMETER :: theta=30.0
     ! Swelling coefficient frh (d rwet / d rd)
 !!!  REAL(kind=kind_chem),    PARAMETER :: frh = 1.65
@@ -157,19 +157,19 @@ CONTAINS
     REAL(kind=kind_chem), TARGET :: tcms(nmx) ! tracer mass (kg; kgS for sulfur case)
     REAL(kind=kind_chem), TARGET :: tcgm(nmx) ! g/m3
 
-    !-----------------------------------------------------------------------  
+    !-----------------------------------------------------------------------
     ! sea salt specific
-    !-----------------------------------------------------------------------  
+    !-----------------------------------------------------------------------
 ! REAL(kind=kind_chem), DIMENSION(nmx) :: ra, rb
 ! REAL(kind=kind_chem) :: ch_ss(nmx,12)
 
-    !-----------------------------------------------------------------------  
+    !-----------------------------------------------------------------------
     ! emissions (input)
-    !-----------------------------------------------------------------------  
+    !-----------------------------------------------------------------------
     REAL(kind=kind_chem) :: e_an(2,nmx), e_bb(nmx), &
             e_ac(nmx)
 
-    !-----------------------------------------------------------------------  
+    !-----------------------------------------------------------------------
     ! diagnostics (budget)
     !-----------------------------------------------------------------------
 !  ! tendencies per time step and process
@@ -180,7 +180,7 @@ CONTAINS
 !  REAL(kind=kind_chem), TARGET :: tems(nmx), tstl(nmx)
 !  REAL(kind=kind_chem), TARGET :: tdry(nmx), twet(nmx), tcnv(nmx)
 
-    ! global mass balance per time step 
+    ! global mass balance per time step
     REAL(kind=kind_chem) :: tmas0(nmx), tmas1(nmx)
     REAL(kind=kind_chem) :: dtems(nmx), dttrp(nmx), dtdif(nmx), dtcnv(nmx)
     REAL(kind=kind_chem) :: dtwet(nmx), dtdry(nmx), dtstl(nmx)
@@ -222,7 +222,7 @@ CONTAINS
           b = (b0(1) - LOG10(r_w))/b0(2)
           dfn = (c0(1)/r_w**a)*(1.0 + c0(3)*r_w**c0(4))* &
                10**(c0(5)*EXP(-(b**2)))
-          
+
           r_d = r_w/frh*1.0D-6  ! um -> m
           dfm = 4.0/3.0*pi*r_d**3*rho_d*frh*dfn*dr*dt1 ! 3600 !dt1
 
@@ -233,7 +233,7 @@ CONTAINS
           ELSE
              src = 0.0
           END IF
-          
+
           bems(n) = bems(n) + src*fudge_fac/(dxy*dt1) !kg/m2/s
 
        END DO ! ir

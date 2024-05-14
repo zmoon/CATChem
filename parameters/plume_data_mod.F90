@@ -15,7 +15,7 @@ module plume_data_mod
 
   real(kind=kind_chem), dimension(0:4), parameter :: &
     flaming = (/ &
-      0.00, & ! 
+      0.00, & !
       0.45, & ! % biomass burned at flaming phase : tropical forest igbp 2 and 4
       0.45, & ! % biomass burned at flaming phase : extratropical forest igbp 1 , 3 and 5
       0.75, & ! % biomass burned at flaming phase : cerrado/woody savanna igbp 6 to 9

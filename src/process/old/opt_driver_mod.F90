@@ -1,11 +1,11 @@
 MODULE opt_driver_mod
-!**********************************************************************************  
+!**********************************************************************************
 ! This computer software was prepared by Battelle Memorial Institute, hereinafter
-! the Contractor, under Contract No. DE-AC05-76RL0 1830 with the Department of 
+! the Contractor, under Contract No. DE-AC05-76RL0 1830 with the Department of
 ! Energy (DOE). NEITHER THE GOVERNMENT NOR THE CONTRACTOR MAKES ANY WARRANTY,
 ! EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS SOFTWARE.
 !
-!**********************************************************************************  
+!**********************************************************************************
 !
 ! WRF-chem V3.0 : Original version of optical_driver written by Jerome Fast (PNNL)
 !                 and James Barnard (PNNL)
@@ -45,23 +45,23 @@ CONTAINS
    REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, num_chem ),             &
          INTENT(INOUT ) ::  chem
 !
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme ),                       &  
+   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme ),                       &
          INTENT(IN ) ::  relhum, dz8w, alt, h2oai, h2oaj
 !
 ! arrays that hold the aerosol optical properties
 !
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:4 ),                       &  
+   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:4 ),                       &
          INTENT(INOUT ) ::                                             &
            tauaersw,gaersw,waersw,bscoefsw
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:16),                       &  
+   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:16),                       &
          INTENT(INOUT ) ::                                             &
            tauaerlw
-   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:4 ),                  &  
+   REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme, 1:4 ),                  &
          INTENT(INOUT ) ::                                             &
            l2aer, l3aer, l4aer, l5aer, l6aer, l7aer
 !
 
-!         
+!
 ! local variables
 !
       logical processingAerosols

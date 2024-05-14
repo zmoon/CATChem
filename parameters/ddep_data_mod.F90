@@ -33,7 +33,7 @@ module ddep_data_mod
 
       INTEGER :: month = 0
       INTEGER :: ixxxlu(nlu)
-!     include modis landuse 
+!     include modis landuse
 !--
 
       REAL    :: kpart(nlu)

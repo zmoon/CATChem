@@ -37,7 +37,7 @@ contains
 
 !> \defgroup catchem_dust_group CATChem dust wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_dust_wrapper CATChem dust wrapper Module  
+!>\defgroup catchem_dust_wrapper CATChem dust wrapper Module
 !> \ingroup catchem_dust_group
 !! This is the CATChem dust wrapper Module
 !! \section arg_table_catchem_dust_wrapper_run Argument Table
@@ -71,13 +71,13 @@ contains
     integer, parameter :: ims=1,jms=1,jme=1, kms=1
     integer, parameter :: its=1,jts=1,jte=1, kts=1
 
-    integer, dimension(im), intent(in) :: land, vegtype, soiltyp        
+    integer, dimension(im), intent(in) :: land, vegtype, soiltyp
     real(kind_phys), dimension(im,nsoil), intent(in) :: smc
     real(kind_phys), dimension(im,    5), intent(in) :: dust_in
     real(kind_phys), dimension(im,   10), intent(in) :: emi_in
     real(kind_phys), dimension(im), intent(in) :: u10m, v10m, ustar,              &
                 garea, rlat,rlon, tskin,                      &
-                hf2d, pb2d, sigmaf, dswsfc, zorl, snow_cplchm 
+                hf2d, pb2d, sigmaf, dswsfc, zorl, snow_cplchm
     real(kind_phys), dimension(im,kme), intent(in) :: ph3d, pr3d
     real(kind_phys), dimension(im,kte), intent(in) :: phl3d, prl3d, tk3d,        &
                 us3d, vs3d, spechum
@@ -95,7 +95,7 @@ contains
                      xland, xlat, xlong, dxy, rcav, rnav, hfx, pbl
 
 !>- vapor & chemistry variables
-    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist 
+    real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_moist)  :: moist
     real(kind_phys), dimension(ims:im, kms:kme, jms:jme, 1:num_chem )  :: chem
 
     integer :: ide, ime, ite, kde
@@ -137,7 +137,7 @@ contains
     emis_dust = 0._kind_phys
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -184,14 +184,14 @@ contains
 
     select case (dust_opt)
       case (DUST_OPT_AFWA)
-        dust_alpha = dust_alpha_in 
+        dust_alpha = dust_alpha_in
         dust_gamma = dust_gamma_in
 
         do j=jts,jte
           do i=its,ite
             if(xland(i,j).lt.1.5)then ! JianHe: why not also > 0.5?
-              delp = p8w(i,kts,j)-p8w(i,kts+1,j)    
-              airmas = dxy(i,j) * delp / g        
+              delp = p8w(i,kts,j)-p8w(i,kts+1,j)
+              airmas = dxy(i,j) * delp / g
               ! -- afwa dust scheme
               call gocart_dust_afwa_driver(ktau,dt,u_phy(i,kts,j), &
                 v_phy(i,kts,j),rho_phy(i,kts,j), &
@@ -227,7 +227,7 @@ contains
               !store_arrays = .true.
               do n=0,ndust-1
                 chem(i,kts,j, p_dust_1 + n ) = chem(i,kts,j, p_dust_1 + n ) + emis_dust(i,1,j,n+1) * dt / airmas
-              end do 
+              end do
             end if
           end do
         end do
@@ -271,7 +271,7 @@ contains
 
             end if
           end do
-        end do         
+        end do
 
       case default
         errmsg = 'Logic error in catchem_dust_wrapper_run: invalid dust_opt'
@@ -335,10 +335,10 @@ contains
     integer, dimension(ims:ime), intent(in) :: land, vegtype, soiltyp
     integer, intent(in) :: ntrac
     integer, intent(in) :: ntdust1,ntdust2,ntdust3,ntdust4,ntdust5
-    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                & 
+    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                &
          u10m, v10m, ustar, garea, rlat, rlon, ts2d, sigmaf, dswsfc,       &
          zorl, snow_cplchm, hf2d, pb2d
-    real(kind=kind_phys), dimension(ims:ime, nsoil),   intent(in) :: smc 
+    real(kind=kind_phys), dimension(ims:ime, nsoil),   intent(in) :: smc
     real(kind=kind_phys), dimension(ims:ime,     5),   intent(in) :: dust_in
     real(kind=kind_phys), dimension(ims:ime,    10),   intent(in) :: emi_in
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) ::     &
@@ -356,10 +356,10 @@ contains
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
 
-    
+
     integer,dimension(ims:ime, jms:jme), intent(out) :: isltyp, ivgtyp
     real(kind_phys), dimension(ims:ime, jms:jme, 3), intent(inout) :: erod
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, u_phy, v_phy, p_phy, rho_phy, dz8w, p8w, t8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          u10, v10, ust, tsk, xland, xlat, xlong, dxy, vegfrac, rmol, gsw, znt, hfx,    &
@@ -405,10 +405,10 @@ contains
     snowh          = 0._kind_phys
     clayf          = 0._kind_phys
     rdrag          = 0._kind_phys
-    sandf          = 0._kind_phys 
+    sandf          = 0._kind_phys
     ssm            = 0._kind_phys
     uthr           = 0._kind_phys
-    moist          = 0._kind_phys  
+    moist          = 0._kind_phys
     chem           = 0._kind_phys
     z_at_w         = 0._kind_phys
 
@@ -439,7 +439,7 @@ contains
      erod (i,1,2)=emi_in(i,9) ! --ero2
      erod (i,1,3)=emi_in(i,10)! --ero3
     enddo
-   
+
     rmol=0.
 
     do k=1,nsoil
@@ -528,7 +528,7 @@ contains
     enddo
 
 
- 
+
     do k=kms,kte
      do i=ims,ime
        chem(i,k,jts,p_dust_1)=max(epsilc,gq0(i,k,ntdust1)/ppm2ugkg(p_dust_1))

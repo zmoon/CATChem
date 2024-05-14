@@ -34,7 +34,7 @@ contains
 
 !> \defgroup catchem_group CATChem dmsemis wrapper Module
 !! This is the Configurable ATmospheric Chemistry (CATChem)
-!>\defgroup catchem_dmsemis_wrapper CATChem dmsemis wrapper Module  
+!>\defgroup catchem_dmsemis_wrapper CATChem dmsemis wrapper Module
 !> \ingroup catchem_dmsemis_group
 !! This is the CATChem dmsemis wrapper Module
 !! \section arg_table_catchem_dmsemis_wrapper_run Argument Table
@@ -45,7 +45,7 @@ contains
     subroutine catchem_dmsemis_wrapper_run(im, kte, kme, dt, garea,       &
                    land, u10m, v10m, tskin,                                &
                    pr3d, ph3d,phl3d, prl3d, tk3d, us3d, vs3d, spechum,     &
-                   vegtype, soiltyp,                                       & 
+                   vegtype, soiltyp,                                       &
                    emi_in, ntrac, ntdms, gq0, qgrs, dmsemis_opt_in,        &
                    errmsg,errflg)
 
@@ -61,7 +61,7 @@ contains
     integer, parameter :: ims=1,jms=1,jme=1, kms=1
     integer, parameter :: its=1,jts=1,jte=1, kts=1
 
-    integer, dimension(im), intent(in) :: land, vegtype, soiltyp        
+    integer, dimension(im), intent(in) :: land, vegtype, soiltyp
     real(kind_phys), dimension(im,10), intent(in) :: emi_in
     real(kind_phys), dimension(im),    intent(in) :: u10m, v10m, garea, tskin
     real(kind_phys), dimension(im,kme),intent(in) :: ph3d, pr3d
@@ -85,7 +85,7 @@ contains
 
 !>-- local variables
     integer :: i, j, jp, k, kp, n
-    real(kind_phys) :: delp 
+    real(kind_phys) :: delp
 
     errmsg = ''
     errflg = 0
@@ -93,7 +93,7 @@ contains
     dmsemis_opt       = dmsemis_opt_in
 
     ! -- set domain
-    ide=im 
+    ide=im
     ime=im
     ite=im
     kde=kte
@@ -126,20 +126,20 @@ contains
           if(xland(i,j).lt.0.5 .and. tsk(i,j).gt.273.)then
             delp = p8w(i,kts,j)-p8w(i,kts+1,j)
 
-            ! -- GOCART dms scheme 
+            ! -- GOCART dms scheme
             call gocart_dmsemis(dt,u_phy(i,kts,j),v_phy(i,kts,j),          &
                 chem(i,kts,j,:),dz8w(i,kts,j),u10(i,j),v10(i,j),    &
                 delp,dms_0(i,j),tsk(i,j),dxy(i,j))
           endif
         enddo
-      end do   
+      end do
     endif
 
 
     ! -- put chem stuff back into tracer array
     do k=kts,kte
      do i=its,ite
-       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms)) 
+       gq0(i,k,ntdms  )=ppm2ugkg(p_dms   ) * max(epsilc,chem(i,k,1,p_dms))
      enddo
     enddo
 
@@ -168,7 +168,7 @@ contains
     integer, dimension(ims:ime), intent(in) :: land, vegtype, soiltyp
     integer, intent(in) :: ntrac
     integer,        intent(in) :: ntdms
-    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                & 
+    real(kind=kind_phys), dimension(ims:ime), intent(in) ::                &
          u10m, v10m, garea, ts2d
     real(kind=kind_phys), dimension(ims:ime,    10),   intent(in) :: emi_in
     real(kind=kind_phys), dimension(ims:ime, kms:kme), intent(in) ::     &
@@ -186,9 +186,9 @@ contains
 
     real(kind_phys), dimension(num_chem), intent(in) :: ppm2ugkg
 
-    
+
     integer,dimension(ims:ime, jms:jme), intent(out) :: isltyp, ivgtyp
-    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              & 
+    real(kind_phys), dimension(ims:ime, kms:kme, jms:jme), intent(out) ::              &
          rri, t_phy, u_phy, v_phy, rho_phy, dz8w, p8w
     real(kind_phys), dimension(ims:ime, jms:jme),          intent(out) ::              &
          u10, v10, tsk, xland, dxy,     &
@@ -229,7 +229,7 @@ contains
      isltyp (i,1)=soiltyp(i)
      dms_0(i,1  )=emi_in(i,7) ! --dm0
     enddo
-   
+
     do j=jts,jte
       jp = j - jts + 1
       do i=its,ite

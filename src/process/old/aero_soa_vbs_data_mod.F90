@@ -94,18 +94,18 @@ MODULE aero_soa_vbs_data_mod
       INTEGER orgaer
                             ! 2 = Pankow 1994/Odum et al. 1996 method is
 ! ***
-! switch for organic aerosol method         
+! switch for organic aerosol method
       PARAMETER (orgaer=2)
 
 ! *** information about visibility variables
-! number of visibility variables    
+! number of visibility variables
       INTEGER n_ae_vis_spc
       PARAMETER (n_ae_vis_spc=2)
 
-! index for visual range in deciview             
+! index for visual range in deciview
       INTEGER idcvw
       PARAMETER (idcvw=1)
-! index for extinction [ 1/km ]                  
+! index for extinction [ 1/km ]
       INTEGER ibext
       PARAMETER (ibext=2)
 
@@ -191,11 +191,11 @@ MODULE aero_soa_vbs_data_mod
       INTEGER vecj
       PARAMETER (vecj=29)
 
-! index for Aitken mode elemental carbon    
+! index for Aitken mode elemental carbon
       INTEGER veci
       PARAMETER (veci=30)
 
-! index for Accumulation mode primary PM2.5 
+! index for Accumulation mode primary PM2.5
       INTEGER vp25aj
       PARAMETER (vp25aj=31)
 
@@ -215,19 +215,19 @@ MODULE aero_soa_vbs_data_mod
       INTEGER vsoila
       PARAMETER (vsoila=35)
 
-! index for Aitken mode number              
+! index for Aitken mode number
       INTEGER vnu0
       PARAMETER (vnu0=36)
 
-! index for accum  mode number              
+! index for accum  mode number
       INTEGER vac0
       PARAMETER (vac0=37)
 
-! index for coarse mode number              
+! index for coarse mode number
       INTEGER vcorn
       PARAMETER (vcorn=38)
 
-! index for Accumulation mode aerosol water 
+! index for Accumulation mode aerosol water
       INTEGER vh2oaj
       PARAMETER (vh2oaj=39)
 
@@ -235,15 +235,15 @@ MODULE aero_soa_vbs_data_mod
       INTEGER vh2oai
       PARAMETER (vh2oai=40)
 
-! index for Aitken mode 3'rd moment         
+! index for Aitken mode 3'rd moment
       INTEGER vnu3
       PARAMETER (vnu3=41)
 
-! index for Accumulation mode 3'rd moment   
+! index for Accumulation mode 3'rd moment
       INTEGER vac3
       PARAMETER (vac3=42)
 
-! index for coarse mode 3rd moment          
+! index for coarse mode 3rd moment
       INTEGER vcor3
       PARAMETER (vcor3=43)
 
@@ -276,58 +276,58 @@ INTEGER, PARAMETER :: vcvbsoa4=55
 ! *** set up species dimension and indices for sedimentation
 !     velocity array VSED
 
-! number of sedimentation velocities         
+! number of sedimentation velocities
       INTEGER naspcssed
       PARAMETER (naspcssed=6)
 
-! index for Aitken mode number                  
+! index for Aitken mode number
       INTEGER vsnnuc
       PARAMETER (vsnnuc=1)
 
-! index for Accumulation mode number            
+! index for Accumulation mode number
       INTEGER vsnacc
       PARAMETER (vsnacc=2)
 
-! index for coarse mode number                  
+! index for coarse mode number
       INTEGER vsncor
       PARAMETER (vsncor=3)
 
-! index for Aitken mode mass                     
+! index for Aitken mode mass
       INTEGER vsmnuc
       PARAMETER (vsmnuc=4)
 
-! index for accumulation mode mass               
+! index for accumulation mode mass
       INTEGER vsmacc
       PARAMETER (vsmacc=5)
 
-! index for coarse mass                         
+! index for coarse mass
       INTEGER vsmcor
       PARAMETER (vsmcor=6)
 
 ! *** set up species dimension and indices for deposition
 !     velocity array VDEP
 
-! number of deposition velocities            
+! number of deposition velocities
       INTEGER naspcsdep
       PARAMETER (naspcsdep=7)
 
-! index for Aitken mode number                  
+! index for Aitken mode number
       INTEGER vdnnuc
       PARAMETER (vdnnuc=1)
 
-! index for accumulation mode number            
+! index for accumulation mode number
       INTEGER vdnacc
       PARAMETER (vdnacc=2)
 
-! index for coarse mode number                  
+! index for coarse mode number
       INTEGER vdncor
       PARAMETER (vdncor=3)
 
-! index for Aitken mode mass                    
+! index for Aitken mode mass
       INTEGER vdmnuc
       PARAMETER (vdmnuc=4)
 
-! index for accumulation mode                   
+! index for accumulation mode
       INTEGER vdmacc
       PARAMETER (vdmacc=5)
 
@@ -335,7 +335,7 @@ INTEGER, PARAMETER :: vcvbsoa4=55
       INTEGER vdmfine
       PARAMETER (vdmfine=6)
 
-! index for coarse mode mass                    
+! index for coarse mode mass
       INTEGER vdmcor
       PARAMETER (vdmcor=7)
 
@@ -361,7 +361,7 @@ INTEGER, PARAMETER :: pasoa1=1
 INTEGER, PARAMETER :: pasoa2=2
 INTEGER, PARAMETER :: pasoa3=3
 INTEGER, PARAMETER :: pasoa4=4
-      
+
 INTEGER, PARAMETER :: pbsoa1=5
 INTEGER, PARAMETER :: pbsoa2=6
 INTEGER, PARAMETER :: pbsoa3=7
@@ -593,7 +593,7 @@ INTEGER, PARAMETER :: pbsoa4=8
       REAL(kind_chem) clfac
       PARAMETER (clfac=f6dpim9/rhocl)
 
-!  starting standard surface pressure [ Pa ]  
+!  starting standard surface pressure [ Pa ]
       REAL(kind_chem) pss0
       PARAMETER (pss0=101325.0)
 
@@ -601,19 +601,19 @@ INTEGER, PARAMETER :: pbsoa4=8
       REAL(kind_chem) tss0
       PARAMETER (tss0=288.15)
 
-!  initial sigma-G for nucleimode                 
+!  initial sigma-G for nucleimode
       REAL(kind_chem) sginin
       PARAMETER (sginin=1.70)
 
-!  initial sigma-G for accumulation mode          
+!  initial sigma-G for accumulation mode
       REAL(kind_chem) sginia
       PARAMETER (sginia=2.00)
 
-! initial sigma-G for coarse mode               
+! initial sigma-G for coarse mode
       REAL(kind_chem) sginic
       PARAMETER (sginic=2.5)
 
-!  initial mean diameter for nuclei mode [ m ]    
+!  initial mean diameter for nuclei mode [ m ]
       REAL(kind_chem) dginin
       PARAMETER (dginin=0.01E-6)
 
@@ -621,7 +621,7 @@ INTEGER, PARAMETER :: pbsoa4=8
       REAL(kind_chem) dginia
       PARAMETER (dginia=0.07E-6)
 
-! initial mean diameter for coarse mode [ m ]  
+! initial mean diameter for coarse mode [ m ]
       REAL(kind_chem) dginic
       PARAMETER (dginic=1.0E-6)
 
@@ -631,136 +631,136 @@ INTEGER, PARAMETER :: pbsoa4=8
 !     LOGICAL diagnostics
 ! *** Scalar variables for fixed standard deviations.
 
-! Flag for writing diagnostics to file       
-! nuclei mode exp( log^2( sigmag )/8 )  
+! Flag for writing diagnostics to file
+! nuclei mode exp( log^2( sigmag )/8 )
       REAL(kind_chem) en1
 ! accumulation mode exp( log^2( sigmag )
       REAL(kind_chem) ea1
 
       REAL(kind_chem) ec1
-! coarse mode exp( log^2( sigmag )/8 )  
-! nuclei        **4                    
+! coarse mode exp( log^2( sigmag )/8 )
+! nuclei        **4
       REAL(kind_chem) esn04
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa04
 
       REAL(kind_chem) esc04
-! coarse                               
-! nuclei        **5                    
+! coarse
+! nuclei        **5
       REAL(kind_chem) esn05
 
       REAL(kind_chem) esa05
-! accumulation                         
-! nuclei        **8                    
+! accumulation
+! nuclei        **8
       REAL(kind_chem) esn08
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa08
 
       REAL(kind_chem) esc08
-! coarse                               
-! nuclei        **9                    
+! coarse
+! nuclei        **9
       REAL(kind_chem) esn09
 
       REAL(kind_chem) esa09
-! accumulation                         
-! nuclei        **12                   
+! accumulation
+! nuclei        **12
       REAL(kind_chem) esn12
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa12
 
       REAL(kind_chem) esc12
-! coarse mode                          
-! nuclei        **16                   
+! coarse mode
+! nuclei        **16
       REAL(kind_chem) esn16
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa16
 
       REAL(kind_chem) esc16
-! coarse                               
-! nuclei        **20                   
+! coarse
+! nuclei        **20
       REAL(kind_chem) esn20
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa20
 
       REAL(kind_chem) esc20
-! coarse                               
-! nuclei        **25                   
+! coarse
+! nuclei        **25
       REAL(kind_chem) esn25
 
       REAL(kind_chem) esa25
-! accumulation                         
-! nuclei        **24                   
+! accumulation
+! nuclei        **24
       REAL(kind_chem) esn24
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa24
 
       REAL(kind_chem) esc24
-! coarse                               
-! nuclei        **28                   
+! coarse
+! nuclei        **28
       REAL(kind_chem) esn28
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa28
 
       REAL(kind_chem) esc28
-! coarse                               
-! nuclei        **32                   
+! coarse
+! nuclei        **32
       REAL(kind_chem) esn32
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa32
 
       REAL(kind_chem) esc32
-! coarese                              
-! nuclei        **36                   
+! coarese
+! nuclei        **36
       REAL(kind_chem) esn36
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa36
 
       REAL(kind_chem) esc36
-! coarse                               
-! nuclei        **49                   
+! coarse
+! nuclei        **49
       REAL(kind_chem) esn49
 
       REAL(kind_chem) esa49
-! accumulation                         
-! nuclei        **52                   
+! accumulation
+! nuclei        **52
       REAL(kind_chem) esn52
 
       REAL(kind_chem) esa52
-! accumulation                         
-! nuclei        **64                   
+! accumulation
+! nuclei        **64
       REAL(kind_chem) esn64
-! accumulation                         
+! accumulation
       REAL(kind_chem) esa64
 
       REAL(kind_chem) esc64
-! coarse                               
+! coarse
 
       REAL(kind_chem) esn100
-! nuclei        **100                  
-! nuclei        **(-20)                
+! nuclei        **100
+! nuclei        **(-20)
       REAL(kind_chem) esnm20
-! accumulation                         
+! accumulation
       REAL(kind_chem) esam20
 
       REAL(kind_chem) escm20
-! coarse                               
-! nuclei        **(-32)                
+! coarse
+! nuclei        **(-32)
       REAL(kind_chem) esnm32
-! accumulation                         
+! accumulation
       REAL(kind_chem) esam32
 
       REAL(kind_chem) escm32
-! coarse                               
-! log(sginin)                           
+! coarse
+! log(sginin)
       REAL(kind_chem) xxlsgn
-! log(sginia)                           
+! log(sginia)
       REAL(kind_chem) xxlsga
 
       REAL(kind_chem) xxlsgc
-! log(sginic )                          
-! log(sginin ) ** 2                           
+! log(sginic )
+! log(sginin ) ** 2
       REAL(kind_chem) l2sginin
-! log(sginia ) ** 2                           
+! log(sginia ) ** 2
       REAL(kind_chem) l2sginia
 
       REAL(kind_chem) l2sginic
@@ -775,7 +775,7 @@ INTEGER, PARAMETER :: pbsoa4=8
       INTEGER inucl
                             ! INUCL = 1, Youngblood and Kreidenweis mech
                             ! INUCL = 2, Kulmala et al. mechanism
-! Flag for Choice of nucleation Mechanism   
+! Flag for Choice of nucleation Mechanism
       PARAMETER (inucl=2)
 
 ! *** Set flag for sedimentation velocities:
@@ -786,45 +786,45 @@ INTEGER, PARAMETER :: pbsoa4=8
 !     the diameters are the volume (mass) geometric mean diameters
 
 ! *** Aitken mode:
-! special factor to compute mass transfer           
+! special factor to compute mass transfer
       REAL(kind_chem) dgvem_i
-      PARAMETER (dgvem_i=0.03E-6) ! [ m ]                            
+      PARAMETER (dgvem_i=0.03E-6) ! [ m ]
       REAL(kind_chem) sgem_i
       PARAMETER (sgem_i=1.7)
 
 ! *** Accumulation mode:
       REAL(kind_chem) dgvem_j
-      PARAMETER (dgvem_j=0.3E-6) ! [ m ]                             
+      PARAMETER (dgvem_j=0.3E-6) ! [ m ]
       REAL(kind_chem) sgem_j
       PARAMETER (sgem_j=2.0)
 
 ! *** Coarse mode
       REAL(kind_chem) dgvem_c
-      PARAMETER (dgvem_c=6.0E-6) ! [ m ] <<< Corrected 11/19/97      
+      PARAMETER (dgvem_c=6.0E-6) ! [ m ] <<< Corrected 11/19/97
       REAL(kind_chem) sgem_c
       PARAMETER (sgem_c=2.2)
 
 ! *** factors for getting number emissions rate from mass emissions rate
-! Aitken mode                                       
+! Aitken mode
       REAL(kind_chem) factnumn
-! accumulation mode                                 
+! accumulation mode
       REAL(kind_chem) factnuma
 
       REAL(kind_chem) factnumc
-! coarse mode                                       
+! coarse mode
       REAL(kind_chem) facatkn_min, facacc_min
       PARAMETER (facatkn_min=0.04,facacc_min=1.0-facatkn_min)
       REAL(kind_chem) xxm3
       REAL(kind_chem), PARAMETER ::  conmin = 1.E-16
       REAL(kind_chem), PARAMETER ::  epsilc = 1.E-16
-! [ ug/m**3 ] ! changed 1/6/98 
-      REAL(kind_chem) & ! factor to set minimum for Aitken mode number  
+! [ ug/m**3 ] ! changed 1/6/98
+      REAL(kind_chem) & ! factor to set minimum for Aitken mode number
         nummin_i
       REAL(kind_chem) & ! factor to set minimum for accumulation mode nu
         nummin_j
-      REAL(kind_chem) & 
+      REAL(kind_chem) &
         nummin_c
-! factor to set minimum for coarse mode number  
+! factor to set minimum for coarse mode number
 !bs
 !bs      REAL(kind_chem) ALPHSULF ! Accommodation coefficient for sulfuric acid
 !bs      PARAMETER ( ALPHSULF = 0.05 ) ! my be set to one in future
@@ -841,16 +841,16 @@ INTEGER, PARAMETER :: pbsoa4=8
 !bs
 ! Accommodation coefficient for sulfuric
       REAL(kind_chem) alphsulf
-      PARAMETER (alphsulf=1.0) 
-!bs updated from code of FSB         
-! molecular weight for sulfuric acid [ kg/mole ] MKS 
+      PARAMETER (alphsulf=1.0)
+!bs updated from code of FSB
+! molecular weight for sulfuric acid [ kg/mole ] MKS
       REAL(kind_chem) mwh2so4
-      PARAMETER (mwh2so4=98.07354E-3) 
+      PARAMETER (mwh2so4=98.07354E-3)
 !cia corrected error 24/11/97
 ! molecular diffusivity for sulfuric acid [ m**2 /se
       REAL(kind_chem) diffsulf
-      PARAMETER (diffsulf=9.362223E-06) 
-!bs updated from code of FSB 
+      PARAMETER (diffsulf=9.362223E-06)
+!bs updated from code of FSB
 !bs Accomodation coefficient for organic
       REAL(kind_chem) alphaorg
       PARAMETER (alphaorg=1.0)                                    !bs Kleeman et al. '99 propose alpha
@@ -867,26 +867,26 @@ INTEGER, PARAMETER :: pbsoa4=8
       REAL(kind_chem) difforg
       PARAMETER (difforg=5.151174E-06)
 ! *** CCONC is the factor for near-continuum condensation.
-! ccofm * sqrt( ta )                    
+! ccofm * sqrt( ta )
       REAL(kind_chem) cconc
-      PARAMETER (cconc=2.0*pirs*diffsulf) 
+      PARAMETER (cconc=2.0*pirs*diffsulf)
 !bs * factor for NC condensation for organics
-! [ m**2 / sec ]       
+! [ m**2 / sec ]
       REAL(kind_chem) cconc_org
-      PARAMETER (cconc_org=2.0*pirs*difforg) 
-! [ m**2 / sec ]    
-!bs analogue to CCOFM but for organics  
+      PARAMETER (cconc_org=2.0*pirs*difforg)
+! [ m**2 / sec ]
+!bs analogue to CCOFM but for organics
       REAL(kind_chem) ccofm_org
 ! FSB  CCOFM is  the accommodation coefficient
 !      times the mean molecular velocity for h2so4 without the temperatu
 !      after some algebra
 
-!bs CCOFM_ORG * sqrt(TA)                
-! set to a value below                  
+!bs CCOFM_ORG * sqrt(TA)
+! set to a value below
       REAL(kind_chem) ccofm
-! minimum aerosol sulfate concentration          
+! minimum aerosol sulfate concentration
       REAL(kind_chem) aeroconcmin
-      PARAMETER (aeroconcmin=0.0001) 
+      PARAMETER (aeroconcmin=0.0001)
 
 !*******************************************************************
 !*                                                                 *

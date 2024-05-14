@@ -36,7 +36,7 @@ CONTAINS
          INTENT(IN    ) :: tauaerlw
    REAL(kind_chem), DIMENSION( ims:ime, kms:kme, jms:jme ),            &
          INTENT(IN    ) :: dz8w
-   real(kind_chem) :: ang,slope,slopeg,slopessa,onemang    
+   real(kind_chem) :: ang,slope,slopeg,slopessa,onemang
    integer :: i,j,k
    real(kind_chem), dimension (ims:ime,jms:jme), intent(INOUT) :: aodi
    real(kind_chem), dimension (ims:ime,jms:jme)  :: aod
@@ -105,5 +105,5 @@ CONTAINS
        end do
       end do
       end do
-  END SUBROUTINE AER_OPT_OUT 
+  END SUBROUTINE AER_OPT_OUT
 END MODULE opt_aer_out_mod
