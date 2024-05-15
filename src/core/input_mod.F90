@@ -38,7 +38,7 @@ MODULE Input_Mod
 ! !DEFINED PARAMETERS:
 !
   ! YAML configuration file name to be read
-  CHARACTER(LEN=21), PARAMETER, PRIVATE :: configFile ='./geoschem_config.yml'
+  CHARACTER(LEN=21), PARAMETER, PRIVATE :: configFile ='./CATChem_config.yml'
 
 CONTAINS
 !EOC
@@ -105,7 +105,7 @@ CONTAINS
     ENDIF
 
     ! Assume success
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Read_Input_File (in module GeosCore/input_mod.F90)'
 
@@ -113,9 +113,9 @@ CONTAINS
     ! Read the YAML file into the Config object
     !========================================================================
     CALL QFYAML_Init( configFile, Config, ConfigAnchored, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -125,9 +125,9 @@ CONTAINS
 
     ! Simulation config settings
     CALL Config_Simulation( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Simulation"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -137,9 +137,9 @@ CONTAINS
     ! Grid config settings
     ! Skip if we are gettomg the grid from an external model
     CALL Config_Grid( Config, Input_Opt, State_Grid, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Grid"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -148,9 +148,9 @@ CONTAINS
 
     ! Timesteps config settings
     CALL Config_Timesteps( Config, Input_Opt, State_Grid, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Timesteps"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -162,9 +162,9 @@ CONTAINS
 
     ! Transport settings
     CALL Config_Transport( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Transport"!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -172,9 +172,9 @@ CONTAINS
 
     ! Convection and PBL mixing settings
     CALL Config_Convection_Mixing( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Convection_Mixing"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -182,9 +182,9 @@ CONTAINS
 
     ! Aerosol settings
     CALL Config_Aerosol( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Aerosol"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -192,9 +192,9 @@ CONTAINS
 
     ! Dry deposition and wet deposition settings
     CALL Config_DryDep_WetDep( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_DryDep_WetDep"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -202,17 +202,17 @@ CONTAINS
 
     ! Chemistry settings
     CALL Config_Chemistry( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Chemistry"!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
     ! Photolysis settings
     CALL Config_Photolysis( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Photolysis"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -220,9 +220,9 @@ CONTAINS
 
     ! RRTMG (radiative transfer model) settings
     CALL Config_RRTMG( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_RRTMG"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -236,9 +236,9 @@ CONTAINS
     IF ( Input_Opt%Its_A_CH4_Sim .or. Input_Opt%Its_A_TagCH4_Sim .or. &
          Input_Opt%Its_A_Carbon_Sim ) THEN
        CALL Config_CH4( Config, Input_Opt, RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error in "Config_CH4"!'
-          CALL GC_Error( errMsg, RC, thisLoc  )
+          CALL CC_Error( errMsg, RC, thisLoc  )
           CALL QFYAML_CleanUp( Config         )
           CALL QFYAML_CleanUp( ConfigAnchored )
           RETURN
@@ -248,9 +248,9 @@ CONTAINS
     ! CO simulation settings
     IF ( Input_Opt%Its_A_TagCO_Sim .or. Input_Opt%Its_A_Carbon_Sim ) THEN
        CALL Config_CO( Config, Input_Opt, RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error in "Config_CO"!'
-          CALL GC_Error( errMsg, RC, thisLoc  )
+          CALL CC_Error( errMsg, RC, thisLoc  )
           CALL QFYAML_CleanUp( Config         )
           CALL QFYAML_CleanUp( ConfigAnchored )
           RETURN
@@ -261,9 +261,9 @@ CONTAINS
     ! CO2/carbon simulation settings
     IF ( Input_Opt%Its_A_CO2_Sim .or. Input_Opt%Its_A_Carbon_Sim ) THEN
        CALL Config_CO2( Config, Input_Opt, RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error in "Config_CO2"!'
-          CALL GC_Error( errMsg, RC, thisLoc  )
+          CALL CC_Error( errMsg, RC, thisLoc  )
           CALL QFYAML_CleanUp( Config         )
           CALL QFYAML_CleanUp( ConfigAnchored )
           RETURN
@@ -273,9 +273,9 @@ CONTAINS
     ! Hg simulation settings
     IF ( Input_Opt%Its_A_Mercury_Sim ) THEN
        CALL Config_Hg( Config, Input_Opt, RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error in "Config_Hg"!'
-          CALL GC_Error( errMsg, RC, thisLoc  )
+          CALL CC_Error( errMsg, RC, thisLoc  )
           CALL QFYAML_CleanUp( Config         )
           CALL QFYAML_CleanUp( ConfigAnchored )
           RETURN
@@ -285,9 +285,9 @@ CONTAINS
     ! POPs simulation settings
     IF ( Input_Opt%Its_A_POPs_Sim ) THEN
        CALL Config_POPs( Config, Input_Opt, RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error in "Config_POPs"!'
-          CALL GC_Error( errMsg, RC, thisLoc  )
+          CALL CC_Error( errMsg, RC, thisLoc  )
           CALL QFYAML_CleanUp( Config         )
           CALL QFYAML_CleanUp( ConfigAnchored )
           RETURN
@@ -300,9 +300,9 @@ CONTAINS
 
     ! Obspack diagnostic settings
     CALL Config_ObsPack( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_ObsPack"!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -313,9 +313,9 @@ CONTAINS
     ! Planeflight diagnostic settings
     ! (Skip if we are connecting to an external model)
     CALL Config_PlaneFlight( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_PlaneFlight"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -325,9 +325,9 @@ CONTAINS
     ! GAMAP metadata files
     ! (Skip if we are connecting to an external model)
     CALL Config_Gamap( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Gamap"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -336,9 +336,9 @@ CONTAINS
     ! ND51 timeseries
     ! (Skip if we are connecting to an external model)
     CALL Config_ND51( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_ND51"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -347,9 +347,9 @@ CONTAINS
     ! ND51b timeseries
     ! (Skip if we are connecting to an external model)
     CALL Config_ND51b( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_ND51b"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -358,9 +358,9 @@ CONTAINS
     ! Bpch diagnostic output
     ! (Skip if we are connecting to an external model)
     CALL Config_Bpch_Output( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Bpch_Output"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -370,9 +370,9 @@ CONTAINS
     ! Bpch prod & loss -- only needed for TOMAS
     ! (Skip if we are connecting to an external model)
     CALL Config_Bpch_ProdLoss( Config, Input_Opt, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Config_Bpch_ProdLoss"!'
-       CALL GC_Error( errMsg, RC, thisLoc  )
+       CALL CC_Error( errMsg, RC, thisLoc  )
        CALL QFYAML_CleanUp( Config         )
        CALL QFYAML_CleanUp( ConfigAnchored )
        RETURN
@@ -385,9 +385,9 @@ CONTAINS
     ! NOTE: Skip for GCHP/GEOS, as this is called from GCHP_Chunk_Run
     !========================================================================
     CALL Check_Time_Steps( Input_Opt, State_Grid, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error in "Check_Time_Steps"!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 #endif
@@ -464,7 +464,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = &
      ' -> at Config_Simulation (in module GeosCore/input_mod.F90)'
@@ -475,9 +475,9 @@ CONTAINS
     key   = "simulation%name"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%SimulationName = TRIM( v_str )
@@ -501,7 +501,7 @@ CONTAINS
                 ' valid simulation. Supported simulations are:'           // &
                 ' aerosol, carbon, CH4, CO2, fullchem, Hg, Metals, POPs,' // &
                 ' TransportTracers, TagCH4, TagCO, or TagO3.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -525,9 +525,9 @@ CONTAINS
     key   = "simulation%species_database_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%SpcDataBaseFile = TRIM( v_str )
@@ -538,9 +538,9 @@ CONTAINS
     key   = "simulation%species_metadata_output_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%SpcMetaDataOutFile = TRIM( v_str )
@@ -551,9 +551,9 @@ CONTAINS
     key    = "simulation%verbose%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%VerboseRequested = v_bool
@@ -564,9 +564,9 @@ CONTAINS
     key  = "simulation%verbose%on_cores"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%VerboseOnCores = To_UpperCase( v_str )
@@ -583,103 +583,10 @@ CONTAINS
        CASE DEFAULT
           errMsg = 'Invalid selection!' // NEW_LINE( 'a' ) //                &
                'simulation:verbose:on_cores must be either "root" or "all"'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
     END SELECT
 
-#if defined( MODEL_GCHP ) || defined( MODEL_GEOS )
-    !========================================================================
-    !          %%%%%%% GCHP and NASA/GEOS (with ESMF & MPI) %%%%%%%
-    !
-    ! Because GCHP and NASA/GEOS use ESMF, we need to take the start & end
-    ! dates from the ESMF resource file (GEOSCHEMchem_GridComp_mod.rc)
-    ! instead of those in geoschem_config.yml.  Therefore, the following
-    ! fields have already been defined in the GCHP_Chunk_Init routine
-    ! (located in module Interfaces/GCHP/Chem_GridCompMod.F90):
-    !
-    ! (1) Input_Opt%NYMDb
-    ! (2) Input_Opt%NHMSb
-    ! (3) Input_Opt%NYMDe
-    ! (4) Input_Opt%NYMDe
-    !
-    ! Pass these fields of Input_Opt to routine Accept_External_Date_Time,
-    ! as well as the starting UTC value in hours.
-    !========================================================================
-
-    ! Make sure the starting date NYMDb is valid
-    IF ( .not. Valid_Date( Input_Opt%NYMDb ) ) THEN
-       WRITE( DateStr, '(i8.8)' ) Input_Opt%NYMDb
-       errMsg = 'Input%Opt%NYMDb = ' // DateStr // ' is not a valid '     // &
-                'calendar date!'
-       CALL GC_Error( errMsg, RC, thisLoc )
-       RETURN
-    ENDIF
-
-    ! Make sure the starting time NHMSb is valid
-    IF ( .not. Valid_Time( Input_Opt%NHMSb ) ) THEN
-       WRITE( TimeStr, '(i6.6)' ) Input_Opt%NHMSb
-       errMsg = 'Input%Opt%NHMSb = ' // TimeStr // ' is not a valid '     // &
-                'clock time!'
-       CALL GC_Error( errMsg, RC, thisLoc )
-       RETURN
-    ENDIF
-
-    ! Make sure the ending date NYMDe is valid
-    IF ( .not. Valid_Date( Input_Opt%NYMDe ) ) THEN
-       WRITE( DateStr, '(i8.8)' ) Input_Opt%NYMDe
-       errMsg = 'Input%Opt%NYMDe = ' // DateStr // ' is not a valid '     // &
-                'calendar date!'
-       CALL GC_Error( errMsg, RC, thisLoc )
-       RETURN
-    ENDIF
-
-    ! Make sure the ending time NHMSe is valid
-    IF ( .not. Valid_Time( Input_Opt%NHMSe ) ) THEN
-       WRITE( TimeStr, '(i6.6)' ) Input_Opt%NHMSe
-       errMsg = 'Input%Opt%NHMSe = ' // TimeStr // ' is not a valid '     // &
-                'clock time!'
-       CALL GC_Error( errMsg, RC, thisLoc )
-       RETURN
-    ENDIF
-
-    ! Get the starting UTC time from Input_Opt%NHMSb for use below
-    CALL YMD_Extract( Input_Opt%NHMSb, H, M, S )
-    init_UTC = ( H + ( M / 60 ) + ( S / 3600 ) )
-
-    ! Pass the values for the start & end times of the simulation directly
-    ! to GeosUtil/time_mod.F90 via subroutine ACCEPT_EXTERNAL_DATE_TIME.
-    ! (bmy, 12/6/12)
-    CALL Accept_External_Date_Time( value_NYMDb = Input_Opt%NYMDb,           &
-                                    value_NHMSb = Input_Opt%NHMSb,           &
-                                    value_NYMDe = Input_Opt%NYMDe,           &
-                                    value_NHMSe = Input_Opt%NHMSe,           &
-                                    value_NYMD  = Input_Opt%NYMDb,           &
-                                    value_NHMS  = Input_Opt%NHMSb,           &
-                                    value_UTC   = init_UTC,                  &
-                                    RC          = RC                        )
-
-    !------------------------------------------------------------------------
-    ! Chemistry inputs folder (GCHP/NASA-GEOS only)
-    !------------------------------------------------------------------------
-
-    key   = "simulation%chem_inputs_dir"
-    v_str = MISSING_STR
-    CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
-       RETURN
-    ENDIF
-    Input_Opt%CHEM_INPUTS_DIR = TRIM( v_str )
-
-    !------------------------------------------------------------------------
-    ! Set other fields of Input_Opt accordingly
-    !------------------------------------------------------------------------
-    Input_Opt%MetField        = 'See ExtData.rc'
-    Input_Opt%DATA_DIR        = 'N/A'
-    Input_Opt%RUN_DIR         = 'N/A'
-
-#else
     !========================================================================
     !             %%%%%%% GEOS-Chem CLASSIC (with OpenMP) %%%%%%%
     !
@@ -692,9 +599,9 @@ CONTAINS
     key   = "simulation%start_date"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%NYMDb = a_int(1)
@@ -706,7 +613,7 @@ CONTAINS
        errMsg = 'Input%Opt%NYMDb = ' // DateStr        // &
                 ' is not a valid calendar date!'       // &
                 ' Please check your "geoschem_config.yml" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -716,7 +623,7 @@ CONTAINS
        errMsg = 'Input%Opt%NHMSb = ' // TimeStr        // &
                 ' is not a valid clock time!'          // &
                 ' Please check your "geoschem_config.yml" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -726,9 +633,9 @@ CONTAINS
     key   = "simulation%end_date"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%NYMDe = a_int(1)
@@ -740,7 +647,7 @@ CONTAINS
        errMsg = 'Input%Opt%NYMDe = ' // DateStr        // &
                 ' is not a valid calendar date!'       // &
                 ' Please check your "geoschem_config.yml" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -750,7 +657,7 @@ CONTAINS
        errMsg = 'Input%Opt%NHMSe = ' // TimeStr        // &
                 ' is not a valid clock time!'          // &
                 ' Please check your "geoschem_config.yml" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -760,9 +667,9 @@ CONTAINS
     key   = "simulation%root_data_dir"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Data_Dir = TRIM( v_str )
@@ -783,9 +690,9 @@ CONTAINS
     key   = "simulation%met_field"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%MetField = TRIM( v_str )
@@ -809,7 +716,7 @@ CONTAINS
                 ' met field. Supported met fields are GEOS-FP, '          // &
                 ' MERRA-2 and ModelE2.1. Please check your '              // &
                 '"geoschem_config.ymls" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     END SELECT
 #endif
@@ -820,9 +727,9 @@ CONTAINS
     key    = "simulation%use_gcclassic_timers"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%UseTimers = v_bool
@@ -831,9 +738,9 @@ CONTAINS
     ! Set start time of run in "time_mod.F90"
     !------------------------------------------------------------------------
     CALL Set_Begin_Time( Input_Opt%NYMDb, Input_Opt%NHMSb, RC  )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error encountered in "Set_Begin_Time"!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -842,8 +749,8 @@ CONTAINS
     !------------------------------------------------------------------------
     errMsg = 'Error encountered in "Set_Begin_Time"!'
     CALL Set_End_Time( Input_Opt%NYMDe, Input_Opt%NHMSe, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       CALL GC_Error( errMsg, RC, thisLoc )
+    IF ( RC /= CC_SUCCESS ) THEN
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -869,7 +776,7 @@ CONTAINS
                            * 86400_f8)
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -980,7 +887,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Grid (in GeosCore/input_mod.F90)'
 
@@ -990,9 +897,9 @@ CONTAINS
     key   = "grid%resolution"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%GridRes = TRIM( v_str )
@@ -1005,7 +912,7 @@ CONTAINS
        errMsg = 'Error in extracting delta X and Y values from'    // &
                 ' State_Grid%GridRes. Values must be separated by' // &
                 ' an x. Please check your "geoschem_config.yml" file.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1019,9 +926,9 @@ CONTAINS
     key   = "grid%number_of_levels"
     v_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%NZ = v_int
@@ -1032,9 +939,9 @@ CONTAINS
     key   = "grid%longitude%range"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%XMin = Cast_and_RoundOff( a_str(1), places=4 )
@@ -1046,7 +953,7 @@ CONTAINS
        WRITE( XMax_Str, '(i10)' ) State_Grid%XMax
        errMsg = 'Lower lon must be smaller than upper lon: ' // &
                 TRIM( XMin_Str ) // ' ' // TRIM( XMax_Str )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1056,9 +963,9 @@ CONTAINS
     key    = "grid%longitude%center_at_180"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%Center180 = v_bool
@@ -1069,9 +976,9 @@ CONTAINS
     key   = "grid%latitude%range"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%YMin = Cast_and_RoundOff( a_str(1), places=4 )
@@ -1083,7 +990,7 @@ CONTAINS
        WRITE( YMax_Str, '(i10)' ) State_Grid%YMax
        errMsg = 'Lower lat must be smaller than upper lat: ' // &
                 TRIM( YMin_Str ) // ' ' // TRIM( YMax_Str )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1092,14 +999,14 @@ CONTAINS
        WRITE( YMin_Str, '(i10)' ) State_Grid%YMin
        errMsg = 'Lower latitude must be between -90 and 90 degN: ' // &
                 TRIM( YMin_Str )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     IF ( State_Grid%YMax > 90.0_fp ) THEN
        WRITE( YMax_Str, '(i10)' ) State_Grid%YMax
        errMsg = 'Upper latitude must be between -90 and 90 degN: ' // &
                 TRIM( YMax_Str )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1109,9 +1016,9 @@ CONTAINS
     key    = "grid%latitude%half_size_polar_boxes"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%HalfPolar = v_bool
@@ -1122,9 +1029,9 @@ CONTAINS
     key    = "grid%nested_grid_simulation%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%NestedGrid = v_bool
@@ -1143,9 +1050,9 @@ CONTAINS
     key   = "grid%nested_grid_simulation%buffer_zone_NSEW"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     State_Grid%NorthBuffer = a_int(1)
@@ -1173,7 +1080,7 @@ CONTAINS
     ENDIF
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -1270,7 +1177,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Error reading the "geoschem_config.yml" file!'
     thisLoc = ' -> at Config_Timestep (in module GeosCore/input_mod.F90)'
 
@@ -1281,9 +1188,9 @@ CONTAINS
     key   = "timesteps%transport_timestep_in_s"
     v_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%TS_DYN  = v_int
@@ -1295,9 +1202,9 @@ CONTAINS
     key   = "timesteps%chemistry_timestep_in_s"
     v_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%TS_CHEM = v_int
@@ -1309,9 +1216,9 @@ CONTAINS
     key   = "timesteps%radiation_timestep_in_s"
     v_int = 0
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%TS_RAD = v_int
@@ -1335,7 +1242,7 @@ CONTAINS
           WRITE( 6,100 ) 'Chemistry/Emissions   [sec] : ', Input_Opt%TS_CHEM
           WRITE( 6,100 ) 'Simulation duration   [sec] : ',                   &
                                                        Input_Opt%SimLengthSec
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
     ENDIF
@@ -1359,12 +1266,12 @@ CONTAINS
                 WRITE( 6,'(a)' ) ' recommended for CH4 and CO2 simulations.'
                 WRITE( 6,'(a)' ) ''
                 WRITE( 6,'(a)' ) 'You may remove this trap at your own peril,'
-                WRITE( 6,'(a)' ) ' by commenting out the call to GC_ERROR in'
+                WRITE( 6,'(a)' ) ' by commenting out the call to CC_ERROR in'
                 WRITE( 6,'(a)' ) ' GeosCore/input_mod.F90. '
                 WRITE( 6,'(a)' ) ''
                 WRITE( 6,'(a)' ) 'See the MERRA-2 implementation details page'
                 WRITE( 6,'(a)' ) ' on the GEOS-Chem wiki for details'
-                CALL GC_Error( errMsg, RC, thisLoc )
+                CALL CC_Error( errMsg, RC, thisLoc )
                 RETURN
              ENDIF
           ENDIF
@@ -1373,7 +1280,7 @@ CONTAINS
 #endif
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -1452,7 +1359,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Error reading the "geoschem_config.yml" file!'
     thisLoc = ' -> at Config_Transport (in GeosCore/input_mod.F90)'
 
@@ -1467,9 +1374,9 @@ CONTAINS
     key    = "operations%transport%gcclassic_tpcore%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LTRAN = v_bool
@@ -1480,9 +1387,9 @@ CONTAINS
     key    = "operations%transport%gcclassic_tpcore%fill_negative_values"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LFILL = v_bool
@@ -1493,9 +1400,9 @@ CONTAINS
     key   = "operations%transport%gcclassic_tpcore%iord_jord_kord"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%TPCORE_IORD = a_int(1)
@@ -1514,9 +1421,9 @@ CONTAINS
     key    = "operations%transport%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LTRAN = v_bool
@@ -1530,9 +1437,9 @@ CONTAINS
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str,                         &
                          "",     RC,          dynamic_size=.TRUE.           )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1553,7 +1460,7 @@ CONTAINS
     IF ( Input_Opt%N_Advect > Input_Opt%Max_AdvectSpc ) THEN
        errMsg = 'Number of advected species exceeds maximum. ' // &
             'This value can be modified in input_opt_mod.F90.'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1634,7 +1541,7 @@ CONTAINS
 !
 ! !REMARKS:
 !  Move error checks that depend on species indices to the subroutine
-!  DO_ERROR_CHECKS.  This is now called from GC_INIT_EXTRA, after the
+!  DO_ERROR_CHECKS.  This is now called from CC_INIT_EXTRA, after the
 !  initialization of the species database.
 !------------------------------------------------------------------------------
 !BOC
@@ -1659,7 +1566,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Aerosol (in module GeosCore/input_mod.F90)'
 
@@ -1669,9 +1576,9 @@ CONTAINS
     key    = "aerosols%carbon%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LCARB = v_bool
@@ -1682,9 +1589,9 @@ CONTAINS
     key    = "aerosols%carbon%use_brown_carbon"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LBRC = v_bool
@@ -1695,9 +1602,9 @@ CONTAINS
     key    = "aerosols%carbon%enhance_black_carbon_absorption%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LBCAE = v_bool
@@ -1708,9 +1615,9 @@ CONTAINS
     key   = "aerosols%carbon%enhance_black_carbon_absorption%hydrophilic"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%BCAE_1 = Cast_and_RoundOff( v_str, places=2 )
@@ -1721,9 +1628,9 @@ CONTAINS
     key   = "aerosols%carbon%enhance_black_carbon_absorption%hydrophobic"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%BCAE_2 = Cast_and_RoundOff( v_str, places=2 )
@@ -1734,9 +1641,9 @@ CONTAINS
     key    = "aerosols%complex_SOA%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSOA = v_bool
@@ -1747,9 +1654,9 @@ CONTAINS
     key    = "aerosols%complex_SOA%semivolatile_POA"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSVPOA = v_bool
@@ -1760,9 +1667,9 @@ CONTAINS
     key    = "aerosols%dust%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LDUST = v_bool
@@ -1773,9 +1680,9 @@ CONTAINS
     key    = "aerosols%dust%acid_uptake_on_dust"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LDSTUP = v_bool
@@ -1786,9 +1693,9 @@ CONTAINS
     key    = "aerosols%sea_salt%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSSALT = v_bool
@@ -1799,9 +1706,9 @@ CONTAINS
     key   = "aerosols%sea_salt%SALA_radius_bin_in_um"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%SALA_Redge_um(1) = Cast_and_RoundOff( a_str(1), places=2 )
@@ -1813,9 +1720,9 @@ CONTAINS
     key   = "aerosols%sea_salt%SALC_radius_bin_in_um"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%SALC_Redge_um(1) = Cast_and_RoundOff( a_str(1), places=2 )
@@ -1827,9 +1734,9 @@ CONTAINS
     key    = "aerosols%sea_salt%marine_organic_aerosols"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LMPOA = v_bool
@@ -1840,9 +1747,9 @@ CONTAINS
     key    = "aerosols%stratosphere%settle_strat_aerosol"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LGRAVSTRAT = v_bool
@@ -1853,9 +1760,9 @@ CONTAINS
     key    = "aerosols%stratosphere%polar_strat_clouds%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSOLIDPSC = v_bool
@@ -1866,9 +1773,9 @@ CONTAINS
     key    = "aerosols%stratosphere%polar_strat_clouds%het_chem"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPSCCHEM = v_bool
@@ -1879,9 +1786,9 @@ CONTAINS
     key    = "aerosols%stratosphere%allow_homogeneous_NAT"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LHOMNUCNAT = v_bool
@@ -1892,9 +1799,9 @@ CONTAINS
     key   = "aerosols%stratosphere%NAT_supercooling_req_in_K"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%T_NAT_SUPERCOOL = Cast_and_RoundOff( v_str, places=2 )
@@ -1905,9 +1812,9 @@ CONTAINS
     key   = "aerosols%stratosphere%supersat_factor_req_for_ice_nucl"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%P_ICE_SUPERSAT = Cast_and_RoundOff( v_str, places=2 )
@@ -1918,9 +1825,9 @@ CONTAINS
     key    = "aerosols%stratosphere%calc_strat_aod"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSTRATOD = v_bool
@@ -1931,9 +1838,9 @@ CONTAINS
     key    = "aerosols%sulfate%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSULF = v_bool
@@ -1944,9 +1851,9 @@ CONTAINS
     key    = "aerosols%sulfate%metal_cat_SO2_oxidation"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LMETALCATSO2 = v_bool
@@ -1959,7 +1866,7 @@ CONTAINS
     IF ( Input_Opt%SALA_REDGE_um(2) /= &
          Input_Opt%SALC_REDGE_um(1)     ) THEN
        errMsg = 'SALA and SALC bin edges are not contiguous!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -1979,7 +1886,7 @@ CONTAINS
     ENDIF
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -2074,7 +1981,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_CO2 (in module GeosCore/input_mod.F90)'
 
@@ -2084,9 +1991,9 @@ CONTAINS
     key    = "CO_simulation_options%use_fullchem_PCO_from_CH4"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPCO_CH4 = v_bool
@@ -2097,9 +2004,9 @@ CONTAINS
     key    = "CO_simulation_options%use_fullchem_PCO_from_NMVOC"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPCO_NMVOC = v_bool
@@ -2169,7 +2076,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_CO2 (in module GeosCore/input_mod.F90)'
 
@@ -2179,9 +2086,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%fossil_fuel_emissions"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LFOSSIL = v_bool
@@ -2192,9 +2099,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%ocean_exchange"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LOCEAN = v_bool
@@ -2205,9 +2112,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%balanced_biosphere_exchange"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LBIODIURNAL = v_bool
@@ -2218,9 +2125,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%net_terrestrial_exchange"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LBIONETCLIM = v_bool
@@ -2231,9 +2138,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%ship_emissions"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSHIP = v_bool
@@ -2244,9 +2151,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%aviation_emissions"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPLANE = v_bool
@@ -2257,9 +2164,9 @@ CONTAINS
     key    = "CO2_simulation_options%sources%3D_chemical_oxidation_source"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LCHEMCO2 = v_bool
@@ -2270,9 +2177,9 @@ CONTAINS
     key = "CO2_simulation_options%tagged_species%save_fossil_fuel_in_background"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LFFBKGRD = v_bool
@@ -2283,9 +2190,9 @@ CONTAINS
     key    = "CO2_simulation_options%tagged_species%tag_bio_and_ocean_CO2"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LBIOSPHTAG = v_bool
@@ -2296,9 +2203,9 @@ CONTAINS
     key    = "CO2_simulation_options%tagged_species%tag_land_fossil_fuel_CO2"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LFOSSILTAG = v_bool
@@ -2309,9 +2216,9 @@ CONTAINS
     key    = "CO2_simulation_options%tagged_species%tag_global_ship_CO2"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSHIPTAG = v_bool
@@ -2322,9 +2229,9 @@ CONTAINS
     key    = "CO2_simulation_options%tagged_species%tag_global_aircraft_CO2"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPLANETAG = v_bool
@@ -2408,7 +2315,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Chemistry (in module GeosCore/input_mod.F90)'
 
@@ -2418,9 +2325,9 @@ CONTAINS
     key    = "operations%chemistry%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LCHEM = v_bool
@@ -2431,9 +2338,9 @@ CONTAINS
     key    = "operations%chemistry%linear_chemistry_aloft%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LINEAR_CHEM = v_bool
@@ -2444,9 +2351,9 @@ CONTAINS
     key    = "operations%chemistry%linear_chemistry_aloft%use_linoz_for_O3"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LLINOZ = v_bool
@@ -2458,9 +2365,9 @@ CONTAINS
     key    = "operations%chemistry%active_strat_H2O%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LACTIVEH2O = v_bool
@@ -2471,9 +2378,9 @@ CONTAINS
     key    = "operations%chemistry%active_strat_H2O%use_static_bnd_cond"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LStaticH2OBC = v_bool
@@ -2484,9 +2391,9 @@ CONTAINS
     key   = "operations%chemistry%gamma_HO2"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%GAMMA_HO2 = Cast_and_RoundOff( v_str, places=2 )
@@ -2508,9 +2415,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%USE_AUTOREDUCE = v_bool
@@ -2519,9 +2426,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%use_target_threshold%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_IS_KEY_THRESHOLD = v_bool
@@ -2530,9 +2437,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%use_target_threshold%oh_tuning_factor"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_TUNING_OH = Cast_and_RoundOff( v_str, places=0 )
@@ -2540,9 +2447,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%use_target_threshold%no2_tuning_factor"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_TUNING_NO2 = Cast_and_RoundOff( v_str, places=0 )
@@ -2551,9 +2458,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%use_absolute_threshold%absolute_threshold"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_THRESHOLD = Cast_and_RoundOff( v_str, places=0 )
@@ -2562,9 +2469,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%use_absolute_threshold%scale_by_pressure"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_IS_PRS_THRESHOLD = v_bool
@@ -2573,9 +2480,9 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%keep_halogens_active"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_IS_KEEPACTIVE = v_bool
@@ -2585,15 +2492,15 @@ CONTAINS
     key   = "operations%chemistry%autoreduce_solver%append_in_internal_timestep"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AUTOREDUCE_IS_APPEND = v_bool
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -2688,7 +2595,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_RRTMG (in module GeosCore/input_mod.F90)'
 
@@ -2698,9 +2605,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LRAD = v_bool
@@ -2712,9 +2619,9 @@ CONTAINS
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str,                          &
                          "",     RC,          dynamic_size=.TRUE.            )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -2734,9 +2641,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%longwave_fluxes"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LLWRAD = v_bool
@@ -2747,9 +2654,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%shortwave_fluxes"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSWRAD = v_bool
@@ -2760,9 +2667,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%clear_sky_flux"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSKYRAD(1) = v_bool
@@ -2773,9 +2680,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%all_sky_flux"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LSKYRAD(2) = v_bool
@@ -2786,9 +2693,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%co2_ppmv"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%RRTMG_CO2_ppmv = Cast_and_Roundoff( v_str, places=2 )
@@ -2799,9 +2706,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%fixed_dyn_heating"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%RRTMG_FDH = v_bool
@@ -2812,9 +2719,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%seasonal_fdh"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%RRTMG_SEFDH = v_bool
@@ -2825,9 +2732,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%fdh_to_toa"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%RRTMG_SA_TOA = v_bool
@@ -2838,9 +2745,9 @@ CONTAINS
     key    = "operations%rrtmg_rad_transfer_model%read_dyn_heating"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Read_Dyn_Heating = v_bool
@@ -2852,7 +2759,7 @@ CONTAINS
     ! Use of RRTMG necessitates recompilation
     IF ( Input_Opt%LRAD ) THEN
        errMsg = 'LRAD=T but RRTMG is not defined at compile time!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 #endif
@@ -2862,38 +2769,38 @@ CONTAINS
 
        IF ( Input_Opt%LLWRAD ) THEN
           errMsg = 'Cannot have LW fluxes turned on without RRTMG!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
 
        IF ( Input_Opt%LSWRAD ) THEN
           errMsg = 'Cannot have SW fluxes turned on without RRTMG!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
 
        IF ( Input_Opt%LSKYRAD(1) ) THEN
           errMsg = 'Cannot have clear-sky flux turned on without RRTMG!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
 
        IF ( Input_Opt%LSKYRAD(2) ) THEN
           errMsg = 'Cannot have all-sky flux turned on without RRTMG!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
        ENDIF
     ENDIF
 
 #ifndef MODEL_GCHPCTM
     If (Input_Opt%RRTMG_FDH) Then
        errMsg = 'Fixed dynamical heating in RRTMG is currently only available in GCHP'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
     End If
 #endif
 
     If (Input_Opt%RRTMG_SEFDH.and.(.not.Input_Opt%RRTMG_FDH)) Then
        errMsg = 'Cannot have seasonally evolving FDH without enabling FDH!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
     End If
 
     !========================================================================
@@ -2978,7 +2885,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Photolysis (in module GeosCore/input_mod.F90)'
 
@@ -2989,9 +2896,9 @@ CONTAINS
     key    = "operations%photolysis%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Do_Photolysis = v_bool
@@ -3003,9 +2910,9 @@ CONTAINS
     key   = "operations%photolysis%input_directories%fastjx_input_dir"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%FAST_JX_DIR = TRIM( v_str )
@@ -3013,9 +2920,9 @@ CONTAINS
     key   = "operations%photolysis%input_directories%cloudj_input_dir"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CloudJ_DIR = TRIM( v_str )
@@ -3026,9 +2933,9 @@ CONTAINS
     key    = "operations%photolysis%overhead_O3%use_online_O3_from_model"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%USE_ONLINE_O3 = v_bool
@@ -3039,9 +2946,9 @@ CONTAINS
     key    = "operations%photolysis%overhead_O3%use_column_O3_from_met"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%USE_O3_FROM_MET = v_bool
@@ -3052,9 +2959,9 @@ CONTAINS
     key    = "operations%photolysis%overhead_O3%use_TOMS_SBUV_O3"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%USE_TOMS_O3 = v_bool
@@ -3065,9 +2972,9 @@ CONTAINS
     key    = "operations%photolysis%photolyze_nitrate_aerosol%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%hvAerNIT = v_bool
@@ -3079,9 +2986,9 @@ CONTAINS
      "operations%photolysis%photolyze_nitrate_aerosol%NITs_Jscale_JHNO3"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%hvAerNIT_JNITs = Cast_and_RoundOff( v_str, places=3 )
@@ -3093,9 +3000,9 @@ CONTAINS
      "operations%photolysis%photolyze_nitrate_aerosol%NIT_Jscale_JHNO2"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%hvAerNIT_JNIT = Cast_and_RoundOff( v_str, places=3 )
@@ -3107,9 +3014,9 @@ CONTAINS
      "operations%photolysis%photolyze_nitrate_aerosol%percent_channel_A_HONO"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%JNITChanA = Cast_and_RoundOff( v_str, places=3 )
@@ -3121,9 +3028,9 @@ CONTAINS
      "operations%photolysis%photolyze_nitrate_aerosol%percent_channel_B_NO2"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%JNITChanB = Cast_and_RoundOff( v_str, places=3 )
@@ -3137,7 +3044,7 @@ CONTAINS
     IF ( Input_Opt%ITS_A_FULLCHEM_SIM .and. Input_Opt%LINEAR_CHEM ) THEN
        IF (.not.Input_Opt%LLINOZ) THEN
           errMsg = 'Cannot use Synoz with linearized mesospheric chem.!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
     ENDIF
@@ -3153,14 +3060,14 @@ CONTAINS
             .not. Input_Opt%USE_TOMS_O3     ) THEN
           errMsg = 'Must select either O3 from met or TOMS/SBUV O3'          &
                 // 'for O3 values above the chemistry grid!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
        IF ( Input_Opt%USE_O3_FROM_MET .and. &
             Input_Opt%USE_TOMS_O3 ) THEN
           errMsg = 'Must select either O3 from met or TOMS/SBUV O3'          &
                 // 'for O3 values above the chemistry grid!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
 
@@ -3169,7 +3076,7 @@ CONTAINS
           IF ( Input_Opt%USE_ONLINE_O3 ) THEN
              errMsg= 'Cannot use online O3 for specialty simulations! '      &
                   // 'Select O3 from met or TOMS O3 instead.'
-             CALL GC_Error( errMsg, RC, thisLoc )
+             CALL CC_Error( errMsg, RC, thisLoc )
              RETURN
           ENDIF
        ENDIF
@@ -3194,7 +3101,7 @@ CONTAINS
     ENDIF
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !========================================================================
     ! Print to screen
@@ -3285,7 +3192,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ""
     thisLoc = &
       ' -> at Config_Convection_Mixing (in module GeosCore/input_mod.F90)'
@@ -3296,9 +3203,9 @@ CONTAINS
     key    = "operations%convection%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LCONV = v_bool
@@ -3309,9 +3216,9 @@ CONTAINS
     key    = "operations%pbl_mixing%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LTURB = v_bool
@@ -3322,9 +3229,9 @@ CONTAINS
     key    = "operations%pbl_mixing%use_non_local_pbl"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LNLPBL = v_bool
@@ -3337,7 +3244,7 @@ CONTAINS
     Input_Opt%PBL_DRYDEP = ( .not. Input_Opt%LNLPBL )
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
     !=========================================================================
     ! Print to screen
@@ -3410,7 +3317,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_DryDep_WetDep (in module GeosCore/input_mod.F90)'
 
@@ -3420,9 +3327,9 @@ CONTAINS
     key    = "operations%dry_deposition%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LDRYD = v_bool
@@ -3433,9 +3340,9 @@ CONTAINS
     key    = "operations%dry_deposition%CO2_effect%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CO2_EFFECT = v_bool
@@ -3446,9 +3353,9 @@ CONTAINS
     key   = "operations%dry_deposition%CO2_effect%CO2_level"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CO2_LEVEL = Cast_and_RoundOff( v_str, places=2 )
@@ -3459,9 +3366,9 @@ CONTAINS
     key   = "operations%dry_deposition%CO2_effect%reference_CO2_level"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CO2_REF = Cast_and_RoundOff( v_str, places=2 )
@@ -3472,9 +3379,9 @@ CONTAINS
     key   = "operations%dry_deposition%diag_alt_above_sfc_in_m"
     v_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%RA_Alt_Above_Sfc = v_int
@@ -3485,9 +3392,9 @@ CONTAINS
     key    = "operations%wet_deposition%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LWETD = v_bool
@@ -3593,7 +3500,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Gamap (in module GeosCore/input_mod.F90)'
 
@@ -3603,9 +3510,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%gamap%diaginfo_dat_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%GAMAP_DIAGINFO = TRIM( ADJUSTL( v_str ) )
@@ -3616,9 +3523,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%gamap%tracerinfo_dat_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%GAMAP_TRACERINFO = TRIM( ADJUSTL( v_str ) )
@@ -3696,7 +3603,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Bpch_Output (in module GeosCore/input_mod.F90)'
 
@@ -3709,9 +3616,9 @@ CONTAINS
              "schedule_output_for_"                       // mon(N)
        v_str = MISSING_STR
        CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-       IF ( RC /= GC_SUCCESS ) THEN
+       IF ( RC /= CC_SUCCESS ) THEN
           errMsg = 'Error parsing ' // TRIM( key ) // '!'
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
 
@@ -3769,8 +3676,8 @@ CONTAINS
     CALL IS_LAST_DAY_GOOD( Input_Opt, RC )
 
     ! Trap potential errors
-    IF ( RC /= GC_SUCCESS ) THEN
-       CALL GC_Error( errMsg, RC, thisLoc )
+    IF ( RC /= CC_SUCCESS ) THEN
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -3826,7 +3733,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_PlaneFlight (in module GeosCore/input_mod.F90)'
 
@@ -3836,9 +3743,9 @@ CONTAINS
     key    = "extra_diagnostics%planeflight%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Do_Planeflight = v_bool
@@ -3849,9 +3756,9 @@ CONTAINS
     key   = "extra_diagnostics%planeflight%flight_track_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Planeflight_InFile = TRIM( v_str )
@@ -3864,9 +3771,9 @@ CONTAINS
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
 
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Planeflight_OutFile = TRIM( v_str )
@@ -3955,7 +3862,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Error reading the "geoschem_config.yml" file!'
     thisLoc = ' -> at Config_ObsPack (in module GeosCore/input_mod.F90)'
 
@@ -3965,9 +3872,9 @@ CONTAINS
     key    = "extra_diagnostics%obspack%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%Do_ObsPack = v_bool
@@ -3978,9 +3885,9 @@ CONTAINS
     key    = "extra_diagnostics%obspack%quiet_logfile_output"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ObsPack_Quiet = v_bool
@@ -3991,9 +3898,9 @@ CONTAINS
     key   = "extra_diagnostics%obspack%input_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ObsPack_InputFile = TRIM( v_str )
@@ -4004,9 +3911,9 @@ CONTAINS
     key   = "extra_diagnostics%obspack%output_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ObsPack_OutputFile = TRIM( v_str )
@@ -4018,9 +3925,9 @@ CONTAINS
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str,                         &
                          "",     RC,          dynamic_size=.TRUE.           )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -4132,7 +4039,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_ND51 (in module GeosCore/input_mod.F90)'
 
@@ -4142,9 +4049,9 @@ CONTAINS
     key    = "extra_diagnostics%legacy_bpch%ND51_satellite%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%DO_ND51 = v_bool
@@ -4155,9 +4062,9 @@ CONTAINS
     key    = "extra_diagnostics%legacy_bpch%ND51_satellite%output_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_FILE = TRIM( v_str )
@@ -4168,9 +4075,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%ND51_satellite%tracers"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     DO N = 1, SIZE( a_int )
@@ -4185,9 +4092,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%ND51_satellite%UTC_hour_for_write"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_HR_WRITE = Cast_and_RoundOff( v_str, places=2 )
@@ -4201,9 +4108,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51_satellite%averaging_period_in_LT"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, a_str, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_HR1 = Cast_and_RoundOff( a_str(1), places=2 )
@@ -4215,9 +4122,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51_satellite%IMIN_and_IMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_IMIN = a_int(1)
@@ -4229,9 +4136,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51_satellite%JMIN_and_JMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_JMIN = a_int(1)
@@ -4243,9 +4150,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51_satellite%LMIN_and_LMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51_LMIN = a_int(1)
@@ -4340,7 +4247,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_ND51b (in module GeosCore/input_mod.F90)'
 
@@ -4350,9 +4257,9 @@ CONTAINS
     key    = "extra_diagnostics%legacy_bpch%ND51b_satellite%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%DO_ND51b = v_bool
@@ -4363,9 +4270,9 @@ CONTAINS
     key    = "extra_diagnostics%legacy_bpch%ND51b_satellite%output_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_FILE = TRIM( v_str )
@@ -4376,9 +4283,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%ND51b_satellite%tracers"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     DO N = 1, SIZE( a_int )
@@ -4393,9 +4300,9 @@ CONTAINS
     key   = "extra_diagnostics%legacy_bpch%ND51b_satellite%UTC_hour_for_write"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_HR_WRITE = Cast_and_RoundOff( v_str, places=2 )
@@ -4409,9 +4316,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51b_satellite%averaging_period_in_LT"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, a_str, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_HR1 = Cast_and_RoundOff( a_str(1), places=2 )
@@ -4423,9 +4330,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51b_satellite%IMIN_and_IMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_IMIN = a_int(1)
@@ -4437,9 +4344,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51b_satellite%JMIN_and_JMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_JMIN = a_int(1)
@@ -4451,9 +4358,9 @@ CONTAINS
     key = "extra_diagnostics%legacy_bpch%ND51b_satellite%LMIN_and_LMAX_of_region"
     a_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, a_int, "", RC, dynamic_size=.TRUE. )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND51b_LMIN = a_int(1)
@@ -4553,7 +4460,7 @@ CONTAINS
     !=========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Error reading the "geoschem_config.yml" file!'
     thisLoc = ' -> at Config_Bpch_ProdLoss (in module GeosCore/input_mod.F90)'
 
@@ -4564,9 +4471,9 @@ CONTAINS
              "ND65_prodloss%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%DO_SAVE_PL = v_bool
@@ -4578,9 +4485,9 @@ CONTAINS
              "ND65_prodloss%number_of_levels"
     v_int = MISSING_INT
     CALL QFYAML_Add_Get( Config, key, v_int, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%ND65 = v_int
@@ -4762,7 +4669,7 @@ CONTAINS
     !=================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Config_Hg (in module GeosCore/input_mod.F90)'
 
@@ -4772,9 +4679,9 @@ CONTAINS
     key    = "Hg_simulation_options%sources%use_dynamic_ocean_Hg"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LDYNOCEAN = v_bool
@@ -4785,9 +4692,9 @@ CONTAINS
     key    = "Hg_simulation_options%sources%use_preindustrial_Hg"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LPREINDHG = v_bool
@@ -4798,9 +4705,9 @@ CONTAINS
     key    = "Hg_simulation_options%sources%use_arctic_river_Hg"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LARCTICRIV = v_bool
@@ -4811,9 +4718,9 @@ CONTAINS
     key    = "Hg_simulation_options%chemistry%tie_HgIIaq_reduction_to_UVB"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LKRedUV = v_bool
@@ -4828,9 +4735,9 @@ CONTAINS
     key    = "Hg_simulation_options%GTMM_soil_model%activate"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%LGTMM = v_bool
@@ -4845,9 +4752,9 @@ CONTAINS
     key   = "Hg_simulation_options%GTMM_soil_model%restart_file"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%GTMM_RST_FILE = TRIM( v_str )
@@ -4940,7 +4847,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Error reading the "geoschem_config.yml" file!'
     thisLoc = ' -> at Config_CH4 (in module GeosCore/input_mod.F90)'
 
@@ -4950,9 +4857,9 @@ CONTAINS
     key    = "CH4_simulation_options%use_observational_operators%AIRS"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%AIRS_CH4_OBS = v_bool
@@ -4963,9 +4870,9 @@ CONTAINS
     key    = "CH4_simulation_options%use_observational_operators%GOSAT"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%GOSAT_CH4_OBS =  v_bool
@@ -4976,9 +4883,9 @@ CONTAINS
     key    = "CH4_simulation_options%use_observational_operators%TCCON"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%TCCON_CH4_OBS = v_bool
@@ -4989,9 +4896,9 @@ CONTAINS
     key    = "CH4_simulation_options%analytical_inversion%perturb_CH4_boundary_conditions"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, TRIM( key ), v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM ( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%DoPerturbCH4BoundaryConditions = v_bool
@@ -5002,9 +4909,9 @@ CONTAINS
     key    = "CH4_simulation_options%analytical_inversion%CH4_boundary_condition_ppb_increase_NSEW"
     a_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, TRIM( key ), a_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM ( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CH4BoundaryConditionIncreaseNorth = Cast_and_RoundOff( a_str(1), places=4 )
@@ -5085,7 +4992,7 @@ CONTAINS
     !========================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
 
     ! Continue initializing
     errMsg  = ''
@@ -5097,9 +5004,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_type"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_TYPE = TRIM( v_str )
@@ -5110,9 +5017,9 @@ CONTAINS
     key    = "POPs_simulation_options%chemistry_processing"
     v_bool = MISSING_BOOL
     CALL QFYAML_Add_Get( Config, key, v_bool, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%CHEM_PROCESS = v_bool
@@ -5123,9 +5030,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_XMW"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_XMW = Cast_and_RoundOff( v_str, places=0 )
@@ -5136,9 +5043,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_KOA"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_KOA = Cast_and_RoundOff( v_str, places=0 )
@@ -5149,9 +5056,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_KBC"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_KBC = Cast_and_RoundOff( v_str, places=0 )
@@ -5162,9 +5069,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_K_POPG_OH"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_K_POPG_OH = Cast_and_RoundOff( v_str, places=0 )
@@ -5175,9 +5082,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_K_POPP_O3A"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_K_POPP_O3A = Cast_and_RoundOff( v_str, places=0 )
@@ -5188,9 +5095,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_K_POPP_O3B"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_K_POPP_O3B = Cast_and_RoundOff( v_str, places=0 )
@@ -5201,9 +5108,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_HSTAR"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_HSTAR = Cast_and_RoundOff( v_str, places=0 )
@@ -5214,9 +5121,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_DEL_H"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_DEL_H = Cast_and_RoundOff( v_str, places=0 )
@@ -5227,9 +5134,9 @@ CONTAINS
     key   = "POPs_simulation_options%POP_DEL_Hw"
     v_str = MISSING_STR
     CALL QFYAML_Add_Get( Config, key, v_str, "", RC )
-    IF ( RC /= GC_SUCCESS ) THEN
+    IF ( RC /= CC_SUCCESS ) THEN
        errMsg = 'Error parsing ' // TRIM( key ) // '!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
     Input_Opt%POP_DEL_Hw = Cast_and_RoundOff( v_str, places=0 )
@@ -5261,7 +5168,7 @@ CONTAINS
 130 FORMAT( A, ES10.2 )
 
     ! Return success
-    RC = GC_SUCCESS
+    RC = CC_SUCCESS
 
   END SUBROUTINE Config_POPs
 !EOC
@@ -5312,7 +5219,7 @@ CONTAINS
     !=================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = 'Invalid directory encountered!'
     thisLoc = ' -> at Validate_Directories (in module GeosCore/input_mod.F90)'
 
@@ -5322,22 +5229,22 @@ CONTAINS
 #if !defined( MODEL_CESM )
     ! Check directories
     CALL Check_Directory( Input_Opt, Input_Opt%DATA_DIR, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       CALL GC_Error( errMsg, RC, thisLoc )
+    IF ( RC /= CC_SUCCESS ) THEN
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 #endif
 
     CALL Check_Directory( Input_Opt, Input_Opt%CHEM_INPUTS_DIR, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       CALL GC_Error( errMsg, RC, thisLoc )
+    IF ( RC /= CC_SUCCESS ) THEN
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
 #if !defined( MODEL_CESM )
     CALL Check_Directory( Input_Opt, Input_Opt%RUN_DIR, RC )
-    IF ( RC /= GC_SUCCESS ) THEN
-       CALL GC_Error( errMsg, RC, thisLoc )
+    IF ( RC /= CC_SUCCESS ) THEN
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 #endif
@@ -5394,7 +5301,7 @@ CONTAINS
     !=================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Check_Directory (in module GeosCore/input_mod.F90)'
 
@@ -5413,7 +5320,7 @@ CONTAINS
     ! If the directory does not exist then stop w/ an error message
     IF ( .not. File_Exists( dir ) ) THEN
        errMsg = 'Invalid directory: ' // TRIM( dir )
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -5476,7 +5383,7 @@ CONTAINS
     !=================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Check_Time_Steps (in module GeosCore/input_mod.F90)'
 
@@ -5526,7 +5433,7 @@ CONTAINS
           WRITE( errMsg, 300 ) 'Transport timestep exceeds max:', &
                                 Input_Opt%TS_DYN, MAX_DYN
 300       FORMAT( a, i8, ' >', i8 )
-          CALL GC_Error( errMsg, RC, thisLoc )
+          CALL CC_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
     ENDIF
@@ -5562,7 +5469,7 @@ CONTAINS
 
     IF ( LTRAN .and. TS_DYN /= TS_SMALLEST ) THEN
        errMsg = 'The transport time step should be the smallest one'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -5595,25 +5502,25 @@ CONTAINS
     ! (ccc, 5/13/09)
     IF ( L /= -999999 .and. MOD( TS_CHEM, TS_SMALLEST ) /= 0 ) THEN
        WRITE( errMsg, 100 ) 'Chemistry', TS_CHEM, TS_SMALLEST
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
     IF ( K /= -999999 .and. MOD( TS_EMIS, TS_SMALLEST ) /= 0 ) THEN
        WRITE( ErrMSg, 100 ) 'Emission', TS_EMIS, TS_SMALLEST
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
     IF ( J /= -999999 .and. MOD( TS_CONV, TS_SMALLEST ) /= 0 ) THEN
        WRITE( errMsg, 100 ) 'Convection', TS_CONV, TS_SMALLEST
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
     IF ( I /= -999999 .and. MOD( TS_DYN, TS_SMALLEST ) /= 0 ) THEN
        WRITE( errMsg, 100 ) 'Transport', TS_DYN, TS_SMALLEST
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -5682,7 +5589,7 @@ CONTAINS
     !=================================================================
 
     ! Initialize
-    RC      = GC_SUCCESS
+    RC      = CC_SUCCESS
     errMsg  = ''
     thisLoc = ' -> at Is_Last_Day_Good (in module GeosCore/input_mod.F90)'
 
@@ -5705,7 +5612,7 @@ CONTAINS
     ! Exit w/ error if THIS_NJDAY = 0
     IF ( Input_Opt%NJDAY(LASTDAY) == 0 ) THEN
        errMsg = 'No output scheduled on last day of run!'
-       CALL GC_Error( errMsg, RC, thisLoc )
+       CALL CC_Error( errMsg, RC, thisLoc )
        RETURN
     ENDIF
 
@@ -5766,7 +5673,7 @@ CONTAINS
     !=================================================================
 
     ! Assume success
-    RC       = GC_SUCCESS
+    RC       = CC_SUCCESS
 
     ! Define location string
     LOCATION = '-> at Do_Error_Checks (in GeosCore/input_mod.F90)'
@@ -5779,13 +5686,13 @@ CONTAINS
     IF ( Input_Opt%LSSALT ) THEN
        IF ( I == 0 ) THEN
           MSG = 'LSSALT=T but ONLINE SEASALT AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use ONLINE SEASALT AEROSOLS if LSSALT=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -5798,18 +5705,18 @@ CONTAINS
     IF ( Input_Opt%LMPOA ) THEN
        IF ( .not. Input_Opt%LSSALT ) THEN
           MSG = 'LMPOA=T but LSSALT=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
        IF ( I == 0 ) THEN
           MSG = 'LMPOA=T but MARINE ORGANIC AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use MARINE ORGANIC AEROSOLS if LMPOA=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -5833,14 +5740,14 @@ CONTAINS
        ! LSULF=T, then we must also have LSSALT=T (bec, bmy, 4/13/05)
        IF ( .not. Input_Opt%LSSALT ) THEN
           MSG = 'LSULF=T now also requires LSSALT=T!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
 
        ! Stop w/ error if everything is undefined
        IF ( I == 0 ) THEN
           MSG = 'LSULF=T but ONLINE SULFUR AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
 
@@ -5849,7 +5756,7 @@ CONTAINS
        ! If LSULF=F but we have defined species, stop w/ error
        IF ( I > 0 ) THEN
           MSG = 'Cannot use ONLINE SULFUR AEROSOLS if LSULF=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
 
@@ -5869,20 +5776,20 @@ CONTAINS
     IF ( Input_Opt%LCARB ) THEN
        IF ( I == 0 ) THEN
           MSG = 'LCARB=T but ONLINE CARBON AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use ONLINE CARBON AEROSOLS if LCARB=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
 
     IF ( Input_Opt%LSVPOA .and. ( .NOT. Input_Opt%LSOA ) ) THEN
        MSG = 'Semivolatile POA requires COMPLEX SOA (LSOA=T)'
-       CALL GC_Error( Msg, RC, Location )
+       CALL CC_Error( Msg, RC, Location )
        RETURN
     ENDIF
 
@@ -5896,13 +5803,13 @@ CONTAINS
        IF ( I > 0 ) THEN
           MSG = 'Semivolatile POA species is defined in addition to ' // &
                  'Nonvolatile POA'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
        IF ( ( .NOT. Input_Opt%LSOA   ) .or. &
             ( .NOT. Input_Opt%LSVPOA ) ) THEN
           MSG = 'Semivolatile POA requires LSOA=T and LSVPOA=T'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -5927,12 +5834,12 @@ CONTAINS
     IF ( Input_Opt%LSVPOA ) THEN
        IF ( I < 8 ) THEN
           MSG = 'Not enough semivolatile POA species!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
        IF ( Ind_('NAP','A') < 0 ) THEN
           MSG = 'Semivolatile POA requires IVOCs/NAP!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -5960,13 +5867,13 @@ CONTAINS
     IF ( Input_Opt%LSOA ) THEN
        IF ( I == 0 ) THEN
           MSG = 'LSOA=T but COMPLEX SOA species are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use COMPLEX SOA species if LSOA=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -5989,13 +5896,13 @@ CONTAINS
     IF ( Input_Opt%LDUST ) THEN
        IF ( I == 0 ) THEN
           MSG = 'LDUST=T but ONLINE DUST AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use ONLINE DUST AEROSOLS if LDUST=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -6021,13 +5928,13 @@ CONTAINS
     IF ( Input_Opt%LDSTUP ) THEN
        IF ( I < 12 ) THEN
           MSG = 'LDSTUP=T but COATED DUST AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use COATED DUST AEROSOLS if LDSTUP=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF
@@ -6040,13 +5947,13 @@ CONTAINS
     IF ( Input_Opt%LSSALT ) THEN
        IF ( I == 0 ) THEN
           MSG = 'LSSALT=T but ONLINE SEASALT AEROSOLS are undefined!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ELSE
        IF ( I > 0 ) THEN
           MSG = 'Cannot use ONLINE SEASALT AEROSOLS if LSSALT=F!'
-          CALL GC_Error( Msg, RC, Location )
+          CALL CC_Error( Msg, RC, Location )
           RETURN
        ENDIF
     ENDIF

@@ -1,5 +1,4 @@
-### geoschem_config.yml: GEOS-Chem Runtime configuration options.
-### Customized for simulations using the aerosols-only mechanism.
+### CATChem_config.yml: CATChem Runtime configuration options.
 ###
 ### NOTE: Add quotes around nitrogen oxide ('NO'), because YAML
 ### parsers will confuse this with a negative "no" value.
@@ -11,30 +10,18 @@ simulation:
   name: test
   start_date: 20240501 0000
   end_date: 20240501 0100
-  root_data_dir: ./
-  met_field: geosfp
   species_database_file: ./species_database.yml
   species_metadata_output_file: ./species_metadata.yml
   verbose:
     activate: false
-    on_cores: root       # Allowed values: root all
-  use_gcclassic_timers: false
 
 #============================================================================
 # Grid settings
 #============================================================================
 grid:
-  resolution: 4.0x5.0
+  nx: 10
+  ny: 10
   number_of_levels: 28 
-  longitude:
-    range: -180 180 
-    center_at_180: 
-  latitude:
-    range: -90 90
-    half_size_polar_boxes: 
-  nested_grid_simulation:
-    activate:  false
-    buffer_zone_NSEW: 0 0 0 0
 
 #============================================================================
 # Timesteps settings
@@ -44,7 +31,7 @@ timesteps:
   chemistry_timestep_in_s: 60 
 
 #============================================================================
-# Settings for GEOS-Chem operations
+# Settings for CATChem operations
 #============================================================================
 operations:
 
@@ -73,10 +60,10 @@ operations:
       use_TOMS_SBUV_O3: false
 
   transport:
-    gcclassic_tpcore:                 # GEOS-Chem Classic only
-      activate: true                  # GEOS-Chem Classic only
-      fill_negative_values: true      # GEOS-Chem Classic only
-      iord_jord_kord: [3, 3, 7]       # GEOS-Chem Classic only
+    gcclassic_tpcore:                 # CATChem Classic only
+      activate: true                  # CATChem Classic only
+      fill_negative_values: true      # CATChem Classic only
+      iord_jord_kord: [3, 3, 7]       # CATChem Classic only
     transported_species:
       - BCPI
       - BCPO
@@ -110,7 +97,7 @@ operations:
     activate: true
 
 #============================================================================
-# Settings for GEOS-Chem aerosols
+# Settings for CATChem aerosols
 #============================================================================
 aerosols:
 
@@ -143,7 +130,7 @@ extra_diagnostics:
     activate: false
     quiet_logfile_output: false
     input_file: ./obspack_co2_1_OCO2MIP_2018-11-28.YYYYMMDD.nc
-    output_file: ./OutputDir/GEOSChem.ObsPack.YYYYMMDD_hhmmz.nc4
+    output_file: ./OutputDir/CATChem.ObsPack.YYYYMMDD_hhmmz.nc4
     output_species:
       - BCPI
       
