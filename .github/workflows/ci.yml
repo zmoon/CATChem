@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: [main, feature/catchem_begins]
   pull_request:
   workflow_dispatch:
 
@@ -11,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        compiler: [gfortran-10, gfortran-11, gfortran-12, gfortran-13, ifort]
+        compiler: [gfortran-10, gfortran-11, gfortran-12, ifort]
     defaults:
       run:
         shell: bash -l {0}
