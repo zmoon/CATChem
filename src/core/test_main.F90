@@ -2,17 +2,12 @@
 
 
 program test_main
-  USE init_mod
-  IMPLICIT NONE
-  
-  ! Integers
-  INTEGER:: RC          ! Success or failure
+   USE init_mod
+   IMPLICIT NONE
 
-  call base_config_yaml_read(RC)
-  
+   ! Integers
+   INTEGER:: RC          ! Success or failure
+
+   call base_config_yaml_read(RC)
+
 end program test_main
-
-
-
-
-
