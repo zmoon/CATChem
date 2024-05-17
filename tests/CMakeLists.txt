@@ -1,7 +1,6 @@
 add_executable(test_main test_main.F90)
 target_link_libraries(test_main PRIVATE CATChem_core)
-set_target_properties(test_main PROPERTIES Fortran_MODULE_DIRECTORY
-                                           ${CMAKE_BINARY_DIR}/include)
+set_target_properties(test_main PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
 enable_testing()
 

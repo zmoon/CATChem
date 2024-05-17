@@ -9,5 +9,4 @@ set(_srcs
     species_mod.F90)
 
 add_library(CATChem_core ${_srcs})
-set_target_properties(CATChem_core PROPERTIES Fortran_MODULE_DIRECTORY
-                                              ${CMAKE_BINARY_DIR}/include)
+set_target_properties(CATChem_core PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
