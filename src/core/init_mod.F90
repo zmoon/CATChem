@@ -17,6 +17,9 @@ module init_mod
         ! Characters
         CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
         CHARACTER(LEN=512) :: errMsg
+        CHARACTER(LEN=512) :: thisLoc
+
+        thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
 
         ! QFYAML_t type 
         TYPE(QFYAML_t)     :: Config, ConfigAnchored
@@ -44,7 +47,7 @@ module init_mod
 
         IF ( RC /= 0 ) THEN
           errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-          CALL CC_Error( errMsg, RC )
+          CALL CC_Error( errMsg, RC , thisLoc)
           RETURN
         print *, errMsg
 
