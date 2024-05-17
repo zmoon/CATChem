@@ -27,16 +27,14 @@ module init_mod
 
         ! set thisLoc
         thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
+        errMsg = ''
+        RC = CC_SUCCESS
         
         WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
         WRITE( 6, 100   ) TRIM( configFile )
 
 100     FORMAT( 'READ_INPUT_FILE: Opening ', a )
 
-        ! Assume success
-        !    RC      = CC_SUCCESS
-        !    errMsg  = ''
-        !    thisLoc = ' -> at Read_Input_File (in module GeosCore/input_mod.F90)'
         !========================================================================
         ! Read the YAML file into the Config object
         !========================================================================
