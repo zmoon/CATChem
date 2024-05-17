@@ -6,7 +6,8 @@ set(_srcs
     init_mod.F90
     precision_mod.F90
     qfyaml_mod.F90
-    species_mod.F90
-    test_main.F90)
+    species_mod.F90)
 
-add_library(CATChem_core STATIC ${_srcs})
+add_library(CATChem_core ${_srcs})
+set_target_properties(CATChem_core PROPERTIES Fortran_MODULE_DIRECTORY
+                                              ${CMAKE_BINARY_DIR}/include)
