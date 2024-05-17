@@ -6,7 +6,7 @@ module init_mod
 
     contains
 
-        subroutine base_config_yaml_read( RC)
+      subroutine base_config_yaml_read( RC)
         use QfYaml_Mod
         use Error_Mod
         implicit none
@@ -19,20 +19,19 @@ module init_mod
         CHARACTER(LEN=512) :: errMsg
         CHARACTER(LEN=512) :: thisLoc
 
-        thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
-
         ! QFYAML_t type 
         TYPE(QFYAML_t)     :: Config, ConfigAnchored
 
         ! Integers
         INTEGER :: RC          ! Success or failure
 
+        ! set thisLoc
+        thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
+        
         WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
         WRITE( 6, 100   ) TRIM( configFile )
 
 100     FORMAT( 'READ_INPUT_FILE: Opening ', a )
-
-
 
         ! Assume success
         !    RC      = CC_SUCCESS
@@ -52,7 +51,7 @@ module init_mod
         print *, errMsg
 
         ENDIF
-    end subroutine base_config_yaml_read
+      end subroutine base_config_yaml_read
 
 end module init_mod
 
