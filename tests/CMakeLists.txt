@@ -8,3 +8,9 @@ add_test(
   NAME test_main
   COMMAND test_main
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(
+  NAME test_main_missing_config
+  COMMAND test_main
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+set_property(TEST test_main_missing_config PROPERTY WILL_FAIL TRUE)
