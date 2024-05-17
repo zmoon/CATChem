@@ -47,3 +47,15 @@ cmake --build build --target clean
 ```
 
 or remove the build directory (`./build`).
+
+### Test
+
+To run the tests, after building, use
+
+```
+ctest --test-dir build/tests
+```
+
+There [are options](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Testing%20With%20CMake%20and%20CTest.html#testing-using-ctest) for selecting specific tests.
+
+Edit `tests/CMakelists.txt` to add new tests.
