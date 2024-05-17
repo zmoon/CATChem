@@ -1,55 +1,54 @@
 module init_mod
 
-    implicit none
-        
-    PUBLIC :: base_config_yaml_read
+   implicit none
 
-    contains
+   PUBLIC :: base_config_yaml_read
 
-      subroutine base_config_yaml_read( RC)
-        use QfYaml_Mod
-        use Error_Mod
-        implicit none
+contains
 
-        ! Local Params
-        !-------------
+   subroutine base_config_yaml_read( RC)
+      use QfYaml_Mod
+      use Error_Mod
+      implicit none
 
-        ! Characters
-        CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
-        CHARACTER(LEN=512) :: errMsg
-        CHARACTER(LEN=512) :: thisLoc
+      ! Local Params
+      !-------------
 
-        ! QFYAML_t type 
-        TYPE(QFYAML_t)     :: Config, ConfigAnchored
+      ! Characters
+      CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
+      CHARACTER(LEN=512) :: errMsg
+      CHARACTER(LEN=512) :: thisLoc
 
-        ! Integers
-        INTEGER :: RC          ! Success or failure
+      ! QFYAML_t type
+      TYPE(QFYAML_t)     :: Config, ConfigAnchored
 
-        ! set thisLoc
-        thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
-        errMsg = ''
-        RC = CC_SUCCESS
-        
-        WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
-        WRITE( 6, 100   ) TRIM( configFile )
+      ! Integers
+      INTEGER :: RC          ! Success or failure
 
-100     FORMAT( 'READ_INPUT_FILE: Opening ', a )
+      ! set thisLoc
+      thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
+      errMsg = ''
+      RC = CC_SUCCESS
 
-        !========================================================================
-        ! Read the YAML file into the Config object
-        !========================================================================
+      WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
+      WRITE( 6, 100   ) TRIM( configFile )
 
-        print *, 'QFYAML_Init(', configFile, 'Config, ConfigAnchored, RC  )'
-        CALL QFYAML_Init( configFile, Config, ConfigAnchored, RC )
+100   FORMAT( 'READ_INPUT_FILE: Opening ', a )
 
-        IF ( RC /= 0 ) THEN
-          errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-          CALL CC_Error( errMsg, RC , thisLoc)
-          RETURN
-        print *, errMsg
+      !========================================================================
+      ! Read the YAML file into the Config object
+      !========================================================================
 
-        ENDIF
-      end subroutine base_config_yaml_read
+      print *, 'QFYAML_Init(', configFile, 'Config, ConfigAnchored, RC  )'
+      CALL QFYAML_Init( configFile, Config, ConfigAnchored, RC )
+
+      IF ( RC /= 0 ) THEN
+         errMsg = 'Error reading configuration file: ' // TRIM( configFile )
+         CALL CC_Error( errMsg, RC , thisLoc)
+         RETURN
+         print *, errMsg
+
+      ENDIF
+   end subroutine base_config_yaml_read
 
 end module init_mod
-
