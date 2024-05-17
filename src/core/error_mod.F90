@@ -10,7 +10,7 @@
 !------------------------------------------------------------------------------
 !BOP
 !
-! !MODULE: errcode_mod.F90
+! !MODULE: error_mod.F90
 !
 ! !DESCRIPTION: Module ERRCODE\_MOD contains the error codes (i.e. that
 !  report success or failure) returned by CATChem routines.
@@ -18,7 +18,7 @@
 !\\
 ! !INTERFACE:
 !
-MODULE ErrCode_Mod
+MODULE Error_Mod
     !
     ! !USES:
     !
@@ -265,5 +265,5 @@ MODULE ErrCode_Mod
     
       END SUBROUTINE CC_CheckVar
     !EOC
-    END MODULE ErrCode_Mod
+    END MODULE Error_Mod
     
