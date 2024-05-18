@@ -10,4 +10,8 @@ program test_main
 
    call base_config_yaml_read(RC)
 
+   if (RC /= 0) then
+      stop 1
+   end if
+
 end program test_main

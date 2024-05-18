@@ -41,3 +41,4 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel" AND CMAKE_BUILD_TYPE MATCHES "D
 endif()
 
 add_subdirectory(src)
+add_subdirectory(tests)
