@@ -57,7 +57,7 @@ contains
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
       ! Initialize
-      RC = 0
+      RC = CC_SUCCESS
       ErrMsg = ''
       thisLoc = ' -> at Init_Diag (in core/init_mod.F90)'
 

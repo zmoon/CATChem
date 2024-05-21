@@ -19,7 +19,7 @@ program test_main
    ! set thisLoc
    thisLoc = 'test_main::test_main() -> at read CATChem_Conifg.yml'
    errMsg = ''
-   RC = 0
+   RC = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
@@ -34,6 +34,7 @@ program test_main
    if (RC /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call CC_Error( errMsg, RC , thisLoc)
+      stop 1
    endif
 
    ! write grid info
@@ -47,20 +48,9 @@ program test_main
    if (RC /= CC_success) then
       errMsg = 'Error initializing meteorology'
       call CC_Error( errMsg, RC , thisLoc)
+      stop 1
    endif
 
    write(*,*) 'Finished CATChem'
-   ! call base_config_yaml_read(RC)
-
-   ! read yaml file
-   ! if (RC /= CC_success) then
-   !    errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-   !    call CC_Error( errMsg, RC , thisLoc)
-   !    return
-   ! endif
-
-   ! allocate arrays for current state
-   ! call Init_State(Config_Opt, State_Grid, State_Met, RC)
-
 
 end program test_main
