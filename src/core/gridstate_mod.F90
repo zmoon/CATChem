@@ -13,7 +13,7 @@ module GridState_Mod
    PUBLIC :: Grid_State_Allocate
    PUBLIC :: Grid_Cleanup
 
-   type, public :: GrdState
+   type, public :: GridStateType
 
       ! Integers
       integer :: nx
@@ -22,7 +22,12 @@ module GridState_Mod
 
       ! Reals
       real(fp), POINTER :: area(:,:)
-   end type GrdState
+
+      !-------------------------------------------------------------------------
+      ! Name of variables containing grid information
+      !-------------------------------------------------------------------------
+      CHARACTER(LEN=4)             :: State     = 'Grid'    ! Name of this state
+   end type GridStateType
 
 contains
 
@@ -37,7 +42,7 @@ contains
       type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
       ! INOUT Params
-      type(GrdState), intent(inout) :: State_Grid ! Grid State object
+      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
 
       ! OUTPUT Params
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
@@ -66,7 +71,7 @@ contains
 
       type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
-      type(GrdState), intent(inout) :: State_Grid ! Grid State object
+      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
 
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
 
@@ -99,7 +104,7 @@ contains
       ! type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
       ! INOUT Params
-      type(GrdState), intent(inout) :: State_Grid ! Grid State object
+      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
 
       ! OUTPUT Params
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
@@ -122,7 +127,7 @@ contains
    subroutine Grid_Cleanup(GridState, RC)
 
       ! INOUT Params
-      type(GrdState), intent(inout) :: GridState ! Grid State object
+      type(GridStateType), intent(inout) :: GridState ! Grid State object
 
       ! OUTPUT Params
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure

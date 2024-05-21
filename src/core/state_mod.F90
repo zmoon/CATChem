@@ -1,13 +1,13 @@
 module state_mod
    use precision_mod
    use Config_Opt_Mod, only : OptConfig
-   use GridState_Mod, only : GrdState
-   use MetState_Mod, only : MetState
+   use GridState_Mod, only : GridStateType
+   use MetState_Mod, only : MetStateType
 
    IMPLICIT NONE
 
-   type(GrdState) :: GRID
-   type(MetState)  :: MET
+   type(GridStateType) :: GRID
+   type(MetStateType)  :: MET
    type(OptConfig)  :: Config_Opt
 
    ! PUBLIC :: Init_State

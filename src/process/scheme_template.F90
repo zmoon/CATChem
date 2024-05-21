@@ -12,7 +12,7 @@
 ! Template for an example scheme for CATChem
 !==============================================================================
 
-module scheme_template(input1, input2, inout1, inout2, output1, output2, RC)
+module scheme_template(State_Met, input2, inout1, inout2, output1, output2, RC)
     use precision_mod
     use constants
     use error_mod
