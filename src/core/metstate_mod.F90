@@ -1,12 +1,12 @@
 !------------------------------------------------------------------------------
-!                  GEOS-Chem Global Chemical Transport Model                  !
+!                  CATChem Model                                              !
 !------------------------------------------------------------------------------
 !BOP
 !
 ! !MODULE: state_met_mod.F90
 !
 ! !DESCRIPTION: Module STATE\_MET\_MOD contains the derived type
-!  used to define the Meteorology State object for GEOS-Chem.
+!  used to define the Meteorology State object for CATChem.
 !\\
 !\\
 !  This module also contains the routines that allocate and deallocate memory
@@ -34,21 +34,13 @@ MODULE MetState_Mod
    ! !PUBLIC MEMBER FUNCTIONS:
    PUBLIC :: Zero_State_Met
    PUBLIC :: Met_Allocate
-   ! PUBLIC :: Init_State_Met
-   ! PUBLIC :: Cleanup_State_Met
-   ! PUBLIC :: Get_Metadata_State_Met
-   !
-   ! !PRIVATE MEMBER FUNCTIONS:
-   !
-   ! PRIVATE :: Init_and_Register
-   ! PRIVATE :: Register_MetField
    !
    ! !PUBLIC DATA MEMBERS:
    !
    !=========================================================================
    ! Derived type for Meteorology State
    !=========================================================================
-   TYPE, PUBLIC :: MetState
+   TYPE, PUBLIC :: MetStateType
 
       !----------------------------------------------------------------------
       ! Surface fields
@@ -226,7 +218,6 @@ MODULE MetState_Mod
       !  1..IREG(I,J)
       INTEGER,  POINTER :: IUSE          (:,:,:) ! Fraction (per mil) of box
       !  (I,J) occupied by each land
-      !  type
       REAL(fp), POINTER :: MODISLAI      (:,:) ! Daily LAI computed from
       !  monthly offline MODIS [m2/m2]
       REAL(fp), POINTER :: XLAI          (:,:,:) ! MODIS LAI per land type,
@@ -264,7 +255,7 @@ MODULE MetState_Mod
       ! TYPE(MetaRegItem), POINTER   :: Registry  => NULL()  ! Registry object
       ! TYPE(dictionary_t)           :: RegDict              ! Reg. lookup table
 
-   END TYPE MetState
+   END TYPE MetStateType
 
 CONTAINS
 
@@ -276,7 +267,7 @@ CONTAINS
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      TYPE(MetState), INTENT(INOUT) :: State_Met
+      TYPE(MetStateType), INTENT(INOUT) :: State_Met
       !
       ! !OUTPUT PARAMETERS:
       !
@@ -435,14 +426,14 @@ CONTAINS
 
    SUBROUTINE Met_Allocate( State_Grid, State_Met, RC)
       ! USES
-      USE GridState_Mod, Only : GrdState
+      USE GridState_Mod, Only : GridStateType
 
       IMPLICIT NONE
 
       ! Arguments
-      TYPE(GrdState), INTENT(IN)  :: State_Grid
-      TYPE(MetState), INTENT(OUT) :: State_Met
-      INTEGER,        INTENT(OUT) :: RC
+      TYPE(GridStateType), INTENT(IN)  :: State_Grid
+      TYPE(MetStateType),  INTENT(OUT) :: State_Met
+      INTEGER,             INTENT(OUT) :: RC
 
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
@@ -451,6 +442,50 @@ CONTAINS
       RC = CC_SUCCESS
       ErrMsg = ''
       thisLoc = ' -> at Met_Allocate (in core/metstate_mod.F90)'
+
+      ! Nullify all fields for safety's sake before allocating them
+      ! This can prevent compilation errors caused by uninitialized values
+      State_Met%ALBD_VIS       => NULL() ! Visible albedo
+      State_Met%ALBD_NIR       => NULL() ! Near-IR albedo
+      State_Met%ALBD_UV        => NULL() ! UV albedo
+      State_Met%AREA_M2        => NULL() ! Area of grid box
+      ! State_Met%CLDFRA         => NULL() ! Cloud fraction
+      State_Met%CONV_DEPTH     => NULL() ! Convective depth
+      State_Met%EFLUX          => NULL() ! Latent heat flux
+      State_Met%FLASH_DENS     => NULL() ! Flash density
+      State_Met%FRLAKE         => NULL() ! Lake fraction
+      State_Met%FROCEAN        => NULL() ! Ocean fraction
+      State_Met%FRLAND         => NULL() ! Land fraction
+      State_Met%FRLANDIC       => NULL() ! Land ice fraction
+      State_Met%FROCEAN        => NULL() ! Ocean fraction
+      State_Met%FRSNO          => NULL() ! Snow fraction
+      State_Met%FRSEAICE       => NULL() ! Sea ice fraction
+      State_Met%GWETROOT       => NULL() ! Root zone wetted area
+      State_Met%GWETTOP        => NULL() ! Top level wetted area
+      State_Met%HFLUX          => NULL() ! Surface flux
+      State_Met%IsLand         => NULL() ! Is this grid box land?
+      State_Met%IsWater        => NULL() ! Is this grid box water?
+      State_Met%IsIce          => NULL() ! Is this grid box ice?
+      State_Met%IsSnow         => NULL() ! Is this grid box snow?
+      State_Met%LAI            => NULL() ! Leaf area index
+      State_Met%PARDR          => NULL() ! Direct  downward PAR
+      State_Met%PARDF          => NULL() ! Diffuse downward PAR
+      State_Met%PBLH           => NULL() ! PBL height
+      State_Met%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
+      State_Met%PBL_TOP_L      => NULL() ! PBL top [levels]
+      State_Met%PBL_TOP_m      => NULL() ! PBL top [m]
+      State_Met%PS             => NULL() ! Surface pressure
+      State_Met%QV2M           => NULL() ! 2m specific humidity
+      State_Met%T2M            => NULL() ! 2m temperature
+      State_Met%TSKIN          => NULL() ! Skin temperature
+      State_Met%U10M           => NULL() ! 10m U wind
+      State_Met%V10M           => NULL() ! 10m V wind
+      State_Met%z0             => NULL() ! Surface roughness
+      State_Met%USTAR          => NULL() ! Friction velocity
+
+      !--------------------------------------------------
+      ! Allocate fields
+      !--------------------------------------------------
 
       ! Visible Surface Albedo
       ALLOCATE( State_Met%ALBD_VIS( State_Grid%NX, State_Grid%NY ), STAT=RC )

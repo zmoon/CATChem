@@ -2,28 +2,28 @@ module init_mod
 
    implicit none
 
-   PUBLIC :: base_config_yaml_read
    PUBLIC :: Init_Met
+   PUBLIC :: Init_Diag
 
 contains
 
    subroutine Init_Met(State_Grid, State_Met, RC)
-      use GridState_Mod, Only : GrdState
+
+      use GridState_Mod, Only : GridStateType
       use MetState_Mod
       USE Error_Mod
-
-      IMPLICIT NONE
+      implicit none
 
       ! Arguments
-      TYPE(GrdState), INTENT(IN)  :: State_Grid
-      TYPE(MetState), INTENT(INOUT) :: State_Met
+      TYPE(GridStateType), INTENT(IN)  :: State_Grid
+      TYPE(MetStateType), INTENT(INOUT) :: State_Met
       INTEGER,        INTENT(OUT) :: RC
 
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
       ! Initialize
-      RC = CC_SUCCESS
+      RC = 0
       ErrMsg = ''
       thisLoc = ' -> at Init_Met (in core/state_mod.F90)'
 
@@ -40,55 +40,34 @@ contains
       endif
    end subroutine Init_Met
 
-   subroutine base_config_yaml_read(Config_Opt, State_Grid, RC)
-      use QfYaml_Mod
+   subroutine Init_Diag(Config_Opt, State_Grid, State_Diag, RC)
+      use DiagState_Mod
+      use Config_Opt_Mod, Only : OptConfig
+      use GridState_Mod, Only : GridStateType
       use Error_Mod
-      use Config_Opt_Mod
-      use GridState_Mod, Only : GrdState
 
       implicit none
 
-      ! INOUT Params
-      type(OptConfig), intent(inout) :: Config_Opt ! Input Options object
-      type(OptConfig), intent(inout) :: State_Grid ! Input Options object
-      ! OUTPUT Params
-      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      ! Arguments
+      TYPE(OptConfig), INTENT(IN)  :: Config_Opt
+      TYPE(GridStateType),  INTENT(IN)  :: State_Grid
+      TYPE(DiagStateType), INTENT(INOUT) :: State_Diag
+      INTEGER,         INTENT(OUT) :: RC
 
-      ! Local Params
-      !-------------
+      ! Local variables
+      CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
-      ! Characters
-      CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
-      CHARACTER(LEN=512) :: errMsg
-      CHARACTER(LEN=255) :: thisLoc
-
-      ! QFYAML_t type
-      TYPE(QFYAML_t)     :: Config, ConfigAnchored
-
-      ! set thisLoc
-      thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
-      errMsg = ''
+      ! Initialize
       RC = CC_SUCCESS
+      ErrMsg = ''
+      thisLoc = ' -> at Init_Diag (in core/init_mod.F90)'
 
-      WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
-      WRITE( 6, 100   ) TRIM( configFile )
+      call Diag_Allocate(Config_Opt, State_Grid, State_Diag, RC)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Error allocating diag state'
+         call CC_Error( errMsg, RC , thisLoc)
+      endif
 
-100   FORMAT( 'READ_INPUT_FILE: Opening ', a )
-
-      !========================================================================
-      ! Read the YAML file into the Config object
-      !========================================================================
-
-      print *, 'QFYAML_Init(', configFile, 'Config, ConfigAnchored, RC  )'
-      CALL QFYAML_Init( configFile, Config, ConfigAnchored, RC )
-
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-         CALL CC_Error( errMsg, RC , thisLoc)
-         RETURN
-         print *, errMsg
-
-      ENDIF
-   end subroutine base_config_yaml_read
+   end subroutine Init_Diag
 
 end module init_mod

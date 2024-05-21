@@ -19,7 +19,7 @@ program test_main
    ! set thisLoc
    thisLoc = 'test_main::test_main() -> at read CATChem_Conifg.yml'
    errMsg = ''
-   RC = 0
+   RC = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
@@ -47,11 +47,11 @@ program test_main
    call Init_Met(GRID, MET, RC)
    if (RC /= CC_success) then
       errMsg = 'Error initializing meteorology'
+
       call CC_Error( errMsg, RC , thisLoc)
       stop 1
    endif
 
    write(*,*) 'Finished CATChem'
-
 
 end program test_main
