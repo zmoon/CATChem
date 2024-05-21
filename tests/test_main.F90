@@ -24,8 +24,8 @@ program test_main
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
-   write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'    
-   write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M' 
+   write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
+   write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
    write(*,*) ''
    write(*,*) ''
 
@@ -41,7 +41,7 @@ program test_main
    write(*,*) 'Number of grid nx = ', GRID%NX
    write(*,*) 'Number of grid ny = ', GRID%NY
    write(*,*) 'Number of grid levels = ', GRID%number_of_levels
-   
+
    ! initialize met
    call Init_Met(GRID, MET, RC)
    if (RC /= CC_success) then

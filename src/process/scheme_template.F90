@@ -5,7 +5,7 @@
 !! \date 05/2023
 !! \version 0.1
 !!
-!! 
+!!
 !!
 
 !==============================================================================
@@ -20,16 +20,16 @@ module scheme_template(input1, input2, inout1, inout2, output1, output2, RC)
     implicit none
 
     !=========================================================================
-    ! Parameters 
+    ! Parameters
     !=========================================================================
     !
     ! Input parameters
     !
     ! Integers
-    integer, intent(in) :: input1  ! Comment for input1 (units if needed) 
+    integer, intent(in) :: input1  ! Comment for input1 (units if needed)
 
     ! Reals
-    real(fp), intent(in) :: input2 ! Comment for input2 (units if needed) 
+    real(fp), intent(in) :: input2 ! Comment for input2 (units if needed)
 
     ! Booleans
 
@@ -52,7 +52,7 @@ module scheme_template(input1, input2, inout1, inout2, output1, output2, RC)
     integer, intent(out) :: output1  ! Comment for output1 (units if needed)
 
     ! Reals
-    real(fp), intent(out) :: output2 ! Comment for output2 (units if needed)    
+    real(fp), intent(out) :: output2 ! Comment for output2 (units if needed)
 
     ! Booleans
     ! add boolean parameters here
@@ -60,7 +60,7 @@ module scheme_template(input1, input2, inout1, inout2, output1, output2, RC)
     !=========================================================================
     ! Local Variables
     !=========================================================================
-    
+
     ! Reals
     real(fp) :: var1
     real(fp) :: var2
@@ -80,8 +80,8 @@ module scheme_template(input1, input2, inout1, inout2, output1, output2, RC)
 
     !=========================================================================
     ! Begin Code
-    !=========================================================================  
+    !=========================================================================
 
     ! add code here
-    
+
 end module scheme_template

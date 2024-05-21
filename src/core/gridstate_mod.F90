@@ -3,143 +3,143 @@
 
 module GridState_Mod
 
-    USE Error_Mod
-    USE precision_mod
+   USE Error_Mod
+   USE precision_mod
 
-    IMPLICIT NONE
-    PRIVATE
+   IMPLICIT NONE
+   PRIVATE
 
-    PUBLIC :: Grid_Init_State
-    PUBLIC :: Grid_State_Allocate
-    PUBLIC :: Grid_Cleanup
+   PUBLIC :: Grid_Init_State
+   PUBLIC :: Grid_State_Allocate
+   PUBLIC :: Grid_Cleanup
 
-    type, public :: GrdState
-        
-        ! Integers
-        integer :: nx
-        integer :: ny
-        integer :: number_of_levels
-        
-        ! Reals
-        real(fp), POINTER :: area(:,:)
-    end type GrdState
+   type, public :: GrdState
 
-    contains
-      
-      subroutine Grid_Init_State(Config_Opt, State_Grid, RC)
-        ! USES
-        USE Config_Opt_Mod, ONLY : OptConfig
-        use Error_Mod, only : CC_SUCCESS
+      ! Integers
+      integer :: nx
+      integer :: ny
+      integer :: number_of_levels
 
-        implicit none
+      ! Reals
+      real(fp), POINTER :: area(:,:)
+   end type GrdState
 
-        ! Input Params
-        type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+contains
 
-        ! INOUT Params
-        type(GrdState), intent(inout) :: State_Grid ! Grid State object
+   subroutine Grid_Init_State(Config_Opt, State_Grid, RC)
+      ! USES
+      USE Config_Opt_Mod, ONLY : OptConfig
+      use Error_Mod, only : CC_SUCCESS
 
-        ! OUTPUT Params
-        INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      implicit none
 
-        CHARACTER(LEN=512) :: errMsg
-        CHARACTER(LEN=255) :: thisLoc
+      ! Input Params
+      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
-        ! set error handling defaults
-        RC = 0
-        errMsg = ''
-        thisLoc = 'Grid_Init_State() -> at initializing GridState'
+      ! INOUT Params
+      type(GrdState), intent(inout) :: State_Grid ! Grid State object
 
-        ! initialize GridState
-        State_Grid%nx=0
-        State_Grid%ny=0
-        State_Grid%number_of_levels=0
-        State_Grid%area => NULL()
+      ! OUTPUT Params
+      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
 
-      end subroutine Grid_Init_State
+      CHARACTER(LEN=512) :: errMsg
+      CHARACTER(LEN=255) :: thisLoc
 
-      subroutine Grid_Init(Config_Opt, State_Grid, RC)
+      ! set error handling defaults
+      RC = 0
+      errMsg = ''
+      thisLoc = 'Grid_Init_State() -> at initializing GridState'
 
-        USE Config_Opt_Mod, ONLY : OptConfig
+      ! initialize GridState
+      State_Grid%nx=0
+      State_Grid%ny=0
+      State_Grid%number_of_levels=0
+      State_Grid%area => NULL()
 
-        implicit none
+   end subroutine Grid_Init_State
 
-        type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+   subroutine Grid_Init(Config_Opt, State_Grid, RC)
 
-        type(GrdState), intent(inout) :: State_Grid ! Grid State object
+      USE Config_Opt_Mod, ONLY : OptConfig
 
-        INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      implicit none
 
-        CHARACTER(LEN=512) :: errMsg
-        CHARACTER(LEN=512) :: thisLoc
+      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
-        RC=0
+      type(GrdState), intent(inout) :: State_Grid ! Grid State object
 
-        ! allocate GridState
-        ! ------------------
+      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
 
-        ! start with integers
-        State_Grid%nx = 0
-        State_Grid%ny = 0
-        State_Grid%number_of_levels = 0
+      CHARACTER(LEN=512) :: errMsg
+      CHARACTER(LEN=512) :: thisLoc
 
-        ! nullify arrays
-        State_Grid%area   => NULL()
+      RC=0
 
-      end subroutine Grid_Init
+      ! allocate GridState
+      ! ------------------
 
-      subroutine Grid_State_Allocate(State_Grid, RC) !Config_Opt, State_Grid, RC)
+      ! start with integers
+      State_Grid%nx = 0
+      State_Grid%ny = 0
+      State_Grid%number_of_levels = 0
 
-        use Error_Mod
-        ! use Config_Opt_Mod, only : OptConfig
+      ! nullify arrays
+      State_Grid%area   => NULL()
 
-        implicit none
+   end subroutine Grid_Init
 
-        ! input Params
-        ! type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+   subroutine Grid_State_Allocate(State_Grid, RC) !Config_Opt, State_Grid, RC)
 
-        ! INOUT Params
-        type(GrdState), intent(inout) :: State_Grid ! Grid State object
+      use Error_Mod
+      ! use Config_Opt_Mod, only : OptConfig
 
-        ! OUTPUT Params
-        INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      implicit none
 
-        CHARACTER(LEN=512) :: errMsg
-        CHARACTER(LEN=512) :: thisLoc
+      ! input Params
+      ! type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
 
-        ! set error handling defaults
-        thisLoc = 'Grid_Allocate() -> at allocating GridState'
-        errMsg = ''
-        RC = 0
-      
-        ALLOCATE( State_Grid%Area( State_Grid%NX, State_Grid%NY ), STAT=RC )
-        CALL CC_CheckVar( 'GridState%Area', 0, RC )
-        IF ( RC /= CC_SUCCESS ) RETURN
-        State_Grid%Area = 0e+0_fp
+      ! INOUT Params
+      type(GrdState), intent(inout) :: State_Grid ! Grid State object
 
-      end subroutine Grid_State_Allocate
+      ! OUTPUT Params
+      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
 
-      subroutine Grid_Cleanup(GridState, RC)
+      CHARACTER(LEN=512) :: errMsg
+      CHARACTER(LEN=512) :: thisLoc
 
-        ! INOUT Params
-        type(GrdState), intent(inout) :: GridState ! Grid State object
+      ! set error handling defaults
+      thisLoc = 'Grid_Allocate() -> at allocating GridState'
+      errMsg = ''
+      RC = 0
 
-        ! OUTPUT Params
-        INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      ALLOCATE( State_Grid%Area( State_Grid%NX, State_Grid%NY ), STAT=RC )
+      CALL CC_CheckVar( 'GridState%Area', 0, RC )
+      IF ( RC /= CC_SUCCESS ) RETURN
+      State_Grid%Area = 0e+0_fp
 
-        CHARACTER(LEN=512) :: errMsg
-        CHARACTER(LEN=512) :: thisLoc
+   end subroutine Grid_State_Allocate
 
-        ! set error handling defaults
-        thisLoc = 'Grid_Cleanup() -> at deallocating GridState'
-        errMsg = ''
-        RC = 0
-      
-        DEALLOCATE( GridState%Area, STAT=RC )
-        CALL CC_CheckVar( 'GridState%Area', 0, RC )
-        IF ( RC /= CC_SUCCESS ) RETURN
-        GridState%Area => NULL()
+   subroutine Grid_Cleanup(GridState, RC)
 
-      end subroutine Grid_Cleanup
-    
+      ! INOUT Params
+      type(GrdState), intent(inout) :: GridState ! Grid State object
+
+      ! OUTPUT Params
+      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+
+      CHARACTER(LEN=512) :: errMsg
+      CHARACTER(LEN=512) :: thisLoc
+
+      ! set error handling defaults
+      thisLoc = 'Grid_Cleanup() -> at deallocating GridState'
+      errMsg = ''
+      RC = 0
+
+      DEALLOCATE( GridState%Area, STAT=RC )
+      CALL CC_CheckVar( 'GridState%Area', 0, RC )
+      IF ( RC /= CC_SUCCESS ) RETURN
+      GridState%Area => NULL()
+
+   end subroutine Grid_Cleanup
+
 end module GridState_Mod

@@ -37,7 +37,7 @@ contains
          errMsg = 'Error allocating met state'
          call CC_Error( errMsg, RC , thisLoc)
       endif
-   end subroutine Init_Met 
+   end subroutine Init_Met
 
    subroutine base_config_yaml_read(Config_Opt, State_Grid, RC)
       use QfYaml_Mod
