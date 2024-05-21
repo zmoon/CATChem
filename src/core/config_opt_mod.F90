@@ -3,7 +3,7 @@
 !------------------------------------------------------------------------------
 !BOP
 !
-! !MODULE: input_opt_mod.F90
+! !MODULE: Config_Opt_mod.F90
 !
 ! !DESCRIPTION: Module INPUT\_OPT\_MOD contains the derived type for CATChem
 !  options and logical switches.
@@ -11,7 +11,7 @@
 !\\
 ! !INTERFACE:
 !
-MODULE Input_Opt_Mod
+MODULE Config_Opt_Mod
 !
 ! !USES:
 !
@@ -22,16 +22,16 @@ MODULE Input_Opt_Mod
 !
 ! !PUBLIC MEMBER FUNCTIONS:
 !
-   PUBLIC :: Set_Input_Opt
-   PUBLIC :: Set_Input_Opt_Advect
-   PUBLIC :: Cleanup_Input_Opt
+   PUBLIC :: Set_Config_Opt
+   PUBLIC :: Set_Config_Opt_Advect
+   PUBLIC :: Cleanup_Config_Opt
 !
 ! !PUBLIC DATA MEMBERS:
 !
    !=========================================================================
    ! Derived type for Input Options
    !=========================================================================
-   TYPE, PUBLIC :: OptInput
+   TYPE, PUBLIC :: OptConfig
 
       !----------------------------------------
       ! General Runtime & Distributed Comp Info
@@ -50,9 +50,9 @@ MODULE Input_Opt_Mod
       !----------------------------------------
       ! SIZE PARAMETER fields
       !----------------------------------------
-      INTEGER                     :: Max_BPCH_Diag
-      INTEGER                     :: Max_Families
-      INTEGER                     :: Max_AdvectSpc
+      ! INTEGER                     :: Max_BPCH_Diag
+      ! INTEGER                     :: Max_Families
+      ! INTEGER                     :: Max_AdvectSpc
 
       !----------------------------------------
       ! SIMULATION MENU fields
@@ -64,11 +64,11 @@ MODULE Input_Opt_Mod
       INTEGER                     :: SimLengthSec
       CHARACTER(LEN=255)          :: RUN_DIR
       CHARACTER(LEN=255)          :: DATA_DIR
-      CHARACTER(LEN=255)          :: CHEM_INPUTS_DIR
-      CHARACTER(LEN=255)          :: MetField
+      ! CHARACTER(LEN=255)          :: CHEM_INPUTS_DIR
+      ! CHARACTER(LEN=255)          :: MetField
       CHARACTER(LEN=255)          :: SimulationName
       CHARACTER(LEN=255)          :: SpcDatabaseFile
-      CHARACTER(LEN=255)          :: SpcMetaDataOutFile
+      ! CHARACTER(LEN=255)          :: SpcMetaDataOutFile
       !  LOGICAL                     :: ITS_AN_AEROSOL_SIM
       !  LOGICAL                     :: ITS_A_CARBON_SIM
       !  LOGICAL                     :: ITS_A_CH4_SIM
@@ -84,7 +84,7 @@ MODULE Input_Opt_Mod
       LOGICAL                     :: VerboseRequested
       CHARACTER(LEN=10)           :: VerboseOnCores
       LOGICAL                     :: Verbose
-      LOGICAL                     :: useTimers
+      ! LOGICAL                     :: useTimers
 
       !----------------------------------------
       ! ADVECTED SPECIES MENU fields
@@ -141,11 +141,6 @@ MODULE Input_Opt_Mod
       LOGICAL                     :: LHCodedOrgHal
       LOGICAL                     :: LCMIP6OrgHal
       LOGICAL                     :: DoLightNOx ! Shadow for LightNOX extension
-
-      ! For HEMCO "intermediate" grid (hplin, 6/2/20)
-      LOGICAL                     :: LIMGRID    ! Use different grid resolution for HEMCO?
-      INTEGER                     :: IMGRID_XSCALE
-      INTEGER                     :: IMGRID_YSCALE
 
       !----------------------------------------
       ! CO MENU fields
@@ -449,7 +444,7 @@ MODULE Input_Opt_Mod
       Character(Len=255)          :: compname
 #endif
 
-   END TYPE OptInput
+   END TYPE OptConfig
 !
 ! !REMARKS:
 !
@@ -465,7 +460,7 @@ CONTAINS
 !------------------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: Set_Input_Opt
+! !IROUTINE: Set_Config_Opt
 !
 ! !DESCRIPTION: Subroutine SET\_INPUT\_OPT intializes all CATChem
 !  options carried in Input Options derived type object.
@@ -473,11 +468,11 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Set_Input_Opt( am_I_Root, Input_Opt, RC )
+   SUBROUTINE Set_Config_Opt( am_I_Root, Config_Opt, RC )
 !
 ! !USES:
 !
-      USE ErrCode_Mod
+      USE Error_Mod
 !
 ! !INPUT PARAMETERS:
 !
@@ -485,7 +480,7 @@ CONTAINS
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(OptInput), INTENT(INOUT) :: Input_Opt   ! Input Options object
+      TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input Options object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -510,499 +505,499 @@ CONTAINS
       ! Set pointers to NULL for safety's sake
       !----------------------------------------
       RC                               =  CC_SUCCESS
-      Input_Opt%AdvectSpc_Name         => NULL()
-      Input_Opt%SALA_REDGE_um          => NULL()
-      Input_Opt%SALC_REDGE_um          => NULL()
-      Input_Opt%LSKYRAD                => NULL()
-      Input_Opt%LSPECRADMENU           => NULL()
-      Input_Opt%NJDAY                  => NULL()
-      Input_Opt%TINDEX                 => NULL()
-      Input_Opt%TCOUNT                 => NULL()
-      Input_Opt%TMAX                   => NULL()
-      Input_Opt%ND51_TRACERS           => NULL()
-      Input_Opt%ND51b_TRACERS          => NULL()
-      Input_Opt%FAM_NAME               => NULL()
-      Input_Opt%FAM_TYPE               => NULL()
-      Input_Opt%LINOZ_TPARM            => NULL()
+      Config_Opt%AdvectSpc_Name         => NULL()
+      Config_Opt%SALA_REDGE_um          => NULL()
+      Config_Opt%SALC_REDGE_um          => NULL()
+      Config_Opt%LSKYRAD                => NULL()
+      Config_Opt%LSPECRADMENU           => NULL()
+      Config_Opt%NJDAY                  => NULL()
+      Config_Opt%TINDEX                 => NULL()
+      Config_Opt%TCOUNT                 => NULL()
+      Config_Opt%TMAX                   => NULL()
+      ! Config_Opt%ND51_TRACERS           => NULL()
+      ! ! Config_Opt%ND51b_TRACERS          => NULL()
+      ! Config_Opt%FAM_NAME               => NULL()
+      ! Config_Opt%FAM_TYPE               => NULL()
+      ! Config_Opt%LINOZ_TPARM            => NULL()
 
       !----------------------------------------
       ! General Runtime & Distributed Comp Info
       !----------------------------------------
-      Input_Opt%amIRoot                = am_I_Root
-      Input_Opt%isMPI                  = .FALSE.
-      Input_Opt%numCPUs                = 1
-      Input_Opt%thisCPU                = -1
-      Input_Opt%MPIComm                = -1
+      Config_Opt%amIRoot                = am_I_Root
+      Config_Opt%isMPI                  = .FALSE.
+      Config_Opt%numCPUs                = 1
+      Config_Opt%thisCPU                = -1
+      Config_Opt%MPIComm                = -1
 
       !----------------------------------------
       ! Dry run info (print out file names)
       !----------------------------------------
-      Input_Opt%DryRun                 = .FALSE.
+      Config_Opt%DryRun                 = .FALSE.
 
       !----------------------------------------
       ! SIZE PARAMETER fields
       !
       ! Set to large placeholder values
       !----------------------------------------
-#ifdef RRTMG
-      Input_Opt%Max_BPCH_Diag          = 187 ! Mirror MAX_DIAG in CMN_DIAG_mod.F90
-#else
-      Input_Opt%Max_BPCH_Diag          = 80  ! Mirror MAX_DIAG in CMN_DIAG_mod.F90
-#endif
-      Input_Opt%Max_Families           = 250
-      Input_Opt%Max_AdvectSpc          = 600
+! #ifdef RRTMG
+!       Config_Opt%Max_BPCH_Diag          = 187 ! Mirror MAX_DIAG in CMN_DIAG_mod.F90
+! #else
+!       Config_Opt%Max_BPCH_Diag          = 80  ! Mirror MAX_DIAG in CMN_DIAG_mod.F90
+! #endif
+!       Config_Opt%Max_Families           = 250
+!       Config_Opt%Max_AdvectSpc          = 600
 
-      !----------------------------------------
-      ! SIMULATION MENU fields
-      !----------------------------------------
-      Input_Opt%NYMDb                  = 0
-      Input_Opt%NHMSb                  = 0
-      Input_Opt%NYMDe                  = 0
-      Input_Opt%NHMSe                  = 0
-      Input_Opt%SimLengthSec           = 0
-      Input_Opt%RUN_DIR                = './'
-      Input_Opt%DATA_DIR               = './'
-      Input_Opt%CHEM_INPUTS_DIR        = './'
-      Input_Opt%MetField               = ''
-      Input_Opt%SimulationName         = ''
-      Input_Opt%SpcDatabaseFile        = ''
-      Input_Opt%SpcMetaDataOutFile     = ''
-      Input_Opt%ITS_AN_AEROSOL_SIM     = .FALSE.
-      Input_Opt%ITS_A_CARBON_SIM       = .FALSE.
-      Input_Opt%ITS_A_CH4_SIM          = .FALSE.
-      Input_Opt%ITS_A_CO2_SIM          = .FALSE.
-      Input_Opt%ITS_A_FULLCHEM_SIM     = .FALSE.
-      Input_Opt%ITS_A_MERCURY_SIM      = .FALSE.
-      Input_Opt%ITS_A_POPS_SIM         = .FALSE.
-      Input_Opt%ITS_A_TAGCH4_SIM       = .FALSE.
-      Input_Opt%ITS_A_TAGCO_SIM        = .FALSE.
-      Input_Opt%ITS_A_TAGO3_SIM        = .FALSE.
-      Input_Opt%ITS_A_TRACEMETAL_SIM   = .FALSE.
-      Input_Opt%ITS_A_TRACER_SIM       = .FALSE.
-      Input_Opt%VerboseRequested       = .FALSE.
-      Input_Opt%VerboseOnCores         = ''
-      Input_Opt%Verbose                = .FALSE.
-      Input_Opt%useTimers              = .FALSE.
+      ! !----------------------------------------
+      ! ! SIMULATION MENU fields
+      ! !----------------------------------------
+      ! Config_Opt%NYMDb                  = 0
+      ! Config_Opt%NHMSb                  = 0
+      ! Config_Opt%NYMDe                  = 0
+      ! Config_Opt%NHMSe                  = 0
+      ! Config_Opt%SimLengthSec           = 0
+      ! Config_Opt%RUN_DIR                = './'
+      ! Config_Opt%DATA_DIR               = './'
+      ! Config_Opt%CHEM_INPUTS_DIR        = './'
+      ! Config_Opt%MetField               = ''
+      ! Config_Opt%SimulationName         = ''
+      ! Config_Opt%SpcDatabaseFile        = ''
+      ! Config_Opt%SpcMetaDataOutFile     = ''
+      ! Config_Opt%ITS_AN_AEROSOL_SIM     = .FALSE.
+      ! Config_Opt%ITS_A_CARBON_SIM       = .FALSE.
+      ! Config_Opt%ITS_A_CH4_SIM          = .FALSE.
+      ! Config_Opt%ITS_A_CO2_SIM          = .FALSE.
+      ! Config_Opt%ITS_A_FULLCHEM_SIM     = .FALSE.
+      ! Config_Opt%ITS_A_MERCURY_SIM      = .FALSE.
+      ! Config_Opt%ITS_A_POPS_SIM         = .FALSE.
+      ! Config_Opt%ITS_A_TAGCH4_SIM       = .FALSE.
+      ! Config_Opt%ITS_A_TAGCO_SIM        = .FALSE.
+      ! Config_Opt%ITS_A_TAGO3_SIM        = .FALSE.
+      ! Config_Opt%ITS_A_TRACEMETAL_SIM   = .FALSE.
+      ! Config_Opt%ITS_A_TRACER_SIM       = .FALSE.
+      ! Config_Opt%VerboseRequested       = .FALSE.
+      ! Config_Opt%VerboseOnCores         = ''
+      ! Config_Opt%Verbose                = .FALSE.
+      ! Config_Opt%useTimers              = .FALSE.
 
-      !----------------------------------------
-      ! ADVECTED SPECIES MENU fields
-      !----------------------------------------
-      arrayId = 'Input_Opt%AdvectSpc_Name'
-      ALLOCATE( Input_Opt%AdvectSpc_Name( Input_Opt%Max_AdvectSpc ), STAT=RC )
-      CALL CC_CheckVar( arrayId, 0, RC )
-      IF ( RC /= CC_SUCCESS ) RETURN
+      ! !----------------------------------------
+      ! ! ADVECTED SPECIES MENU fields
+      ! !----------------------------------------
+      ! arrayId = 'Config_Opt%AdvectSpc_Name'
+      ! ALLOCATE( Config_Opt%AdvectSpc_Name( Config_Opt%Max_AdvectSpc ), STAT=RC )
+      ! CALL CC_CheckVar( arrayId, 0, RC )
+      ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      Input_Opt%N_ADVECT               = 0
-      Input_Opt%AdvectSpc_Name         = ''
-      Input_Opt%LSPLIT                 = .FALSE.
+      Config_Opt%N_ADVECT               = 0
+      Config_Opt%AdvectSpc_Name         = ''
+      Config_Opt%LSPLIT                 = .FALSE.
 
       !----------------------------------------
       ! AEROSOL MENU fields
       !----------------------------------------
-      arrayId = 'Input_Opt%SALA_REDGE_um'
-      ALLOCATE( Input_Opt%SALA_REDGE_um( 2 ), STAT=RC )
+      arrayId = 'Config_Opt%SALA_REDGE_um'
+      ALLOCATE( Config_Opt%SALA_REDGE_um( 2 ), STAT=RC )
       CALL CC_CheckVar( arrayId, 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
 
-      arrayId = 'Input_Opt%SALC_REDGE_um'
-      ALLOCATE( Input_Opt%SALC_REDGE_um( 2 ), STAT=RC )
+      arrayId = 'Config_Opt%SALC_REDGE_um'
+      ALLOCATE( Config_Opt%SALC_REDGE_um( 2 ), STAT=RC )
       CALL CC_CheckVar( arrayId, 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
 
-      Input_Opt%LSULF                  = .FALSE.
-      Input_Opt%LMETALCATSO2           = .FALSE.
-      Input_Opt%LCARB                  = .FALSE.
-      Input_Opt%LBRC                   = .FALSE.
-      Input_Opt%LSOA                   = .FALSE.
-      Input_Opt%LMPOA                  = .FALSE.
-      Input_Opt%LSVPOA                 = .FALSE.
-      Input_Opt%LDUST                  = .FALSE.
-      Input_Opt%LDEAD                  = .FALSE.
-      Input_Opt%LDSTUP                 = .FALSE.
-      Input_Opt%LSSALT                 = .FALSE.
-      Input_Opt%SALA_REDGE_um          = 0.0_fp
-      Input_Opt%SALC_REDGE_um          = 0.0_fp
-      Input_Opt%LGRAVSTRAT             = .FALSE.
-      Input_Opt%LSOLIDPSC              = .FALSE.
-      Input_Opt%LHOMNUCNAT             = .FALSE.
-      Input_Opt%T_NAT_SUPERCOOL        = 0.0_fp
-      Input_Opt%P_ICE_SUPERSAT         = 0.0_fp
-      Input_Opt%LPSCCHEM               = .FALSE.
-      Input_Opt%LSTRATOD               = .FALSE.
-      Input_Opt%hvAerNIT               = .FALSE.
-      Input_Opt%hvAerNIT_JNIT          = 0.0_fp
-      Input_Opt%hvAerNIT_JNITs         = 0.0_fp
-      Input_Opt%JNITChanA              = 0.0_fp
-      Input_Opt%JNITChanB              = 0.0_fp
+      Config_Opt%LSULF                  = .FALSE.
+      Config_Opt%LMETALCATSO2           = .FALSE.
+      Config_Opt%LCARB                  = .FALSE.
+      Config_Opt%LBRC                   = .FALSE.
+      Config_Opt%LSOA                   = .FALSE.
+      Config_Opt%LMPOA                  = .FALSE.
+      Config_Opt%LSVPOA                 = .FALSE.
+      Config_Opt%LDUST                  = .FALSE.
+      Config_Opt%LDEAD                  = .FALSE.
+      Config_Opt%LDSTUP                 = .FALSE.
+      Config_Opt%LSSALT                 = .FALSE.
+      Config_Opt%SALA_REDGE_um          = 0.0_fp
+      Config_Opt%SALC_REDGE_um          = 0.0_fp
+      Config_Opt%LGRAVSTRAT             = .FALSE.
+      Config_Opt%LSOLIDPSC              = .FALSE.
+      Config_Opt%LHOMNUCNAT             = .FALSE.
+      Config_Opt%T_NAT_SUPERCOOL        = 0.0_fp
+      Config_Opt%P_ICE_SUPERSAT         = 0.0_fp
+      Config_Opt%LPSCCHEM               = .FALSE.
+      Config_Opt%LSTRATOD               = .FALSE.
+      Config_Opt%hvAerNIT               = .FALSE.
+      Config_Opt%hvAerNIT_JNIT          = 0.0_fp
+      Config_Opt%hvAerNIT_JNITs         = 0.0_fp
+      Config_Opt%JNITChanA              = 0.0_fp
+      Config_Opt%JNITChanB              = 0.0_fp
 
       ! !----------------------------------------
       ! ! EMISSIONS MENU fields
       ! !----------------------------------------
-      ! Input_Opt%DoEmissions            = .TRUE. ! On by default
-      ! Input_Opt%TS_EMIS                = 0
-      ! Input_Opt%LSOILNOX               = .FALSE.
-      ! Input_Opt%LCH4SBC                = .FALSE.
-      ! Input_Opt%LSETH2O                = .FALSE.
-      ! Input_Opt%LStaticH2OBC           = .FALSE.
-      ! Input_Opt%LHCodedOrgHal          = .FALSE.
-      ! Input_Opt%LCMIP6OrgHal           = .FALSE.
-      ! Input_Opt%DoLightNOx             = .FALSE.
-      ! Input_Opt%LIMGRID                = .FALSE.
-      ! Input_Opt%IMGRID_XSCALE          = 1
-      ! Input_Opt%IMGRID_YSCALE          = 1
+      ! Config_Opt%DoEmissions            = .TRUE. ! On by default
+      ! Config_Opt%TS_EMIS                = 0
+      ! Config_Opt%LSOILNOX               = .FALSE.
+      ! Config_Opt%LCH4SBC                = .FALSE.
+      ! Config_Opt%LSETH2O                = .FALSE.
+      ! Config_Opt%LStaticH2OBC           = .FALSE.
+      ! Config_Opt%LHCodedOrgHal          = .FALSE.
+      ! Config_Opt%LCMIP6OrgHal           = .FALSE.
+      ! Config_Opt%DoLightNOx             = .FALSE.
+      ! Config_Opt%LIMGRID                = .FALSE.
+      ! Config_Opt%IMGRID_XSCALE          = 1
+      ! Config_Opt%IMGRID_YSCALE          = 1
 
       ! !----------------------------------------
       ! ! CO MENU fields
       ! !----------------------------------------
-      ! Input_Opt%LPCO_CH4               = .FALSE.
-      ! Input_Opt%LPCO_NMVOC             = .FALSE.
+      ! Config_Opt%LPCO_CH4               = .FALSE.
+      ! Config_Opt%LPCO_NMVOC             = .FALSE.
 
       ! !----------------------------------------
       ! ! CO2 MENU fields
       ! !----------------------------------------
-      ! Input_Opt%LFOSSIL                = .FALSE.
-      ! Input_Opt%LCHEMCO2               = .FALSE.
-      ! Input_Opt%LBIOFUEL               = .FALSE.
-      ! Input_Opt%LBIODIURNAL            = .FALSE.
-      ! Input_Opt%LBIONETCLIM            = .FALSE.
-      ! Input_Opt%LOCEAN                 = .FALSE.
-      ! Input_Opt%LSHIP                  = .FALSE.
-      ! Input_Opt%LPLANE                 = .FALSE.
-      ! Input_Opt%LFFBKGRD               = .FALSE.
-      ! Input_Opt%LBIOSPHTAG             = .FALSE.
-      ! Input_Opt%LFOSSILTAG             = .FALSE.
-      ! Input_Opt%LSHIPTAG               = .FALSE.
-      ! Input_Opt%LPLANETAG              = .FALSE.
+      ! Config_Opt%LFOSSIL                = .FALSE.
+      ! Config_Opt%LCHEMCO2               = .FALSE.
+      ! Config_Opt%LBIOFUEL               = .FALSE.
+      ! Config_Opt%LBIODIURNAL            = .FALSE.
+      ! Config_Opt%LBIONETCLIM            = .FALSE.
+      ! Config_Opt%LOCEAN                 = .FALSE.
+      ! Config_Opt%LSHIP                  = .FALSE.
+      ! Config_Opt%LPLANE                 = .FALSE.
+      ! Config_Opt%LFFBKGRD               = .FALSE.
+      ! Config_Opt%LBIOSPHTAG             = .FALSE.
+      ! Config_Opt%LFOSSILTAG             = .FALSE.
+      ! Config_Opt%LSHIPTAG               = .FALSE.
+      ! Config_Opt%LPLANETAG              = .FALSE.
 
 !     !----------------------------------------
 !     ! CHEMISTRY MENU fields
 !     !----------------------------------------
-!     Input_Opt%LCHEM                  = .FALSE.
-!     Input_Opt%LINEAR_CHEM            = .FALSE.
-!     Input_Opt%LLINOZ                 = .FALSE.
-!     Input_Opt%LSYNOZ                 = .FALSE.
+!     Config_Opt%LCHEM                  = .FALSE.
+!     Config_Opt%LINEAR_CHEM            = .FALSE.
+!     Config_Opt%LLINOZ                 = .FALSE.
+!     Config_Opt%LSYNOZ                 = .FALSE.
 ! ! #ifdef MODEL_GEOS
-! !     Input_Opt%LGMIOZ                 = .FALSE.
+! !     Config_Opt%LGMIOZ                 = .FALSE.
 ! ! #endif
-!     Input_Opt%TS_CHEM                = 0
-!     Input_Opt%GAMMA_HO2              = 0.0_fp
-!     Input_Opt%LACTIVEH2O             = .FALSE.
-!     Input_Opt%LINITSPEC              = .FALSE.
-!     Input_Opt%USE_ONLINE_O3          = .FALSE.
-!     Input_Opt%USE_O3_FROM_MET        = .FALSE.
-!     Input_Opt%USE_TOMS_O3            = .FALSE.
+!     Config_Opt%TS_CHEM                = 0
+!     Config_Opt%GAMMA_HO2              = 0.0_fp
+!     Config_Opt%LACTIVEH2O             = .FALSE.
+!     Config_Opt%LINITSPEC              = .FALSE.
+!     Config_Opt%USE_ONLINE_O3          = .FALSE.
+!     Config_Opt%USE_O3_FROM_MET        = .FALSE.
+!     Config_Opt%USE_TOMS_O3            = .FALSE.
 
-!     Input_Opt%USE_AUTOREDUCE                = .FALSE.
-!     Input_Opt%AUTOREDUCE_IS_KEY_THRESHOLD   = .TRUE.
-!     Input_Opt%AUTOREDUCE_TUNING_OH          = 5e-5_fp
-!     Input_Opt%AUTOREDUCE_TUNING_NO2         = 1e-4_fp
-!     Input_Opt%AUTOREDUCE_IS_PRS_THRESHOLD   = .TRUE.
-!     Input_Opt%AUTOREDUCE_IS_KEEPACTIVE      = .FALSE.
-!     Input_Opt%AUTOREDUCE_IS_APPEND          = .FALSE.
+!     Config_Opt%USE_AUTOREDUCE                = .FALSE.
+!     Config_Opt%AUTOREDUCE_IS_KEY_THRESHOLD   = .TRUE.
+!     Config_Opt%AUTOREDUCE_TUNING_OH          = 5e-5_fp
+!     Config_Opt%AUTOREDUCE_TUNING_NO2         = 1e-4_fp
+!     Config_Opt%AUTOREDUCE_IS_PRS_THRESHOLD   = .TRUE.
+!     Config_Opt%AUTOREDUCE_IS_KEEPACTIVE      = .FALSE.
+!     Config_Opt%AUTOREDUCE_IS_APPEND          = .FALSE.
 
       !----------------------------------------
       ! PHOTOLYSIS MENU fields
       !----------------------------------------
-      Input_Opt%Do_Photolysis         = .FALSE.
-      Input_Opt%FAST_JX_DIR           = ''
-      Input_Opt%CloudJ_Dir            = ''
+      ! Config_Opt%Do_Photolysis         = .FALSE.
+      ! Config_Opt%FAST_JX_DIR           = ''
+      ! Config_Opt%CloudJ_Dir            = ''
 
       ! !----------------------------------------
       ! ! RADIATION MENU fields (for RRTMG only)
       ! !----------------------------------------
-      ! arrayId = 'Input_Opt%LSKYRAD'
-      ! ALLOCATE( Input_Opt%LSKYRAD( 2 ), STAT=RC )
+      ! arrayId = 'Config_Opt%LSKYRAD'
+      ! ALLOCATE( Config_Opt%LSKYRAD( 2 ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! arrayId = 'Input_Opt%WVSELECT'
-      ! ALLOCATE( Input_Opt%WVSELECT( 3 ), STAT=RC )
+      ! arrayId = 'Config_Opt%WVSELECT'
+      ! ALLOCATE( Config_Opt%WVSELECT( 3 ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! arrayId = 'Input_Opt%STRWVSELECT'
-      ! ALLOCATE( Input_Opt%STRWVSELECT( 3 ), STAT=RC )
+      ! arrayId = 'Config_Opt%STRWVSELECT'
+      ! ALLOCATE( Config_Opt%STRWVSELECT( 3 ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
       ! Number of RRTMG outputs (change as necessary)
-      Input_Opt%NSpecRadMenu           = 17
+      Config_Opt%NSpecRadMenu           = 17
 
-      arrayId = 'Input_Opt%LSPECRADMENU'
-      ALLOCATE( Input_Opt%LSPECRADMENU( Input_Opt%NSpecRadMenu ), STAT=RC )
+      arrayId = 'Config_Opt%LSPECRADMENU'
+      ALLOCATE( Config_Opt%LSPECRADMENU( Config_Opt%NSpecRadMenu ), STAT=RC )
       CALL CC_CheckVar( arrayId, 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      Input_Opt%LSpecRadMenu           = 0
+      Config_Opt%LSpecRadMenu           = 0
 
-      Input_Opt%LRAD                   = .FALSE.
-      Input_Opt%LLWRAD                 = .FALSE.
-      Input_Opt%LSWRAD                 = .FALSE.
-      Input_Opt%LSKYRAD                = .FALSE.
-      Input_Opt%TS_RAD                 = 0
-      Input_Opt%NWVSELECT              = 0
-      Input_Opt%WVSELECT               = 0.0_fp
-      Input_Opt%STRWVSELECT            = ''
-      Input_Opt%RRTMG_CO2_ppmv         = 3.90e-4_fp
-      Input_Opt%RRTMG_FDH              = .FALSE.
-      Input_Opt%RRTMG_SEFDH            = .FALSE.
-      Input_Opt%RRTMG_SA_TOA           = .FALSE.
-      Input_Opt%Read_Dyn_Heating       = .FALSE.
+      Config_Opt%LRAD                   = .FALSE.
+      Config_Opt%LLWRAD                 = .FALSE.
+      Config_Opt%LSWRAD                 = .FALSE.
+      Config_Opt%LSKYRAD                = .FALSE.
+      Config_Opt%TS_RAD                 = 0
+      Config_Opt%NWVSELECT              = 0
+      Config_Opt%WVSELECT               = 0.0_fp
+      Config_Opt%STRWVSELECT            = ''
+      Config_Opt%RRTMG_CO2_ppmv         = 3.90e-4_fp
+      Config_Opt%RRTMG_FDH              = .FALSE.
+      Config_Opt%RRTMG_SEFDH            = .FALSE.
+      Config_Opt%RRTMG_SA_TOA           = .FALSE.
+      Config_Opt%Read_Dyn_Heating       = .FALSE.
 
       ! !----------------------------------------
       ! ! TRANSPORT MENU fields
       ! !----------------------------------------
-      ! Input_Opt%LTRAN                  = .FALSE.
-      ! Input_Opt%LFILL                  = .FALSE.
-      ! Input_Opt%TPCORE_IORD            = 0
-      ! Input_Opt%TPCORE_JORD            = 0
-      ! Input_Opt%TPCORE_KORD            = 0
-      ! Input_Opt%TS_DYN                 = 0
+      ! Config_Opt%LTRAN                  = .FALSE.
+      ! Config_Opt%LFILL                  = .FALSE.
+      ! Config_Opt%TPCORE_IORD            = 0
+      ! Config_Opt%TPCORE_JORD            = 0
+      ! Config_Opt%TPCORE_KORD            = 0
+      ! Config_Opt%TS_DYN                 = 0
 
-      !----------------------------------------
-      ! CONVECTION MENU fields
-      !----------------------------------------
-      Input_Opt%LCONV                  = .FALSE.
-      Input_Opt%LTURB                  = .FALSE.
-      Input_Opt%LNLPBL                 = .FALSE.
-      Input_Opt%TS_CONV                = 0
+      ! !----------------------------------------
+      ! ! CONVECTION MENU fields
+      ! !----------------------------------------
+      ! Config_Opt%LCONV                  = .FALSE.
+      ! Config_Opt%LTURB                  = .FALSE.
+      ! Config_Opt%LNLPBL                 = .FALSE.
+      ! Config_Opt%TS_CONV                = 0
 
       !----------------------------------------
       ! DEPOSITION MENU fields
       !----------------------------------------
-      Input_Opt%LDRYD                  = .FALSE.
-      Input_Opt%LWETD                  = .FALSE.
-      Input_Opt%WETD_CONV_SCAL         = 1.0_fp
-      Input_Opt%PBL_DRYDEP             = .FALSE.
-      Input_Opt%CO2_LEVEL              = 390.0_fp
-      Input_Opt%CO2_REF                = 390.0_fp
-      Input_Opt%CO2_EFFECT             = .FALSE.
-      Input_Opt%RS_SCALE               = 1.0_fp
-      Input_Opt%RA_Alt_Above_Sfc       = 10       ! default height
+      Config_Opt%LDRYD                  = .FALSE.
+      Config_Opt%LWETD                  = .FALSE.
+      Config_Opt%WETD_CONV_SCAL         = 1.0_fp
+      Config_Opt%PBL_DRYDEP             = .FALSE.
+      Config_Opt%CO2_LEVEL              = 390.0_fp
+      Config_Opt%CO2_REF                = 390.0_fp
+      Config_Opt%CO2_EFFECT             = .FALSE.
+      Config_Opt%RS_SCALE               = 1.0_fp
+      Config_Opt%RA_Alt_Above_Sfc       = 10       ! default height
 
 
       !----------------------------------------
       ! GAMAP_MENU fields
       !----------------------------------------
-      Input_Opt%GAMAP_DIAGINFO         = ''
-      Input_Opt%GAMAP_TRACERINFO       = ''
+      Config_Opt%GAMAP_DIAGINFO         = ''
+      Config_Opt%GAMAP_TRACERINFO       = ''
 
       ! !----------------------------------------
       ! ! OUTPUT MENU fields
       ! !----------------------------------------
-      ! arrayId = 'Input_Opt%NJDAY'
-      ! ALLOCATE( Input_Opt%NJDAY( 366 ), STAT=RC )
+      ! arrayId = 'Config_Opt%NJDAY'
+      ! ALLOCATE( Config_Opt%NJDAY( 366 ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! Input_Opt%NJDAY                  = 0
+      ! Config_Opt%NJDAY                  = 0
 
       ! !----------------------------------------
       ! ! DIAGNOSTIC MENU fields
       ! !----------------------------------------
-      ! Input_Opt%HistoryInputFile       = ''
-      ! Input_Opt%DIAG_COLLECTION        = -999
-      ! Input_Opt%TS_DIAG                = 0
-      ! ALLOCATE( Input_Opt%TCOUNT( Input_Opt%Max_BPCH_Diag ), STAT=RC )
-      ! ALLOCATE( Input_Opt%TMAX  ( Input_Opt%Max_BPCH_Diag ), STAT=RC )
+      ! Config_Opt%HistoryInputFile       = ''
+      ! Config_Opt%DIAG_COLLECTION        = -999
+      ! Config_Opt%TS_DIAG                = 0
+      ! ALLOCATE( Config_Opt%TCOUNT( Config_Opt%Max_BPCH_Diag ), STAT=RC )
+      ! ALLOCATE( Config_Opt%TMAX  ( Config_Opt%Max_BPCH_Diag ), STAT=RC )
 
-      ! Input_Opt%ND03                   = 0
-      ! Input_Opt%ND06                   = 0
-      ! Input_Opt%ND44                   = 0
-      ! Input_Opt%ND53                   = 0
-      ! Input_Opt%ND59                   = 0
-      ! Input_Opt%ND60                   = 0
-      ! Input_Opt%ND61                   = 0
-      ! Input_Opt%ND65                   = 0
-      ! Input_Opt%TCOUNT(:)              = 0
-      ! Input_Opt%TMAX(:)	             = 0
+      ! Config_Opt%ND03                   = 0
+      ! Config_Opt%ND06                   = 0
+      ! Config_Opt%ND44                   = 0
+      ! Config_Opt%ND53                   = 0
+      ! Config_Opt%ND59                   = 0
+      ! Config_Opt%ND60                   = 0
+      ! Config_Opt%ND61                   = 0
+      ! Config_Opt%ND65                   = 0
+      ! Config_Opt%TCOUNT(:)              = 0
+      ! Config_Opt%TMAX(:)	             = 0
 ! #if defined( ESMF_ ) || defined( EXTERNAL_GRID ) || defined( EXTERNAL_FORCING )
 !     ! Need to shut off G-C diagnostics when
 !     ! connecting to an external GCM (bmy, 3/29/13)
-!     Input_Opt%DO_DIAG_WRITE          = .FALSE.
+!     Config_Opt%DO_DIAG_WRITE          = .FALSE.
 ! #else
 !     ! For traditional G-C runs, always write diags (bmy, 3/29/13)
-!     Input_Opt%DO_DIAG_WRITE          = .TRUE.
+!     Config_Opt%DO_DIAG_WRITE          = .TRUE.
 ! #endif
 
       ! !----------------------------------------
       ! ! PLANEFLIGHT MENU fields
       ! !----------------------------------------
-      ! Input_Opt%Do_Planeflight         = .FALSE.
-      ! Input_Opt%Planeflight_InFile     = ''
-      ! Input_Opt%Planeflight_OutFile    = ''
+      ! Config_Opt%Do_Planeflight         = .FALSE.
+      ! Config_Opt%Planeflight_InFile     = ''
+      ! Config_Opt%Planeflight_OutFile    = ''
 
       ! !----------------------------------------
       ! ! PLANEFLIGHT MENU fields
       ! !----------------------------------------
-      ! ALLOCATE( Input_Opt%ObsPack_SpcName( 1000 ), STAT=RC )
+      ! ALLOCATE( Config_Opt%ObsPack_SpcName( 1000 ), STAT=RC )
 
-      ! Input_Opt%Do_ObsPack             = .FALSE.
-      ! Input_Opt%ObsPack_Quiet          = .FALSE.
-      ! Input_Opt%ObsPack_InputFile      = ''
-      ! Input_Opt%ObsPack_OutputFile     = ''
-      ! Input_Opt%ObsPack_nSpc           = 0
-      ! Input_Opt%ObsPack_SpcName        = ''
+      ! Config_Opt%Do_ObsPack             = .FALSE.
+      ! Config_Opt%ObsPack_Quiet          = .FALSE.
+      ! Config_Opt%ObsPack_InputFile      = ''
+      ! Config_Opt%ObsPack_OutputFile     = ''
+      ! Config_Opt%ObsPack_nSpc           = 0
+      ! Config_Opt%ObsPack_SpcName        = ''
 
       ! !----------------------------------------
       ! ! ND51 MENU fields
       ! !----------------------------------------
-      ! Input_Opt%DO_ND51                = .FALSE.
-      ! Input_Opt%N_ND51                 = 0
-      ! Input_Opt%ND51_FILE              = ''
-      ! Input_Opt%ND51_HR_WRITE          = 0.0_fp
-      ! Input_Opt%ND51_HR1               = 0.0_fp
-      ! Input_Opt%ND51_HR2               = 0.0_fp
-      ! Input_Opt%ND51_IMIN              = 0
-      ! Input_Opt%ND51_IMAX              = 0
-      ! Input_Opt%ND51_JMIN              = 0
-      ! Input_Opt%ND51_JMAX              = 0
-      ! Input_Opt%ND51_LMIN              = 0
+      ! Config_Opt%DO_ND51                = .FALSE.
+      ! Config_Opt%N_ND51                 = 0
+      ! Config_Opt%ND51_FILE              = ''
+      ! Config_Opt%ND51_HR_WRITE          = 0.0_fp
+      ! Config_Opt%ND51_HR1               = 0.0_fp
+      ! Config_Opt%ND51_HR2               = 0.0_fp
+      ! Config_Opt%ND51_IMIN              = 0
+      ! Config_Opt%ND51_IMAX              = 0
+      ! Config_Opt%ND51_JMIN              = 0
+      ! Config_Opt%ND51_JMAX              = 0
+      ! Config_Opt%ND51_LMIN              = 0
 
       ! !----------------------------------------
       ! ! ND51b MENU fields
       ! !----------------------------------------
-      ! Input_Opt%DO_ND51b               = .FALSE.
-      ! Input_Opt%N_ND51b                = 0
-      ! Input_Opt%ND51b_FILE             = ''
-      ! Input_Opt%ND51b_HR_WRITE         = 0.0_fp
-      ! Input_Opt%ND51b_HR1              = 0.0_fp
-      ! Input_Opt%ND51b_HR2              = 0.0_fp
-      ! Input_Opt%ND51b_IMIN             = 0
-      ! Input_Opt%ND51b_IMAX             = 0
-      ! Input_Opt%ND51b_JMIN             = 0
-      ! Input_Opt%ND51b_JMAX             = 0
-      ! Input_Opt%ND51b_LMIN             = 0
+      ! Config_Opt%DO_ND51b               = .FALSE.
+      ! Config_Opt%N_ND51b                = 0
+      ! Config_Opt%ND51b_FILE             = ''
+      ! Config_Opt%ND51b_HR_WRITE         = 0.0_fp
+      ! Config_Opt%ND51b_HR1              = 0.0_fp
+      ! Config_Opt%ND51b_HR2              = 0.0_fp
+      ! Config_Opt%ND51b_IMIN             = 0
+      ! Config_Opt%ND51b_IMAX             = 0
+      ! Config_Opt%ND51b_JMIN             = 0
+      ! Config_Opt%ND51b_JMAX             = 0
+      ! Config_Opt%ND51b_LMIN             = 0
 
       ! !----------------------------------------
       ! ! PROD LOSS MENU fields
       ! !---------------------------------------
 
-      ! arrayId = 'Input_Opt%FAM_NAME'
-      ! ALLOCATE( Input_Opt%FAM_NAME( Input_Opt%Max_Families ), STAT=RC )
+      ! arrayId = 'Config_Opt%FAM_NAME'
+      ! ALLOCATE( Config_Opt%FAM_NAME( Config_Opt%Max_Families ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! arrayId = 'Input_Opt%FAM_TYPE'
-      ! ALLOCATE( Input_Opt%FAM_TYPE( Input_Opt%Max_Families ), STAT=RC )
+      ! arrayId = 'Config_Opt%FAM_TYPE'
+      ! ALLOCATE( Config_Opt%FAM_TYPE( Config_Opt%Max_Families ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! Input_Opt%DO_SAVE_PL             = .FALSE.
-      ! Input_Opt%ND65                   = 0
-      ! Input_Opt%NFAM                   = 0
-      ! Input_Opt%FAM_NAME               = ''
-      ! Input_Opt%FAM_TYPE               = ''
+      ! Config_Opt%DO_SAVE_PL             = .FALSE.
+      ! Config_Opt%ND65                   = 0
+      ! Config_Opt%NFAM                   = 0
+      ! Config_Opt%FAM_NAME               = ''
+      ! Config_Opt%FAM_TYPE               = ''
 
       ! !----------------------------------------
       ! ! MERCURY MENU fields
       ! !----------------------------------------
-      ! Input_Opt%ANTHRO_Hg_YEAR         = 0
-      ! Input_Opt%HG_SCENARIO            = ''
-      ! Input_Opt%USE_CHECKS             = .FALSE.
-      ! Input_Opt%LDYNOCEAN              = .FALSE.
-      ! Input_Opt%LPREINDHG              = .FALSE.
-      ! Input_Opt%LGTMM                  = .FALSE.
-      ! Input_Opt%GTMM_RST_FILE          = ''
+      ! Config_Opt%ANTHRO_Hg_YEAR         = 0
+      ! Config_Opt%HG_SCENARIO            = ''
+      ! Config_Opt%USE_CHECKS             = .FALSE.
+      ! Config_Opt%LDYNOCEAN              = .FALSE.
+      ! Config_Opt%LPREINDHG              = .FALSE.
+      ! Config_Opt%LGTMM                  = .FALSE.
+      ! Config_Opt%GTMM_RST_FILE          = ''
 
       ! !----------------------------------------
       ! ! CH4 MENU fields
       ! !----------------------------------------
-      ! Input_Opt%GOSAT_CH4_OBS                     = .FALSE.
-      ! Input_Opt%AIRS_CH4_OBS                      = .FALSE.
-      ! Input_Opt%TCCON_CH4_OBS                     = .FALSE.
-      ! Input_Opt%DoAnalyticalInv                   = .FALSE.
-      ! Input_Opt%StateVectorElement                = 0
-      ! Input_Opt%EmisPerturbFactor                 = 1.0
-      ! Input_Opt%DoPerturbCH4BoundaryConditions    = .FALSE.
-      ! Input_Opt%CH4BoundaryConditionIncreaseNorth = 0.0_fp
-      ! Input_Opt%CH4BoundaryConditionIncreaseSouth = 0.0_fp
-      ! Input_Opt%CH4BoundaryConditionIncreaseEast  = 0.0_fp
-      ! Input_Opt%CH4BoundaryConditionIncreaseWest  = 0.0_fp
-      ! Input_Opt%UseEmisSF                         = .FALSE.
-      ! Input_Opt%UseOHSF                           = .FALSE.
+      ! Config_Opt%GOSAT_CH4_OBS                     = .FALSE.
+      ! Config_Opt%AIRS_CH4_OBS                      = .FALSE.
+      ! Config_Opt%TCCON_CH4_OBS                     = .FALSE.
+      ! Config_Opt%DoAnalyticalInv                   = .FALSE.
+      ! Config_Opt%StateVectorElement                = 0
+      ! Config_Opt%EmisPerturbFactor                 = 1.0
+      ! Config_Opt%DoPerturbCH4BoundaryConditions    = .FALSE.
+      ! Config_Opt%CH4BoundaryConditionIncreaseNorth = 0.0_fp
+      ! Config_Opt%CH4BoundaryConditionIncreaseSouth = 0.0_fp
+      ! Config_Opt%CH4BoundaryConditionIncreaseEast  = 0.0_fp
+      ! Config_Opt%CH4BoundaryConditionIncreaseWest  = 0.0_fp
+      ! Config_Opt%UseEmisSF                         = .FALSE.
+      ! Config_Opt%UseOHSF                           = .FALSE.
 
       ! !----------------------------------------
       ! ! POPS MENU fields
       ! !----------------------------------------
-      ! Input_Opt%POP_TYPE               = ''
-      ! Input_Opt%CHEM_PROCESS           = .FALSE.
-      ! Input_Opt%POP_XMW                = 0.0_fp
-      ! Input_Opt%POP_KOA                = 0.0_fp
-      ! Input_Opt%POP_KBC                = 0.0_fp
-      ! Input_Opt%POP_K_POPG_OH          = 0.0_fp
-      ! Input_Opt%POP_K_POPP_O3A         = 0.0_fp
-      ! Input_Opt%POP_K_POPP_O3B         = 0.0_fp
-      ! Input_Opt%POP_HSTAR              = 0.0_fp
-      ! Input_Opt%POP_DEL_H              = 0.0_fp
-      ! Input_Opt%POP_DEL_Hw             = 0.0_fp
+      ! Config_Opt%POP_TYPE               = ''
+      ! Config_Opt%CHEM_PROCESS           = .FALSE.
+      ! Config_Opt%POP_XMW                = 0.0_fp
+      ! Config_Opt%POP_KOA                = 0.0_fp
+      ! Config_Opt%POP_KBC                = 0.0_fp
+      ! Config_Opt%POP_K_POPG_OH          = 0.0_fp
+      ! Config_Opt%POP_K_POPP_O3A         = 0.0_fp
+      ! Config_Opt%POP_K_POPP_O3B         = 0.0_fp
+      ! Config_Opt%POP_HSTAR              = 0.0_fp
+      ! Config_Opt%POP_DEL_H              = 0.0_fp
+      ! Config_Opt%POP_DEL_Hw             = 0.0_fp
 
       !----------------------------------------
       ! Fields for interface to GEOS-5 GCM
       !----------------------------------------
 ! #ifdef MODEL_GEOS
-! !    Input_Opt%OZONOPAUSE             = -999.0
-! !    Input_Opt%haveImpRst             = .FALSE.
-! !    Input_Opt%AlwaysSetH2O           = .FALSE.
-! !    Input_Opt%LLFASTJX               = -999
-!     Input_Opt%NN_RxnRates            = -999
-!     Input_Opt%RxnRates_IDs           => NULL()
-!     Input_Opt%NN_RxnRconst           = -999
-!     Input_Opt%RxnRconst_IDs          => NULL()
-!     Input_Opt%NN_Jvals               = -999
-!     Input_Opt%Jval_IDs               => NULL()
+! !    Config_Opt%OZONOPAUSE             = -999.0
+! !    Config_Opt%haveImpRst             = .FALSE.
+! !    Config_Opt%AlwaysSetH2O           = .FALSE.
+! !    Config_Opt%LLFASTJX               = -999
+!     Config_Opt%NN_RxnRates            = -999
+!     Config_Opt%RxnRates_IDs           => NULL()
+!     Config_Opt%NN_RxnRconst           = -999
+!     Config_Opt%RxnRconst_IDs          => NULL()
+!     Config_Opt%NN_Jvals               = -999
+!     Config_Opt%Jval_IDs               => NULL()
 ! #else
-!     Input_Opt%AlwaysSetH2O           = .FALSE.
-!     Input_Opt%TurnOffHetRates        = .FALSE.
+!     Config_Opt%AlwaysSetH2O           = .FALSE.
+!     Config_Opt%TurnOffHetRates        = .FALSE.
 ! #endif
 
 ! #ifdef ADJOINT
 !     !----------------------------------------
 !     ! Fields for adoint
 !     !---------------------------------------
-!     Input_Opt%IS_ADJOINT             = .FALSE.
-!     Input_Opt%IS_FD_SPOT             = .FALSE.
-!     Input_Opt%IS_FD_GLOBAL           = .FALSE.
-!     Input_Opt%IS_FD_SPOT_THIS_PET    = .FALSE.
-!     Input_Opt%FD_STEP                = -999
-!     Input_Opt%IFD                    = -999
-!     Input_Opt%JFD                    = -999
-!     Input_Opt%NFD                    = -999
-!     Input_Opt%LFD                    = -999
+!     Config_Opt%IS_ADJOINT             = .FALSE.
+!     Config_Opt%IS_FD_SPOT             = .FALSE.
+!     Config_Opt%IS_FD_GLOBAL           = .FALSE.
+!     Config_Opt%IS_FD_SPOT_THIS_PET    = .FALSE.
+!     Config_Opt%FD_STEP                = -999
+!     Config_Opt%IFD                    = -999
+!     Config_Opt%JFD                    = -999
+!     Config_Opt%NFD                    = -999
+!     Config_Opt%LFD                    = -999
 ! #endif
 
       ! !----------------------------------------
       ! ! Fields for LINOZ strat chem
       ! !----------------------------------------
-      ! Input_Opt%LINOZ_NLEVELS          = 25
-      ! Input_Opt%LINOZ_NLAT             = 18
-      ! Input_Opt%LINOZ_NMONTHS          = 12
-      ! Input_Opt%LINOZ_NFIELDS          = 7
+      ! Config_Opt%LINOZ_NLEVELS          = 25
+      ! Config_Opt%LINOZ_NLAT             = 18
+      ! Config_Opt%LINOZ_NMONTHS          = 12
+      ! Config_Opt%LINOZ_NFIELDS          = 7
 
-      ! arrayId = 'Input_Opt%LINOZ_TPARM'
-      ! ALLOCATE( Input_Opt%LINOZ_TPARM( Input_Opt%LINOZ_NLEVELS,            &
-      !                                  Input_Opt%LINOZ_NLAT,               &
-      !                                  Input_Opt%LINOZ_NMONTHS,            &
-      !                                  Input_Opt%LINOZ_NFIELDS ), STAT=RC )
+      ! arrayId = 'Config_Opt%LINOZ_TPARM'
+      ! ALLOCATE( Config_Opt%LINOZ_TPARM( Config_Opt%LINOZ_NLEVELS,            &
+      !                                  Config_Opt%LINOZ_NLAT,               &
+      !                                  Config_Opt%LINOZ_NMONTHS,            &
+      !                                  Config_Opt%LINOZ_NFIELDS ), STAT=RC )
       ! CALL CC_CheckVar( arrayId, 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
 
-      ! Input_Opt%LINOZ_TPARM            = 0.0_fp
+      ! Config_Opt%LINOZ_TPARM            = 0.0_fp
 
 ! #if defined( ESMF_ )
 !     ! Logger handle is set up by Chem_GridCompMod
-!     Input_Opt%lgr => NULL()
+!     Config_Opt%lgr => NULL()
 !     ! Component name is acquired externally - this is a placeholder
-!     Input_Opt%compname = 'GC'
+!     Config_Opt%compname = 'GC'
 ! #endif
 
-   END SUBROUTINE Set_Input_Opt
+   END SUBROUTINE Set_Config_Opt
 !EOC
 !------------------------------------------------------------------------------
 !                  CATChem Global Chemical Transport Model                  !
 !------------------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: Set_Input_Opt_Advect
+! !IROUTINE: Set_Config_Opt_Advect
 !
 ! !DESCRIPTION: Subroutine SET\_INPUT\_OPT\_ADVECT intializes all CATChem
 !  options carried in Input Options derived type object that depend on
@@ -1011,15 +1006,15 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Set_Input_Opt_Advect( Input_Opt, RC )
+   SUBROUTINE Set_Config_Opt_Advect( Config_Opt, RC )
 !
 ! !USES:
 !
-      USE ErrCode_Mod
+      USE Error_Mod
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(OptInput), INTENT(INOUT) :: Input_Opt   ! Input Options object
+      TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input Options object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -1045,32 +1040,32 @@ CONTAINS
       ! Allocate arrays
       !=======================================================================
 
-      ALLOCATE( Input_Opt%TINDEX(Input_Opt%Max_BPCH_Diag,Input_Opt%N_ADVECT), &
-         STAT=RC )
-      CALL CC_CheckVar( 'Input_Opt%TINDEX', 0, RC )
-      IF ( RC /= CC_SUCCESS ) RETURN
-      Input_Opt%TINDEX = 0
+      ! ALLOCATE( Config_Opt%TINDEX(Config_Opt%Max_BPCH_Diag,Config_Opt%N_ADVECT), &
+      !    STAT=RC )
+      ! CALL CC_CheckVar( 'Config_Opt%TINDEX', 0, RC )
+      ! IF ( RC /= CC_SUCCESS ) RETURN
+      ! Config_Opt%TINDEX = 0
 
-      ALLOCATE( Input_Opt%ND51_TRACERS (Input_Opt%N_ADVECT+Input_Opt%Max_BPCH_Diag),&
-         STAT=RC )
-      CALL CC_CheckVar( 'Input_Opt%ND51_TRACERS', 0, RC )
-      IF ( RC /= CC_SUCCESS ) RETURN
-      Input_Opt%ND51_TRACERS = 0
+      ! ALLOCATE( Config_Opt%ND51_TRACERS (Config_Opt%N_ADVECT+Config_Opt%Max_BPCH_Diag),&
+      !    STAT=RC )
+      ! CALL CC_CheckVar( 'Config_Opt%ND51_TRACERS', 0, RC )
+      ! IF ( RC /= CC_SUCCESS ) RETURN
+      ! Config_Opt%ND51_TRACERS = 0
 
-      ALLOCATE( Input_Opt%ND51b_TRACERS(Input_Opt%N_ADVECT+Input_Opt%Max_BPCH_Diag),&
-         STAT=RC )
-      CALL CC_CheckVar( 'Input_Opt%ND51b_TRACERS', 0, RC )
-      IF ( RC /= CC_SUCCESS ) RETURN
-      Input_Opt%ND51b_TRACERS = 0
+      ! ALLOCATE( Config_Opt%ND51b_TRACERS(Config_Opt%N_ADVECT+Config_Opt%Max_BPCH_Diag),&
+      !    STAT=RC )
+      ! CALL CC_CheckVar( 'Config_Opt%ND51b_TRACERS', 0, RC )
+      ! IF ( RC /= CC_SUCCESS ) RETURN
+      ! Config_Opt%ND51b_TRACERS = 0
 
-   END SUBROUTINE Set_Input_Opt_Advect
+   END SUBROUTINE Set_Config_Opt_Advect
 !EOC
 !------------------------------------------------------------------------------
 !                  CATChem Global Chemical Transport Model                  !
 !------------------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: Cleanup_Input_Opt
+! !IROUTINE: Cleanup_Config_Opt
 !
 ! !DESCRIPTION: Subroutine CLEANUP\_INPUT\_OPT deallocates all
 !  allocatable fields of the Input Options object.
@@ -1078,15 +1073,15 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Cleanup_Input_Opt( Input_Opt, RC )
+   SUBROUTINE Cleanup_Config_Opt( Config_Opt, RC )
 !
 ! !USES:
 !
-      USE ErrCode_Mod
+      USE Error_Mod
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(OptInput), INTENT(INOUT) :: Input_Opt   ! Input Options object
+      TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input Options object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -1105,156 +1100,156 @@ CONTAINS
       !======================================================================
       ! Deallocate fields of the Input Options object
       !======================================================================
-      IF ( ASSOCIATED( Input_Opt%AdvectSpc_Name ) ) THEN
-         DEALLOCATE( Input_Opt%AdvectSpc_Name, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%AdvectSpcName', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%AdvectSpc_Name ) ) THEN
+         DEALLOCATE( Config_Opt%AdvectSpc_Name, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%AdvectSpcName', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%AdvectSpc_Name => NULL()
+         Config_Opt%AdvectSpc_Name => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%SALA_REDGE_um ) ) THEN
-         DEALLOCATE( Input_Opt%SALA_REDGE_um, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%SALA_REDGE_um', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%SALA_REDGE_um ) ) THEN
+         DEALLOCATE( Config_Opt%SALA_REDGE_um, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%SALA_REDGE_um', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%SALA_REDGE_um => NULL()
+         Config_Opt%SALA_REDGE_um => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%SALC_REDGE_um ) ) THEN
-         DEALLOCATE( Input_Opt%SALC_REDGE_um, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%SALC_REDGE_um', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%SALC_REDGE_um ) ) THEN
+         DEALLOCATE( Config_Opt%SALC_REDGE_um, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%SALC_REDGE_um', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%SALC_REDGE_um => NULL()
+         Config_Opt%SALC_REDGE_um => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%NJDAY ) ) THEN
-         DEALLOCATE( Input_Opt%NJDAY, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%NJDAY', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%NJDAY ) ) THEN
+         DEALLOCATE( Config_Opt%NJDAY, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%NJDAY', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%NJDAY => NULL()
+         Config_Opt%NJDAY => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%TINDEX ) ) THEN
-         DEALLOCATE( Input_Opt%TINDEX, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%TINDEX', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%TINDEX ) ) THEN
+         DEALLOCATE( Config_Opt%TINDEX, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%TINDEX', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%TINDEX => NULL()
+         Config_Opt%TINDEX => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%TCOUNT ) ) THEN
-         DEALLOCATE( Input_Opt%TCOUNT, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%TCOUNT', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%TCOUNT ) ) THEN
+         DEALLOCATE( Config_Opt%TCOUNT, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%TCOUNT', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%TCOUNT => NULL()
+         Config_Opt%TCOUNT => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%TMAX ) ) THEN
-         DEALLOCATE( Input_Opt%TMAX, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%TMAX', 2, RC )
+      IF ( ASSOCIATED( Config_Opt%TMAX ) ) THEN
+         DEALLOCATE( Config_Opt%TMAX, STAT=RC )
+         CALL CC_CheckVar( 'Config_Opt%TMAX', 2, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%TMAX => NULL()
+         Config_Opt%TMAX => NULL()
       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%ND51_TRACERS ) ) THEN
-         DEALLOCATE( Input_Opt%ND51_TRACERS, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%ND51_TRACERS', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%ND51_TRACERS => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%ND51_TRACERS ) ) THEN
+      !    DEALLOCATE( Config_Opt%ND51_TRACERS, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%ND51_TRACERS', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%ND51_TRACERS => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%ND51b_TRACERS ) ) THEN
-         DEALLOCATE( Input_Opt%ND51b_TRACERS, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%ND51b_TRACERS', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%ND51b_TRACERS => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%ND51b_TRACERS ) ) THEN
+      !    DEALLOCATE( Config_Opt%ND51b_TRACERS, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%ND51b_TRACERS', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%ND51b_TRACERS => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%FAM_NAME ) ) THEN
-         DEALLOCATE( Input_Opt%FAM_NAME, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%FAM_NAME', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%FAM_NAME => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%FAM_NAME ) ) THEN
+      !    DEALLOCATE( Config_Opt%FAM_NAME, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%FAM_NAME', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%FAM_NAME => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%FAM_TYPE ) ) THEN
-         DEALLOCATE( Input_Opt%FAM_TYPE, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%FAM_TYPE', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%FAM_TYPE => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%FAM_TYPE ) ) THEN
+      !    DEALLOCATE( Config_Opt%FAM_TYPE, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%FAM_TYPE', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%FAM_TYPE => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%LINOZ_TPARM ) ) THEN
-         DEALLOCATE( Input_Opt%LINOZ_TPARM, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%LINOZ_TPARM', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%LINOZ_TPARM => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%LINOZ_TPARM ) ) THEN
+      !    DEALLOCATE( Config_Opt%LINOZ_TPARM, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%LINOZ_TPARM', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%LINOZ_TPARM => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%LSPECRADMENU ) ) THEN
-         DEALLOCATE( Input_Opt%LSPECRADMENU, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%LSPECRADMENU', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%LSPECRADMENU => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%LSPECRADMENU ) ) THEN
+      !    DEALLOCATE( Config_Opt%LSPECRADMENU, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%LSPECRADMENU', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%LSPECRADMENU => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%LSKYRAD ) ) THEN
-         DEALLOCATE( Input_Opt%LSKYRAD, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%LSKYRAD', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%LSKYRAD => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%LSKYRAD ) ) THEN
+      !    DEALLOCATE( Config_Opt%LSKYRAD, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%LSKYRAD', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%LSKYRAD => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%WVSELECT ) ) THEN
-         DEALLOCATE( Input_Opt%WVSELECT, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%WVSELECT', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%WVSELECT => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%WVSELECT ) ) THEN
+      !    DEALLOCATE( Config_Opt%WVSELECT, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%WVSELECT', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%WVSELECT => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%STRWVSELECT ) ) THEN
-         DEALLOCATE( Input_Opt%STRWVSELECT, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%STRWVSELECT', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%STRWVSELECT => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%STRWVSELECT ) ) THEN
+      !    DEALLOCATE( Config_Opt%STRWVSELECT, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%STRWVSELECT', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%STRWVSELECT => NULL()
+      ! ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%ObsPack_SpcName ) ) THEN
-         DEALLOCATE( Input_Opt%ObsPack_SpcName, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%ObsPack_SpcName', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%ObsPack_SpcName => NULL()
-      ENDIF
+      ! IF ( ASSOCIATED( Config_Opt%ObsPack_SpcName ) ) THEN
+      !    DEALLOCATE( Config_Opt%ObsPack_SpcName, STAT=RC )
+      !    CALL CC_CheckVar( 'Config_Opt%ObsPack_SpcName', 2, RC )
+      !    IF ( RC /= CC_SUCCESS ) RETURN
+      !    Config_Opt%ObsPack_SpcName => NULL()
+      ! ENDIF
 
-#ifdef MODEL_GEOS
-      !=======================================================================
-      ! These fields of Input_Opt are only finalized when
-      ! CATChem is coupled to the online NASA/GEOS ESM
-      !=======================================================================
-      IF ( ASSOCIATED( Input_Opt%RxnRconst_IDs ) ) THEN
-         DEALLOCATE( Input_Opt%RxnRconst_IDs, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%RxnRconst_IDs', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%RxnRconst_IDs => NULL()
-      ENDIF
+! #ifdef MODEL_GEOS
+!       !=======================================================================
+!       ! These fields of Config_Opt are only finalized when
+!       ! CATChem is coupled to the online NASA/GEOS ESM
+!       !=======================================================================
+!       IF ( ASSOCIATED( Config_Opt%RxnRconst_IDs ) ) THEN
+!          DEALLOCATE( Config_Opt%RxnRconst_IDs, STAT=RC )
+!          CALL CC_CheckVar( 'Config_Opt%RxnRconst_IDs', 2, RC )
+!          IF ( RC /= CC_SUCCESS ) RETURN
+!          Config_Opt%RxnRconst_IDs => NULL()
+!       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%RxnRates_IDs ) ) THEN
-         DEALLOCATE( Input_Opt%RxnRates_IDs, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%RxnRates_IDs', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%RxnRates_IDs => NULL()
-      ENDIF
+!       IF ( ASSOCIATED( Config_Opt%RxnRates_IDs ) ) THEN
+!          DEALLOCATE( Config_Opt%RxnRates_IDs, STAT=RC )
+!          CALL CC_CheckVar( 'Config_Opt%RxnRates_IDs', 2, RC )
+!          IF ( RC /= CC_SUCCESS ) RETURN
+!          Config_Opt%RxnRates_IDs => NULL()
+!       ENDIF
 
-      IF ( ASSOCIATED( Input_Opt%Jval_IDs ) ) THEN
-         DEALLOCATE( Input_Opt%Jval_IDs, STAT=RC )
-         CALL CC_CheckVar( 'Input_Opt%Jval_Ids', 2, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         Input_Opt%Jval_Ids => NULL()
-      ENDIF
-#endif
+!       IF ( ASSOCIATED( Config_Opt%Jval_IDs ) ) THEN
+!          DEALLOCATE( Config_Opt%Jval_IDs, STAT=RC )
+!          CALL CC_CheckVar( 'Config_Opt%Jval_Ids', 2, RC )
+!          IF ( RC /= CC_SUCCESS ) RETURN
+!          Config_Opt%Jval_Ids => NULL()
+!       ENDIF
+! #endif
 
-#if defined( ESMF_ )
-      If (Associated(Input_Opt%lgr)) Input_Opt%lgr => NULL()
-#endif
+! #if defined( ESMF_ )
+!       If (Associated(Config_Opt%lgr)) Config_Opt%lgr => NULL()
+! #endif
 
-   END SUBROUTINE Cleanup_Input_Opt
+   END SUBROUTINE Cleanup_Config_Opt
 !EOC
-END MODULE Input_Opt_Mod
+END MODULE Config_Opt_Mod
