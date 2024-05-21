@@ -66,6 +66,7 @@ CONTAINS
       USE Error_Mod
       USE Config_Opt_Mod,  ONLY : OptConfig
       USE GridState_Mod, ONLY : GridStateType
+
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
@@ -235,6 +236,7 @@ CONTAINS
       ENDIF
       Config_Opt%SimulationName = TRIM( v_str )
 
+
       ! Return success
       RC = CC_SUCCESS
 
@@ -373,9 +375,10 @@ CONTAINS
          RETURN
       ENDIF
       State_Grid%NY = v_int
-
+      
       ! Return success
       RC = CC_SUCCESS
+
 
 !       !========================================================================
 !       ! Print to screen

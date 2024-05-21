@@ -30,4 +30,5 @@ MODULE CMN_SIZE_MOD
 
    !Number of coefficients for polynomial fits
    INTEGER, PARAMETER :: NPOLY = 20
+
 END MODULE CMN_SIZE_MOD

@@ -1,11 +1,11 @@
 !------------------------------------------------------------------------------
-!                  CATChem  Model                  !
+!                  CATChem  Model  
 !------------------------------------------------------------------------------
 !BOP
 !
-! !MODULE: Config_Opt_mod.F90
+! !MODULE: Config_Opt_mod.F90     
 !
-! !DESCRIPTION: Module INPUT\_OPT\_MOD contains the derived type for CATChem
+! !DESCRIPTION: Module INPUT\_OPT\_MOD contains the derived type for CATChem             
 !  options and logical switches.
 !\\
 !\\
@@ -16,7 +16,7 @@ MODULE Config_Opt_Mod
 ! !USES:
 !
    USE PRECISION_MOD    ! For CATChem Precision (fp)
-
+    
    IMPLICIT NONE
    PRIVATE
 !
@@ -147,6 +147,7 @@ CONTAINS
       Config_Opt%dust_scheme = 1
       Config_Opt%seasalt_activate = .FALSE.
       Config_Opt%seasalt_scheme = 1
+
 
 
    END SUBROUTINE Set_Config_Opt

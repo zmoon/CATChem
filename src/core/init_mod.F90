@@ -8,6 +8,7 @@ module init_mod
 contains
 
    subroutine Init_Met(State_Grid, State_Met, RC)
+
       use GridState_Mod, Only : GridStateType
       use MetState_Mod
       USE Error_Mod
@@ -52,7 +53,7 @@ contains
       TYPE(GridStateType),  INTENT(IN)  :: State_Grid
       TYPE(DiagStateType), INTENT(INOUT) :: State_Diag
       INTEGER,         INTENT(OUT) :: RC
-
+      
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 

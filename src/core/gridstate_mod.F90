@@ -29,6 +29,7 @@ module GridState_Mod
       CHARACTER(LEN=4)             :: State     = 'Grid'    ! Name of this state
    end type GridStateType
 
+
 contains
 
    subroutine Grid_Init_State(Config_Opt, State_Grid, RC)
@@ -43,6 +44,7 @@ contains
 
       ! INOUT Params
       type(GridStateType), intent(inout) :: State_Grid ! Grid State object
+
 
       ! OUTPUT Params
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
@@ -70,8 +72,8 @@ contains
       implicit none
 
       type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
-
       type(GridStateType), intent(inout) :: State_Grid ! Grid State object
+
 
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
 

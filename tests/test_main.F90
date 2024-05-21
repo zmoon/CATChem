@@ -47,6 +47,7 @@ program test_main
    call Init_Met(GRID, MET, RC)
    if (RC /= CC_success) then
       errMsg = 'Error initializing meteorology'
+
       call CC_Error( errMsg, RC , thisLoc)
       stop 1
    endif

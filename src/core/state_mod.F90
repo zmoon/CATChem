@@ -8,6 +8,7 @@ module state_mod
 
    type(GridStateType) :: GRID
    type(MetStateType)  :: MET
+
    type(OptConfig)  :: Config_Opt
 
    ! PUBLIC :: Init_State
