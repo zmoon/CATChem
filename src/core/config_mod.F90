@@ -375,7 +375,7 @@ CONTAINS
          RETURN
       ENDIF
       State_Grid%NY = v_int
-      
+
       ! Return success
       RC = CC_SUCCESS
 

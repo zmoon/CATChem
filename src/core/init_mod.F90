@@ -53,7 +53,7 @@ contains
       TYPE(GridStateType),  INTENT(IN)  :: State_Grid
       TYPE(DiagStateType), INTENT(INOUT) :: State_Diag
       INTEGER,         INTENT(OUT) :: RC
-      
+
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
