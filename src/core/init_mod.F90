@@ -11,7 +11,8 @@ contains
       use GridState_Mod, Only : GrdState
       use MetState_Mod
       USE Error_Mod
-      implicit none
+
+      IMPLICIT NONE
 
       ! Arguments
       TYPE(GrdState), INTENT(IN)  :: State_Grid
@@ -22,7 +23,7 @@ contains
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
       ! Initialize
-      RC = 0
+      RC = CC_SUCCESS
       ErrMsg = ''
       thisLoc = ' -> at Init_Met (in core/state_mod.F90)'
 
@@ -67,7 +68,7 @@ contains
       ! set thisLoc
       thisLoc = 'init_mod::base_config_yaml_read() -> at read CATChem_Conifg.yml'
       errMsg = ''
-      RC = 0
+      RC = CC_SUCCESS
 
       WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
       WRITE( 6, 100   ) TRIM( configFile )
@@ -81,7 +82,7 @@ contains
       print *, 'QFYAML_Init(', configFile, 'Config, ConfigAnchored, RC  )'
       CALL QFYAML_Init( configFile, Config, ConfigAnchored, RC )
 
-      IF ( RC /= 0 ) THEN
+      IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error reading configuration file: ' // TRIM( configFile )
          CALL CC_Error( errMsg, RC , thisLoc)
          RETURN
