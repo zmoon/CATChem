@@ -292,8 +292,8 @@ CONTAINS
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(QFYAML_t),      INTENT(INOUT) :: Config      ! YAML Config object
-      TYPE(OptConfig),     INTENT(INOUT) :: Config_Opt   ! Input options
+      TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
+      TYPE(OptConfig),     INTENT(INOUT) :: Config   ! Input options
       TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State
 !
 ! !OUTPUT PARAMETERS:
