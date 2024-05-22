@@ -1,3 +1,11 @@
+!> \file init_mod.F90
+!! \brief Initialization module for the program.
+!!
+!! This module contains subroutines and functions related to the initialization of the program. It includes subroutines for initializing the grid, the time step, and the solution.
+!!
+!! \author Barry Baker
+!! \date 05/2023
+
 module init_mod
 
    implicit none
@@ -6,17 +14,27 @@ module init_mod
    PUBLIC :: Init_Diag
 
 contains
+   !> \brief Initialize the met state
+   !!
+   !! This subroutine allocates the met state.
+   !!
+   !! \param GridState The grid state containing information about the grid.
+   !! \param MetState The met state to be initialized.
+   !! \param RC The return code.
+   !!
+   !! \author Barry Baker
+   !! \date 05/2023
 
-   subroutine Init_Met(State_Grid, State_Met, RC)
-
+   subroutine Init_Met(GridState, MetState, RC)
+      !
       use GridState_Mod, Only : GridStateType
       use MetState_Mod
       USE Error_Mod
       implicit none
 
       ! Arguments
-      TYPE(GridStateType), INTENT(IN)  :: State_Grid
-      TYPE(MetStateType), INTENT(INOUT) :: State_Met
+      TYPE(GridStateType), INTENT(IN)  :: GridState
+      TYPE(MetStateType), INTENT(INOUT) :: MetState
       INTEGER,        INTENT(OUT) :: RC
 
       ! Local variables
@@ -27,20 +45,27 @@ contains
       ErrMsg = ''
       thisLoc = ' -> at Init_Met (in core/state_mod.F90)'
 
-      call Zero_State_Met(State_Met, RC)
-      if (RC /= CC_SUCCESS) then
-         errMsg = 'Error Nullifying met state'
-         call CC_Error( errMsg, RC , thisLoc)
-      endif
-
-      call Met_Allocate(State_Grid, State_Met, RC)
+      call Met_Allocate(GridState, MetState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error allocating met state'
-         call CC_Error( errMsg, RC , thisLoc)
+         call CC_Error(errMsg, RC , thisLoc)
       endif
+
    end subroutine Init_Met
 
-   subroutine Init_Diag(Config_Opt, State_Grid, State_Diag, RC)
+   !> \brief Initialize the diag state
+   !!
+   !! This subroutine allocates the diag state.
+   !!
+   !! \param Config_Opt The config state containing information about the config.
+   !! \param GridState The grid state containing information about the grid.
+   !! \param DiagState The diag state to be initialized.
+   !! \param RC The return code.
+   !!
+   !! \author Barry Baker
+   !! \date 05/2023
+
+   subroutine Init_Diag(Config_Opt, GridState, DiagState, RC)
       use DiagState_Mod
       use Config_Opt_Mod, Only : OptConfig
       use GridState_Mod, Only : GridStateType
@@ -50,8 +75,8 @@ contains
 
       ! Arguments
       TYPE(OptConfig), INTENT(IN)  :: Config_Opt
-      TYPE(GridStateType),  INTENT(IN)  :: State_Grid
-      TYPE(DiagStateType), INTENT(INOUT) :: State_Diag
+      TYPE(GridStateType),  INTENT(IN)  :: GridState
+      TYPE(DiagStateType), INTENT(INOUT) :: DiagState
       INTEGER,         INTENT(OUT) :: RC
 
       ! Local variables
@@ -62,10 +87,10 @@ contains
       ErrMsg = ''
       thisLoc = ' -> at Init_Diag (in core/init_mod.F90)'
 
-      call Diag_Allocate(Config_Opt, State_Grid, State_Diag, RC)
+      call Diag_Allocate(Config_Opt, GridState, DiagState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error allocating diag state'
-         call CC_Error( errMsg, RC , thisLoc)
+         call CC_Error(errMsg, RC , thisLoc)
       endif
 
    end subroutine Init_Diag
