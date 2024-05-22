@@ -57,7 +57,7 @@ contains
    !!
    !! This subroutine allocates the diag state.
    !!
-   !! \param Config_Opt The config state containing information about the config.
+   !! \param Config_Opt The config.
    !! \param GridState The grid state containing information about the grid.
    !! \param DiagState The diag state to be initialized.
    !! \param RC The return code.
