@@ -44,22 +44,22 @@ contains
 !
 ! This subroutine initializes a GridState object.
 !
-! \param Config_Opt The input config object.
+! \param Config The input config object.
 ! \param GridState The GridState object to be initialized.
 ! \param RC The return code.
 !
 ! \author Barry Baker
 ! \date 05/2023
 !-------------------------------------------------------------------------
-   subroutine Grid_Init_State(Config_Opt, GridState, RC)
-      ! USES
-      USE Config_Opt_Mod, ONLY : OptConfig
+   subroutine Grid_Init_State(Config, GridState, RC)
       use Error_Mod, only : CC_SUCCESS
+
+      use Config_Opt_Mod, Only : ConfigType
 
       implicit none
 
       ! Input Params
-      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+      type(ConfigType),    intent(in)    :: Config ! Input Options object
 
       ! INOUT Params
       type(GridStateType), intent(inout) :: GridState ! Grid State object
@@ -89,7 +89,7 @@ contains
 !
 ! This subroutine initializes a GridState object.
 !
-! \param Config_Opt The input config object.
+! \param Config The input config object.
 ! \param GridState The GridState object to be initialized.
 ! \param RC The return code.
 !
@@ -98,13 +98,13 @@ contains
 !
 !-------------------------------------------------------------------------
 
-   subroutine Grid_Init(Config_Opt, GridState, RC)
+   subroutine Grid_Init(Config, GridState, RC)
 
-      USE Config_Opt_Mod, ONLY : OptConfig
+      USE Config_Opt_Mod, ONLY : ConfigType
 
       implicit none
 
-      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+      type(ConfigType),    intent(in)    :: Config ! Input Options object
       type(GridStateType), intent(inout) :: GridState ! Grid State object
 
 
@@ -140,15 +140,15 @@ contains
 ! \date 05/2023
 !-------------------------------------------------------------------------
 
-   subroutine Grid_State_Allocate(GridState, RC) !Config_Opt, GridState, RC)
+   subroutine Grid_State_Allocate(GridState, RC) !Config, GridState, RC)
 
       use Error_Mod
-      ! use Config_Opt_Mod, only : OptConfig
+      ! use Config_Mod, only : ConfigType
 
       implicit none
 
       ! input Params
-      ! type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+      ! type(ConfigType),  intent(in)    :: Config ! Input Options object
 
       ! INOUT Params
       type(GridStateType), intent(inout) :: GridState ! Grid State object
@@ -176,7 +176,7 @@ contains
 !
 ! This subroutine deallocates memory for GridState.
 !
-! \param GridState The GridState object to be deallocated.
+! \param GridState The GridState instance to be deallocated.
 ! \param RC The return code.
 !
 ! \author Barry Baker

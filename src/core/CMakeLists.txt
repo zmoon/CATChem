@@ -1,6 +1,6 @@
 set(_srcs
     charpak_mod.F90
-    chmstate_mod.F90
+    chemstate_mod.F90
     cmn_size_mod.F90
     config_mod.F90
     config_opt_mod.F90

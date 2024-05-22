@@ -1,22 +1,8 @@
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: MetState_mod.F90
-!
-! !DESCRIPTION: Module STATE\_MET\_MOD contains the derived type
-!  used to define the Meteorology State object for CATChem.
-!\\
-!\\
-!  This module also contains the routines that allocate and deallocate memory
-!  to the Meteorology State object.  The Meteorology State object is not
-!  defined in this module.  It must be be declared as variable in the top-level
-!  driver routine, and then passed to lower-level routines as an argument.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \defgroup MetState_Mod MetState Module
+!! \brief Contains the MetStateType data type and related subroutines and functions.
+!!
+!! The MetState_Mod module contains the MetStateType data type and related subroutines and functions for managing the state of the meteorology model.
+!!
 MODULE MetState_Mod
    !
    ! USES:

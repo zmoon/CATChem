@@ -30,7 +30,7 @@ program test_main
    write(*,*) ''
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config_Opt, GRID, RC)
+   call Read_Input_File(Config, GridState, RC)
    if (RC /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call CC_Error( errMsg, RC , thisLoc)
@@ -39,15 +39,14 @@ program test_main
 
    ! write grid info
    write(*,*) 'Grid info:'
-   write(*,*) 'Number of grid nx = ', GRID%NX
-   write(*,*) 'Number of grid ny = ', GRID%NY
-   write(*,*) 'Number of grid levels = ', GRID%number_of_levels
+   write(*,*) 'Number of grid nx = ', GridState%NX
+   write(*,*) 'Number of grid ny = ', GridState%NY
+   write(*,*) 'Number of grid levels = ', GridState%number_of_levels
 
    ! initialize met
-   call Init_Met(GRID, MET, RC)
+   call Init_Met(GridState, MetState, RC)
    if (RC /= CC_success) then
       errMsg = 'Error initializing meteorology'
-
       call CC_Error( errMsg, RC , thisLoc)
       stop 1
    endif

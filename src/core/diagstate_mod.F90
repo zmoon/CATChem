@@ -29,19 +29,19 @@ CONTAINS
    !!
    !! This subroutine allocates memory for the diagnostic state variables.
    !!
-   !! \param Config_Opt The configuration options
+   !! \param Config The configuration options
    !! \param GridState The grid state containing information about the grid
    !! \param DiagState The diagnostic state to be allocated
    !! \param RC The return code
-   subroutine Diag_Allocate(Config_Opt, GridState, DiagState, RC)
+   subroutine Diag_Allocate(Config, GridState, DiagState, RC)
       ! USES
       USE GridState_Mod, ONLY : GridStateType
-      USE Config_Opt_Mod, ONLY : OptConfig
+      USE Config_Opt_Mod, ONLY : ConfigType
 
       ! Arguments
-      type(OptConfig), intent(in) :: Config_Opt
-      type(GridStateType), INTENT(in)    :: GridState ! Grid State object
-      type(DiagStateType), INTENT(inout) :: DiagState ! Diag State object
+      type(ConfigType),    INTENT(IN)    :: Config
+      type(GridStateType), INTENT(IN)    :: GridState ! Grid State object
+      type(DiagStateType), INTENT(INOUT) :: DiagState ! Diag State object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC          ! Success or failure
 
@@ -62,7 +62,7 @@ CONTAINS
       DiagState%sea_salt_total_flux => NULL()
 
       ! If dust process is activated then allocate dust related diagnostics
-      if (Config_Opt%dust_activate) then
+      if (Config%dust_activate) then
          ALLOCATE( DiagState%dust_total_flux( GridState%NX, GridState%NY ), STAT=RC )
          CALL CC_CheckVar( 'DiagState%dust_total_flux', 0, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
@@ -70,7 +70,7 @@ CONTAINS
       endif
 
       ! If sea salt process is activated then allocate sea salt related diagnostics
-      if (Config_Opt%seasalt_activate) then
+      if (Config%seasalt_activate) then
          ALLOCATE( DiagState%sea_salt_total_flux( GridState%NX, GridState%NY ), STAT=RC )
          CALL CC_CheckVar( 'DiagState%sea_salt_total_flux', 0, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
