@@ -59,7 +59,7 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Read_Input_File( Config_Opt, State_Grid, RC )
+   SUBROUTINE Read_Input_File( Config_Opt, GridState, RC )
 !
 ! !USES:
 !
@@ -71,7 +71,7 @@ CONTAINS
 ! !INPUT/OUTPUT PARAMETERS:
 !
       TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input options
-      TYPE(GridStateType), INTENT(INOUT) :: State_Grid  ! Grid State object
+      TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -141,7 +141,7 @@ CONTAINS
       !========================================================================
 
       ! Grid config settings
-      CALL Config_Grid( Config, Config_Opt, State_Grid, RC )
+      CALL Config_Grid( Config, Config_Opt, GridState, RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Grid"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -281,7 +281,7 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Config_Grid( Config, Config_Opt, State_Grid, RC )
+   SUBROUTINE Config_Grid( Config, Config_Opt, GridState, RC )
 !
 ! !USES:
 !
@@ -294,7 +294,7 @@ CONTAINS
 !
       TYPE(QFYAML_t),      INTENT(INOUT) :: Config      ! YAML Config object
       TYPE(OptConfig),     INTENT(INOUT) :: Config_Opt   ! Input options
-      TYPE(GridStateType), INTENT(INOUT) :: State_Grid  ! Grid State
+      TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -351,7 +351,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      State_Grid%number_of_levels = v_int
+      GridState%number_of_levels = v_int
 
       !------------------------------------------------------------------------
       ! number of x and y dimensions (nx and ny)
@@ -364,7 +364,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      State_Grid%NX = v_int
+      GridState%NX = v_int
 
       key   = "grid%ny"
       v_int = MISSING_INT
@@ -374,7 +374,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      State_Grid%NY = v_int
+      GridState%NY = v_int
 
       ! Return success
       RC = CC_SUCCESS
@@ -387,28 +387,28 @@ CONTAINS
 !          WRITE( 6, 90  ) 'GRID SETTINGS'
 !          WRITE( 6, 95  )  '------------'
 !          WRITE( 6, 100 ) 'Grid resolution             : ',                     &
-!             TRIM( State_Grid%GridRes )
+!             TRIM( GridState%GridRes )
 !          WRITE( 6, 110 ) 'Min/max longitude           : ',                     &
-!             State_Grid%XMin, State_Grid%XMax
+!             GridState%XMin, GridState%XMax
 !          WRITE( 6, 110 ) 'Min/max latitude            : ',                     &
-!             State_Grid%YMin, State_Grid%YMax
+!             GridState%YMin, GridState%YMax
 !          WRITE( 6, 120 ) 'X grid dimension            : ',                     &
-!             State_Grid%NX
+!             GridState%NX
 !          WRITE( 6, 120 ) 'Y grid dimension            : ',                     &
-!             State_Grid%NY
+!             GridState%NY
 !          WRITE( 6, 120 ) 'Z grid dimension            : ',                     &
-!             State_Grid%NZ
+!             GridState%NZ
 !          WRITE( 6, 130 ) 'Use half-sized polar boxes? : ',                     &
-!             State_Grid%HalfPolar
+!             GridState%HalfPolar
 !          WRITE( 6, 130 ) 'Center on Intl Date Line?   : ',                     &
-!             State_Grid%Center180
+!             GridState%Center180
 !          WRITE( 6, 130 ) 'Is this a nested-grid sim?  : ',                     &
-!             State_Grid%NestedGrid
+!             GridState%NestedGrid
 !          WRITE( 6, 140 ) ' --> Buffer zone (N S E W ) : ',                     &
-!             State_Grid%NorthBuffer,                              &
-!             State_Grid%SouthBuffer,                              &
-!             State_Grid%EastBuffer,                               &
-!             State_Grid%WestBuffer
+!             GridState%NorthBuffer,                              &
+!             GridState%SouthBuffer,                              &
+!             GridState%EastBuffer,                               &
+!             GridState%WestBuffer
 !       ENDIF
 
 !       ! Format statements
