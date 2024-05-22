@@ -37,7 +37,7 @@ module ChmState_Mod
       INTEGER           :: nSpeciesGas       ! Number of Gas Species
       INTEGER           :: nSpeciesAero      ! Number of Aerosol Species
       INTEGER           :: nSpeciesDust      ! Number of Dust Species
-      INTEGER           :: NSpeicesSeaSalt   ! Number of SeaSalt Species
+      INTEGER           :: NSpeciesSeaSalt   ! Number of SeaSalt Species
       Integer, POINTER  :: SpeciesIndex(:)   ! Total Species Index
       INTEGER, POINTER  :: AeroIndex(:)      ! Aerosol Species Index
       INTEGER, POINTER  :: GasIndex(:)       ! Gas Species Index
