@@ -1,7 +1,8 @@
 !> \file init_mod.F90
 !! \brief Initialization module for the program.
 !!
-!! This module contains subroutines and functions related to the initialization of the program. It includes subroutines for initializing the grid, the time step, and the solution.
+!! This module contains subroutines and functions related to the initialization of the program.
+!! It includes subroutines for initializing the grid, the time step, and the solution.
 !!
 !! \author Barry Baker
 !! \date 05/2023
