@@ -66,7 +66,7 @@ CONTAINS
          ALLOCATE( DiagState%dust_total_flux( GridState%NX, GridState%NY ), STAT=RC )
          CALL CC_CheckVar( 'DiagState%dust_total_flux', 0, RC )
          IF ( RC /= CC_SUCCESS ) RETURN
-         DiagState%dust_total_flux = 0e+0_fp
+         DiagState%dust_total_flux = 0._fp
       endif
 
       ! If sea salt process is activated then allocate sea salt related diagnostics
