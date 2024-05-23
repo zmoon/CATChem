@@ -1,8 +1,6 @@
 !> \file charpak_mod.F90
 !! \brief Module for character string manipulation
 !!
-!!!>
-
 MODULE Charpak_Mod
     !
     ! !USES:
