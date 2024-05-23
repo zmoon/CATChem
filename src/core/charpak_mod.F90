@@ -1,7 +1,7 @@
 !> \file
 !! \brief Module for character string manipulation
 !!
-!! Original code from https://github.com/geoschem/geos-chem/blob/main/Headers/charpak_mod.F90
+!! Original code from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/charpak_mod.F90
 !!
 MODULE Charpak_Mod
     !
