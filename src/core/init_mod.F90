@@ -21,7 +21,7 @@ contains
    !! \param GridState The grid state containing information about the grid.
    !! \param MetState The met state to be initialized.
    !! \param RC The return code.
-   !!!>  
+   !!!>
 
    subroutine Init_Met(GridState, MetState, RC)
       !

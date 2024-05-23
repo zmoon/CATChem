@@ -22,7 +22,7 @@ MODULE Error_Mod
    !
    INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   ! Routine returns success
    INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   ! Routine returns failure
-   
+
 CONTAINS
    !>
    !! \brief CC_Error
@@ -49,7 +49,7 @@ CONTAINS
       ! !INPUT/OUTPUT PARAMETERS:
       !
       INTEGER,          INTENT(INOUT)            :: RC      ! Error code
-      
+
       CHARACTER(LEN=1000) :: Message
       !=======================================================================
       ! CC_ERROR begins here
@@ -90,7 +90,7 @@ CONTAINS
       ENDIF
 
    END SUBROUTINE CC_Error
-   
+
    !>
    !! \brief CC_Warning
    !!
@@ -116,7 +116,7 @@ CONTAINS
       ! !INPUT/OUTPUT PARAMETERS:
       !
       INTEGER,          INTENT(INOUT)            :: RC
-      
+
       CHARACTER(LEN=1000) :: Message
 
       !=======================================================================
@@ -153,7 +153,7 @@ CONTAINS
       RC = CC_SUCCESS
 
    END SUBROUTINE CC_Warning
-   
+
    !>
    !! \brief CC_CheckVar
    !!

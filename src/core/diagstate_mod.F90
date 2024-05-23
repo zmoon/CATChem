@@ -3,7 +3,7 @@
 !!
 !! This module contains subroutines and functions related to the DiagState instance of CATChem.
 !! It includes subroutines for initializing of the DiagState.
-!!!> 
+!!!>
 module DiagState_Mod
    ! Uses
    USE Precision_Mod

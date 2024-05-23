@@ -42,7 +42,7 @@ MODULE Charpak_Mod
       INTEGER, PARAMETER, PUBLIC :: MAXSTRLEN = 500
 
     CONTAINS
-    
+
     !> \brief Count the number of times a character appears in a string
     !!
     !! \param[in]  str1  String to search
@@ -97,7 +97,7 @@ MODULE Charpak_Mod
         IF ( PRESENT( Locations ) ) Locations = TmpLocations
 
       END SUBROUTINE CntMat
-    
+
       !> \brief Copy characters from one string to another
       !!
       !! \param[in]  col  Starting column
@@ -135,7 +135,7 @@ MODULE Charpak_Mod
         ENDIF
 
       END SUBROUTINE CopyTxt
-    
+
     !> \brief Strip leading and trailing spaces from a string
     !!
     !! \param[inout] text        String to be modified
@@ -311,7 +311,7 @@ MODULE Charpak_Mod
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: Str   ! String to be squeezed
-   
+
         !=================================================================
         ! STRSQUEEZE begins here!
         !=================================================================
@@ -481,7 +481,7 @@ MODULE Charpak_Mod
     !> \brief Convert a string to uppercase
     !!
     !! \param[in]  Text  String to be manipulated
-    !!!> 
+    !!!>
       FUNCTION To_UpperCase( Text ) RESULT( UpCaseText )
     !
     ! !INPUT PARAMETERS:
@@ -539,7 +539,7 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         CHARACTER(LEN=MAXSTRLEN) :: Line       ! Single line from the input file
-    
+
         !=================================================================
         ! Initialize
         !=================================================================
@@ -581,7 +581,7 @@ MODULE Charpak_Mod
     ! !RETURN VALUE
     !
         CHARACTER(LEN=255)           :: CleanStr   ! Cleaned-up string
-    
+
         ! Initialize
         CleanStr = Str
 
@@ -693,7 +693,7 @@ MODULE Charpak_Mod
     ! !OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), ALLOCATABLE, INTENT(INOUT) :: vec_unique(:)
-    
+
     !
     ! !LOCAL VARIABLES:
     !
@@ -805,5 +805,5 @@ MODULE Charpak_Mod
        charArray(L+1:) = ACHAR(0)
 
      END FUNCTION str2CharArr
-    
+
     END MODULE CharPak_Mod

@@ -29,7 +29,7 @@ MODULE Config_Opt_Mod
    !! - `numCPUs` : Number of MPI procs
    !! - `thisCPU` : Local MPI process handle
    !! - `MPIComm` : MPI Communicator Handle
-   !! - `isMPI` : Is this an MPI sim?           
+   !! - `isMPI` : Is this an MPI sim?
    !! - `amIRoot` : Are we on the root CPU?
    !! - `DryRun` : Is this a dry run?
    !! - `SimulationName` : Name of the simulation
@@ -88,7 +88,7 @@ CONTAINS
    !> \brief Initialize the Config options
    !!
    !! This subroutine initializes the Config options
-   !! 
+   !!
    !! \param am_I_Root  Are we on the root CPU?
    !! \param Config     The Config object
    !! \param RC         The return code
@@ -155,7 +155,7 @@ CONTAINS
    !> \brief Cleanup the Config options
    !!
    !! This subroutine cleans up the Config options
-   !! 
+   !!
    !! \param Config     The Config object
    !! \param RC         The return code
    !!!>

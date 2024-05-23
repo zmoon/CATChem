@@ -3,7 +3,7 @@
 !!
 !! This module contains subroutines and functions related to the ConfigType instance of CATChem.
 !! It includes subroutines for reading the configuration file.
-!!!> 
+!!!>
 MODULE Config_Mod
 !
 ! !USES:

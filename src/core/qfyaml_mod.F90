@@ -171,8 +171,8 @@ MODULE QFYAML_Mod
       END INTERFACE QFYAML_Update
 
     CONTAINS
-    !> 
-    !! \brief This routine handles an error 
+    !>
+    !! \brief This routine handles an error
     !!
     !! \param errMsg The error message
     !! \param RC Return code
@@ -1254,14 +1254,14 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Read_Variable
       !>
-      !! \brief Trim_Comment  
+      !! \brief Trim_Comment
       !!
       !! Strip comments, but only outside quoted strings
       !! (so that var = '#yolo' is valid when # is a comment char)
       !!
       !! \param[in]    line        Input line
       !! \param[in]    comment_chars Character(s) to be stripped
-      !!!>      
+      !!!>
       SUBROUTINE Trim_Comment(line, comment_chars)
     !
     ! !INPUT PARAMETERS:
@@ -1358,7 +1358,7 @@ MODULE QFYAML_Mod
       !! \brief QFYAML_FindDepth
       !!
       !! Find the depth of a category or variable name
-      !! 
+      !!
       !! \param[in]    name        Input name
       !!!>
       FUNCTION QFYAML_FindDepth( name ) RESULT( depth )
@@ -1561,7 +1561,7 @@ MODULE QFYAML_Mod
       !! \param[in]    var_size    Input variable size
       !! \param[in]    description Input variable description
       !! \param[in]    ix          Input index
-      !! \param[out]   RC          Input return code 
+      !! \param[out]   RC          Input return code
       !! \param[in]    dynamic_size
       !!!>
       SUBROUTINE Prepare_Store_Var( yml,      var_name,    var_type,             &
@@ -1647,7 +1647,7 @@ MODULE QFYAML_Mod
       END SUBROUTINE Prepare_Store_Var
       !>
       !! \brief Prepare_Get_Var
-      !! 
+      !!
       !! \details This routine is used to get variables from the YAML file.
       !! Helper routine to get variables. This is useful because a
       !! lot of the same code is executed for the different types of variables.
@@ -1872,7 +1872,7 @@ MODULE QFYAML_Mod
       END SUBROUTINE get_fields_string
       !>
       !! \brief Binary_Search_Variable
-      !! 
+      !!
       !! \details This routine will perform a binary search for a given variable
       !!          in a YAML file.
       !!
@@ -2423,7 +2423,7 @@ MODULE QFYAML_Mod
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT) :: category
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT) :: var_name
         LOGICAL,                      INTENT(OUT) :: append
-    !     
+    !
     ! !LOCAL VARIABLES:
     !
         INTEGER                            :: C
@@ -2458,7 +2458,7 @@ MODULE QFYAML_Mod
         ! Save for next iteration
         last_var = var_name
       END SUBROUTINE Get_Sequence_VarName
-    
+
     !############################################################################
     !### HERE FOLLOWS OVERLOADED MODULE PROCEDURES.
     !### THESE ARE SIMPLE ROUTINES, SO WE WILL OMIT ADDING SUBROUTINE HEADERS
