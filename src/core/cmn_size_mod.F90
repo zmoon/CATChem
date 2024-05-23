@@ -1,15 +1,7 @@
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: CMN_SIZE_mod.F90
-!
-! !DESCRIPTION: CMN\_SIZE contains size parameters for CATChem arrays.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \file cmn_size_mod.F90
+!! \brief Module for common size parameters
+!!
+!!!>
 MODULE CMN_SIZE_MOD
    !
    ! !USES:

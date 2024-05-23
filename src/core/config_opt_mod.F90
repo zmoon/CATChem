@@ -1,16 +1,9 @@
-!------------------------------------------------------------------------------
-!                  CATChem  Model
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: Config_mod.F90
-!
-! !DESCRIPTION: Module INPUT\_OPT\_MOD contains the derived type for CATChem
-!  options and logical switches.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \file config_opt_mod.F90
+!! \brief This file contains the module for catchem configuration options
+!!
+!! This file contains the module for catchem configuration options
+!!
+!!!>
 MODULE Config_Opt_Mod
 !
 ! !USES:
@@ -30,6 +23,25 @@ MODULE Config_Opt_Mod
    !=========================================================================
    ! Derived type for Input Options
    !=========================================================================
+   !> \brief Derived type for Input Options
+   !!
+   !! ConfigType contains the following variables:
+   !! - `numCPUs` : Number of MPI procs
+   !! - `thisCPU` : Local MPI process handle
+   !! - `MPIComm` : MPI Communicator Handle
+   !! - `isMPI` : Is this an MPI sim?           
+   !! - `amIRoot` : Are we on the root CPU?
+   !! - `DryRun` : Is this a dry run?
+   !! - `SimulationName` : Name of the simulation
+   !! - `SpcDatabaseFile` : Name of the species database file
+   !! - `VerboseRequested` : Is the user requesting verbose mode
+   !! - `VerboseOnCores` : Which cores should be verbose
+   !! - `Verbose` : Is verbose mode on?
+   !! - `dust_activate` : Activate dust process
+   !! - `dust_scheme_opt` : Scheme option for dust process
+   !! - `seasalt_activate` : Activate seasalt process
+   !! - `seasalt_scheme_opt` : Scheme option for seasalt process
+   !!!>
    TYPE, PUBLIC :: ConfigType
 
       !----------------------------------------
@@ -71,29 +83,16 @@ MODULE Config_Opt_Mod
 
 
    END TYPE ConfigType
-!
-! !REMARKS:
-!
-! !REVISION HISTORY:
-!  See https://github.com/geoschem/CATChem for complete history
-!EOP
-!------------------------------------------------------------------------------
-!BOC
+
 CONTAINS
-!EOC
-!------------------------------------------------------------------------------
-!                  CATChem  Model                  !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !IROUTINE: Set_Config
-!
-! !DESCRIPTION: Subroutine SET\_INPUT\_OPT intializes all CATChem
-!  options carried in Input Options derived type object.
-!\\
-!\\
-! !INTERFACE:
-!
+   !> \brief Initialize the Config options
+   !!
+   !! This subroutine initializes the Config options
+   !! 
+   !! \param am_I_Root  Are we on the root CPU?
+   !! \param Config     The Config object
+   !! \param RC         The return code
+   !!!>
    SUBROUTINE Set_Config( am_I_Root, Config, RC )
 !
 ! !USES:
@@ -111,15 +110,6 @@ CONTAINS
 ! !OUTPUT PARAMETERS:
 !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure?
-!
-! !REMARKS:
-!
-! !REVISION HISTORY:
-!  01 Nov 2012 - R. Yantosca - Initial version
-!  See https://github.com/geoschem/CATChem for complete history
-!EOP
-!------------------------------------------------------------------------------
-!BOC
 !
 ! !LOCAL VARIABLES:
 !
@@ -162,20 +152,13 @@ CONTAINS
 
 
    END SUBROUTINE Set_Config
-!EOC
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !IROUTINE: Cleanup_Config
-!
-! !DESCRIPTION: Subroutine CLEANUP\_INPUT\_OPT deallocates all
-!  allocatable fields of the Input Options object.
-!\\
-!\\
-! !INTERFACE:
-!
+   !> \brief Cleanup the Config options
+   !!
+   !! This subroutine cleans up the Config options
+   !! 
+   !! \param Config     The Config object
+   !! \param RC         The return code
+   !!!>
    SUBROUTINE Cleanup_Config( Config, RC )
 !
 ! !USES:
@@ -189,13 +172,6 @@ CONTAINS
 ! !OUTPUT PARAMETERS:
 !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
-!
-! !REVISION HISTORY:
-!  02 Nov 2012 - R. Yantosca - Initial version
-!  See https://github.com/geoschem/CATChem for complete history
-!EOP
-!------------------------------------------------------------------------------
-!BOC
 
       ! Assume success
       RC = CC_SUCCESS
@@ -207,5 +183,5 @@ CONTAINS
       ! Nothing to do yet
 
    END SUBROUTINE Cleanup_Config
-!EOC
+
 END MODULE Config_Opt_Mod

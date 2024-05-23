@@ -1,3 +1,8 @@
+!> \file state_mod.F90
+!!
+!! \brief This file contains the module for catchem state
+!!
+
 module state_mod
    use precision_mod
    use Config_Opt_Mod, only : ConfigType
@@ -7,15 +12,10 @@ module state_mod
 
    IMPLICIT NONE
 
-   type(GridStateType) :: GridState
-   type(MetStateType)  :: MetState
-   type(ChemStateType) :: ChemState
-   type(ConfigType)  :: Config
-
-   ! PUBLIC :: Init_State
-   PUBLIC :: GridState
-   PUBLIC :: MetState
-   PUBLIC :: ChemState
-   PUBLIC :: Config
+   ! PUBLIC
+   type(GridStateType), PUBLIC :: GridState
+   type(MetStateType),  PUBLIC :: MetState
+   type(ChemStateType), PUBLIC :: ChemState
+   type(ConfigType),    PUBLIC  :: Config
 
 end module state_mod
