@@ -1,4 +1,4 @@
-!> \file charpak_mod.F90
+!> \file
 !! \brief Module for character string manipulation
 !!
 MODULE Charpak_Mod
