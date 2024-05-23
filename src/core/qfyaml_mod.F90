@@ -4,7 +4,7 @@
 !! Contains routines for reading a YAML file into Fortran,
 !!  based off the "config_fortran" package of H. J. Teunissen.
 !!
-!! Original Code taken from https://github.com/geoschem/geos-chem/blob/main/Headers/qfyaml_mod.F90
+!! Original Code taken from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/qfyaml_mod.F90
 !!!>
 
 MODULE QFYAML_Mod
