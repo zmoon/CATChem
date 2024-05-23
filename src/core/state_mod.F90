@@ -1,6 +1,6 @@
 !> \file state_mod.F90
 !!
-!! \brief This file contains the module for catchem state
+!! \brief This file contains the module for CATChem state
 !!
 
 module state_mod
