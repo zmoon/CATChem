@@ -3,7 +3,7 @@
 !------------------------------------------------------------------------------
 !BOP
 !
-! !MODULE: Config_Opt_mod.F90
+! !MODULE: Config_mod.F90
 !
 ! !DESCRIPTION: Module INPUT\_OPT\_MOD contains the derived type for CATChem
 !  options and logical switches.
@@ -22,15 +22,15 @@ MODULE Config_Opt_Mod
 !
 ! !PUBLIC MEMBER FUNCTIONS:
 !
-   PUBLIC :: Set_Config_Opt
-   PUBLIC :: Cleanup_Config_Opt
+   PUBLIC :: Set_Config
+   PUBLIC :: Cleanup_Config
 !
 ! !PUBLIC DATA MEMBERS:
 !
    !=========================================================================
    ! Derived type for Input Options
    !=========================================================================
-   TYPE, PUBLIC :: OptConfig
+   TYPE, PUBLIC :: ConfigType
 
       !----------------------------------------
       ! General Runtime & Distributed Comp Info
@@ -58,13 +58,19 @@ MODULE Config_Opt_Mod
       !-----------------------------------------
       ! PROCESSING MENU fields
       !-----------------------------------------
+
+      ! Dust Process
       LOGICAL                     :: dust_activate
       INTEGER                     :: dust_scheme
+      INTEGER                     :: dust_fengsha_drag_opt  ! Fengsha Option for drag Paramertization (1 MB95; 2) Input Value)
+      INTEGER                     :: dust_fengsha_moist_opt ! Fengsha Option for moisture Paramertization (1 Fecan; 2 Shao)
+
+      ! SeaSalt Process
       LOGICAL                     :: seasalt_activate
       INTEGER                     :: seasalt_scheme
 
 
-   END TYPE OptConfig
+   END TYPE ConfigType
 !
 ! !REMARKS:
 !
@@ -80,7 +86,7 @@ CONTAINS
 !------------------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: Set_Config_Opt
+! !IROUTINE: Set_Config
 !
 ! !DESCRIPTION: Subroutine SET\_INPUT\_OPT intializes all CATChem
 !  options carried in Input Options derived type object.
@@ -88,7 +94,7 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Set_Config_Opt( am_I_Root, Config_Opt, RC )
+   SUBROUTINE Set_Config( am_I_Root, Config, RC )
 !
 ! !USES:
 !
@@ -100,7 +106,7 @@ CONTAINS
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input Options object
+      TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -129,35 +135,40 @@ CONTAINS
       !----------------------------------------
       ! General Runtime & Distributed Comp Info
       !----------------------------------------
-      Config_Opt%amIRoot                = am_I_Root
-      Config_Opt%isMPI                  = .FALSE.
-      Config_Opt%numCPUs                = 1
-      Config_Opt%thisCPU                = -1
-      Config_Opt%MPIComm                = -1
+      Config%amIRoot                = am_I_Root
+      Config%isMPI                  = .FALSE.
+      Config%numCPUs                = 1
+      Config%thisCPU                = -1
+      Config%MPIComm                = -1
 
       !----------------------------------------
       ! Dry run info (print out file names)
       !----------------------------------------
-      Config_Opt%DryRun                 = .FALSE.
+      Config%DryRun                 = .FALSE.
 
       !-----------------------------------------
       ! PROCESSING MENU fields
       !-----------------------------------------
-      Config_Opt%dust_activate = .FALSE.
-      Config_Opt%dust_scheme = 1
-      Config_Opt%seasalt_activate = .FALSE.
-      Config_Opt%seasalt_scheme = 1
+      ! Dust Process
+      Config%dust_activate = .FALSE.
+      Config%dust_scheme = 1
+      Config%dust_fengsha_drag_opt = 1
+      Config%dust_fengsha_moist_opt = 1
+
+      ! SeaSalt Process
+      Config%seasalt_activate = .FALSE.
+      Config%seasalt_scheme = 1
 
 
 
-   END SUBROUTINE Set_Config_Opt
+   END SUBROUTINE Set_Config
 !EOC
 !------------------------------------------------------------------------------
 !                  CATChem Model                                              !
 !------------------------------------------------------------------------------
 !BOP
 !
-! !IROUTINE: Cleanup_Config_Opt
+! !IROUTINE: Cleanup_Config
 !
 ! !DESCRIPTION: Subroutine CLEANUP\_INPUT\_OPT deallocates all
 !  allocatable fields of the Input Options object.
@@ -165,7 +176,7 @@ CONTAINS
 !\\
 ! !INTERFACE:
 !
-   SUBROUTINE Cleanup_Config_Opt( Config_Opt, RC )
+   SUBROUTINE Cleanup_Config( Config, RC )
 !
 ! !USES:
 !
@@ -173,7 +184,7 @@ CONTAINS
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(OptConfig), INTENT(INOUT) :: Config_Opt   ! Input Options object
+      TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -195,6 +206,6 @@ CONTAINS
 
       ! Nothing to do yet
 
-   END SUBROUTINE Cleanup_Config_Opt
+   END SUBROUTINE Cleanup_Config
 !EOC
 END MODULE Config_Opt_Mod

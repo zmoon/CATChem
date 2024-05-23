@@ -13,7 +13,7 @@ module species_mod
    use precision_mod
    implicit none
 
-   type :: Species
+   type :: SpeciesType
       private
 
       ! Names
@@ -46,7 +46,7 @@ module species_mod
       integer :: drydep_index         !< drydep index in drydep array
       integer :: photolysis_index     !< photolysis index in photolysis array
       integer :: gocart_aero_index    !< gocart_aero index in gocart_aero array
-   end type Species
+   end type SpeciesType
 
    !
    ! !DEFINED PARAMETERS:
@@ -59,21 +59,20 @@ module species_mod
 
 contains
 
-   subroutine init(sp, species_name, atomic_num)
-      class(Species), intent(out) :: sp
+   subroutine init(Species_State, species_name, atomic_num)
+      type(SpeciesType), intent(inout) :: Species_State
       character(len=*), intent(in) :: species_name
       integer, intent(in) :: atomic_num
 
-      sp%short_name = species_name
-      sp%mw_g = atomic_num
+      Species_State%short_name = species_name
+      Species_State%mw_g = atomic_num
    end subroutine init
 
-   function get_name(this) result(species_name)
-      class(Species), intent(in) :: this
-      character(len=30) :: species_name
+   ! function get_name(this) result(species_name)
+   !    character(len=30) :: species_name
 
-      species_name = this%short_name
-   end function get_name
+   !    species_name = this%short_name
+   ! end function get_name
 
    ! function get_atomic_number(this) result(atomic_num)
    !    class(Species), intent(in) :: this

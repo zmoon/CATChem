@@ -1,22 +1,8 @@
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: state_met_mod.F90
-!
-! !DESCRIPTION: Module STATE\_MET\_MOD contains the derived type
-!  used to define the Meteorology State object for CATChem.
-!\\
-!\\
-!  This module also contains the routines that allocate and deallocate memory
-!  to the Meteorology State object.  The Meteorology State object is not
-!  defined in this module.  It must be be declared as variable in the top-level
-!  driver routine, and then passed to lower-level routines as an argument.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \defgroup MetState_Mod MetState Module
+!! \brief Contains the MetStateType data type and related subroutines and functions.
+!!
+!! The MetState_Mod module contains the MetStateType data type and related subroutines and functions for managing the state of the meteorology model.
+!!
 MODULE MetState_Mod
    !
    ! USES:
@@ -32,7 +18,7 @@ MODULE MetState_Mod
    PRIVATE
    !
    ! !PUBLIC MEMBER FUNCTIONS:
-   PUBLIC :: Zero_State_Met
+   PUBLIC :: Zero_MetState
    PUBLIC :: Met_Allocate
    !
    ! !PUBLIC DATA MEMBERS:
@@ -202,8 +188,8 @@ MODULE MetState_Mod
       REAL(fp), POINTER :: DELP_DRY      (:,:,:) ! Delta-P (dry) across box [hPa]
       REAL(fp), POINTER :: AD            (:,:,:) ! Dry air mass [kg] in grid box
       REAL(fp), POINTER :: AIRVOL        (:,:,:) ! Grid box volume [m3] (dry air)
-      REAL(fp), POINTER :: DP_DRY_PREV   (:,:,:) ! Previous State_Met%DELP_DRY
-      REAL(fp), POINTER :: SPHU_PREV     (:,:,:) ! Previous State_Met%SPHU
+      REAL(fp), POINTER :: DP_DRY_PREV   (:,:,:) ! Previous MetState%DELP_DRY
+      REAL(fp), POINTER :: SPHU_PREV     (:,:,:) ! Previous MetState%SPHU
 
       !  !----------------------------------------------------------------------
       !  ! Fields read in from a previous GC run
@@ -249,7 +235,7 @@ MODULE MetState_Mod
       INTEGER           :: PBL_MAX_L             ! Max level where PBL top occurs
 
       !----------------------------------------------------------------------
-      ! Registry of variables contained within State_Met
+      ! Registry of variables contained within MetState
       !----------------------------------------------------------------------
       CHARACTER(LEN=3)             :: State     = 'MET'    ! Name of this state
       ! TYPE(MetaRegItem), POINTER   :: Registry  => NULL()  ! Registry object
@@ -263,11 +249,11 @@ CONTAINS
    ! PUBLIC MEMBER FUNCTIONS
    !---------------------------------------------------------------------------
    !
-   SUBROUTINE Zero_State_Met( State_Met, RC )
+   SUBROUTINE Zero_MetState( MetState, RC )
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      TYPE(MetStateType), INTENT(INOUT) :: State_Met
+      TYPE(MetStateType), INTENT(INOUT) :: MetState
       !
       ! !OUTPUT PARAMETERS:
       !
@@ -287,152 +273,152 @@ CONTAINS
       ! Nullify all fields for safety's sake before allocating them
       ! This can prevent compilation errors caused by uninitialized values
       !=======================================================================
-      State_Met%ALBD_VIS       => NULL() ! Visible albedo
-      State_Met%ALBD_NIR       => NULL() ! Near-IR albedo
-      State_Met%ALBD_UV        => NULL() ! UV albedo
-      State_Met%AREA_M2        => NULL() ! Area of grid box
-      State_Met%CLDFRC         => NULL() ! Cloud fraction
-      ! State_Met%CLDTOPS        => NULL() ! Cloud top level
-      State_Met%CONV_DEPTH     => NULL() ! Convective depth
-      State_Met%EFLUX          => NULL() ! Surface flux
-      State_Met%FLASH_DENS     => NULL() ! Flash density
-      State_Met%FRLAKE         => NULL() ! Fraction Lake of grid box
-      State_Met%FRLAND         => NULL() ! Fraction Land of grid box
-      State_Met%FRLANDIC       => NULL() ! Fraction LandIce of grid box
-      State_Met%FROCEAN        => NULL() ! Fraction Ocean of grid box
-      State_Met%FRSEAICE       => NULL() ! Fraction SeaIce of grid box
-      State_Met%FRSNO          => NULL() ! Fraction Snow of grid box
-      State_Met%GWETROOT       => NULL() ! Soil Moisture Root Zone
-      State_Met%GWETTOP        => NULL() ! Soil Moisture Top Level
-      State_Met%HFLUX          => NULL() ! Surface flux
-      State_Met%IsLand         => NULL() ! Is this grid box land?
-      State_Met%IsWater        => NULL() ! Is this grid box water?
-      State_Met%IsIce          => NULL() ! Is this grid box ice?
-      State_Met%IsSnow         => NULL() ! Is this grid box snow?
-      State_Met%LAI            => NULL() ! Leaf Area Index
-      State_Met%PARDR          => NULL() ! Direct  downward PAR
-      State_Met%PARDF          => NULL() ! Diffuse downward PAR
-      State_Met%PBLH           => NULL() ! PBL height
-      State_Met%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
-      State_Met%PBL_TOP_L      => NULL() ! PBL top [levels]
-      State_Met%PBL_TOP_m      => NULL() ! PBL top [m]
-      State_Met%PBL_THICK      => NULL() ! PBL thickness
-      State_Met%PHIS           => NULL() ! Surface geopotential
-      State_Met%PRECANV        => NULL() ! Canopy evaporation
-      State_Met%PRECCON        => NULL() ! Convective precipitation
-      State_Met%PRECLSC        => NULL() ! Large-scale precipitation
-      State_Met%PRECTOT        => NULL() ! Total precipitation
-      ! State_Met%PS1_WET        => NULL()
-      ! State_Met%PS2_WET        => NULL()
-      ! State_Met%PSC2_WET       => NULL()
-      ! State_Met%PS1_DRY        => NULL()
-      ! State_Met%PS2_DRY        => NULL()
-      ! State_Met%PSC2_DRY       => NULL()
-      State_Met%QV2M           => NULL() ! 2-m specific humidity
-      State_Met%SEAICE00       => NULL() ! Sea ice fraction
-      State_Met%SEAICE10       => NULL() ! Sea ice fraction
-      State_Met%SEAICE20       => NULL() ! Sea ice fraction
-      State_Met%SEAICE30       => NULL() ! Sea ice fraction
-      State_Met%SEAICE40       => NULL() ! Sea ice fraction
-      State_Met%SEAICE50       => NULL() ! Sea ice fraction
-      State_Met%SEAICE60       => NULL() ! Sea ice fraction
-      State_Met%SEAICE70       => NULL() ! Sea ice fraction
-      State_Met%SEAICE80       => NULL() ! Sea ice fraction
-      State_Met%SEAICE90       => NULL() ! Sea ice fraction
-      State_Met%SLP            => NULL() ! Sea level pressure
-      State_Met%SNODP          => NULL() ! Snow depth
-      State_Met%SNOMAS         => NULL() ! Snow mass
-      State_Met%SUNCOS         => NULL() ! Cosine of solar zenith angle
-      State_Met%SUNCOSmid      => NULL() ! Cosine of solar zenith angle
-      State_Met%SUNCOSsum      => NULL() ! Cosine of solar zenith angle
-      State_Met%SZAFACT        => NULL() ! Cosine of solar zenith angle
-      State_Met%SWGDN          => NULL() ! Surface downward SW radiation
-      State_Met%TO3            => NULL() ! Total ozone
-      State_Met%TROPP          => NULL() ! Topopause level pressure
-      State_Met%TropLev        => NULL() ! Topopause level
-      State_Met%TropHt         => NULL() ! Top level height
-      State_Met%TS             => NULL() ! Surface temperature
-      State_Met%TSKIN          => NULL() ! Skin temperature
-      State_Met%U10M           => NULL() ! 10-m zonal wind
-      State_Met%USTAR          => NULL() ! Friction velocity
-      State_Met%V10M           => NULL() ! 10-m meridional wind
-      State_Met%Z0             => NULL() ! Surface roughness
-      State_Met%CNV_FRC        => NULL() ! Convective fraction
-      State_Met%CLDF           => NULL() ! Cloud fraction
-      State_Met%CMFMC          => NULL() ! Convective mass flux
-      State_Met%DQRCU          => NULL()
-      State_Met%DQRLSAN        => NULL()
-      State_Met%DTRAIN         => NULL()
-      State_Met%F_OF_PBL       => NULL()
-      State_Met%F_UNDER_PBLTOP => NULL()
-      State_Met%OMEGA          => NULL()
-      State_Met%OPTD           => NULL()
-      State_Met%PEDGE          => NULL()
-      State_Met%PFICU          => NULL()
-      State_Met%PFILSAN        => NULL()
-      State_Met%PFLCU          => NULL()
-      State_Met%PFLLSAN        => NULL()
-      State_Met%QI             => NULL()
-      State_Met%QL             => NULL()
-      State_Met%RH             => NULL()
-      State_Met%SPHU           => NULL()
-      State_Met%SPHU1          => NULL()
-      State_Met%SPHU2          => NULL()
-      State_Met%T              => NULL()
-      State_Met%TAUCLI         => NULL()
-      State_Met%TAUCLW         => NULL()
-      State_Met%TMPU1          => NULL()
-      State_Met%TMPU2          => NULL()
-      State_Met%U              => NULL()
-      State_Met%UPDVVEL        => NULL()
-      State_Met%V              => NULL()
-      State_Met%PEDGE_DRY      => NULL()
-      State_Met%PMID           => NULL()
-      State_Met%PMID_DRY       => NULL()
-      State_Met%THETA          => NULL()
-      State_Met%TV             => NULL()
-      State_Met%MAIRDEN        => NULL()
-      State_Met%AIRDEN         => NULL()
-      State_Met%AIRNUMDEN      => NULL()
-      State_Met%AVGW           => NULL()
-      State_Met%BXHEIGHT       => NULL()
-      State_Met%DELP           => NULL()
-      State_Met%DELP_DRY       => NULL()
-      State_Met%AD             => NULL()
-      State_Met%PS             => NULL()
-      State_Met%AIRVOL         => NULL()
-      State_Met%DP_DRY_PREV    => NULL()
-      State_Met%SPHU_PREV      => NULL()
-      State_Met%IREG           => NULL()
-      State_Met%ILAND          => NULL()
-      State_Met%IUSE           => NULL()
-      State_Met%MODISLAI       => NULL()
-      State_Met%XLAI           => NULL()
-      State_Met%LandTypeFrac   => NULL()
-      State_Met%XLAI_NATIVE    => NULL()
-      State_Met%XLAI2          => NULL()
-      State_Met%InChemGrid     => NULL()
-      State_Met%InPbl          => NULL()
-      State_Met%InStratMeso    => NULL()
-      State_Met%InStratosphere => NULL()
-      State_Met%InTroposphere  => NULL()
-      State_Met%LocalSolarTime => NULL()
-      State_Met%IsLocalNoon    => NULL()
-      State_Met%IMIX           => NULL()
-      State_Met%FPBL           => NULL()
-      State_Met%PBL_MAX_L      = 0
+      MetState%ALBD_VIS       => NULL() ! Visible albedo
+      MetState%ALBD_NIR       => NULL() ! Near-IR albedo
+      MetState%ALBD_UV        => NULL() ! UV albedo
+      MetState%AREA_M2        => NULL() ! Area of grid box
+      MetState%CLDFRC         => NULL() ! Cloud fraction
+      ! MetState%CLDTOPS        => NULL() ! Cloud top level
+      MetState%CONV_DEPTH     => NULL() ! Convective depth
+      MetState%EFLUX          => NULL() ! Surface flux
+      MetState%FLASH_DENS     => NULL() ! Flash density
+      MetState%FRLAKE         => NULL() ! Fraction Lake of grid box
+      MetState%FRLAND         => NULL() ! Fraction Land of grid box
+      MetState%FRLANDIC       => NULL() ! Fraction LandIce of grid box
+      MetState%FROCEAN        => NULL() ! Fraction Ocean of grid box
+      MetState%FRSEAICE       => NULL() ! Fraction SeaIce of grid box
+      MetState%FRSNO          => NULL() ! Fraction Snow of grid box
+      MetState%GWETROOT       => NULL() ! Soil Moisture Root Zone
+      MetState%GWETTOP        => NULL() ! Soil Moisture Top Level
+      MetState%HFLUX          => NULL() ! Surface flux
+      MetState%IsLand         => NULL() ! Is this grid box land?
+      MetState%IsWater        => NULL() ! Is this grid box water?
+      MetState%IsIce          => NULL() ! Is this grid box ice?
+      MetState%IsSnow         => NULL() ! Is this grid box snow?
+      MetState%LAI            => NULL() ! Leaf Area Index
+      MetState%PARDR          => NULL() ! Direct  downward PAR
+      MetState%PARDF          => NULL() ! Diffuse downward PAR
+      MetState%PBLH           => NULL() ! PBL height
+      MetState%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
+      MetState%PBL_TOP_L      => NULL() ! PBL top [levels]
+      MetState%PBL_TOP_m      => NULL() ! PBL top [m]
+      MetState%PBL_THICK      => NULL() ! PBL thickness
+      MetState%PHIS           => NULL() ! Surface geopotential
+      MetState%PRECANV        => NULL() ! Canopy evaporation
+      MetState%PRECCON        => NULL() ! Convective precipitation
+      MetState%PRECLSC        => NULL() ! Large-scale precipitation
+      MetState%PRECTOT        => NULL() ! Total precipitation
+      ! MetState%PS1_WET        => NULL()
+      ! MetState%PS2_WET        => NULL()
+      ! MetState%PSC2_WET       => NULL()
+      ! MetState%PS1_DRY        => NULL()
+      ! MetState%PS2_DRY        => NULL()
+      ! MetState%PSC2_DRY       => NULL()
+      MetState%QV2M           => NULL() ! 2-m specific humidity
+      MetState%SEAICE00       => NULL() ! Sea ice fraction
+      MetState%SEAICE10       => NULL() ! Sea ice fraction
+      MetState%SEAICE20       => NULL() ! Sea ice fraction
+      MetState%SEAICE30       => NULL() ! Sea ice fraction
+      MetState%SEAICE40       => NULL() ! Sea ice fraction
+      MetState%SEAICE50       => NULL() ! Sea ice fraction
+      MetState%SEAICE60       => NULL() ! Sea ice fraction
+      MetState%SEAICE70       => NULL() ! Sea ice fraction
+      MetState%SEAICE80       => NULL() ! Sea ice fraction
+      MetState%SEAICE90       => NULL() ! Sea ice fraction
+      MetState%SLP            => NULL() ! Sea level pressure
+      MetState%SNODP          => NULL() ! Snow depth
+      MetState%SNOMAS         => NULL() ! Snow mass
+      MetState%SUNCOS         => NULL() ! Cosine of solar zenith angle
+      MetState%SUNCOSmid      => NULL() ! Cosine of solar zenith angle
+      MetState%SUNCOSsum      => NULL() ! Cosine of solar zenith angle
+      MetState%SZAFACT        => NULL() ! Cosine of solar zenith angle
+      MetState%SWGDN          => NULL() ! Surface downward SW radiation
+      MetState%TO3            => NULL() ! Total ozone
+      MetState%TROPP          => NULL() ! Topopause level pressure
+      MetState%TropLev        => NULL() ! Topopause level
+      MetState%TropHt         => NULL() ! Top level height
+      MetState%TS             => NULL() ! Surface temperature
+      MetState%TSKIN          => NULL() ! Skin temperature
+      MetState%U10M           => NULL() ! 10-m zonal wind
+      MetState%USTAR          => NULL() ! Friction velocity
+      MetState%V10M           => NULL() ! 10-m meridional wind
+      MetState%Z0             => NULL() ! Surface roughness
+      MetState%CNV_FRC        => NULL() ! Convective fraction
+      MetState%CLDF           => NULL() ! Cloud fraction
+      MetState%CMFMC          => NULL() ! Convective mass flux
+      MetState%DQRCU          => NULL()
+      MetState%DQRLSAN        => NULL()
+      MetState%DTRAIN         => NULL()
+      MetState%F_OF_PBL       => NULL()
+      MetState%F_UNDER_PBLTOP => NULL()
+      MetState%OMEGA          => NULL()
+      MetState%OPTD           => NULL()
+      MetState%PEDGE          => NULL()
+      MetState%PFICU          => NULL()
+      MetState%PFILSAN        => NULL()
+      MetState%PFLCU          => NULL()
+      MetState%PFLLSAN        => NULL()
+      MetState%QI             => NULL()
+      MetState%QL             => NULL()
+      MetState%RH             => NULL()
+      MetState%SPHU           => NULL()
+      MetState%SPHU1          => NULL()
+      MetState%SPHU2          => NULL()
+      MetState%T              => NULL()
+      MetState%TAUCLI         => NULL()
+      MetState%TAUCLW         => NULL()
+      MetState%TMPU1          => NULL()
+      MetState%TMPU2          => NULL()
+      MetState%U              => NULL()
+      MetState%UPDVVEL        => NULL()
+      MetState%V              => NULL()
+      MetState%PEDGE_DRY      => NULL()
+      MetState%PMID           => NULL()
+      MetState%PMID_DRY       => NULL()
+      MetState%THETA          => NULL()
+      MetState%TV             => NULL()
+      MetState%MAIRDEN        => NULL()
+      MetState%AIRDEN         => NULL()
+      MetState%AIRNUMDEN      => NULL()
+      MetState%AVGW           => NULL()
+      MetState%BXHEIGHT       => NULL()
+      MetState%DELP           => NULL()
+      MetState%DELP_DRY       => NULL()
+      MetState%AD             => NULL()
+      MetState%PS             => NULL()
+      MetState%AIRVOL         => NULL()
+      MetState%DP_DRY_PREV    => NULL()
+      MetState%SPHU_PREV      => NULL()
+      MetState%IREG           => NULL()
+      MetState%ILAND          => NULL()
+      MetState%IUSE           => NULL()
+      MetState%MODISLAI       => NULL()
+      MetState%XLAI           => NULL()
+      MetState%LandTypeFrac   => NULL()
+      MetState%XLAI_NATIVE    => NULL()
+      MetState%XLAI2          => NULL()
+      MetState%InChemGrid     => NULL()
+      MetState%InPbl          => NULL()
+      MetState%InStratMeso    => NULL()
+      MetState%InStratosphere => NULL()
+      MetState%InTroposphere  => NULL()
+      MetState%LocalSolarTime => NULL()
+      MetState%IsLocalNoon    => NULL()
+      MetState%IMIX           => NULL()
+      MetState%FPBL           => NULL()
+      MetState%PBL_MAX_L      = 0
 
-   END SUBROUTINE Zero_State_Met
+   END SUBROUTINE Zero_MetState
 
-   SUBROUTINE Met_Allocate( State_Grid, State_Met, RC)
+   SUBROUTINE Met_Allocate( GridState, MetState, RC)
       ! USES
       USE GridState_Mod, Only : GridStateType
 
       IMPLICIT NONE
 
       ! Arguments
-      TYPE(GridStateType), INTENT(IN)  :: State_Grid
-      TYPE(MetStateType),  INTENT(OUT) :: State_Met
+      TYPE(GridStateType), INTENT(IN)  :: GridState
+      TYPE(MetStateType),  INTENT(OUT) :: MetState
       INTEGER,             INTENT(OUT) :: RC
 
       ! Local variables
@@ -445,268 +431,268 @@ CONTAINS
 
       ! Nullify all fields for safety's sake before allocating them
       ! This can prevent compilation errors caused by uninitialized values
-      State_Met%ALBD_VIS       => NULL() ! Visible albedo
-      State_Met%ALBD_NIR       => NULL() ! Near-IR albedo
-      State_Met%ALBD_UV        => NULL() ! UV albedo
-      State_Met%AREA_M2        => NULL() ! Area of grid box
-      ! State_Met%CLDFRA         => NULL() ! Cloud fraction
-      State_Met%CONV_DEPTH     => NULL() ! Convective depth
-      State_Met%EFLUX          => NULL() ! Latent heat flux
-      State_Met%FLASH_DENS     => NULL() ! Flash density
-      State_Met%FRLAKE         => NULL() ! Lake fraction
-      State_Met%FROCEAN        => NULL() ! Ocean fraction
-      State_Met%FRLAND         => NULL() ! Land fraction
-      State_Met%FRLANDIC       => NULL() ! Land ice fraction
-      State_Met%FROCEAN        => NULL() ! Ocean fraction
-      State_Met%FRSNO          => NULL() ! Snow fraction
-      State_Met%FRSEAICE       => NULL() ! Sea ice fraction
-      State_Met%GWETROOT       => NULL() ! Root zone wetted area
-      State_Met%GWETTOP        => NULL() ! Top level wetted area
-      State_Met%HFLUX          => NULL() ! Surface flux
-      State_Met%IsLand         => NULL() ! Is this grid box land?
-      State_Met%IsWater        => NULL() ! Is this grid box water?
-      State_Met%IsIce          => NULL() ! Is this grid box ice?
-      State_Met%IsSnow         => NULL() ! Is this grid box snow?
-      State_Met%LAI            => NULL() ! Leaf area index
-      State_Met%PARDR          => NULL() ! Direct  downward PAR
-      State_Met%PARDF          => NULL() ! Diffuse downward PAR
-      State_Met%PBLH           => NULL() ! PBL height
-      State_Met%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
-      State_Met%PBL_TOP_L      => NULL() ! PBL top [levels]
-      State_Met%PBL_TOP_m      => NULL() ! PBL top [m]
-      State_Met%PS             => NULL() ! Surface pressure
-      State_Met%QV2M           => NULL() ! 2m specific humidity
-      State_Met%T2M            => NULL() ! 2m temperature
-      State_Met%TSKIN          => NULL() ! Skin temperature
-      State_Met%U10M           => NULL() ! 10m U wind
-      State_Met%V10M           => NULL() ! 10m V wind
-      State_Met%z0             => NULL() ! Surface roughness
-      State_Met%USTAR          => NULL() ! Friction velocity
+      MetState%ALBD_VIS       => NULL() ! Visible albedo
+      MetState%ALBD_NIR       => NULL() ! Near-IR albedo
+      MetState%ALBD_UV        => NULL() ! UV albedo
+      MetState%AREA_M2        => NULL() ! Area of grid box
+      ! MetState%CLDFRA         => NULL() ! Cloud fraction
+      MetState%CONV_DEPTH     => NULL() ! Convective depth
+      MetState%EFLUX          => NULL() ! Latent heat flux
+      MetState%FLASH_DENS     => NULL() ! Flash density
+      MetState%FRLAKE         => NULL() ! Lake fraction
+      MetState%FROCEAN        => NULL() ! Ocean fraction
+      MetState%FRLAND         => NULL() ! Land fraction
+      MetState%FRLANDIC       => NULL() ! Land ice fraction
+      MetState%FROCEAN        => NULL() ! Ocean fraction
+      MetState%FRSNO          => NULL() ! Snow fraction
+      MetState%FRSEAICE       => NULL() ! Sea ice fraction
+      MetState%GWETROOT       => NULL() ! Root zone wetted area
+      MetState%GWETTOP        => NULL() ! Top level wetted area
+      MetState%HFLUX          => NULL() ! Surface flux
+      MetState%IsLand         => NULL() ! Is this grid box land?
+      MetState%IsWater        => NULL() ! Is this grid box water?
+      MetState%IsIce          => NULL() ! Is this grid box ice?
+      MetState%IsSnow         => NULL() ! Is this grid box snow?
+      MetState%LAI            => NULL() ! Leaf area index
+      MetState%PARDR          => NULL() ! Direct  downward PAR
+      MetState%PARDF          => NULL() ! Diffuse downward PAR
+      MetState%PBLH           => NULL() ! PBL height
+      MetState%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
+      MetState%PBL_TOP_L      => NULL() ! PBL top [levels]
+      MetState%PBL_TOP_m      => NULL() ! PBL top [m]
+      MetState%PS             => NULL() ! Surface pressure
+      MetState%QV2M           => NULL() ! 2m specific humidity
+      MetState%T2M            => NULL() ! 2m temperature
+      MetState%TSKIN          => NULL() ! Skin temperature
+      MetState%U10M           => NULL() ! 10m U wind
+      MetState%V10M           => NULL() ! 10m V wind
+      MetState%z0             => NULL() ! Surface roughness
+      MetState%USTAR          => NULL() ! Friction velocity
 
       !--------------------------------------------------
       ! Allocate fields
       !--------------------------------------------------
 
       ! Visible Surface Albedo
-      ALLOCATE( State_Met%ALBD_VIS( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%ALBD_VIS', 0, RC )
+      ALLOCATE( MetState%ALBD_VIS( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%ALBD_VIS', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%ALBD_VIS = 0e+0_fp
+      MetState%ALBD_VIS = 0e+0_fp
 
       ! Near-IR Surface Albedo
-      ALLOCATE( State_Met%ALBD_NIR( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%ALBD_NIR', 0, RC )
+      ALLOCATE( MetState%ALBD_NIR( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%ALBD_NIR', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%ALBD_NIR = 0e+0_fp
+      MetState%ALBD_NIR = 0e+0_fp
 
       ! UV Surface Albedo
-      ALLOCATE( State_Met%ALBD_UV( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%ALBD_UV', 0, RC )
+      ALLOCATE( MetState%ALBD_UV( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%ALBD_UV', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%ALBD_UV = 0e+0_fp
+      MetState%ALBD_UV = 0e+0_fp
 
       ! Grid Box Area
-      ALLOCATE( State_Met%AREA_M2( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%AREA_M2', 0, RC )
+      ALLOCATE( MetState%AREA_M2( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%AREA_M2', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%AREA_M2 = 0e+0_fp
+      MetState%AREA_M2 = 0e+0_fp
 
       ! Cloud Fraction
-      ALLOCATE( State_Met%CLDFRC( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%CLDFRC', 0, RC )
+      ALLOCATE( MetState%CLDFRC( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%CLDFRC', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%CLDFRC = 0e+0_fp
+      MetState%CLDFRC = 0e+0_fp
 
       ! Convective Depth
-      ALLOCATE( State_Met%CONV_DEPTH( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%CONV_DEPTH', 0, RC )
+      ALLOCATE( MetState%CONV_DEPTH( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%CONV_DEPTH', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%CONV_DEPTH = 0e+0_fp
+      MetState%CONV_DEPTH = 0e+0_fp
 
       ! Latent Heaf Flux
-      ALLOCATE( State_Met%EFLUX( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%EFLUX', 0, RC )
+      ALLOCATE( MetState%EFLUX( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%EFLUX', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%EFLUX = 0e+0_fp
+      MetState%EFLUX = 0e+0_fp
 
       ! Flash Density
-      ALLOCATE( State_Met%FLASH_DENS( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FLASH_DENS', 0, RC )
+      ALLOCATE( MetState%FLASH_DENS( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FLASH_DENS', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
 
       ! Fraction of Lake
-      ALLOCATE( State_Met%FRLAKE( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FRLAKE', 0, RC )
+      ALLOCATE( MetState%FRLAKE( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FRLAKE', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FRLAKE = 0e+0_fp
+      MetState%FRLAKE = 0e+0_fp
 
       ! Fraction of Land
-      ALLOCATE( State_Met%FRLAND( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FRLAND', 0, RC )
+      ALLOCATE( MetState%FRLAND( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FRLAND', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FRLAND = 0e+0_fp
+      MetState%FRLAND = 0e+0_fp
 
       ! Fraction of Land
-      ALLOCATE( State_Met%FRLANDIC( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FRLANDIC', 0, RC )
+      ALLOCATE( MetState%FRLANDIC( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FRLANDIC', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FRLANDIC = 0e+0_fp
+      MetState%FRLANDIC = 0e+0_fp
 
       ! Fraction of Ocean
-      ALLOCATE( State_Met%FROCEAN( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FROCEAN', 0, RC )
+      ALLOCATE( MetState%FROCEAN( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FROCEAN', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FROCEAN = 0e+0_fp
+      MetState%FROCEAN = 0e+0_fp
 
       ! Fraction of Sea Ice
-      ALLOCATE( State_Met%FRSEAICE( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FRSEAICE', 0, RC )
+      ALLOCATE( MetState%FRSEAICE( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FRSEAICE', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FRSEAICE = 0e+0_fp
+      MetState%FRSEAICE = 0e+0_fp
 
       ! Fraction of Snow
-      ALLOCATE( State_Met%FRSNO( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%FRSNO', 0, RC )
+      ALLOCATE( MetState%FRSNO( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%FRSNO', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%FRSNO = 0e+0_fp
+      MetState%FRSNO = 0e+0_fp
 
       ! GWETROOT
-      ALLOCATE( State_Met%GWETROOT( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%GWETROOT', 0, RC )
+      ALLOCATE( MetState%GWETROOT( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%GWETROOT', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%GWETROOT = 0e+0_fp
+      MetState%GWETROOT = 0e+0_fp
 
       ! GWETTOP
-      ALLOCATE( State_Met%GWETTOP( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%GWETTOP', 0, RC )
+      ALLOCATE( MetState%GWETTOP( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%GWETTOP', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%GWETTOP = 0e+0_fp
+      MetState%GWETTOP = 0e+0_fp
 
       ! Heat Flux
-      ALLOCATE( State_Met%HFLUX( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%HFLUX', 0, RC )
+      ALLOCATE( MetState%HFLUX( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%HFLUX', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%HFLUX = 0e+0_fp
+      MetState%HFLUX = 0e+0_fp
 
       ! Is Land grid box
-      ALLOCATE( State_Met%IsLand( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%IsLand', 0, RC )
+      ALLOCATE( MetState%IsLand( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%IsLand', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%IsLand = .false.
+      MetState%IsLand = .false.
 
       ! Is water grid box
-      ALLOCATE( State_Met%IsWater( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%IsWater', 0, RC )
+      ALLOCATE( MetState%IsWater( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%IsWater', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%IsWater = .false.
+      MetState%IsWater = .false.
 
       ! Is Ice grid box
-      ALLOCATE( State_Met%IsIce( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%IsIce', 0, RC )
+      ALLOCATE( MetState%IsIce( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%IsIce', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%IsIce = .false.
+      MetState%IsIce = .false.
 
       ! Is Snow grid box
-      ALLOCATE( State_Met%IsSnow( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%IsSnow', 0, RC )
+      ALLOCATE( MetState%IsSnow( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%IsSnow', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%IsSnow = .false.
+      MetState%IsSnow = .false.
 
       ! Leaf Area Index
-      ALLOCATE( State_Met%LAI( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%LAI', 0, RC )
+      ALLOCATE( MetState%LAI( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%LAI', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%LAI = 0e+0_fp
+      MetState%LAI = 0e+0_fp
 
       ! Direct Downwelling PAR
-      ALLOCATE( State_Met%PARDR( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PARDR', 0, RC )
+      ALLOCATE( MetState%PARDR( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PARDR', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PARDR = 0e+0_fp
+      MetState%PARDR = 0e+0_fp
 
       ! Diffuse Downwelling PAR
-      ALLOCATE( State_Met%PARDF( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PARDF', 0, RC )
+      ALLOCATE( MetState%PARDF( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PARDF', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PARDF = 0e+0_fp
+      MetState%PARDF = 0e+0_fp
 
       ! PBL Height
-      ALLOCATE( State_Met%PBLH( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PBLH', 0, RC )
+      ALLOCATE( MetState%PBLH( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PBLH', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PBLH = 0e+0_fp
+      MetState%PBLH = 0e+0_fp
 
       ! PBL Top in hPa
-      ALLOCATE( State_Met%PBL_TOP_hPa( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PBL_TOP_hPa', 0, RC )
+      ALLOCATE( MetState%PBL_TOP_hPa( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PBL_TOP_hPa', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PBL_TOP_hPa = 0e+0_fp
+      MetState%PBL_TOP_hPa = 0e+0_fp
 
       ! PBL Top level
-      ALLOCATE( State_Met%PBL_TOP_L( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PBL_TOP_L', 0, RC )
+      ALLOCATE( MetState%PBL_TOP_L( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PBL_TOP_L', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PBL_TOP_L = 0e+0_fp
+      MetState%PBL_TOP_L = 0e+0_fp
 
       ! Surface Pressure
-      ALLOCATE( State_Met%PS( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%PS', 0, RC )
+      ALLOCATE( MetState%PS( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%PS', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%PS = 0e+0_fp
+      MetState%PS = 0e+0_fp
 
       ! ! Rain
-      ! ALLOCATE( State_Met%QRAIN( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      ! CALL CC_CheckVar( 'State_Met%QRAIN', 0, RC )
+      ! ALLOCATE( MetState%QRAIN( GridState%NX, GridState%NY ), STAT=RC )
+      ! CALL CC_CheckVar( 'MetState%QRAIN', 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
-      ! State_Met%QRAIN = 0e+0_fp
+      ! MetState%QRAIN = 0e+0_fp
 
       ! ! Snow
-      ! ALLOCATE( State_Met%QSNOW( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      ! CALL CC_CheckVar( 'State_Met%QSNOW', 0, RC )
+      ! ALLOCATE( MetState%QSNOW( GridState%NX, GridState%NY ), STAT=RC )
+      ! CALL CC_CheckVar( 'MetState%QSNOW', 0, RC )
       ! IF ( RC /= CC_SUCCESS ) RETURN
-      ! State_Met%QSNOW = 0e+0_fp
+      ! MetState%QSNOW = 0e+0_fp
 
       ! Specific Humidity 2M
-      ALLOCATE( State_Met%QV2M( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%QV2M', 0, RC )
+      ALLOCATE( MetState%QV2M( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%QV2M', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%QV2M = 0e+0_fp
+      MetState%QV2M = 0e+0_fp
 
       ! Temperature 2M
-      ALLOCATE( State_Met%T2M( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%T2M', 0, RC )
+      ALLOCATE( MetState%T2M( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%T2M', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%T2M = 0e+0_fp
+      MetState%T2M = 0e+0_fp
 
       ! Skin Temperature
-      ALLOCATE( State_Met%TSKIN( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%TSKIN', 0, RC )
+      ALLOCATE( MetState%TSKIN( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%TSKIN', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%TSKIN = 0e+0_fp
+      MetState%TSKIN = 0e+0_fp
 
       ! U Wind Speed 10M
-      ALLOCATE( State_Met%U10M( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%U10M', 0, RC )
+      ALLOCATE( MetState%U10M( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%U10M', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%U10M = 0e+0_fp
+      MetState%U10M = 0e+0_fp
 
       ! V Wind Speed 10M
-      ALLOCATE( State_Met%V10M( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%V10M', 0, RC )
+      ALLOCATE( MetState%V10M( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%V10M', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%V10M = 0e+0_fp
+      MetState%V10M = 0e+0_fp
 
       ! Surface Roughness
-      ALLOCATE( State_Met%z0( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%z0', 0, RC )
+      ALLOCATE( MetState%z0( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%z0', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%z0 = 0e+0_fp
+      MetState%z0 = 0e+0_fp
 
       ! Surface Roughness
-      ALLOCATE( State_Met%USTAR( State_Grid%NX, State_Grid%NY ), STAT=RC )
-      CALL CC_CheckVar( 'State_Met%USTAR', 0, RC )
+      ALLOCATE( MetState%USTAR( GridState%NX, GridState%NY ), STAT=RC )
+      CALL CC_CheckVar( 'MetState%USTAR', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Met%USTAR = 0e+0_fp
+      MetState%USTAR = 0e+0_fp
    end subroutine Met_Allocate
 
 END MODULE MetState_Mod

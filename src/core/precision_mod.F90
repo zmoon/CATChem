@@ -42,6 +42,13 @@ module precision_mod
    REAL(f8),         PARAMETER, PUBLIC :: ZERO_DBLE    =  0.0_f8
 
    !=========================================================================
+   ! Parameters for very tiny numbers
+   !=========================================================================
+   REAL(fp),         PARAMETER, PUBLIC :: TINY         =  1.0e-16_fp
+   REAL(f4),         PARAMETER, PUBLIC :: TINY_REAL    =  1.0e-16_f4
+   REAL(f8),         PARAMETER, PUBLIC :: TINY_DBLE    =  1.0e-31_f8
+
+   !=========================================================================
    ! Parameters for one
    !=========================================================================
    REAL(fp),         PARAMETER, PUBLIC :: ONE          =  1.0_fp

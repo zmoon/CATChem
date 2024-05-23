@@ -1,5 +1,12 @@
-!!! coments for GridState_Mod.F90
-
+!>
+!! \file gridstate_mod.F90
+!! \brief This file contains the module for catchem grid
+!! \author Barry Baker
+!! \date 05/2023
+!! \version 0.1
+!!
+!! This file contains the module for catchem grid
+!!
 
 module GridState_Mod
 
@@ -12,7 +19,6 @@ module GridState_Mod
    PUBLIC :: Grid_Init_State
    PUBLIC :: Grid_State_Allocate
    PUBLIC :: Grid_Cleanup
-
    type, public :: GridStateType
 
       ! Integers
@@ -32,18 +38,31 @@ module GridState_Mod
 
 contains
 
-   subroutine Grid_Init_State(Config_Opt, State_Grid, RC)
-      ! USES
-      USE Config_Opt_Mod, ONLY : OptConfig
+!-------------------------------------------------------------------------
+!
+! Grid_Init_State - Initialize a GridState
+!
+! This subroutine initializes a GridState object.
+!
+! \param Config The input config object.
+! \param GridState The GridState object to be initialized.
+! \param RC The return code.
+!
+! \author Barry Baker
+! \date 05/2023
+!-------------------------------------------------------------------------
+   subroutine Grid_Init_State(Config, GridState, RC)
       use Error_Mod, only : CC_SUCCESS
+
+      use Config_Opt_Mod, Only : ConfigType
 
       implicit none
 
       ! Input Params
-      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+      type(ConfigType),    intent(in)    :: Config ! Input Options object
 
       ! INOUT Params
-      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
+      type(GridStateType), intent(inout) :: GridState ! Grid State object
 
 
       ! OUTPUT Params
@@ -58,21 +77,35 @@ contains
       thisLoc = 'Grid_Init_State() -> at initializing GridState'
 
       ! initialize GridState
-      State_Grid%nx=0
-      State_Grid%ny=0
-      State_Grid%number_of_levels=0
-      State_Grid%area => NULL()
+      GridState%nx=0
+      GridState%ny=0
+      GridState%number_of_levels=0
+      GridState%area => NULL()
 
    end subroutine Grid_Init_State
 
-   subroutine Grid_Init(Config_Opt, State_Grid, RC)
+!----------------------------------------------------------------------------!
+! Grid_Init - Initialize a GridState object
+!
+! This subroutine initializes a GridState object.
+!
+! \param Config The input config object.
+! \param GridState The GridState object to be initialized.
+! \param RC The return code.
+!
+! \author Barry Baker
+! \date 05/2023
+!
+!-------------------------------------------------------------------------
 
-      USE Config_Opt_Mod, ONLY : OptConfig
+   subroutine Grid_Init(Config, GridState, RC)
+
+      USE Config_Opt_Mod, ONLY : ConfigType
 
       implicit none
 
-      type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
-      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
+      type(ConfigType),    intent(in)    :: Config ! Input Options object
+      type(GridStateType), intent(inout) :: GridState ! Grid State object
 
 
       INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
@@ -86,30 +119,42 @@ contains
       ! ------------------
 
       ! start with integers
-      State_Grid%nx = 0
-      State_Grid%ny = 0
-      State_Grid%number_of_levels = 0
+      GridState%nx = 0
+      GridState%ny = 0
+      GridState%number_of_levels = 0
 
       ! nullify arrays
-      State_Grid%area   => NULL()
+      GridState%area   => NULL()
 
    end subroutine Grid_Init
 
-   subroutine Grid_State_Allocate(State_Grid, RC) !Config_Opt, State_Grid, RC)
+!----------------------------------------------------------------------------!
+! Grid_State_Allocate - Allocate memory for GridState
+!
+! This subroutine allocates memory for GridState.
+!
+! \param GridState The GridState object to be allocated.
+! \param RC The return code.
+!
+! \author Barry Baker
+! \date 05/2023
+!-------------------------------------------------------------------------
+
+   subroutine Grid_State_Allocate(GridState, RC) !Config, GridState, RC)
 
       use Error_Mod
-      ! use Config_Opt_Mod, only : OptConfig
+      ! use Config_Mod, only : ConfigType
 
       implicit none
 
       ! input Params
-      ! type(OptConfig),  intent(in)    :: Config_Opt ! Input Options object
+      ! type(ConfigType),  intent(in)    :: Config ! Input Options object
 
       ! INOUT Params
-      type(GridStateType), intent(inout) :: State_Grid ! Grid State object
+      type(GridStateType), intent(inout) :: GridState ! Grid State object
 
       ! OUTPUT Params
-      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      INTEGER,         INTENT(OUT)   :: RC          !Success or failure
 
       CHARACTER(LEN=512) :: errMsg
       CHARACTER(LEN=512) :: thisLoc
@@ -119,12 +164,24 @@ contains
       errMsg = ''
       RC = 0
 
-      ALLOCATE( State_Grid%Area( State_Grid%NX, State_Grid%NY ), STAT=RC )
+      ALLOCATE( GridState%Area( GridState%NX, GridState%NY ), STAT=RC )
       CALL CC_CheckVar( 'GridState%Area', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
-      State_Grid%Area = 0e+0_fp
+      GridState%Area = 0e+0_fp
 
    end subroutine Grid_State_Allocate
+
+!-------------------------------------------------------------------------
+! Grid_Cleanup - Deallocate a GridState object
+!
+! This subroutine deallocates memory for GridState.
+!
+! \param GridState The GridState instance to be deallocated.
+! \param RC The return code.
+!
+! \author Barry Baker
+! \date 05/2023
+!-------------------------------------------------------------------------
 
    subroutine Grid_Cleanup(GridState, RC)
 
@@ -132,7 +189,7 @@ contains
       type(GridStateType), intent(inout) :: GridState ! Grid State object
 
       ! OUTPUT Params
-      INTEGER,         INTENT(OUT)   :: RC          ! Success or failure
+      INTEGER,         INTENT(OUT)   :: RC          !Success or failure
 
       CHARACTER(LEN=512) :: errMsg
       CHARACTER(LEN=512) :: thisLoc
