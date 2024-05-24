@@ -329,7 +329,7 @@ contains
     !! \param R Drag partition
     !!!>
     subroutine MB95_DragParitition(z0, R)
-        use constants, only: e
+        
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: z0
@@ -344,7 +344,7 @@ contains
         !--------------------------------------------
         ! MB95 Drag Paritition
         !--------------------------------------------
-        R = 1 - (log(z0 / z0s ) / log(0.7* (10.0 / z0s) ** e))
+        R = 1 - (log(z0 / z0s ) / log(0.7 * (10.0 / z0s) ** 0.8))
         return
 
     end subroutine MB95_DragParitition
