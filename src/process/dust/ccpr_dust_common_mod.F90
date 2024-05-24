@@ -231,7 +231,9 @@ contains
         if (clayfrac > 0.0 .and. sandfrac > 0.0) then
            SEP = (0.08 * clayfrac + 0.12 * sandfrac + (1 - sandfrac - clayfrac))
         endif
+
         return
+
     end subroutine Soil_Erosion_Potential
 
     !>
@@ -259,10 +261,11 @@ contains
         real(fp), intent(out) :: HorizFlux
 
         ! Local Variables
-        ! real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
+        !----------------
         real(fp) :: u_ts    ! Modified threshold fricition velocity
 
         ! Initialize
+        !-----------
         HorizFlux = ZERO
 
         !--------------------------------------------
@@ -329,7 +332,6 @@ contains
     !! \param R Drag partition
     !!!>
     subroutine MB95_DragParitition(z0, R)
-        
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: z0
