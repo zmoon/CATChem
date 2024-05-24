@@ -32,7 +32,7 @@ contains
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
         Use Error_Mod,     Only : CC_SUCCESS
-        Use CCPr_Dust_mod, Only : DustStateType
+        Use CCPr_Dust_Common_Mod, Only : DustStateType
 
         IMPLICIT NONE
 
@@ -46,7 +46,7 @@ contains
         ! Local Variables
         character(len=256) :: errMsg
         character(len=256) :: thisLoc
-        integer :: do_dust                 ! Enable Dust Calculation Flag
+        logical :: do_dust                 ! Enable Dust Calculation Flag
         integer :: n                       ! loop couters
         integer :: nbins                   ! number of dust bins
         real(fp) :: hflux                  ! Horizontal Flux
@@ -75,7 +75,7 @@ contains
 
         nbins = size(DustState%EffectiveRadius)
 
-        alpha_grav = DustState%AlphaScaleFactor /
+        alpha_grav = DustState%AlphaScaleFactor / g0
 
         !--------------------------------------------------------------------
         ! Don't do dust over certain criteria

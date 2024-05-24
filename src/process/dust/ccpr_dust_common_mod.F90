@@ -15,6 +15,56 @@ module CCPr_Dust_Common_Mod
     public :: KokDistribution
     public :: Soil_Erosion_Potential
     public :: Draxler_HorizFlux
+    public :: DustStateType
+
+    !> \brief Type for CATCHem Dust Process
+    !!
+    !! \details Contains all the information needed to run the CATCHem Dust Process
+    !!
+    !! This type contains the following variables:
+    !! - Activate : Activate Process (True/False)
+    !! - nDustSpecies : Number of dust processes
+    !! - SchemeOpt : Scheme Option
+    !! - DustSpeciesIndex : Index of dust species
+    !! - SpcIDs : CATChem species IDs
+    !! - LowerBinRadius : Lower bin radius        [m]
+    !! - UpperBinRadius : Upper bin radius        [m]
+    !! - EffectiveRadius : Effective radius        [m]
+    !! - DustDensity : Dust density            [kg/m^3]
+    !! - BetaScaleFactor : Beta Scaling Parameter  [1]
+    !! - AlphaScaleFactor : Alpha Scaling Parameter [1]
+    !! - TotalEmission : Total emission          [kg/m^2/s]
+    !! - EmissionRate : Emission rate            [kg/m^2/s]
+    !! - FengshaMoistureOpt : Fengsha-Moisture Calculation Option
+    !! - FengshaDragOpt : Fengsha-Drag Calculation Option
+    !!!>
+    TYPE :: DustStateType
+        ! Generic Variables for Every Process
+        Logical                         :: Activate            ! Activate Process (True/False)
+        INTEGER                         :: nDustSpecies        ! Number of dust processes
+        INTEGER                         :: SchemeOpt           ! Scheme Option
+        INTEGER, ALLOCATABLE            :: DustSpeciesIndex(:) ! Index of dust species
+        INTEGER, ALLOCATABLE            :: SpcIDs(:)           ! CATChem species IDs
+
+        ! Process Specific Parameters
+        REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)         ! Lower bin radius        [m]
+        REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)         ! Upper bin radius        [m]
+        REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)        ! Effective radius        [m]
+        REAL(fp), ALLOCATABLE           :: DustDensity(:)            ! Dust density            [kg/m^3]
+        REAL(fp)                        :: BetaScaleFactor           ! Beta Scaling Parameter  [1]
+        REAL(fp)                        :: AlphaScaleFactor          ! Alpha Scaling Parameter [1]
+        REAL(fp), ALLOCATABLE           :: TotalEmission             ! Total emission          [kg/m^2/s]
+        REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)     ! Emission per species    [kg/m^2/s]
+
+        ! Scheme Options
+        INTEGER                         :: FengshaMoistureOpt  ! Fengsha-Moisture Calculation Option
+        INTEGER                         :: FengshaDragOpt      ! Fengsha-Drag Calculation Option
+
+     !=================================================================
+     ! Module specific variables/arrays/data pointers come below
+     !=================================================================
+
+    END TYPE DustStateType
 
 contains
     !>
