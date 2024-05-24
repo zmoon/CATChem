@@ -10,11 +10,14 @@ module CCPr_Dust_Common_Mod
     use Error_Mod
     implicit none
     private
+
     public :: Fecan_SoilMoisture
     public :: Shao_SoilMoisture
     public :: KokDistribution
     public :: Soil_Erosion_Potential
     public :: Draxler_HorizFlux
+    public :: Kawamura_HorizFlux
+    public :: MB95_DragParitition
     public :: DustStateType
 
     !> \brief Type for CATCHem Dust Process
@@ -83,17 +86,20 @@ contains
     subroutine Fecan_SoilMoisture( clay, sand, volumetric_soil_moisture, H)
         IMPLICIT NONE
         ! Parameters
+        !-----------
         real(fp), intent(in)  :: clay                      ! Fractional Clay Content
         real(fp), intent(in)  :: sand                      ! Fractional Sand Content
         real(fp), intent(in)  :: volumetric_soil_moisture  ! Volumetric soil moisture [m3 m-3]
         real(fp), intent(out) :: H                         ! Soil Moisture attenuation factor for dust emission [1]
 
         ! Local Variables
+        !----------------
         real(fp) :: vsat                      ! Saturated volumetric water content (sand-dependent) ! [m3 m-3]
         real(fp) :: gravimetric_soil_moisture ! Gravimetric soil moisture [kg/kg]
         real(fp) :: DryLimit                  ! Dry limit of the soil moisture [kg/kg]
 
         ! Initialize
+        !-----------
         H = ZERO
 
         !--------------------------------------------
