@@ -5,6 +5,8 @@ on:
     branches: [feature/catchem_begins]
   pull_request:
     branches: [feature/catchem_begins]
+permissions:
+  contents: write
 
 jobs:
   doxygen:
