@@ -1,4 +1,4 @@
-!> 
+!>
 !! \file ccpr_dust_common_mod.F90
 !! \brief Contains module ccpr_dust_common_mod
 !!
@@ -15,14 +15,14 @@ module CCPr_Dust_Common_Mod
     public :: KokDistribution
     public :: Soil_Erosion_Potential
     public :: Draxler_HorizFlux
-    public 
+    public
 
 contains
     !>
     !! \brief Computes the soil moisture attenuation factor for dust emission
     !!
-    !! Fecan, F., Marticorena, B., and Bergametti, G.: Parametrization of the increase of the aeolian 
-    !! erosion threshold wind friction velocity due to soil moisture for arid and semi-arid areas, 
+    !! Fecan, F., Marticorena, B., and Bergametti, G.: Parametrization of the increase of the aeolian
+    !! erosion threshold wind friction velocity due to soil moisture for arid and semi-arid areas,
     !! Ann. Geophys., 17, 149–157, https://doi.org/10.1007/s00585-999-0149-7, 1999.
     !!
     !! \param clay Fractional clay content
@@ -39,7 +39,7 @@ contains
         real(fp), intent(in)  :: volumetric_soil_moisture  ! Volumetric soil moisture [m3 m-3]
         real(fp), intent(out) :: H                         ! Soil Moisture attenuation factor for dust emission [1]
 
-        ! Local Variables 
+        ! Local Variables
         real(fp) :: vsat                      ! Saturated volumetric water content (sand-dependent) ! [m3 m-3]
         real(fp) :: gravimetric_soil_moisture ! Gravimetric soil moisture [kg/kg]
         real(fp) :: DryLimit                  ! Dry limit of the soil moisture [kg/kg]
@@ -74,7 +74,7 @@ contains
     !! \brief Computes the soil moisture attenuation factor for dust emission
     !!
     !! Zhao, T. L., S. L. Gong, X. Y. Zhang, A. Abdel-Mawgoud, and Y. P. Shao (2006),
-    !! An assessment of dust emission schemes in modeling east Asian dust storms, 
+    !! An assessment of dust emission schemes in modeling east Asian dust storms,
     !! J. Geophys. Res., 111, D05S90, doi:10.1029/2004JD005746.
     !!
     !! \param volumetric_soil_moisture Volumetric soil moisture
@@ -82,7 +82,7 @@ contains
     !!
     !!!>
     subroutine Shao_SoilMoisture( volumetric_soil_moisture, H)
-        IMPLICIT NONE 
+        IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: volumetric_soil_moisture  ! Volumetric soil moisture [m3 m-3]
         real(fp), intent(out) :: H                         ! Soil Moisture attenuation factor for dust emission [1]
@@ -105,10 +105,10 @@ contains
 
     !>
     !! \brief KokDistribution
-    !! 
-    !! Kok, J. F. (2011a), A scaling theory for the size distribution of emitted 
-    !! dust aerosols suggests climate models underestimate the size of the global 
-    !! dust cycle, Proc. Natl. Acad. Sci. U. S. A., 108(3), 1016–1021, 
+    !!
+    !! Kok, J. F. (2011a), A scaling theory for the size distribution of emitted
+    !! dust aerosols suggests climate models underestimate the size of the global
+    !! dust cycle, Proc. Natl. Acad. Sci. U. S. A., 108(3), 1016–1021,
     !! doi:10.1073/pnas.1014798108.
     !!
     !! \param radius Radius
@@ -116,7 +116,7 @@ contains
     !! \param rUp Upper radius
     !! \param distribution Distribution
     !!!>
-    subroutine KokDistribution(radius, rLow, rUp, distribution) 
+    subroutine KokDistribution(radius, rLow, rUp, distribution)
         IMPLICIT NONE
         ! Parameters
         real(fp), dimension(:), intent(in)  :: radius
@@ -152,14 +152,14 @@ contains
         ! Normalize Distribution
         do n = 1, nbins
             distribution(n) = distribution(n) / dvol
-        end do  
-        return 
+        end do
+        return
     end subroutine KokDistribution
 
     !>
     !! \brief Computes the soil erosion potential
     !!
-    !! TODO: Find reference for this 
+    !! TODO: Find reference for this
     !!
     !! \param clayfrac clay fraction
     !! \param sandfrac sand fraction
@@ -180,26 +180,26 @@ contains
         !--------------------------------------------
         if (clayfrac > 0.0 .and. sandfrac > 0.0) then
            SEP = (0.08 * clay + 0.12 * sand + (1 - sand - clay))
-        endif   
+        endif
         return
     end subroutine Soil_Erosion_Potential
 
     !>
     !! \brief Computes Draxler Hoirizontal Flux
     !!
-    !! Draxler, R.R, D.A. Gillette, J.S. Kirkpatrick, and J. Heller (2001), 
-    !! Estimating PM10 air concentrations from dust storms in Iraq, Kuwait, 
-    !! and Saudi Arabia, Atm. Environ, 35: 4315-4330. 
+    !! Draxler, R.R, D.A. Gillette, J.S. Kirkpatrick, and J. Heller (2001),
+    !! Estimating PM10 air concentrations from dust storms in Iraq, Kuwait,
+    !! and Saudi Arabia, Atm. Environ, 35: 4315-4330.
     !! https://doi.org/10.1016/S1352-2310(01)00159-5
     !!
     !! \param ustar friction velocity
     !! \param ustar_threshold dry threshold fricition velocity
-    !! \param R Drag partition 
+    !! \param R Drag partition
     !! \param H Soil Moisture Attenuation Factor
     !! \param HorizFlux Horizontal Mass Flux
     !!
     !!!>
-    subroutine Draxler_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux) 
+    subroutine Draxler_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: ustar
@@ -210,7 +210,7 @@ contains
 
         ! Local Variables
         real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
-        real(fp) :: u_ts    ! Modified threshold fricition velocity 
+        real(fp) :: u_ts    ! Modified threshold fricition velocity
 
         ! Initialize
         HorizFlux = ZERO
@@ -218,13 +218,13 @@ contains
         !--------------------------------------------
         ! Compute Draxler Horizontal Flux
         !--------------------------------------------
-        u_ts = ustar_threshold * H / R 
-        
+        u_ts = ustar_threshold * H / R
+
         if (ustar >= threshold) then
            HorizFlux = (ustar * R) ** 3.0 * (1 - ( u_ts / ustar ) ** 2.0)
         endif
 
-        return 
+        return
     end subroutine Draxler_HorizFlux
 
     !>
@@ -232,18 +232,18 @@ contains
     !!
     !! Kawamura, R., 1951. Study on sand movement by wind. Report, 5(3), pp.95-112.
     !!
-    !! Webb, N., Chappell, A., LeGrand, S., Ziegler, N., Edwards, B. 2020. 
-    !! A note on the use of drag partition in aeolian transport models. 
+    !! Webb, N., Chappell, A., LeGrand, S., Ziegler, N., Edwards, B. 2020.
+    !! A note on the use of drag partition in aeolian transport models.
     !! Aeolian Research. 42:100560. https://doi.org/10.1016/j.aeolia.2019.100560.
     !!
     !! \param ustar friction velocity
     !! \param ustar_threshold dry threshold fricition velocity
-    !! \param R Drag partition 
+    !! \param R Drag partition
     !! \param H Soil Moisture Attenuation Factor
     !! \param HorizFlux Horizontal Mass Flux
     !!
     !!!>
-    subroutine Kawamura_HorizFlux(ustar, R, H, HorizFlux) 
+    subroutine Kawamura_HorizFlux(ustar, R, H, HorizFlux)
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: ustar
@@ -252,7 +252,7 @@ contains
         real(fp), intent(out) :: HorizFlux
 
         ! Local Variables
-        real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]    
+        real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
 
         ! Initialize
         HorizFlux = ZERO
@@ -260,18 +260,18 @@ contains
         !--------------------------------------------
         ! Compute Kawamura Horizontal Flux
         !--------------------------------------------
-        u_ts = ustar_threshold * H / R 
+        u_ts = ustar_threshold * H / R
 
         HorizFlux = ustar ** 3.0 * (1 - (u_ts / ustar) ** 2.) * (1 + (u_ts / ustar) ** 2.)
 
-        return 
+        return
     end subroutine Kawamura_HorizFlux
 
     !>
     !! \brief Computes the Drag Partition from MB95
     !!
-    !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle: 
-    !! 1. Design of a soil-derived dust emission scheme, 
+    !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
+    !! 1. Design of a soil-derived dust emission scheme,
     !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995
     !!
     !! \param z0 roughness length
@@ -293,7 +293,7 @@ contains
         ! MB95 Drag Paritition
         !--------------------------------------------
         R = 1 - (log(z0 / z0s ) / log(0.7* (10.0 / z0s) ** e))
-        return 
+        return
 
     end subroutine MB95_DragParitition
 

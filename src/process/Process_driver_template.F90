@@ -21,7 +21,7 @@ MODULE CCPR_<PROCESS>_mod
   PUBLIC :: CCPR_<PROCESS>_Run
   PUBLIC :: CCPR_<PROCESS>_Final
 
-  
+
   !> \brief <PROCESS>StateType
   !!
   !! <PROCESS>StateType is the process-specific derived type. It should hold all module
@@ -31,7 +31,7 @@ MODULE CCPR_<PROCESS>_mod
   !! to that field should be listed within the instance and NOT outside of it.
   !! This ensures that the same process can be invoked in various instances,
   !! all of them potentially pointing to different data fields.
-  !!  
+  !!
   !! \param Activate Activate Process (True/False)
   !! \param SchemeOpt Scheme Option
   !! \param <Process>SpeciesIndex Effected Chemical Species from <Process>
@@ -56,7 +56,7 @@ MODULE CCPR_<PROCESS>_mod
 
 
 CONTAINS
-    
+
   !>
   !! \brief Initialize the CATChem <PROCESS> module
   !!
@@ -68,7 +68,7 @@ CONTAINS
   !!!>
   SUBROUTINE CCPR_<yourname>_Init( Config, ChemState, <Process>State, RC )
     ! USE
-    
+
     IMPLICIT NONE
     ! INPUT PARAMETERS
     !-----------------
@@ -84,7 +84,7 @@ CONTAINS
     !---------------
     CHARACTER(LEN=255)    :: ErrMsg
     CHARACTER(LEN=255)    :: ThisLoc
-        
+
     ! LOCAL VARIABLES
     !----------------
 
@@ -94,10 +94,10 @@ CONTAINS
     ! CCPR_<yourname>_Init begins here!
     !=================================================================
     ThisLoc = ' -> at CCPR_<PROCESS>_INIT (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
- 
+
     ! First check if process is activated in config | if not don't allocate arrays or pointers
     if (Config%<process>activate) then
-         
+
       ! Activate Process
       !------------------
       <Process>State%Activate = .true.
@@ -116,7 +116,7 @@ CONTAINS
       IF (RC /= CC_SUCCESS) RETURN
       <Process>State%SpcIDs(<Process>State%nSpc) = 1
 
-    else 
+    else
 
       <Process>State%Activate = .false.
 
@@ -136,7 +136,7 @@ CONTAINS
   SUBROUTINE CCPr_Dust_Run( MetState, DiagState, <PROCESS>State, ChemState, RC )
 
     ! USE
-    
+
     IMPLICIT NONE
     ! INPUT PARAMETERS
     TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
@@ -180,7 +180,7 @@ CONTAINS
   !>
   !! \brief Finalize the <Process>
   !!
-  !! \param [INOUT] <Process>State 
+  !! \param [INOUT] <Process>State
   !! \param [OUT] RC Return code
   !!!>
   SUBROUTINE CCPr_<PROCESS>_Final( <PROCESS>State, RC )
@@ -211,5 +211,5 @@ CONTAINS
     <PROCESS>State%SpcIDs => NULL()
 
   end subroutine CCPr_<PROCESS>_Final
-  
+
 END MODULE CCPR_<yourname>_Mod

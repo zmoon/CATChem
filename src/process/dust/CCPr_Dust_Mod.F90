@@ -3,9 +3,9 @@
 !!
 !!!>
 MODULE CCPr_Dust_mod
-    
+
       ! USES:
-      USE Precision_Mod   
+      USE Precision_Mod
       USE Error_MOD
       USE DiagState_Mod, Only : DiagStateType
       USE MetState_Mod, Only : MetStateType
@@ -19,11 +19,11 @@ MODULE CCPr_Dust_mod
       PUBLIC :: CCPR_<yourmame>_Run
       PUBLIC :: CCPR_<yourname>_Init
       PUBLIC :: CCPR_<yourname>_Final
-    
+
       !> \brief Type for CATCHem Dust Process
       !!
       !! \details Contains all the information needed to run the CATCHem Dust Process
-      !! 
+      !!
       !! This type contains the following variables:
       !! - Activate : Activate Process (True/False)
       !! - nDustSpecies : Number of dust processes
@@ -59,7 +59,7 @@ MODULE CCPr_Dust_mod
        REAL(fp), ALLOCATABLE           :: TotalEmission             ! Total emission          [kg/m^2/s]
        REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)     ! Emission per species    [kg/m^2/s]
 
-       ! Scheme Options 
+       ! Scheme Options
        INTEGER                         :: FengshaMoistureOpt  ! Fengsha-Moisture Calculation Option
        INTEGER                         :: FengshaDragOpt      ! Fengsha-Drag Calculation Option
 
@@ -70,7 +70,7 @@ MODULE CCPr_Dust_mod
       END TYPE DustStateType
 
     CONTAINS
-    
+
       !>
       !! \brief Initialize the CATCHem Dust Process
       !!
@@ -90,11 +90,11 @@ MODULE CCPr_Dust_mod
         TYPE(ConfigType),    POINTER :: Config  ! Config options
         TYPE(ChmStateType),  POINTER :: ChmState    ! Chemical State
         TYPE(DustStateType), POINTER :: DustState => NULL()
-    
+
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
         INTEGER,          INTENT(INOUT) :: RC
-    
+
         ! LOCAL VARIABLES
         !----------------
         Integer, parameter :: nDustBinsDefault = 5
@@ -115,7 +115,7 @@ MODULE CCPr_Dust_mod
 
         ! Initialize
         !-----------
-        if (Config%dust_activate) then 
+        if (Config%dust_activate) then
 
             ! Activate Dust Process
             !----------------------
@@ -143,44 +143,44 @@ MODULE CCPr_Dust_mod
 
             if (DustState%nDustSpecies == 0) then
 
-                ! Set default bin properties for schemes that need them 
+                ! Set default bin properties for schemes that need them
                 !------------------------------------------------------
                 ALLOCATE(DustState%LowerBinRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%LowerBinRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault 
+                do k in 1, nDustBinsDefault
                     DustState%LowerBinRadius(k) = DefaultLowerBinRadius(k)
-                end do  
+                end do
 
                 ALLOCATE(DustState%UpperBinRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%UpperBinRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault 
+                do k in 1, nDustBinsDefault
                     DustState%UpperBinRadius(k) = DefaultUpperBinRadius(k)
                 end do
 
                 ALLOCATE(DustState%EffectiveRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%EffectiveRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault 
+                do k in 1, nDustBinsDefault
                     DustState%EffectiveRadius(k) = DefaultEffectiveRadius(k)
-                end do  
+                end do
 
                 ALLOCATE(DustState%DustDensity(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%DustDensity', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault 
+                do k in 1, nDustBinsDefault
                     DustState%DustDensity(k) = DefaultDustDensity(k)
                 end do
 
                 ALLOCATE(DustEmissionPerSpecies(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustEmissionPerSpecies', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault 
+                do k in 1, nDustBinsDefault
                     DustState%EmissionPerSpecies(k) = 0.0_fp
                 end do
 
-            else 
+            else
 
                 ! Dust Aerosols are present in ChmState
                 !--------------------------------------
@@ -188,7 +188,7 @@ MODULE CCPr_Dust_mod
                 !TODO: Need to figure out how exactly to do this at the moment
                 write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
-            endif                
+            endif
 
         else
 
@@ -218,7 +218,7 @@ MODULE CCPr_Dust_mod
         ! INPUT PARAMETERS
         !-----------------
         TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
-        
+
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
         TYPE(DiagState_type), INTENT(INOUT) :: DiagState   ! DiagState Instance
@@ -249,7 +249,7 @@ MODULE CCPr_Dust_mod
             else
                 write(*,*) 'TODO: Add other dust schemes'
             endif
-        endif 
+        endif
 
     END SUBROUTINE CCPr_Dust_Run
 
@@ -263,9 +263,9 @@ MODULE CCPr_Dust_mod
 
         ! USE
         !----
-        
+
         IMPLICIT NONE
-        
+
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
         TYPE(DustState_type), INTENT(INOUT) :: DustState ! DustState Instance
@@ -308,4 +308,4 @@ MODULE CCPr_Dust_mod
 
     END SUBROUTINE CCPr_Dust_Finalize
 
-END MODULE CCPr_Dust_Mod    
+END MODULE CCPr_Dust_Mod

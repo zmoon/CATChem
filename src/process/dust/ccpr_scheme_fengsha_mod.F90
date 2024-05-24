@@ -1,4 +1,4 @@
-!> 
+!>
 !! \brief Contains the FENGSHA windblown dust emission scheme
 !!
 !! Reference here:
@@ -41,7 +41,7 @@ contains
         type(DiagStateType), intent(in) :: DiagState    ! Diagnostic Variables
         type(DustStateType), intent(in) :: DustState    ! Dust Variables
 
-        integer, intent(out) :: RC                      ! Success or Failure 
+        integer, intent(out) :: RC                      ! Success or Failure
 
         ! Local Variables
         character(len=256) :: errMsg
@@ -62,12 +62,12 @@ contains
 
         real(fp), parameter :: clay_thresh = 0.2
         real(fp), parameter :: kvhmax = 2.0e-4 ! Max. Vertical to Horizontal Mass Flux Ratio
-        
+
         ! Initialize
         errMsg = ''
         thisLoc = ' -> at CCPr_Scheme_Fengsha (in CCPr_Scheme_Fengsha_mod.F90)'
         RC = CC_SUCCESS
-        
+
         hflux = ZERO
         h_to_v_ratio = ZERO
         kvhmax = ZERO
@@ -75,10 +75,10 @@ contains
 
         nbins = size(DustState%EffectiveRadius)
 
-        alpha_grav = DustState%AlphaScaleFactor / 
+        alpha_grav = DustState%AlphaScaleFactor /
 
         !--------------------------------------------------------------------
-        ! Don't do dust over certain criteria 
+        ! Don't do dust over certain criteria
         !--------------------------------------------------------------------
         do_dust = .true. ! Default value for all cases
 
@@ -86,32 +86,32 @@ contains
         !----------------------------------------------------------------
         if (MetState%SOILTYPE == 15 .or. MetState%SOILTYPE == 16 .or. MetState%SOILTYPE == 18) then
             do_dust = .false.
-        endif   
+        endif
 
         ! Check for valid inputs from SSM and RDRAG
         !------------------------------------------
         if (MetState%SSM < 0.15 .or. MetState%SSM > 1) then
             do_dust = .false.
-        endif   
-        
+        endif
+
         if (MetState%RDRAG < 0.15 .or. MetState%RDRAG > 1) then
             do_dust = .false.
         endif
 
-        ! Don't do dust over frozen soil 
+        ! Don't do dust over frozen soil
         !--------------------------------
         if (MetState%TSOILTOP <= 273.15) then
             do_dust = .false.
-        endif   
+        endif
 
         if (do_dust) then
             !----------------------------------------------------------------
             ! Calculate Dust Flux
             !----------------------------------------------------------------
-            
+
             ! Calculate soil moisture
             !--------------------------------
-            if (DustState%FengshaMoistureOpt == 1) then    
+            if (DustState%FengshaMoistureOpt == 1) then
                 call Fecan_SoilMoisture(MetState%CLAYFRAC, MetState%SANDFRAC, MetState%GWETTOP, H)
             elseif (DustState%FengshaMoistureOpt == 2) then
                 call Shao_SoilMoisture(MetState%CLAYFRAC, MetState%SANDFRAC, MetState%GWETTOP, H)
@@ -129,27 +129,27 @@ contains
                 kvh = 10.0**(13.4*clay-6.0)
             end if
 
-            ! Compute the soil erosion potential 
+            ! Compute the soil erosion potential
             !-----------------------------------
             call Soil_Erosion_Potential(MetState%CLAYFRAC, MetState%SANDFRAC, SEP)
 
             ! Compute the Drag Paritition
-            ! 1: Input Drag Partition 
+            ! 1: Input Drag Partition
             ! 2: MB95 Drag Partition
             ! 3: Darmenova 2009
             !----------------------------
             if (DustState%FengshaDragOpt == 1) then
                 R = MetState%RDRAG
             elseif (DustState%FengshaDragOpt == 2) then
-                call MB95_DragParitition(MetState%z0, R) 
+                call MB95_DragParitition(MetState%z0, R)
             elseif (DustState%FengshaDragOpt == 3) then
                 ! call Darmenova_DragPartition(MetState%z0, R) -> TODO: Darmenova 2009
                 write(*,*) 'Place Holder'
-            else 
+            else
                 RC = CC_FAILURE
                 errMsg = 'Invalid Fengsha Drag Option'
                 call CC_Error( errMsg, RC , thisLoc)
-                return 
+                return
             endif
 
             ! Compute the Horizontal Mass Flux
@@ -164,10 +164,10 @@ contains
                 RC = CC_FAILURE
                 errMsg = 'Invalid Fengsha Horizontal Flux Option'
                 call CC_Error( errMsg, RC , thisLoc)
-                return 
+                return
             endif
 
-            ! Compute the Total Dust Flux 
+            ! Compute the Total Dust Flux
             !----------------------------
             FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN / g0
             DiagState%dust_total_flux = FengshaScaling * HorizFlux * h_to_v_ratio
@@ -181,12 +181,12 @@ contains
             endif
 
             ! TODO: Add microplastic flux option https://doi.org/10.1021/acs.est.4c01252
-            ! will require population density 
+            ! will require population density
             ! Compute Microplastic Flux due to windblown dust
             !------------------------------------------------
 
         endif
-        
+
     end subroutine CCPr_Scheme_Fengsha
 
 end module CCPr_Scheme_Fengsha_Mod
