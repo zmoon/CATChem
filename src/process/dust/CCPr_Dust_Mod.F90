@@ -9,8 +9,7 @@ MODULE CCPr_Dust_mod
       USE Error_MOD
       USE DiagState_Mod, Only : DiagStateType
       USE MetState_Mod, Only : MetStateType
-      USE Config_Opt_Mod, Only : OptConfigType
-      Use GridState_Mod, Only : GridStateType
+      USE Config_Opt_Mod, Only : ConfigType
 
       IMPLICIT NONE
       PRIVATE
@@ -55,14 +54,14 @@ MODULE CCPr_Dust_mod
        REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)         ! Upper bin radius        [m]
        REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)        ! Effective radius        [m]
        REAL(fp), ALLOCATABLE           :: DustDensity(:)            ! Dust density            [kg/m^3]
-       real(fp)                        :: BetaScaleFactor           ! Beta Scaling Parameter  [1]
+       REAL(fp)                        :: BetaScaleFactor           ! Beta Scaling Parameter  [1]
        REAL(fp)                        :: AlphaScaleFactor          ! Alpha Scaling Parameter [1]
        REAL(fp), ALLOCATABLE           :: TotalEmission             ! Total emission          [kg/m^2/s]
        REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)     ! Emission per species    [kg/m^2/s]
 
        ! Scheme Options 
-       Integer                         :: FengshaMoistureOpt  ! Fengsha-Moisture Calculation Option
-       Integer                         :: FengshaDragOpt      ! Fengsha-Drag Calculation Option
+       INTEGER                         :: FengshaMoistureOpt  ! Fengsha-Moisture Calculation Option
+       INTEGER                         :: FengshaDragOpt      ! Fengsha-Drag Calculation Option
 
         !=================================================================
         ! Module specific variables/arrays/data pointers come below
@@ -72,22 +71,32 @@ MODULE CCPr_Dust_mod
 
     CONTAINS
     
-      SUBROUTINE CCPR_Dust_Init( Config_Opt, GridState, DustState, ChmState, RC)
+      !>
+      !! \brief Initialize the CATCHem Dust Process
+      !!
+      !! \param Config_Opt  CATCHem configuration options
+      !! \param DustState   CATCHem dust state
+      !! \param ChmState    CATCHem chemical state
+      !! \param RC          Error return code
+      !!
+      !!!>
+      SUBROUTINE CCPR_Dust_Init( Config, DustState, ChmState, RC)
         ! USES
-        USE precision_mod, ONLY: fp, ZERO
 
         IMPLICIT NONE
 
         ! INPUT PARAMETERS
-        TYPE(ConfigOptType), POINTER :: Config_Opt  ! Config options
-        type(GridStateType), POINTER :: GridState   ! Grid State
+        !-----------------
+        TYPE(ConfigType),    POINTER :: Config  ! Config options
         TYPE(ChmStateType),  POINTER :: ChmState    ! Chemical State
         TYPE(DustStateType), POINTER :: DustState => NULL()
     
-        ! INPUT/OUTPUT PARAMETERS:
+        ! INPUT/OUTPUT PARAMETERS
+        !------------------------
         INTEGER,          INTENT(INOUT) :: RC
     
-        ! LOCAL VARIABLES:
+        ! LOCAL VARIABLES
+        !----------------
         Integer, parameter :: nDustBinsDefault = 5
         REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultDustDensity     = (/ 2500., 2650., 2650., 2650., 2650. /)
         REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultEffectiveRadius = (/ 0.73D-6, 1.4D-6, 2.4D-6, 4.5D-6, 8.0D-6 /)
@@ -95,15 +104,18 @@ MODULE CCPr_Dust_mod
         REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultUpperBinRadius  = (/ 1.0D-6, 1.8D-6, 3.0D-6, 6.0D-6,10.0D-6  /)
 
         ! Error handling
+        !---------------
         CHARACTER(LEN=255)    :: ErrMsg
         CHARACTER(LEN=255)    :: ThisLoc
 
         ! Initialize Error handling
+        !--------------------------
         ErrMsg = ''
-        ThisLoc = ' -> at CCPR_DUST_INIT (in process/dust/ccpr_dust.F90)'
+        ThisLoc = ' -> at CCPR_DUST_INIT (in process/dust/ccpr_dust_mod.F90)'
 
         ! Initialize
-        if (Config_Opt%dust_activate) then 
+        !-----------
+        if (Config%dust_activate) then 
 
             ! Activate Dust Process
             !----------------------
@@ -115,19 +127,19 @@ MODULE CCPr_Dust_mod
 
             ! Set Scheme Options
             !-------------------
-            duststate%SchemeOpt = Config_Opt%dust_scheme
+            duststate%SchemeOpt = Config%dust_scheme
 
             ! Set Drag Calculation Option
             !----------------------------
-            DustState%DragOpt = Config_Opt%dust_drag
+            DustState%DragOpt = Config%dust_drag
 
             ! Set Moisture Calculation Option
             !--------------------------------
-            DustState%MoistOpt = Config_Opt%dust_moisture
+            DustState%MoistOpt = Config%dust_moisture
 
             ! Set Horizontal Flux Calculation Option
             !---------------------------------------
-            DustState%HorizFluxOpt = Config_Opt%dust_horizflux
+            DustState%HorizFluxOpt = Config%dust_horizflux
 
             if (DustState%nDustSpecies == 0) then
 
@@ -187,35 +199,46 @@ MODULE CCPr_Dust_mod
 
     END SUBROUTINE CCPR_DUST_INIT
 
+    !>
+    !! \brief Run the dust scheme
+    !!
+    !! \param [IN] MetState The MetState object
+    !! \param [INOUT] DiagState The DiagState object
+    !! \param [INOUT] DustState The DustState object
+    !! \param [INOUT] ChemState The ChemState object
+    !! \param [OUT] RC Return code
+    !!!>
     SUBROUTINE CCPr_Dust_Run( MetState, DiagState, DustState, ChemState, RC )
 
         ! USE
-        USE MetState_Mod, ONLY: MetState_type                        ! MetState 
-        USE DiagState_Mod, ONLY: DiagState_type                      ! DiagState
-        USE ChemState_Mod, ONLY: ChemState_type                       ! ChemState
         USE CCPr_Scheme_Fengsha_Mod, ONLY: CCPr_Dust_Scheme_Fengsha  ! Fengsha Dust Scheme
 
         IMPLICIT NONE
 
         ! INPUT PARAMETERS
-        TYPE(MetState_type),  INTENT(IN) :: MetState     ! MetState Instance
-        TYPE(DiagState_type), INTENT(IN) :: DiagState    ! DiagState Instance
-
+        !-----------------
+        TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
+        
         ! INPUT/OUTPUT PARAMETERS
-        TYPE(DustState_type), INTENT(INOUT) :: DustState ! DustState Instance
+        !------------------------
+        TYPE(DiagState_type), INTENT(INOUT) :: DiagState   ! DiagState Instance
+        TYPE(DustState_type), INTENT(INOUT) :: DustState   ! DustState Instance
         TYPE(ChemState_type),  INTENT(INOUT) :: ChemState  ! ChemState Instance
 
         ! OUTPUT PARAMETERS
-        INTEGER, INTENT(OUT) :: RC                       ! Return Code
+        !------------------
+        INTEGER, INTENT(OUT) :: RC                         ! Return Code
 
 
         ! LOCAL VARIABLES
+        !----------------
         CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
         ! Initialize
+        !-----------
         RC = CC_SUCCESS
         errMsg = ''
-        thisLoc = ' -> at CCPr_Dust_Run (in process/dust/ccpr_dust.F90)'
+        thisLoc = ' -> at CCPr_Dust_Run (in process/dust/ccpr_dust_mod.F90)'
 
         if (DustState%Activate) then
 
@@ -230,20 +253,30 @@ MODULE CCPr_Dust_mod
 
     END SUBROUTINE CCPr_Dust_Run
 
+    !>
+    !! \brief Finalize the dust scheme
+    !!
+    !! \param [INOUT] DustState The DustState object
+    !! \param [OUT] RC Return code
+    !!!>
     SUBROUTINE CCPr_Dust_Finalize( DustState, RC )
 
         ! USE
+        !----
         
         IMPLICIT NONE
         
         ! INPUT/OUTPUT PARAMETERS
+        !------------------------
         TYPE(DustState_type), INTENT(INOUT) :: DustState ! DustState Instance
         INTEGER, INTENT(OUT) :: RC                       ! Return Code
 
         ! LOCAL VARIABLES
+        !----------------
         CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
         ! Initialize
+        !-----------
         RC = CC_SUCCESS
         errMsg = ''
         thisLoc = ' -> at CCPr_Dust_Finalize (in process/dust/ccpr_dust.F90)'
