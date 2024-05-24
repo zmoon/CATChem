@@ -3,6 +3,8 @@ name: Doxygen docs
 on:
   push:
     branches: [feature/catchem_begins]
+  pull_request:
+    branches: [feature/catchem_begins]
 
 jobs:
   doxygen:
@@ -20,6 +22,7 @@ jobs:
           cd -
 
       - name: Deploy
+        if: github.ref == 'refs/heads/feature/catchem_begins'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
