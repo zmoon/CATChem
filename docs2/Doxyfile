@@ -1,0 +1,12 @@
+# https://www.doxygen.nl/manual/config.html
+PROJECT_NAME = CATChem
+PROJECT_BRIEF = Configurable Atmospheric Chemistry
+PROJECT_LOGO = ../data/CATChem_logo_h55.png
+
+OPTIMIZE_FOR_FORTRAN = YES
+
+INPUT = ../src/core ../src/process/ccpr_fengsha_mod.F90
+FILE_PATTERNS = *.F90
+RECURSIVE = YES
+
+HAVE_DOT = NO
