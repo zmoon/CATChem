@@ -18,7 +18,7 @@ module constants
    REAL(fp), PARAMETER :: AVO = 6.022140857e+23_fp         !< Avogadro's number [particles/mol]
    REAL(fp), PARAMETER :: g0     = 9.80665e+0_fp           !<  Acceleration due to gravity at earth's surface [m/s^2]
    REAL(fp), PARAMETER :: g0_100 = 100.0_fp / g0           !<  100 over gravity at earth's surface
-   REAL(fp), PARAMETER :: PI     = 3.14159265358979323_fp  !<  Double-Precision value of PI
+   REAL(fp), PARAMETER :: PI     = 3.14159265358979323_fp  !<  Pi
    REAL(fp), PARAMETER :: PI_180 = PI / 180.0_fp           !<  Radians per degree
    REAL(fp), PARAMETER :: Re = 6.3710072e+6_fp             !<  Radius of Earth [m]
    REAL(fp), PARAMETER :: Rd   = 287.0_fp                  !<  Gas Constant in Dry Air [J/K/kg]
@@ -35,5 +35,6 @@ module constants
    REAL(fp), PARAMETER :: CONSVAP = 6.1078e+03_fp / ( BOLTZ * 1e+7_fp ) !<  Condensation vapor pressure
    REAL(fp), PARAMETER :: RGASLATM = 8.2057e-2_fp          !<  Gas constant [L.atm/K.mole]
    REAL(fp), PARAMETER :: MWCARB = 12.01e-3_fp             !<  Molecular weight of carbon [g/mol]
+   REAL(fp), PARAMETER :: E = 2.718281828459045235360287471352_fp  !< Euler's number
 
 end module constants

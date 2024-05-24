@@ -15,7 +15,6 @@ module CCPr_Dust_Common_Mod
     public :: KokDistribution
     public :: Soil_Erosion_Potential
     public :: Draxler_HorizFlux
-    public
 
 contains
     !>
@@ -101,7 +100,7 @@ contains
 
         return
 
-    end subroutine Fecan_SoilMoisture
+    end subroutine Shao_SoilMoisture
 
     !>
     !! \brief KokDistribution
@@ -117,6 +116,7 @@ contains
     !! \param distribution Distribution
     !!!>
     subroutine KokDistribution(radius, rLow, rUp, distribution)
+        use constants, only: pi
         IMPLICIT NONE
         ! Parameters
         real(fp), dimension(:), intent(in)  :: radius
@@ -145,7 +145,7 @@ contains
             diameter = radius(n) * 2.0
             dlam = diameter / lambda
             dvol = 4. / 3. * pi * diameter**3
-            diameter * (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
+            diameter = (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
             dvol = dvol + distribution(n)
         end do
 
@@ -179,7 +179,7 @@ contains
         ! Compute SEP
         !--------------------------------------------
         if (clayfrac > 0.0 .and. sandfrac > 0.0) then
-           SEP = (0.08 * clay + 0.12 * sand + (1 - sand - clay))
+           SEP = (0.08 * clayfrac + 0.12 * sandfrac + (1 - sandfrac - clayfrac))
         endif
         return
     end subroutine Soil_Erosion_Potential
@@ -209,7 +209,7 @@ contains
         real(fp), intent(out) :: HorizFlux
 
         ! Local Variables
-        real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
+        ! real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
         real(fp) :: u_ts    ! Modified threshold fricition velocity
 
         ! Initialize
@@ -220,7 +220,7 @@ contains
         !--------------------------------------------
         u_ts = ustar_threshold * H / R
 
-        if (ustar >= threshold) then
+        if (ustar >= ustar_threshold) then
            HorizFlux = (ustar * R) ** 3.0 * (1 - ( u_ts / ustar ) ** 2.0)
         endif
 
@@ -243,16 +243,17 @@ contains
     !! \param HorizFlux Horizontal Mass Flux
     !!
     !!!>
-    subroutine Kawamura_HorizFlux(ustar, R, H, HorizFlux)
+    subroutine Kawamura_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: ustar
+        real(fp), intent(in)  :: ustar_threshold
         real(fp), intent(in)  :: R
         real(fp), intent(in)  :: H
         real(fp), intent(out) :: HorizFlux
 
         ! Local Variables
-        real(fp) :: ustar_s ! surface Friction Velocity (ie USTAR * R) [m/s]
+        real(fp) :: u_ts ! Modified threshold fricition velocity
 
         ! Initialize
         HorizFlux = ZERO
@@ -278,6 +279,7 @@ contains
     !! \param R Drag partition
     !!!>
     subroutine MB95_DragParitition(z0, R)
+        use constants, only: e
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: z0
