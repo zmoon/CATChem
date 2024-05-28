@@ -7,6 +7,7 @@ program test_fengha
    use CCPr_Dust_Common_Mod, only: DustStateType
    use CCPr_Scheme_Fengsha_Mod, only: CCPr_Scheme_Fengsha
    use CCPr_Dust_mod, only: CCPr_Dust_Init, CCPr_Dust_Run
+   use testing_mod, only: assert
    implicit none
 
    type(ConfigType) :: Config
@@ -42,6 +43,6 @@ program test_fengha
 
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
 
-   print *, DiagState%dust_total_flux
+   call assert(DiagState%dust_total_flux == 0.0_fp, "no flux since ustar < u_ts")
 
 end program
