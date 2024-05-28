@@ -34,6 +34,7 @@ program test_fengha
    MetState%GWETTOP = 0.5_fp
    MetState%USTAR = 0.25_fp
    MetState%USTAR_THRESHOLD = 0.1_fp
+   allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
