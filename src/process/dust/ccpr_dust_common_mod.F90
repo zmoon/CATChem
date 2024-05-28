@@ -387,10 +387,11 @@ contains
         real(fp), intent(out) :: ustar_threshold
 
         ! Local Variables
-        real(fp) :: ustar_threshold
+        !-----------------
+        real(fp) :: diameter
 
         diameter = 2.0 * radius
-        ustar_threshold = 0.13 * sqrt(soil_density*g0*diameter/air_dens) &
+        ustar_threshold = 0.13 * sqrt(soil_density*g0*diameter/air_density) &
                                * sqrt(1.+6.e-7/(soil_density*g0*diameter**2.5)) &
                                / sqrt(1.928*(1331.*(100.*diameter)**1.56+0.38)**0.092 - 1.)
 

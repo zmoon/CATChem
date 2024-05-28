@@ -25,7 +25,7 @@ contains
     !! \param [INOUT] DustState The DustState object
     !! \param [OUT] RC Return code
     !!!>
-    subroutine CCPr_Scheme_Ginoux(MetState, DiagState, ChemState, DustState, RC)
+    subroutine CCPr_Scheme_Ginoux(MetState, DiagState, DustState, RC)
 
         ! Uses
         USE Constants,     Only : g0
@@ -33,7 +33,6 @@ contains
         use precision_mod, only : fp, ZERO
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
-        Use ChemState_Mod, Only : ChemStateType
         Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE
         Use CCPr_Dust_Common_Mod, Only : DustStateType
 
@@ -42,7 +41,6 @@ contains
         ! Arguments
         type(MetStateType),  intent(in)    :: MetState
         type(DiagStateType), intent(inout) :: DiagState
-        type(ChemStateType), intent(inout) :: ChemState
         type(DustStateType), intent(inout) :: DustState
         integer, intent(out) :: RC
 
@@ -56,6 +54,7 @@ contains
         real(fp) :: u_thresh0                            ! Dry threshold wind speed [m/s]
         real(fp) :: u_thresh                             ! Moisture Corrected threshold wind speed [m/s]
         real(fp) :: w10m                                 ! 10m wind speed [m/s]
+        real(fp) :: EmissionBin(DustState%nDustSpecies)  ! Emission Rate per Bin
 
         ! Initialize
         errMsg = ''
@@ -98,7 +97,7 @@ contains
             call MB97_threshold_velocity(DustState%DustDensity(n), MetState%AIRDEN, DustState%EffectiveRadius(n), u_thresh0)
 
             ! get 10m mean wind speed
-            w10m = sqrt(MetState%U10*MetState%U10+MetState%V10*MetState%V10)
+            w10m = sqrt(MetState%U10M ** 2 + MetState%V10M ** 2)
 
 
             if (MetState%GWETTOP .lt. 0.5) then
@@ -107,7 +106,8 @@ contains
                 u_thresh = amax1(0., u_thresh0 * (1.2 + 0.2*alog10(max(1.e-3, MetState%GWETTOP))) )
 
                 if (w10m .gt. u_thresh) then
-                    DustState%EmissionPerSpecies(n) = ginoux_scaling * w10m ** 2 * (w10m - u_thresh)
+                    EmissionBin(n) = ginoux_scaling * w10m ** 2 * (w10m - u_thresh)
+                    DustState%EmissionPerSpecies(n) = EmissionBin(n)
                 endif
 
             endif ! GWETTOP < 0.5
