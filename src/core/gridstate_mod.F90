@@ -30,6 +30,7 @@ module GridState_Mod
       ! Name of variables containing grid information
       !-------------------------------------------------------------------------
       CHARACTER(LEN=4)             :: State     = 'Grid'    ! Name of this state
+
    end type GridStateType
 
 
@@ -43,7 +44,6 @@ contains
    !! \param Config The input config object.
    !! \param GridState The GridState object to be initialized.
    !! \param RC The return code
-   !!
    !!!>
    subroutine Grid_Init_State(Config, GridState, RC)
       use Error_Mod, only : CC_SUCCESS
@@ -71,9 +71,9 @@ contains
       thisLoc = 'Grid_Init_State() -> at initializing GridState'
 
       ! initialize GridState
-      GridState%nx=0
-      GridState%ny=0
-      GridState%number_of_levels=0
+      GridState%nx=1
+      GridState%ny=1
+      GridState%number_of_levels=1
       GridState%area => NULL()
 
    end subroutine Grid_Init_State
