@@ -35,7 +35,7 @@ module ChemState_Mod
    !> - GasIndex: An array containing the gas species index.
    !> - DustIndex: An array containing the dust species index.
    !> - SeaSaltIndex: An array containing the sea salt species index.
-   !> - chemSpecies: A 3D array containing the concentration of each species.
+   !> - chemSpecies: A 2-D array containing the concentration of each species.
    type, public :: ChemStateType
       !---------------------------------------------------------------------
       ! Name of variables containing chemistry information
