@@ -359,4 +359,44 @@ contains
 
     end subroutine MB95_DragParitition
 
+    !>
+    !! \brief Computes the Threshold Friction Velocity from MB97
+    !!
+    !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
+    !! 1. Design of a soil-derived dust emission scheme,
+    !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995 | TODO fix with correct reference
+    !!
+    !! \param soil_density soil density
+    !! \param air_density air density
+    !! \param radius particle radius
+    !! \param ustar_threshold threshold friction velocity
+    !!!>
+    subroutine MB97_threshold_velocity(soil_density, air_density, radius, ustar_threshold)
+        ! USES
+        USE constants, ONLY: g0
+        IMPLICIT NONE
+
+        ! Input Parameters
+        !-----------------
+        real(fp), intent(in) :: radius
+        real(fp), intent(in) :: soil_density
+        real(fp), intent(in) :: air_density
+
+        ! Output Parameters
+        !------------------
+        real(fp), intent(out) :: ustar_threshold
+
+        ! Local Variables
+        real(fp) :: ustar_threshold
+
+        diameter = 2.0 * radius
+        ustar_threshold = 0.13 * sqrt(soil_density*g0*diameter/air_dens) &
+                               * sqrt(1.+6.e-7/(soil_density*g0*diameter**2.5)) &
+                               / sqrt(1.928*(1331.*(100.*diameter)**1.56+0.38)**0.092 - 1.)
+
+        return
+
+    end subroutine MB97_threshold_velocity
+
+
 end module CCPr_Dust_Common_Mod
