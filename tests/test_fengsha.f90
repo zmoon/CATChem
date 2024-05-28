@@ -42,7 +42,10 @@ program test_fengha
    DustState%AlphaScaleFactor = 1.0_fp
 
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
-
    call assert(DiagState%dust_total_flux == 0.0_fp, "no flux since ustar < u_ts")
+
+   MetState%USTAR = 2.5_fp
+   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call assert (DiagState%dust_total_flux > 1.0e-6_fp, "windier -> dust")
 
 end program
