@@ -6,6 +6,10 @@ PROJECT_LOGO = ../data/CATChem_logo_h55.png
 OPTIMIZE_FOR_FORTRAN = YES
 
 INPUT = ../src/core ../src/process/ccpr_fengsha_mod.F90
+HTML_EXTRA_STYLESHEET = ../docs2/doxygen-awesome.css
+HTML_COLORSTYLE = LIGHT
+DISABLE_INDEX = NO
+GENERATE_TREEVIEW = YES
 FILE_PATTERNS = *.F90
 RECURSIVE = YES
 
