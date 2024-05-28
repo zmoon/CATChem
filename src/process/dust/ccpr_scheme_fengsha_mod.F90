@@ -128,7 +128,9 @@ contains
 
             ! get distribution of dust
             !--------------------------------
-            call KokDistribution(DustState%EffectiveRadius, DustState%LowerBinRadius, DustState%UpperBinRadius, distribution)
+            if (DustState%nDustSpecies == 1) then
+                call KokDistribution(DustState%EffectiveRadius, DustState%LowerBinRadius, DustState%UpperBinRadius, distribution)
+            endif
 
             ! Compute vertical-to-horizontal mass flux ratio
             ! ----------------------------------------------
