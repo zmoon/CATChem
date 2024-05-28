@@ -10,6 +10,7 @@ MODULE CCPr_Dust_mod
       USE DiagState_Mod, Only : DiagStateType
       USE MetState_Mod, Only : MetStateType
       USE Config_Opt_Mod, Only : ConfigType
+      USE ChemState_Mod, Only : ChemStateType
       USE CCPr_Dust_Common_Mod, Only : DustStateType
 
       IMPLICIT NONE
@@ -19,7 +20,7 @@ MODULE CCPr_Dust_mod
     !
       PUBLIC :: CCPR_Dust_Run
       PUBLIC :: CCPR_Dust_Init
-      PUBLIC :: CCPR_Dust_Final
+      PUBLIC :: CCPR_Dust_Finalize
 
     CONTAINS
 
@@ -32,16 +33,16 @@ MODULE CCPr_Dust_mod
       !! \param RC          Error return code
       !!
       !!!>
-      SUBROUTINE CCPR_Dust_Init( Config, DustState, ChmState, RC)
+      SUBROUTINE CCPR_Dust_Init( Config, DustState, ChemState, RC)
         ! USES
 
         IMPLICIT NONE
 
         ! INPUT PARAMETERS
         !-----------------
-        TYPE(ConfigType),    POINTER :: Config  ! Config options
-        TYPE(ChmStateType),  POINTER :: ChmState    ! Chemical State
-        TYPE(DustStateType), POINTER :: DustState => NULL()
+        TYPE(ConfigType),    POINTER :: Config     ! Config options
+        TYPE(DustStateType), POINTER :: DustState  ! Nullify Dust State During INIT
+        TYPE(ChemStateType), POINTER :: ChemState  ! Chemical State
 
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
@@ -50,10 +51,12 @@ MODULE CCPr_Dust_mod
         ! LOCAL VARIABLES
         !----------------
         Integer, parameter :: nDustBinsDefault = 5
-        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultDustDensity     = (/ 2500., 2650., 2650., 2650., 2650. /)
-        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultEffectiveRadius = (/ 0.73D-6, 1.4D-6, 2.4D-6, 4.5D-6, 8.0D-6 /)
-        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultLowerBinRadius  = (/ 0.1D-6, 1.0D-6, 1.8D-6, 3.0D-6, 6.0D-6  /)
-        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultUpperBinRadius  = (/ 1.0D-6, 1.8D-6, 3.0D-6, 6.0D-6,10.0D-6  /)
+        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultDustDensity     = (/ 2500.0, 2650.0, 2650.0, 2650.0, 2650.0 /)
+        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultEffectiveRadius = (/ 0.73e-6, 1.4e-6, 2.4e-6, 4.5e-6, 8.0e-6 /)
+        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultLowerBinRadius  = (/ 0.1e-6, 1.0e-6, 1.8e-6, 3.0e-6, 6.0e-6  /)
+        REAL(fp), DIMENSION(nDustBinsDefault), Parameter :: DefaultUpperBinRadius  = (/ 1.0e-6, 1.8e-6, 3.0e-6, 6.0e-6, 10.0e-6  /)
+
+        INTEGER :: k ! Loop Counter
 
         ! Error handling
         !---------------
@@ -75,7 +78,7 @@ MODULE CCPr_Dust_mod
 
             ! Set number of dust species
             !---------------------------
-            DustState%nDustSpecies = ChmState%nDust
+            DustState%nDustSpecies = ChemState%nSpeciesDust
 
             ! Set Scheme Options
             !-------------------
@@ -83,15 +86,15 @@ MODULE CCPr_Dust_mod
 
             ! Set Drag Calculation Option
             !----------------------------
-            DustState%DragOpt = Config%dust_drag
+            DustState%DragOpt = Config%dust_drag_opt
 
             ! Set Moisture Calculation Option
             !--------------------------------
-            DustState%MoistOpt = Config%dust_moisture
+            DustState%MoistOpt = Config%dust_moist_opt
 
             ! Set Horizontal Flux Calculation Option
             !---------------------------------------
-            DustState%HorizFluxOpt = Config%dust_horizflux
+            DustState%HorizFluxOpt = Config%dust_horizflux_opt
 
             if (DustState%nDustSpecies == 0) then
 
@@ -100,35 +103,35 @@ MODULE CCPr_Dust_mod
                 ALLOCATE(DustState%LowerBinRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%LowerBinRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault
+                do k = 1, nDustBinsDefault
                     DustState%LowerBinRadius(k) = DefaultLowerBinRadius(k)
                 end do
 
                 ALLOCATE(DustState%UpperBinRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%UpperBinRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault
+                do k = 1, nDustBinsDefault
                     DustState%UpperBinRadius(k) = DefaultUpperBinRadius(k)
-                end do
+                enddo
 
                 ALLOCATE(DustState%EffectiveRadius(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%EffectiveRadius', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault
+                do k = 1, nDustBinsDefault
                     DustState%EffectiveRadius(k) = DefaultEffectiveRadius(k)
                 end do
 
                 ALLOCATE(DustState%DustDensity(nDustBinsDefault), STAT=RC)
                 CALL CC_CheckVar('DustState%DustDensity', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault
+                do k = 1, nDustBinsDefault
                     DustState%DustDensity(k) = DefaultDustDensity(k)
                 end do
 
-                ALLOCATE(DustEmissionPerSpecies(nDustBinsDefault), STAT=RC)
-                CALL CC_CheckVar('DustEmissionPerSpecies', 0, RC)
+                ALLOCATE(DustState%EmissionPerSpecies(nDustBinsDefault), STAT=RC)
+                CALL CC_CheckVar('EmissionPerSpecies', 0, RC)
                 IF (RC /= CC_SUCCESS) RETURN
-                do k in 1, nDustBinsDefault
+                do k = 1, nDustBinsDefault
                     DustState%EmissionPerSpecies(k) = 0.0_fp
                 end do
 
@@ -163,19 +166,19 @@ MODULE CCPr_Dust_mod
     SUBROUTINE CCPr_Dust_Run( MetState, DiagState, DustState, ChemState, RC )
 
         ! USE
-        USE CCPr_Scheme_Fengsha_Mod, ONLY: CCPr_Dust_Scheme_Fengsha  ! Fengsha Dust Scheme
+        USE CCPr_Scheme_Fengsha_Mod, ONLY: CCPr_Scheme_Fengsha  ! Fengsha Dust Scheme
 
         IMPLICIT NONE
 
         ! INPUT PARAMETERS
         !-----------------
-        TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
+        TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
 
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
-        TYPE(DiagState_type), INTENT(INOUT) :: DiagState   ! DiagState Instance
-        TYPE(DustState_type), INTENT(INOUT) :: DustState   ! DustState Instance
-        TYPE(ChemState_type),  INTENT(INOUT) :: ChemState  ! ChemState Instance
+        TYPE(DiagStateType), INTENT(INOUT) :: DiagState   ! DiagState Instance
+        TYPE(DustStateType), INTENT(INOUT) :: DustState   ! DustState Instance
+        TYPE(ChemStateType), INTENT(INOUT) :: ChemState  ! ChemState Instance
 
         ! OUTPUT PARAMETERS
         !------------------
@@ -197,7 +200,7 @@ MODULE CCPr_Dust_mod
             ! Run the Dust Scheme
             !--------------------
             if (DustState%SchemeOpt == 1) then
-                CCPr_Dust_Scheme_Fengsha( MetState, DiagState, DustState, ChemState, RC)
+                call CCPr_Scheme_Fengsha( MetState, DiagState, DustState, RC)
             else
                 write(*,*) 'TODO: Add other dust schemes'
             endif
@@ -220,7 +223,7 @@ MODULE CCPr_Dust_mod
 
         ! INPUT/OUTPUT PARAMETERS
         !------------------------
-        TYPE(DustState_type), INTENT(INOUT) :: DustState ! DustState Instance
+        TYPE(DustStateType), INTENT(INOUT) :: DustState ! DustState Instance
         INTEGER, INTENT(OUT) :: RC                       ! Return Code
 
         ! LOCAL VARIABLES
@@ -233,30 +236,25 @@ MODULE CCPr_Dust_mod
         errMsg = ''
         thisLoc = ' -> at CCPr_Dust_Finalize (in process/dust/ccpr_dust.F90)'
 
-        DELLOCATE( DustState%LowerBinRadius, STAT=RC )
+        DEALLOCATE( DustState%LowerBinRadius, STAT=RC )
         CALL CC_CheckVar('DustState%LowerBinRadius', 0, RC)
         IF (RC /= CC_SUCCESS) RETURN
-        DustState%LowerBinRadius => NULL()
 
-        DELLOCATE( DustState%UpperBinRadius, STAT=RC )
+        DEALLOCATE( DustState%UpperBinRadius, STAT=RC )
         CALL CC_CheckVar('DustState%UpperBinRadius', 0, RC)
         IF (RC /= CC_SUCCESS) RETURN
-        DustState%UpperBinRadius => NULL()
 
-        DELLOCATE( DustState%EffectiveRadius, STAT=RC )
+        DEALLOCATE( DustState%EffectiveRadius, STAT=RC )
         CALL CC_CheckVar('DustState%EffectiveRadius', 0, RC)
         IF (RC /= CC_SUCCESS) RETURN
-        DustState%EffectiveRadius => NULL()
 
-        DELLOCATE( DustState%DustDensity, STAT=RC )
+        DEALLOCATE( DustState%DustDensity, STAT=RC )
         CALL CC_CheckVar('DustState%DustDensity', 0, RC)
         IF (RC /= CC_SUCCESS) RETURN
-        DustState%DustDensity => NULL()
 
         DEALLOCATE( DustState%EmissionPerSpecies, STAT=RC )
         CALL CC_CheckVar('DustState%EmissionPerSpecies', 0, RC)
         IF (RC /= CC_SUCCESS) RETURN
-        DustState%EmissionPerSpecies => NULL()
 
     END SUBROUTINE CCPr_Dust_Finalize
 

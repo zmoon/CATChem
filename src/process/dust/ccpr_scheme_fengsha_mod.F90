@@ -31,34 +31,36 @@ contains
         use precision_mod, only : fp, ZERO
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
-        Use Error_Mod,     Only : CC_SUCCESS
+        Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE
         Use CCPr_Dust_Common_Mod, Only : DustStateType
 
         IMPLICIT NONE
 
         ! Arguments
-        type(MetStateType),  intent(in) :: MetState     ! Meteorological Variables
-        type(DiagStateType), intent(in) :: DiagState    ! Diagnostic Variables
-        type(DustStateType), intent(in) :: DustState    ! Dust Variables
+        type(MetStateType),  intent(in)    :: MetState     ! Meteorological Variables
+        type(DiagStateType), intent(inout) :: DiagState    ! Diagnostic Variables
+        type(DustStateType), intent(inout) :: DustState    ! Dust Variables
 
         integer, intent(out) :: RC                      ! Success or Failure
 
         ! Local Variables
         character(len=256) :: errMsg
         character(len=256) :: thisLoc
-        logical :: do_dust                 ! Enable Dust Calculation Flag
-        integer :: n                       ! loop couters
-        integer :: nbins                   ! number of dust bins
-        real(fp) :: hflux                  ! Horizontal Flux
-        real(fp) :: R                      ! Drag Paritition [1]
-        real(fp) :: h_to_v_ratio           ! Horizontal to Vertical Mass Flux Ratio
-        real(fp) :: airmass                ! Air Mass at lowest model level
-        real(fp) :: H                      ! Soil Moisture Attenuation Factor
-        real(fp) :: distribution           ! Distribution Weights
-        real(fp) :: SEP                    ! Soil Erosion Potential
-        real(fp) :: alpha_grav             ! Alpha Parameter over Gravity
-        real(fp) :: HorizFlux              ! Horizontal Mass Flux
-        real(fp) :: FengshaScaling         ! Total Scaling Factor
+        logical :: do_dust                               ! Enable Dust Calculation Flag
+        integer :: n                                     ! loop couters
+        integer :: nbins                                 ! number of dust bins
+        real(fp) :: hflux                                ! Horizontal Flux
+        real(fp) :: R                                    ! Drag Paritition [1]
+        real(fp) :: h_to_v_ratio                         ! Horizontal to Vertical Mass Flux Ratio
+        real(fp) :: airmass                              ! Air Mass at lowest model level
+        real(fp) :: H                                    ! Soil Moisture Attenuation Factor
+        real(fp) :: distribution(DustState%nDustSpecies) ! Distribution Weights
+        real(fp) :: EmissBins(DustState%nDustSpecies)    ! Emission Rate per Bin
+        real(fp) :: SEP                                  ! Soil Erosion Potential
+        real(fp) :: alpha_grav                           ! Alpha Parameter over Gravity
+        real(fp) :: HorizFlux                            ! Horizontal Mass Flux
+        real(fp) :: FengshaScaling                       ! Total Scaling Factor
+        real(fp) :: TotalFlux                            ! Total Mass Flux
 
         real(fp), parameter :: clay_thresh = 0.2
         real(fp), parameter :: kvhmax = 2.0e-4 ! Max. Vertical to Horizontal Mass Flux Ratio
@@ -70,8 +72,15 @@ contains
 
         hflux = ZERO
         h_to_v_ratio = ZERO
-        kvhmax = ZERO
         airmass = ZERO
+        distribution = ZERO
+        HorizFlux = ZERO
+        FengshaScaling = ZERO
+        SEP = ZERO
+        H = ZERO
+        EmissBins = ZERO
+        TotalFlux = ZERO
+
 
         nbins = size(DustState%EffectiveRadius)
 
@@ -84,7 +93,7 @@ contains
 
         ! Don't do dust over bedrock, lava, or Permanant Ice (15, 16, 18)
         !----------------------------------------------------------------
-        if (MetState%SOILTYPE == 15 .or. MetState%SOILTYPE == 16 .or. MetState%SOILTYPE == 18) then
+        if (MetState%DSOILTYPE == 15 .or. MetState%DSOILTYPE == 16 .or. MetState%DSOILTYPE == 18) then
             do_dust = .false.
         endif
 
@@ -100,7 +109,7 @@ contains
 
         ! Don't do dust over frozen soil
         !--------------------------------
-        if (MetState%TSOILTOP <= 273.15) then
+        if (MetState%TSKIN <= 273.15) then
             do_dust = .false.
         endif
 
@@ -111,10 +120,10 @@ contains
 
             ! Calculate soil moisture
             !--------------------------------
-            if (DustState%FengshaMoistureOpt == 1) then
+            if (DustState%MoistOpt == 1) then
                 call Fecan_SoilMoisture(MetState%CLAYFRAC, MetState%SANDFRAC, MetState%GWETTOP, H)
-            elseif (DustState%FengshaMoistureOpt == 2) then
-                call Shao_SoilMoisture(MetState%CLAYFRAC, MetState%SANDFRAC, MetState%GWETTOP, H)
+            elseif (DustState%MoistOpt == 2) then
+                call Shao_SoilMoisture(MetState%GWETTOP, H)
             endif
 
             ! get distribution of dust
@@ -126,7 +135,7 @@ contains
             if (MetState%CLAYFRAC > clay_thresh) then
                 h_to_v_ratio = kvhmax
             else
-                kvh = 10.0**(13.4*clay-6.0)
+                h_to_v_ratio = 10.0**(13.4*MetState%CLAYFRAC-6.0)
             end if
 
             ! Compute the soil erosion potential
@@ -138,11 +147,11 @@ contains
             ! 2: MB95 Drag Partition
             ! 3: Darmenova 2009
             !----------------------------
-            if (DustState%FengshaDragOpt == 1) then
+            if (DustState%DragOpt == 1) then
                 R = MetState%RDRAG
-            elseif (DustState%FengshaDragOpt == 2) then
+            elseif (DustState%DragOpt == 2) then
                 call MB95_DragParitition(MetState%z0, R)
-            elseif (DustState%FengshaDragOpt == 3) then
+            elseif (DustState%DragOpt == 3) then
                 ! call Darmenova_DragPartition(MetState%z0, R) -> TODO: Darmenova 2009
                 write(*,*) 'Place Holder'
             else
@@ -157,7 +166,7 @@ contains
             ! 2: Draxler 2001
             !----------------------------------
             if (DustState%HorizFluxOpt == 1) then
-                call Kawamura_HorizFlux(MetState%USTAR, R, H, HorizFlux)
+                call Kawamura_HorizFlux(MetState%USTAR, MetState%USTAR_THRESHOLD, R, H, HorizFlux)
             elseif (DustState%HorizFluxOpt == 2) then
                 call Draxler_HorizFlux(MetState%USTAR, MetState%USTAR_THRESHOLD, R, H, HorizFlux)
             else
@@ -169,14 +178,19 @@ contains
 
             ! Compute the Total Dust Flux
             !----------------------------
-            FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN / g0
-            DiagState%dust_total_flux = FengshaScaling * HorizFlux * h_to_v_ratio
+            FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN(1) / g0
+
+            TotalFlux = FengshaScaling * HorizFlux * h_to_v_ratio
+
+            ! Fill Diagnostic TotalFlux
+            !--------------------------
+            DiagState%dust_total_flux = TotalFlux
 
             ! Compute the Dust Concentration
             !-------------------------------
             if (DustState%nDustSpecies > 0) then
-                do i = 1, DustState%nDustSpecies
-                    ChmState%chmarray(DustState%DustSpeciesIndex(i)) = distribution(i) * DiagState%dust_total_flux
+                do n = 1, DustState%nDustSpecies
+                    EmissBins(n) = distribution(n) * TotalFlux
                 enddo
             endif
 

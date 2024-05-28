@@ -60,8 +60,9 @@ module CCPr_Dust_Common_Mod
         REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)     ! Emission per species    [kg/m^2/s]
 
         ! Scheme Options
-        INTEGER                         :: FengshaMoistureOpt  ! Fengsha-Moisture Calculation Option
-        INTEGER                         :: FengshaDragOpt      ! Fengsha-Drag Calculation Option
+        INTEGER                         :: MoistOpt  ! Fengsha-Moisture Calculation Option
+        INTEGER                         :: DragOpt      ! Fengsha-Drag Calculation Option
+        INTEGER                         :: HorizFluxOpt        ! Horizontal Flux Calculation Option
 
      !=================================================================
      ! Module specific variables/arrays/data pointers come below
@@ -169,16 +170,16 @@ contains
     !! \param radius Radius
     !! \param rLow Lower radius
     !! \param rUp Upper radius
-    !! \param distribution Distribution
+    !! \param dist Distribution
     !!!>
-    subroutine KokDistribution(radius, rLow, rUp, distribution)
+    subroutine KokDistribution(radius, rLow, rUp, dist)
         use constants, only: pi
         IMPLICIT NONE
         ! Parameters
         real(fp), dimension(:), intent(in)  :: radius
         real(fp), dimension(:), intent(in)  :: rLow
         real(fp), dimension(:), intent(in)  :: rUp
-        real(fp), dimension(:), intent(out) :: distribution
+        real(fp), dimension(:), intent(out) :: dist
 
         ! Local Variables
         integer :: n          ! looping variable
@@ -194,7 +195,7 @@ contains
         real(fp), parameter :: factor = 1. / ( sqrt(2.) * log(stddev)) ! auxilary constant for the distribution
 
         ! Initialize
-        distribution = ZERO
+        dist = ZERO
         nbins = size(radius)
 
         do n = 1, nbins
@@ -202,12 +203,12 @@ contains
             dlam = diameter / lambda
             dvol = 4. / 3. * pi * diameter**3
             diameter = (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
-            dvol = dvol + distribution(n)
+            dvol = dvol + dist(n)
         end do
 
         ! Normalize Distribution
         do n = 1, nbins
-            distribution(n) = distribution(n) / dvol
+            dist(n) = dist(n) / dvol
         end do
         return
     end subroutine KokDistribution
@@ -226,7 +227,7 @@ contains
         ! Parameters
         real(fp), intent(in)  :: clayfrac
         real(fp), intent(in)  :: sandfrac
-        real(fp), intent(out) :: SEP
+        real(fp), intent(inout) :: SEP
 
         ! Initialize
         SEP = ZERO
@@ -264,7 +265,7 @@ contains
         real(fp), intent(in)  :: ustar_threshold
         real(fp), intent(in)  :: R
         real(fp), intent(in)  :: H
-        real(fp), intent(out) :: HorizFlux
+        real(fp), intent(inout) :: HorizFlux
 
         ! Local Variables
         !----------------
@@ -309,7 +310,7 @@ contains
         real(fp), intent(in)  :: ustar_threshold
         real(fp), intent(in)  :: R
         real(fp), intent(in)  :: H
-        real(fp), intent(out) :: HorizFlux
+        real(fp), intent(inout) :: HorizFlux
 
         ! Local Variables
         real(fp) :: u_ts ! Modified threshold fricition velocity
@@ -341,7 +342,7 @@ contains
         IMPLICIT NONE
         ! Parameters
         real(fp), intent(in)  :: z0
-        real(fp), intent(out) :: R
+        real(fp), intent(inout) :: R
 
         ! Local Variables
         real(fp), parameter :: z0s = 0.0008467 ! ideal roughness length of soil
