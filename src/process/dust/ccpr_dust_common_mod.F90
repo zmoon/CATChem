@@ -195,6 +195,7 @@ contains
         real(fp), parameter :: factor = 1. / ( sqrt(2.) * log(stddev)) ! auxilary constant for the distribution
 
         ! Initialize
+        dvol = ZERO
         dist = ZERO
         nbins = size(radius)
 
