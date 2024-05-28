@@ -23,3 +23,5 @@ target_link_libraries(test_fengsha PRIVATE CATChem_core)
 target_link_libraries(test_fengsha PRIVATE CATChem_process_dust)
 target_link_libraries(test_fengsha PRIVATE testing)
 set_target_properties(test_fengsha PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+
+add_test(NAME test_ccpr_fengsha COMMAND test_fengsha)
