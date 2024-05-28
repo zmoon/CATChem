@@ -283,8 +283,9 @@ contains
         u_ts = ustar_threshold * H / R
 
         if (ustar >= ustar_threshold) then
-           HorizFlux = (ustar * R) ** 3.0 * (1 - ( u_ts / ustar ) ** 2.0)
+           HorizFlux = max(0. ,(ustar * R) ** 3.0 * (1 - ( u_ts / ustar ) ** 2.0))
         endif
+
 
         return
     end subroutine Draxler_HorizFlux
@@ -325,7 +326,7 @@ contains
         !--------------------------------------------
         u_ts = ustar_threshold * H / R
 
-        HorizFlux = ustar ** 3.0 * (1 - (u_ts / ustar) ** 2.) * (1 + (u_ts / ustar) ** 2.)
+        HorizFlux = MAX(0., (ustar ** 3.0 * (1 - (u_ts / ustar) ** 2.) * (1 + (u_ts / ustar) ** 2. ) ) )
 
         return
     end subroutine Kawamura_HorizFlux
