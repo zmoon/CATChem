@@ -106,7 +106,7 @@ contains
                 u_thresh = amax1(0., u_thresh0 * (1.2 + 0.2*alog10(max(1.e-3, MetState%GWETTOP))) )
 
                 if (w10m .gt. u_thresh) then
-                    EmissionBin(n) = ginoux_scaling * w10m ** 2 * (w10m - u_thresh)
+                    EmissionBin(n) = ginoux_scaling * w10m ** 2 * max(0.,(w10m - u_thresh) )
                     DustState%EmissionPerSpecies(n) = EmissionBin(n)
                 endif
 
