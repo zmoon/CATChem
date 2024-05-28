@@ -38,7 +38,10 @@ program test_fengha
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
+   DustState%AlphaScaleFactor = 1.0_fp
 
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+
+   print *, DiagState%dust_total_flux
 
 end program
