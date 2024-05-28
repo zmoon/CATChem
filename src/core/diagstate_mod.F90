@@ -16,15 +16,14 @@ module DiagState_Mod
    PUBLIC :: Diag_Allocate
 
    !> \brief Data type for storing diagnostic state variables
-   !!
-   !! This type contains the following real variables:
-   !! - `dust_total_flux` : Total flux of dust particles
-   !! - `sea_salt_total_flux` : Total flux of sea salt particles
    type, public :: DiagStateType
 
-      ! Reals
-      REAL(fp), POINTER :: dust_total_flux(:,:)
-      REAL(fp), POINTER :: sea_salt_total_flux(:,:)
+      ! Surface or single-level variables
+      REAL(fp) :: dust_total_flux      !> Total flux of dust particles [kg m-2 s-1]
+      REAL(fp) :: sea_salt_total_flux  !> Total flux of sea salt particles [kg m-2 s-1]
+
+      ! Vertically-resolved variables
+      ! real(fp), pointer :: x(:)
 
    end type DiagStateType
 
@@ -48,7 +47,7 @@ CONTAINS
       type(GridStateType), INTENT(IN)    :: GridState ! Grid State object
       type(DiagStateType), INTENT(INOUT) :: DiagState ! Diag State object
       ! OUTPUT Params
-      INTEGER,             INTENT(OUT)   :: RC          ! Success or failure
+      INTEGER,             INTENT(OUT)   :: RC        ! Success or failure
 
       ! Error handling
       CHARACTER(LEN=255) :: ErrMsg
@@ -61,25 +60,16 @@ CONTAINS
 
       ! Nullify all fields for safety's sake before allocating them
       ! This can prevent compilation errors caused by uninitialized values
-      ! Nullify all fields for safety's sake before allocating them
-      ! This can prevent compilation errors caused by uninitialized values
-      DiagState%dust_total_flux => NULL()
-      DiagState%sea_salt_total_flux => NULL()
+      ! DiagState%x => NULL()
 
       ! If dust process is activated then allocate dust related diagnostics
       if (Config%dust_activate) then
-         ALLOCATE( DiagState%dust_total_flux( GridState%NX, GridState%NY ), STAT=RC )
-         CALL CC_CheckVar( 'DiagState%dust_total_flux', 0, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         DiagState%dust_total_flux = 0._fp
+         DiagState%dust_total_flux = ZERO
       endif
 
       ! If sea salt process is activated then allocate sea salt related diagnostics
       if (Config%seasalt_activate) then
-         ALLOCATE( DiagState%sea_salt_total_flux( GridState%NX, GridState%NY ), STAT=RC )
-         CALL CC_CheckVar( 'DiagState%sea_salt_total_flux', 0, RC )
-         IF ( RC /= CC_SUCCESS ) RETURN
-         DiagState%sea_salt_total_flux = 0e+0_fp
+         DiagState%sea_salt_total_flux = ZERO
       endif
 
    end subroutine Diag_Allocate
