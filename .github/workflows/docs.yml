@@ -24,7 +24,7 @@ jobs:
           cd -
 
       - name: Deploy
-        if: github.ref == 'refs/heads/feature/catchem_begins'
+        # if: github.ref == 'refs/heads/feature/catchem_begins'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
