@@ -1,9 +1,6 @@
 !>
 !! \file constants.F90
 !! \brief This file contains constants for catchem
-!! \author Barry Baker
-!! \date 05/2023
-!! \version 0.1
 !!
 !! This file contains constants for catchem
 module constants

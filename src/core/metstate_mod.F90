@@ -1,8 +1,10 @@
-!> \defgroup MetState_Mod MetState Module
-!! \brief Contains the MetStateType data type and related subroutines and functions.
+!> \file metstate_mod.F90
+!! \brief Module for meteorology state variables
 !!
-!! The MetState_Mod module contains the MetStateType data type and related subroutines and functions for managing the state of the meteorology model.
+!! This module contains subroutines and functions related to the MetStateType instance of CATChem.
+!! It includes subroutines for initializing of the MetStateType.
 !!
+!!!>
 MODULE MetState_Mod
    !
    ! USES:

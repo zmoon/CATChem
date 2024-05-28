@@ -1,16 +1,8 @@
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: charpak_mod.F90
-!
-! !DESCRIPTION: Module CHARPAK\_MOD contains routines from the CHARPAK
-!  string and character manipulation package used by GEOS-Chem.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \file
+!! \brief Module for character string manipulation
+!!
+!! Original code from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/charpak_mod.F90
+!!
 MODULE Charpak_Mod
     !
     ! !USES:
@@ -50,20 +42,14 @@ MODULE Charpak_Mod
       INTEGER, PARAMETER, PUBLIC :: MAXSTRLEN = 500
 
     CONTAINS
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: CntMat
-    !
-    ! !DESCRIPTION: Counts the number of characters in str1 that match
-    !  a character in str2.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+
+    !> \brief Count the number of times a character appears in a string
+    !!
+    !! \param[in]  str1  String to search
+    !! \param[in]  str2  Character to search for
+    !! \param[out] imat  Number of matches
+    !! \param[out] locations  Positions of matches
+    !!
       SUBROUTINE CntMat( Str1, Str2, Imat, Locations )
     !
     ! !INPUT PARAMETERS:
@@ -75,12 +61,6 @@ MODULE Charpak_Mod
     !
         INTEGER,          INTENT(OUT) :: imat             ! Number of matches
         INTEGER,          OPTIONAL    :: Locations(255)   ! Positions of matches
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -117,24 +97,13 @@ MODULE Charpak_Mod
         IF ( PRESENT( Locations ) ) Locations = TmpLocations
 
       END SUBROUTINE CntMat
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: CopyTxt
-    !
-    ! !DESCRIPTION: Write all of the characters in str1 into variable
-    !               str2 beginning at column, col.  If the length of str1
-    !               + col is longer than the number of characters str2
-    !               can store, some characters will not be transfered to
-    !               str2.  Any characters already existing in str2 will
-    !               will be overwritten.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+
+      !> \brief Copy characters from one string to another
+      !!
+      !! \param[in]  col  Starting column
+      !! \param[in]  str1  String to copy from
+      !! \param[out] str2  String to copy to
+      !!!>
       SUBROUTINE CopyTxt( col, str1, str2 )
     !
     ! !INPUT PARAMETERS:
@@ -145,12 +114,6 @@ MODULE Charpak_Mod
     ! !OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: str2
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -172,19 +135,12 @@ MODULE Charpak_Mod
         ENDIF
 
       END SUBROUTINE CopyTxt
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Cstrip
-    !
-    ! !DESCRIPTION: Strip blanks and null characters for the variable TEXT.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+
+    !> \brief Strip leading and trailing spaces from a string
+    !!
+    !! \param[inout] text        String to be modified
+    !! \param[in]    KeepSpaces  If =T, then keep spaces
+    !!!>
       SUBROUTINE CStrip( text, KeepSpaces )
     !
     ! !INPUT PARAMETERS:
@@ -196,15 +152,6 @@ MODULE Charpak_Mod
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: TEXT       ! Text to be modified
-    !
-    ! !REMARKS:
-    !  The original "text" is destroyed upon exit.
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -240,20 +187,10 @@ MODULE Charpak_Mod
         ENDIF
 
       END SUBROUTINE CStrip
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: IsDigit
-    !
-    ! !DESCRIPTION: Returned as true if ch is a numeric character (i.e., one of
-    !  the numbers from 0 to 9).
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Check if a character is a digit
+    !!
+    !! \param[in]  ch  Character to check
+    !!!>
       FUNCTION IsDigit( ch ) RESULT( lnum )
     !
     ! !INPUT PARAMETERS:
@@ -263,12 +200,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         LOGICAL                      :: lnum
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -281,20 +212,12 @@ MODULE Charpak_Mod
         ENDIF
 
       END FUNCTION IsDigit
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: StrRepl
-    !
-    ! !DESCRIPTION: Subroutine StrRepl replaces all instances of PATTERN within
-    !  a string STR with replacement text REPLTXT.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Replace text in a string
+    !!
+    !! \param[inout] str  String to be modified
+    !! \param[in]    Pattern  Pattern to search for
+    !! \param[in]    ReplTxt  Text to replace
+    !!!>
       SUBROUTINE StrRepl( Str, Pattern, ReplTxt )
     !
     ! !INPUT PARAMETERS:
@@ -305,12 +228,6 @@ MODULE Charpak_Mod
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: Str       ! String to be manipulated
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -335,21 +252,13 @@ MODULE Charpak_Mod
         ENDDO
 
       END SUBROUTINE StrRepl
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: StrSplit
-    !
-    ! !DESCRIPTION: Subroutine STRSPLIT returns substrings in a string, separated
-    !  by a separator character (similar to IDL's StrSplit function).  This is
-    !  mainly a convenience wrapper for CHARPAK routine TxtExt.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Split a string into substrings
+    !!
+    !! \param[in]  Str  String to be searched
+    !! \param[in]  Sep  Separator character
+    !! \param[out] Result  Substrings
+    !! \param[out] N_SubStrs  # of substrings
+    !!!>
       SUBROUTINE StrSplit( Str, Sep, Result, N_SubStrs )
     !
     ! !INPUT PARAMETERS:
@@ -361,12 +270,6 @@ MODULE Charpak_Mod
     !
         CHARACTER(LEN=*), INTENT(OUT) :: Result(255)   ! Returned substrings
         INTEGER,          OPTIONAL    :: N_SubStrs     ! # of substrings
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -399,33 +302,16 @@ MODULE Charpak_Mod
         IF ( PRESENT( N_SUBSTRS ) ) N_SUBSTRS = I
 
       END SUBROUTINE StrSplit
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: StrSqueeze
-    !
-    ! !DESCRIPTION: Subroutine STRSQUEEZE strips white space from both ends of a
-    !  string.  White space in the middle of the string (i.e. between characters)
-    !  will be preserved as-is.  Somewhat similar (though not exactly) to IDL's
-    !  STRCOMPRESS function.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Remove leading and trailing blanks from a string
+    !!
+    !! \param[inout]  Str  String to be manipulated
+    !!!>
       SUBROUTINE StrSqueeze( Str )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: Str   ! String to be squeezed
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
         !=================================================================
         ! STRSQUEEZE begins here!
         !=================================================================
@@ -433,31 +319,15 @@ MODULE Charpak_Mod
         Str = ADJUSTL( TRIM( Str ) )
 
       END SUBROUTINE StrSqueeze
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: TranLc
-    !
-    ! !DESCRIPTION: Tranlate a character variable to all lowercase letters.
-    !               Non-alphabetic characters are not affected.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Translate a character variable to all lower case letters.
+    !!
+    !! \param[inout]  text  String to be manipulated
+    !!!>
       SUBROUTINE TranLc( text )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*) :: text
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -472,34 +342,15 @@ MODULE Charpak_Mod
         ENDDO
 
       END SUBROUTINE TRANLC
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: TranUc
-    !
-    ! !DESCRIPTION: Tranlate a character variable to all upper case letters.
-    !               Non-alphabetic characters are not affected.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Translate a character variable to all upper case letters.
+    !!
+    !! \param[inout]  text  String to be manipulated
+    !!!>
       SUBROUTINE TranUc( text )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*) :: text
-    !
-    ! !REMARKS:
-    !  The original "text" is destroyed.
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -514,45 +365,14 @@ MODULE Charpak_Mod
         ENDDO
 
       END SUBROUTINE TRANUC
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: TxtExt
-    !
-    ! !DESCRIPTION: TxtExt extracts a sequence of characters from
-    !               text and transfers them to word.  The extraction
-    !               procedure uses a set of character "delimiters"
-    !               to denote the desired sequence of characters.
-    !               For example if ch=' ', the first character sequence
-    !               bracketed by blank spaces will be returned in word.
-    !               The extraction procedure begins in column, col,
-    !               of TEXT.  If text(col:col) = ch (any character in
-    !               the character string), the text is returned beginning
-    !               with col+1 in text (i.e., the first match with ch
-    !               is ignored).
-    !\\
-    !\\
-    !               After completing the extraction, col is incremented to
-    !               the location of the first character following the
-    !               end of the extracted text.
-    !\\
-    !\\
-    !               A status flag is also returned with the following
-    !               meaning(s)
-    !\\
-    !\\
-    !               IF iflg = -1, found a text block, but no more characters
-    !                             are available in TEXT
-    !                  iflg = 0,  task completed sucessfully (normal term)
-    !                  iflg = 1,  ran out of text before finding a block of
-    !                             text.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Extract text from a string
+    !!
+    !! \param[in]  ch  Character string
+    !! \param[in]  text  String to be manipulated
+    !! \param[inout]  col  Column position
+    !! \param[out]  word  Extracted text
+    !! \param[out]  iflg  0: normal termination; 1: text not found
+    !!!>
       SUBROUTINE TxtExt(ch,text,col,word,iflg)
     !
     ! !INPUT PARAMETERS:
@@ -567,19 +387,6 @@ MODULE Charpak_Mod
     !
         CHARACTER(LEN=*), INTENT(OUT)   :: word
         INTEGER                         :: iflg
-    !
-    ! !REMARKS:
-    !  TxtExt is short for Text Extraction.  This routine provides a set of
-    !  powerful line-by-line text search and extraction capabilities in
-    !  standard FORTRAN.
-    !
-    ! !REVISION HISTORY:
-    !      AUTHOR: Robert D. Stewart
-    !        DATE: Jan. 1st, 1995
-    !  See https://github.com/ufs-community/catchem  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -671,20 +478,10 @@ MODULE Charpak_Mod
         ENDIF
 
       END SUBROUTINE TxtExt
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: To_Uppercase
-    !
-    ! !DESCRIPTION: Converts a string to uppercase, so that we can reliably
-    !  do string matching.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Convert a string to uppercase
+    !!
+    !! \param[in]  Text  String to be manipulated
+    !!!>
       FUNCTION To_UpperCase( Text ) RESULT( UpCaseText )
     !
     ! !INPUT PARAMETERS:
@@ -694,12 +491,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         CHARACTER(LEN=255)           :: UpCaseText   ! Output text, uppercase
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -726,23 +517,13 @@ MODULE Charpak_Mod
         ENDDO
 
       END FUNCTION To_UpperCase
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: ReadOneLine
-    !
-    ! !DESCRIPTION: Subroutine READ\_ONE\_LINE reads a line from the input file.
-    !  If the global variable VERBOSE is set, the line will be printed to stdout.
-    !  READ\_ONE\_LINE can trap an unexpected EOF if LOCATION is passed.
-    !  Otherwise, it will pass a logical flag back to the calling routine,
-    !  where the error trapping will be done.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Read one line from a file
+    !!
+    !! \param[in]  fId    File unit number
+    !! \param[out] EndOfFile  Denotes EOF condition
+    !! \param[out] IoStatus   I/O status code
+    !! \param[in]  Squeeze    Call Strsqueeze?
+    !!!>
       FUNCTION ReadOneLine( fId, EndOfFile, IoStatus, Squeeze ) RESULT( Line )
     !
     ! !INPUT PARAMETERS:
@@ -758,12 +539,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         CHARACTER(LEN=MAXSTRLEN) :: Line       ! Single line from the input file
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
 
         !=================================================================
         ! Initialize
@@ -793,19 +568,10 @@ MODULE Charpak_Mod
         ENDIF
 
       END FUNCTION ReadOneLine
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: CleanText
-    !
-    ! !DESCRIPTION: Strips commas, apostrophes, spaces, and tabs from a string.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Clean up a string
+    !!
+    !! \param[in]  Str  Original string
+    !!!>
       FUNCTION CleanText( Str ) RESULT( CleanStr )
     !
     ! !INPUT PARAMETERS:
@@ -815,12 +581,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE
     !
         CHARACTER(LEN=255)           :: CleanStr   ! Cleaned-up string
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
 
         ! Initialize
         CleanStr = Str
@@ -836,20 +596,12 @@ MODULE Charpak_Mod
         CALL StrSqueeze( CleanStr           )
 
       END FUNCTION CleanText
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: WordWrapPrint
-    !
-    ! !DESCRIPTION: Prints a text string wrapped to a specified line width.
-    !  Useful for displaying error and warning messages.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Print a string in multiple lines
+    !!
+    !! \param[in]  Text        String to print
+    !! \param[in]  LineWidth   Width (characters) of lines
+    !! \param[in]  Delimiter   Delimiter between words
+    !!!>
       SUBROUTINE WordWrapPrint( Text, LineWidth, Delimiter )
     !
     ! !INPUT PARAMETERS:
@@ -857,12 +609,6 @@ MODULE Charpak_Mod
         CHARACTER(LEN=*), INTENT(IN) :: Text        ! Text to print
         INTEGER,          INTENT(IN) :: LineWidth   ! Width (characters) of lines
         CHARACTER(LEN=1), OPTIONAL   :: Delimiter   ! Delimiter between words
-    !
-    ! !REVISION HISTORY:
-    !  See https://github.com/ufs-community/catchem                                  ! for complete history
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -933,19 +679,11 @@ MODULE Charpak_Mod
         ENDDO
 
       END SUBROUTINE WordWrapPrint
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Unique
-    !
-    ! !DESCRIPTION: Returns only the unique values in a vector of strings.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Find unique elements in an array
+    !!
+    !! \param[in]  vec  Input array
+    !! \param[out] vec_unique  Unique elements
+    !!!>
       SUBROUTINE Unique( vec, vec_unique )
     !
     ! !INPUT PARAMETERS:
@@ -955,12 +693,7 @@ MODULE Charpak_Mod
     ! !OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), ALLOCATABLE, INTENT(INOUT) :: vec_unique(:)
-    !
-    ! !REVISION HISTORY:
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
     !
     ! !LOCAL VARIABLES:
     !
@@ -1004,20 +737,11 @@ MODULE Charpak_Mod
         !call ISORT (vec_unique, [0], size(vec_unique), 1)
 
       END SUBROUTINE Unique
-    !
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: charArr2Str
-    !
-    ! !DESCRIPTION: Converts a character array of dimension N to a string of
-    !  length N.  Useful for writing character strings to netCDF files.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Convert a character array to a string
+    !!
+    !! \param[in]  charArray  Character array
+    !! \param[in]  N          Dimension of charArray
+    !!!>
       FUNCTION charArr2Str( charArray, N ) RESULT( string )
     !
     ! !INPUT PARAMETERS:
@@ -1028,12 +752,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         CHARACTER(LEN=N)             :: string         ! Output string
-    !
-    ! !REVISION HISTORY:
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1055,23 +773,11 @@ MODULE Charpak_Mod
         ENDDO
 
       END FUNCTION charArr2Str
-    !EOC
-    !
-    !------------------------------------------------------------------------------
-    !                  CATChem Model                                              !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: str2CharArr
-    !
-    ! !DESCRIPTION: Converts a string of length N to a character array of
-    !  dimension N.  Useful for writing character strings to netCDF files.
-
-    ! !DESCRIPTION:
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !> \brief Convert a string to a character array
+    !!
+    !! \param[in]  string  String
+    !! \param[in]  N       Length of string
+    !!!>
       FUNCTION str2CharArr( string, N ) RESULT( charArray )
     !
     ! !INPUT PARAMETERS:
@@ -1082,12 +788,6 @@ MODULE Charpak_Mod
     ! !RETURN VALUE:
     !
         CHARACTER(LEN=1)             :: charArray(N)   ! Output character array
-    !
-    ! !REVISION HISTORY:
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1105,5 +805,5 @@ MODULE Charpak_Mod
        charArray(L+1:) = ACHAR(0)
 
      END FUNCTION str2CharArr
-    !EOC
+
     END MODULE CharPak_Mod

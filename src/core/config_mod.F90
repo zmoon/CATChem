@@ -1,16 +1,9 @@
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: input_mod.F90
-!
-! !DESCRIPTION: Contains routines that read the CATChem configuration file at
-!  the start of the run and pass the information to Config.
-!\\
-!\\
-! !INTERFACE:
-!
+!> \file config_mod.F90
+!!\brief Contains the ConfigType type and Read_Input_File subroutine
+!!
+!! This module contains subroutines and functions related to the ConfigType instance of CATChem.
+!! It includes subroutines for reading the configuration file.
+!!!>
 MODULE Config_Mod
 !
 ! !USES:
@@ -33,7 +26,16 @@ MODULE Config_Mod
    CHARACTER(LEN=21), PARAMETER, PRIVATE :: configFile ='./CATChem_config.yml'
 
 CONTAINS
-!
+
+   !> \brief Read the configuration file
+   !!
+   !! This subroutine reads the configuration file and populates the ConfigType object.
+   !!
+   !! \param Config The configuration options
+   !! \param GridState The grid state containing information about the grid
+   !! \param RC The return code
+   !!
+   !!!>
    SUBROUTINE Read_Input_File( Config , GridState, RC )
 !
 ! !USES:
@@ -125,20 +127,16 @@ CONTAINS
       CALL QFYAML_CleanUp( ConfigAnchored )
 
    END SUBROUTINE Read_Input_File
-!EOC
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !IROUTINE: config_simulation
-!
-! !DESCRIPTION: Copies simulation information from the Config object
-!  to Config, and does necessary checks.
-!\\
-!\\
-! !INTERFACE:
-!
+
+   !> \brief Process simulation configuration
+   !!
+   !! This function processes the simulation configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !!!>
    SUBROUTINE Config_Simulation( ConfigInput, Config, RC )
 !
 ! !USES:
@@ -230,21 +228,16 @@ CONTAINS
 120   FORMAT( A, L5             )
 
    END SUBROUTINE Config_Simulation
-!EOC
-! #if !(defined( EXTERNAL_GRID ) || defined( EXTERNAL_FORCING ))
-!------------------------------------------------------------------------------
-!                  CATChem Model                                              !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !IROUTINE: config_grid
-!
-! !DESCRIPTION: Copies grid information from the Config object
-!  to Config, and does necessary checks.
-!\\
-!\\
-! !INTERFACE:
-!
+
+   !> \brief Process grid configuration
+   !!
+   !! This function processes the grid configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !!!>
    SUBROUTINE Config_Grid( ConfigInput, Config, GridState, RC )
 !
 ! !USES:
@@ -263,13 +256,6 @@ CONTAINS
 ! !OUTPUT PARAMETERS:
 !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
-!
-! !REVISION HISTORY:
-!  20 Oct 2018 - M. Sulprizio- Initial version
-!  See https://github.com/geoschem/CATChem for complete history
-!EOP
-!------------------------------------------------------------------------------
-!BOC
 !
 ! !LOCAL VARIABLES:
 !
@@ -345,6 +331,14 @@ CONTAINS
 
    END SUBROUTINE Config_Grid
 
+   !> \brief Process dust configuration
+   !!
+   !! This function processes the dust configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
    SUBROUTINE Config_Process_Dust( ConfigInput, Config, RC )
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod

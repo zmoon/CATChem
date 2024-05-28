@@ -1,13 +1,10 @@
-!>
-!! \file gridstate_mod.F90
-!! \brief This file contains the module for catchem grid
-!! \author Barry Baker
-!! \date 05/2023
-!! \version 0.1
+!> \file gridstate_mod.F90
 !!
-!! This file contains the module for catchem grid
+!! \brief Module for grid state variables
 !!
-
+!! This module contains subroutines and functions related to the grid state.
+!!
+!!!>
 module GridState_Mod
 
    USE Error_Mod
@@ -38,19 +35,16 @@ module GridState_Mod
 
 contains
 
-!-------------------------------------------------------------------------
-!
-! Grid_Init_State - Initialize a GridState
-!
-! This subroutine initializes a GridState object.
-!
-! \param Config The input config object.
-! \param GridState The GridState object to be initialized.
-! \param RC The return code.
-!
-! \author Barry Baker
-! \date 05/2023
-!-------------------------------------------------------------------------
+
+   !> \brief Initialize a GridState object
+   !!
+   !! This subroutine initializes a GridState object.
+   !!
+   !! \param Config The input config object.
+   !! \param GridState The GridState object to be initialized.
+   !! \param RC The return code
+   !!
+   !!!>
    subroutine Grid_Init_State(Config, GridState, RC)
       use Error_Mod, only : CC_SUCCESS
 
@@ -84,20 +78,16 @@ contains
 
    end subroutine Grid_Init_State
 
-!----------------------------------------------------------------------------!
-! Grid_Init - Initialize a GridState object
-!
-! This subroutine initializes a GridState object.
-!
-! \param Config The input config object.
-! \param GridState The GridState object to be initialized.
-! \param RC The return code.
-!
-! \author Barry Baker
-! \date 05/2023
-!
-!-------------------------------------------------------------------------
 
+   !> @brief Initialize a GridState
+   !!
+   !! This subroutine initializes a GridState object.
+   !!
+   !! @param Config The input config object.
+   !! @param GridState The GridState object to be initialized.
+   !! @param RC The return code.
+   !!
+   !!!>
    subroutine Grid_Init(Config, GridState, RC)
 
       USE Config_Opt_Mod, ONLY : ConfigType
@@ -128,18 +118,15 @@ contains
 
    end subroutine Grid_Init
 
-!----------------------------------------------------------------------------!
-! Grid_State_Allocate - Allocate memory for GridState
-!
-! This subroutine allocates memory for GridState.
-!
-! \param GridState The GridState object to be allocated.
-! \param RC The return code.
-!
-! \author Barry Baker
-! \date 05/2023
-!-------------------------------------------------------------------------
 
+   !> \brief Allocate a GridState object
+   !!
+   !! This subroutine allocates memory for GridState.
+   !!
+   !! \param [inout] GridState The GridState instance to be allocated.
+   !! \param [out] RC The return code.
+   !!
+   !!!>
    subroutine Grid_State_Allocate(GridState, RC) !Config, GridState, RC)
 
       use Error_Mod
@@ -171,18 +158,14 @@ contains
 
    end subroutine Grid_State_Allocate
 
-!-------------------------------------------------------------------------
-! Grid_Cleanup - Deallocate a GridState object
-!
-! This subroutine deallocates memory for GridState.
-!
-! \param GridState The GridState instance to be deallocated.
-! \param RC The return code.
-!
-! \author Barry Baker
-! \date 05/2023
-!-------------------------------------------------------------------------
-
+   !> \brief Deallocate a GridState object
+   !!
+   !! This subroutine deallocates memory for GridState.
+   !!
+   !! \param [inout] GridState The GridState instance to be deallocated.
+   !! \param [out] RC The return code.
+   !!
+   !!!>
    subroutine Grid_Cleanup(GridState, RC)
 
       ! INOUT Params

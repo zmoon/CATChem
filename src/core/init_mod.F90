@@ -4,9 +4,7 @@
 !! This module contains subroutines and functions related to the initialization of the program.
 !! It includes subroutines for initializing the grid, the time step, and the solution.
 !!
-!! \author Barry Baker
-!! \date 05/2023
-
+!!!>
 module init_mod
 
    implicit none
@@ -15,6 +13,7 @@ module init_mod
    PUBLIC :: Init_Diag
 
 contains
+
    !> \brief Initialize the met state
    !!
    !! This subroutine allocates the met state.
@@ -22,9 +21,7 @@ contains
    !! \param GridState The grid state containing information about the grid.
    !! \param MetState The met state to be initialized.
    !! \param RC The return code.
-   !!
-   !! \author Barry Baker
-   !! \date 05/2023
+   !!!>
 
    subroutine Init_Met(GridState, MetState, RC)
       !
@@ -63,9 +60,7 @@ contains
    !! \param DiagState The diag state to be initialized.
    !! \param RC The return code.
    !!
-   !! \author Barry Baker
-   !! \date 05/2023
-
+   !!!>
    subroutine Init_Diag(Config, GridState, DiagState, RC)
       use DiagState_Mod
       use Config_Opt_Mod, Only : ConfigType

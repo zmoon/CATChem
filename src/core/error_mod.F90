@@ -4,20 +4,7 @@
 !! \author Barry Baker
 !!
 !! This file contains error handling routines for CATChem
-
-!------------------------------------------------------------------------------
-!                  CATChem Error Handling Module                           !
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: error_mod.F90
-!
-! !DESCRIPTION: Module ERROR\_MOD contains the error codes (i.e. that
-!  report success or failure) returned by CATChem routines.
-!\\
-!\\
-! !INTERFACE:
-!
+!!!>
 MODULE Error_Mod
    !
    ! !USES:
@@ -35,32 +22,18 @@ MODULE Error_Mod
    !
    INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   ! Routine returns success
    INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   ! Routine returns failure
-   !
-   ! !REMARKS:
-   !  The error codes are returned by routines at various levels of CATChem.
-   !
-   ! !REVISION HISTORY:
-   !  19 Oct 2012 - R. Yantosca - Initial version
-   !  See https://github.com/ufs-community/CATchem for complete history
-   !EOP
-   !------------------------------------------------------------------------------
-   !BOC
+
 CONTAINS
-   !EOC
-   !------------------------------------------------------------------------------
-   !                  CATChem                                                     !
-   !------------------------------------------------------------------------------
-   !BOP
-   !
-   ! !IROUTINE: CC_Error
-   !
-   ! !DESCRIPTION: Subroutine CC\_Error prints an error message and sets RC to
-   !  CC\_FAILURE. Note that this routine does not stop a run, but it will cause
-   !  a stop at a higher level if you add a catch for RC /= CC\_SUCCESS.
-   !\\
-   !\\
-   ! !INTERFACE:
-   !
+   !>
+   !! \brief CC_Error
+   !!
+   !! This subroutine prints an error message and sets RC to CC_FAILURE.
+   !!
+   !! \param ErrMsg The error message
+   !! \param RC The return code
+   !! \param ThisLoc The location of the error
+   !! \param Instr Other instructions
+   !!!>
    SUBROUTINE CC_Error( ErrMsg, RC, ThisLoc, Instr )
       !
       ! !USES:
@@ -76,12 +49,6 @@ CONTAINS
       ! !INPUT/OUTPUT PARAMETERS:
       !
       INTEGER,          INTENT(INOUT)            :: RC      ! Error code
-      !
-      ! !REVISION HISTORY:
-      !  See https://github.com/ufs-community/CATchem for complete history
-      !EOP
-      !------------------------------------------------------------------------------
-      !BOC
 
       CHARACTER(LEN=1000) :: Message
       !=======================================================================
@@ -123,20 +90,17 @@ CONTAINS
       ENDIF
 
    END SUBROUTINE CC_Error
-   !EOC
-   !------------------------------------------------------------------------------
-   !                  CATChem Global Chemical Transport Model                  !
-   !------------------------------------------------------------------------------
-   !BOP
-   !
-   ! !IROUTINE: CC_Warning
-   !
-   ! !DESCRIPTION: Subroutine CC\_Warning prints an warning (i.e. non-fatal
-   !  error message) and sets RC to CC\_SUCCESS.
-   !\\
-   !\\
-   ! !INTERFACE:
-   !
+
+   !>
+   !! \brief CC_Warning
+   !!
+   !! This subroutine prints a warning message and sets RC to CC_SUCCESS.
+   !!
+   !! \param WarnMsg The warning message
+   !! \param RC The return code
+   !! \param ThisLoc The location of the warning
+   !! \param Instr Other instructions
+   !!!>
    SUBROUTINE CC_Warning( WarnMsg, RC, ThisLoc, Instr )
       !
       ! !USES:
@@ -152,12 +116,6 @@ CONTAINS
       ! !INPUT/OUTPUT PARAMETERS:
       !
       INTEGER,          INTENT(INOUT)            :: RC
-      !
-      ! !REVISION HISTORY:
-      !  See https://github.com/ufs-community/CATchem for complete history
-      !EOP
-      !------------------------------------------------------------------------------
-      !BOC
 
       CHARACTER(LEN=1000) :: Message
 
@@ -195,21 +153,16 @@ CONTAINS
       RC = CC_SUCCESS
 
    END SUBROUTINE CC_Warning
-   !EOC
-   !------------------------------------------------------------------------------
-   !                  CATChem Global Chemical Transport Model                  !
-   !------------------------------------------------------------------------------
-   !BOP
-   !
-   ! !IROUTINE: CC_CheckVar
-   !
-   ! !DESCRIPTION: Wrapper routine for CC\_Error.  Prints an error message
-   !  if there is an allocation or registration error.  This is intended to
-   !  be called from the state initialization method (e.g. Init\_State\_Met).
-   !\\
-   !\\
-   ! !INTERFACE:
-   !
+
+   !>
+   !! \brief CC_CheckVar
+   !!
+   !! This subroutine checks if a variable is allocated.
+   !!
+   !! \param Variable The variable to check
+   !! \param Operation 0=Allocate 1=Register 2=Deallocate
+   !! \param RC The return code
+   !!!>
    SUBROUTINE CC_CheckVar( Variable, Operation, RC )
       !
       ! !INPUT PARAMETERS:
@@ -222,17 +175,6 @@ CONTAINS
       ! !OUTPUT PARAMETERS:
       !
       INTEGER,          INTENT(INOUT) :: RC         ! Success or failure
-      !
-      ! !REMARKS:
-      !  You also need to add an
-      !    IF ( RC /= CC_SUCCESS ) RETURN
-      !  from the calling routine for proper error handling.
-      !
-      ! !REVISION HISTORY:
-      !  See https://github.com/ufs-community/CATchem for complete history
-      !EOP
-      !------------------------------------------------------------------------------
-      !BOC
       !
       ! !LOCAL VARIABLES:
       !

@@ -1,6 +1,7 @@
-!> \\file test_main.F90
-
-
+!> \file test_main.F90
+!! \brief Main program for testing CATChem
+!!
+!!!>
 program test_main
    USE init_mod
    USE Error_Mod

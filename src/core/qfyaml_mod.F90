@@ -1,23 +1,12 @@
+!> \file qfyaml_mod.F90
+!! \brief This file contains the QFYAML module
+!!
+!! Contains routines for reading a YAML file into Fortran,
+!!  based off the "config_fortran" package of H. J. Teunissen.
+!!
+!! Original Code taken from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/qfyaml_mod.F90
+!!!>
 
-!<
-!  \file yaml_parser.F90
-!  \brief This file contains the interface to the YAML parser
-!>
-
-!------------------------------------------------------------------------------
-! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-! Based on existing package https://github.com/jannisteunissen/config_fortran
-!------------------------------------------------------------------------------
-!BOP
-!
-! !MODULE: qfyaml_mod.F90
-!
-! !DESCRIPTION: Contains routines for reading a YAML file into Fortran,
-!  based off the "config_fortran" package of H. J. Teunissen.
-!\\
-!\\
-! !INTERFACE:
-!
 MODULE QFYAML_Mod
     !
     ! !USES:
@@ -78,13 +67,6 @@ MODULE QFYAML_Mod
     !  from the original config-fortran code.
     !
     !      -- Bob Yantosca (15 Apr 2020), yantosca@seas.harvard.edu
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !DEFINED PARAMETERS:
     !
@@ -190,21 +172,14 @@ MODULE QFYAML_Mod
       END INTERFACE QFYAML_Update
 
     CONTAINS
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Handle_Error
-    !
-    ! !DESCRIPTION: This routine will be called if an error occurs in one of
-    !  the subroutines of this module.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+    !>
+    !! \brief This routine handles an error
+    !!
+    !! \param errMsg The error message
+    !! \param RC Return code
+    !! \param thisLoc The location of the error
+    !!
+    !!!>
       SUBROUTINE Handle_Error( errMsg, RC, thisLoc )
     !
     ! !INPUT PARAMETERS:
@@ -215,13 +190,7 @@ MODULE QFYAML_Mod
     ! INPUT/OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT) :: RC        ! Return code
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
         !=======================================================================
         ! Handle_Error begins here!
         !=======================================================================
@@ -235,21 +204,15 @@ MODULE QFYAML_Mod
         RC = QFYAML_FAILURE
 
       END SUBROUTINE Handle_Error
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Get_Var_Index
-    !
-    ! !DESCRIPTION:  Return the index of the variable with name 'var_name',
-    !  or -1 if not found.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief This routine returns the index of the variable with name 'var_name',
+      !!  or -1 if not found.
+      !!
+      !! \param yml The YAML object
+      !! \param var_name The name of the variable
+      !! \param ix The index of the variable
+      !!
+      !!!>
       SUBROUTINE Get_Var_Index( yml, var_name, ix )
     !
     ! !INPUT PARAMETERS:
@@ -260,16 +223,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT) :: ix
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
-    !
-    ! !LOCAL VARIABLES:
-    !
         INTEGER :: i
 
         !=======================================================================
@@ -297,22 +250,20 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Get_Var_Index
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Get_Anchor_Info
-    !
-    ! !DESCRIPTION: Returns information about a variable containing an anchor
-    !  target field: the index, the category name, and the variable name (minus
-    !  the category).  Missing values are returned if not found.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Returns information about a variable containing an anchor
+      !!
+      !! Returns information about a variable containing an anchor
+      !! target field: the index, the category name, and the variable name (minus
+      !! the category).  Missing values are returned if not found.
+      !!
+      !! \param yml The YAML object
+      !! \param anchor_ptr The name of the anchor
+      !! \param begin_ix The index of the first variable with the anchor
+      !! \param end_ix The index of the last variable with the anchor
+      !! \param anchor_cat The category of the anchor
+      !!
+      !!!>
       SUBROUTINE Get_Anchor_Info( yml, anchor_ptr, begin_ix, end_ix, anchor_cat )
     !
     ! !INPUT PARAMETERS:
@@ -325,13 +276,6 @@ MODULE QFYAML_Mod
         INTEGER,                      INTENT(OUT) :: begin_ix   ! 1st var w/ anchor
         INTEGER,                      INTENT(OUT) :: end_ix     ! last var w/ anchor
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT) :: anchor_cat ! Anchor category
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -360,20 +304,17 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Get_Anchor_Info
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Init
-    !
-    ! !DESCRIPTION: Initializes a QFYAML_t object from a YAML file.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Initializes a QFYAML_t object from a YAML file.
+      !!
+      !! Initializes a QFYAML_t object from a YAML file.
+      !!
+      !! \param fileName The name of the YAML file
+      !! \param yml The YAML object
+      !! \param yml_anchored The YAML object
+      !! \param RC Return code
+      !!
+      !!!>
       SUBROUTINE QFYAML_Init( fileName, yml, yml_anchored, RC )
     !
     ! !INPUT PARAMETERS:
@@ -388,13 +329,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -424,20 +358,17 @@ MODULE QFYAML_Mod
         CALL QFYAML_Sort( yml )
 
       END SUBROUTINE QFYAML_Init
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Merge
-    !
-    ! !DESCRIPTION: Concatetenates two QFYAML_t objects together.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Concatenates two QFYAML_t objects together.
+      !!
+      !! Concatenates two QFYAML_t objects together.
+      !!
+      !! \param yml1 The first YAML object
+      !! \param yml2 The second YAML object
+      !! \param yml The concatenated YAML object
+      !! \param RC Return code
+      !!
+      !!!>
       SUBROUTINE QFYAML_Merge( yml1, yml2, yml, RC )
     !
     ! !INPUT PARAMETERS:
@@ -449,13 +380,6 @@ MODULE QFYAML_Mod
     !
         TYPE(QFYAML_t),   INTENT(OUT) :: yml
         INTEGER,          INTENT(OUT) :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -501,20 +425,17 @@ MODULE QFYAML_Mod
         CALL QFYAML_Sort( yml )
 
       END SUBROUTINE QFYAML_Merge
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Read_File
-    !
-    ! !DESCRIPTION: Read variables from a YAML file into a configuration object.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Read variables from a YAML file into a configuration object.
+      !!
+      !! Read variables from a YAML file into a configuration object.
+      !!
+      !! \param yml The configuration object
+      !! \param fileName The name of the YAML file
+      !! \param yml_anchored The configuration object for anchored variables
+      !! \param RC Return code
+      !!
+      !!!>
       SUBROUTINE QFYAML_Read_File( yml, fileName, yml_anchored, RC )
     !
     ! !INPUT PARAMETERS:
@@ -529,13 +450,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT  ) :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -680,21 +594,20 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE QFYAML_Read_File
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Parse_Line
-    !
-    ! !DESCRIPTION: Parses a single line of a YAML file and adds the relevant
-    !  variables to the yml configuration object.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !!  Parses a single line of a YAML file and adds the relevant
+      !!  variables to the yml configuration object.
+      !!
+      !!  \param yml The configuration object
+      !!  \param yml_anchored The configuration object
+      !!  \param set_by The line number in the YAML file
+      !!  \param line_arg The line of the YAML file
+      !!  \param valid_syntax Whether the line is valid syntax
+      !!  \param category The category of the variable
+      !!  \param anchor_ptr The name of the variable
+      !!  \param anchor_tgt The name of the variable
+      !!  \param RC Return code
+      !!>
       SUBROUTINE Parse_Line( yml,        yml_anchored, set_by,                   &
                              line_arg,   valid_syntax, category,                 &
                              anchor_ptr, anchor_tgt,   RC                       )
@@ -716,13 +629,6 @@ MODULE QFYAML_Mod
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT)   :: anchor_ptr
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT)   :: anchor_tgt
         INTEGER,                      INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1034,21 +940,23 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Parse_Line
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  GEOS-Chem Global Chemical Transport Model                  !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Add_Variable
-    !
-    ! !DESCRIPTION: Adds a new variable to the config object.  Either it creates
-    !  the variable as "stored" (aka deferred) or actual.  This was split off
-    !  from the routine Parse\_Line above.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Adds a new variable to the config object
+      !!
+      !! \details This routine adds a new variable to the config object.  Either
+      !!  it creates the variable as "stored" (aka deferred) or actual.  This was
+      !!  split off from the routine Parse\_Line above.
+      !!
+      !! \param yml The config object
+      !! \param line_arg The YAML line
+      !! \param anchor_ptr_arg The YAML anchor pointer
+      !! \param anchor_tgt_arg The YAML anchor target
+      !! \param category_arg The YAML category
+      !! \param var_name_arg The YAML variable name
+      !! \param set_by The variable was set by this routine
+      !! \param append Whether to append to an existing variable
+      !! \param RC Return code
+      !!>
       SUBROUTINE Add_Variable( yml,            line_arg,     anchor_ptr_arg,     &
                                anchor_tgt_arg, category_arg, var_name_arg,       &
                                set_by,         append,       RC                 )
@@ -1070,13 +978,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,                      INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1160,21 +1061,19 @@ MODULE QFYAML_Mod
         yml%vars(ix)%set_by     = set_by
 
       END SUBROUTINE Add_Variable
-    !EOC
-    !------------------------------------------------------------------------------
-    !                  GEOS-Chem Global Chemical Transport Model                  !
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Copy_Anchor_Variable
-    !
-    ! !DESCRIPTION: Adds a new variable that is a copy of a variable with a
-    !  YAML anchor.  The new variable will contain all of the field values of
-    !  the old variable.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Copy_Anchor_Variable
+      !!
+      !! Adds a new variable that is a copy of a variable with a YAML anchor.
+      !! The new variable will contain all of the field values of the old
+      !! variable.
+      !!
+      !! \param yml          YAML object
+      !! \param anchor_ix    Index of the YAML anchor
+      !! \param var_w_anchor Variable with the YAML anchor
+      !! \param var_pt_to_anchor Variable that will be copied
+      !! \param RC           Return code
+      !!!>
       SUBROUTINE Copy_Anchor_Variable( yml,          anchor_ix,                  &
                                        var_w_anchor, var_pt_to_anchor,           &
                                        RC                                       )
@@ -1192,13 +1091,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,                      INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1244,21 +1136,15 @@ MODULE QFYAML_Mod
         yml%vars(ix)%anchor_tgt  = ""
 
       END SUBROUTINE Copy_Anchor_Variable
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Read_Variable
-    !
-    ! !DESCRIPTION: Get the start and end positions of the line content,
-    !  and the number of entries.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Read_Variable
+      !!
+      !! Get the start and end positions of the line content,
+      !! and the number of entries.
+      !!
+      !! \param var Variable
+      !! \param RC  Return code
+      !!!>
       SUBROUTINE Read_Variable( var, RC )
     !
     ! !INPUT/OUTPUT PARAMETERS:
@@ -1268,13 +1154,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,            INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history wi th the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1375,21 +1254,15 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE Read_Variable
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Trim_Comment
-    !
-    ! !DESCRIPTION:  Strip comments, but only outside quoted strings
-    !  (so that var = '#yolo' is valid when # is a comment char)
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Trim_Comment
+      !!
+      !! Strip comments, but only outside quoted strings
+      !! (so that var = '#yolo' is valid when # is a comment char)
+      !!
+      !! \param[in]    line        Input line
+      !! \param[in]    comment_chars Character(s) to be stripped
+      !!!>
       SUBROUTINE Trim_Comment(line, comment_chars)
     !
     ! !INPUT PARAMETERS:
@@ -1400,13 +1273,6 @@ MODULE QFYAML_Mod
     ! !INPUT/OUTPUT PARAMETERS:
     !
         CHARACTER(LEN=*), INTENT(INOUT) :: line
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1441,20 +1307,15 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE Trim_Comment
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Check
-    !
-    ! !DESCRIPTION: Checks a QFYAML configuration variable.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_Check
+      !!
+      !! Checks a QFYAML configuration variable.
+      !!
+      !! \param[in]    yml        Input QFYAML configuration variable
+      !! \param[out]   RC         Return code
+      !!
+      !!!>
       SUBROUTINE QFYAML_Check( yml, RC )
     !
     ! !INPUT PARAMETERS:
@@ -1464,13 +1325,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,        INTENT(OUT) :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1501,22 +1355,13 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE QFYAML_check
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_FindNextHigher
-    !
-    ! !DESCRIPTION: For a given category or variable name, returns its depth
-    !  (i.e. indentation level).  This is equal to the number of separator
-    !  strings.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_FindDepth
+      !!
+      !! Find the depth of a category or variable name
+      !!
+      !! \param[in]    name        Input name
+      !!!>
       FUNCTION QFYAML_FindDepth( name ) RESULT( depth )
     !
     ! !INPUT PARAMETERS:
@@ -1526,9 +1371,6 @@ MODULE QFYAML_Mod
     ! RETURN VALUE:
     !
         INTEGER                       :: depth
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1546,23 +1388,18 @@ MODULE QFYAML_Mod
         ENDDO
 
       END FUNCTION QFYAML_FindDepth
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_FindNextHigher
-    !
-    ! !DESCRIPTION: Finds variables that are one category depth higher than
-    !  a given target string (trg_str).  Returns the number of variables that
-    !  match this criteria (n_matches), as well as the variables themselves
-    !  (match_vars).
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_FindNextHigher
+      !!
+      !! Find the next higher level variable in the QFYAML configuration
+      !! file.  This is useful for finding the next higher level variable
+      !! in the QFYAML configuration file.
+      !!
+      !! \param[in]    yml        Input QFYAML configuration variable
+      !! \param[in]    trg_str    Target string
+      !! \param[out]   n_matches  Number of variables that match the target
+      !! \param[out]   match_vars Variable names that match the target
+      !!!>
       SUBROUTINE QFYAML_FindNextHigher( yml, trg_str, match_ct, match_vars )
     !
     ! !INPUT PARAMETERS:
@@ -1636,20 +1473,14 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE QFYAML_FindNextHigher
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Split_Category
-    !
-    ! !DESCRIPTION: splits the category and the var name
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Split_Category
+      !! \details splits the category and the var name
+      !!
+      !! \param[in]    variable   Input QFYAML configuration variable
+      !! \param[out]   category   Output category
+      !! \param[out]   var_name   Output variable name
+      !!!>
       SUBROUTINE Split_Category( variable, category, var_name )
     !
     ! !INPUT PARAMETERS:
@@ -1661,16 +1492,6 @@ MODULE QFYAML_Mod
     !
         CHARACTER(QFYAML_NamLen), INTENT(OUT) :: category
         CHARACTER(QFYAML_NamLen), INTENT(OUT) :: var_name
-    !
-    ! !REMARKS:
-    !  TO DO: Support nested categories
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1690,33 +1511,21 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Split_Category
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Resize_Storage
-    !
-    ! !DESCRIPTION: Resize the storage size of variable, which can be of type
-    !  INTEGER, LOGICAL, REAL, or CHARACTER
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Resize_Storage
+      !!
+      !! \details Resize the storage size of variable, which can be of type
+      !!  INTEGER, LOGICAL, REAL, or CHARACTER
+      !!
+      !! \param[in]    variable   Input QFYAML configuration variable
+      !! \param[out]   variable   Output QFYAML configuration variable
+      !!!>
       SUBROUTINE Resize_Storage( variable )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         TYPE(QFYAML_var_t), INTENT(INOUT) :: variable
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
         !=======================================================================
         ! Resize_Storage begins here!
         !=======================================================================
@@ -1741,21 +1550,21 @@ MODULE QFYAML_Mod
         END SELECT
 
       END SUBROUTINE Resize_Storage
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | APR 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Prepare_Store_Var
-    !
-    ! !DESCRIPTION: Helper routine to store variables. This is useful because
-    !  a lot of the same code is executed for the different types of variables.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Prepare_Store_Var
+      !!
+      !! \details Helper routine to store variables. This is useful because
+      !!  a lot of the same code is executed for the different types of variables.
+      !!
+      !! \param[in]    yml         Input QFYAML object
+      !! \param[in]    var_name    Input variable name
+      !! \param[in]    var_type    Input variable type
+      !! \param[in]    var_size    Input variable size
+      !! \param[in]    description Input variable description
+      !! \param[in]    ix          Input index
+      !! \param[out]   RC          Input return code
+      !! \param[in]    dynamic_size
+      !!!>
       SUBROUTINE Prepare_Store_Var( yml,      var_name,    var_type,             &
                                     var_size, description, ix,                   &
                                     RC,       dynamic_size                      )
@@ -1777,13 +1586,6 @@ MODULE QFYAML_Mod
     !
         INTEGER,         INTENT(OUT)   :: ix          ! Index of variable
         INTEGER,         INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
         ! Strings
         CHARACTER(LEN=QFYAML_StrLen) :: errMsg
         CHARACTER(LEN=QFYAML_StrLen) :: thisLoc
@@ -1844,21 +1646,19 @@ MODULE QFYAML_Mod
         END SELECT
 
       END SUBROUTINE Prepare_Store_Var
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Prepare_Get_Var
-    !
-    ! !DESCRIPTION: Helper routine to get variables. This is useful because a
-    !  lot of the same code is executed for the different types of variables.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Prepare_Get_Var
+      !!
+      !! \details This routine is used to get variables from the YAML file.
+      !! Helper routine to get variables. This is useful because a
+      !! lot of the same code is executed for the different types of variables.
+      !!
+      !! \param var_name Variable name
+      !! \param var_type Variable type
+      !! \param var_size Variable size
+      !! \param ix       Index of variable
+      !! \param RC       Error code
+      !!!>
       SUBROUTINE Prepare_Get_Var( yml, var_name, var_type, var_size, ix, RC )
     !
     ! !INPUT PARAMETERS:
@@ -1875,13 +1675,6 @@ MODULE QFYAML_Mod
     !
         INTEGER,          INTENT(OUT)   :: ix
         INTEGER,          INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -1934,36 +1727,23 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Prepare_Get_Var
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: ensure_free_storage
-    !
-    ! !DESCRIPTION: Routine to ensure that enough storage is allocated for the
-    !  configuration type. If not the new size will be twice as much as the
-    !  current size. If no storage is allocated yet a minumum amount of storage
-    !  is allocated.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Ensure_Free_Storage
+      !!
+      !! \details This routine is used to ensure that enough storage is allocated
+      !!  for the configuration type. If not the new size will be twice as much
+      !!  as the current size. If no storage is allocated yet a minumum amount
+      !!  of storage is allocated.
+      !!
+      !! \param yml Configuration type
+      !!
+      !!!>
       SUBROUTINE Ensure_Free_Storage( yml )
 
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         TYPE(QFYAML_t), INTENT(INOUT)   :: yml
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2007,6 +1787,20 @@ MODULE QFYAML_Mod
     !\\
     ! !INTERFACE:
     !
+      !>
+      !! \brief Get_Fields_String
+      !!
+      !! \details This routine will find the indices of entries in a string.
+      !!
+      !! \param line_arg Line to read
+      !! \param delims Accepted delimiters
+      !! \param brackets Brackets
+      !! \param n_max Max entries to read
+      !! \param n_found # of entries found
+      !! \param ixs_start start pt. of ith entry
+      !! \param ixs_end end pt.   of ith entry
+      !!
+      !!!>
       SUBROUTINE Get_Fields_String( line_arg, delims,  brackets,                 &
                                     n_max,    n_found, ixs_start, ixs_end       )
     !
@@ -2022,13 +1816,6 @@ MODULE QFYAML_Mod
         INTEGER,         INTENT(INOUT) :: n_found          ! # of entries found
         INTEGER,         INTENT(INOUT) :: ixs_start(n_max) ! start pt. of ith entry
         INTEGER,         INTENT(INOUT) :: ixs_end(n_max)   ! end pt.   of ith entry
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2084,20 +1871,17 @@ MODULE QFYAML_Mod
         ENDDO
 
       END SUBROUTINE get_fields_string
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Binary_Search_Variable
-    !
-    ! !DESCRIPTION: Performs a binary search for a given variable.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Binary_Search_Variable
+      !!
+      !! \details This routine will perform a binary search for a given variable
+      !!          in a YAML file.
+      !!
+      !! \param yml YAML file
+      !! \param var_name Variable name
+      !! \param ix Index of variable
+      !!
+      !!!>
       SUBROUTINE Binary_Search_Variable( yml, var_name, ix )
     !
     ! !INPUT PARAMETERS:
@@ -2108,13 +1892,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT) :: ix
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2145,32 +1922,20 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Binary_Search_Variable
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Sort
-    !
-    ! !DESCRIPTION: Sorts the variables list for faster lookup
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_Sort
+      !!
+      !! \details Sorts the variables list for faster lookup
+      !!
+      !! \param yml The YAML object
+      !!
+      !!!>
       SUBROUTINE QFYAML_Sort( yml )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         TYPE(QFYAML_t), INTENT(INOUT) :: yml
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-     !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
         !=======================================================================
         ! QFYAML_Sort begins here!
         !=======================================================================
@@ -2182,34 +1947,19 @@ MODULE QFYAML_Mod
         yml%sorted = .TRUE.
 
       END SUBROUTINE QFYAML_sort
-
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Qsort
-    !
-    ! !DESCRIPTION: Simple implementation of quicksort algorithm to sort
-    !  the variable list alphabetically.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Qsort
+      !!
+      !! \details Sorts the variable list alphabetically
+      !!
+      !! \param list The variable list
+      !!
+      !!!>
       RECURSIVE SUBROUTINE Qsort( list )
     !
     ! !INPUT/OUTPUT PARAMETERS:
     !
         TYPE(QFYAML_var_t), INTENT(INOUT) :: list(:)
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2225,20 +1975,15 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE qsort
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Partition_Var_List
-    !
-    ! !DESCRIPTION: Helper routine for quicksort, to perform partitioning
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Partition_Var_List
+      !!
+      !! \details Helper routine for quicksort, to perform partitioning
+      !!
+      !! \param list The variable list
+      !! \param marker The split position
+      !!
+      !!!>
       SUBROUTINE Partition_Var_List(list, marker)
     !
     ! !INPUT PARAMETERS:
@@ -2248,13 +1993,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,            INTENT(OUT)   :: marker
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr2015 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2306,20 +2044,17 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE partition_var_list
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Print
-    !
-    ! !DESCRIPTION: Prints the contents of a yml object.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_Print
+      !!
+      !! \details Prints the contents of a yml object.
+      !!
+      !! \param yml The YAML object
+      !! \param RC The return code
+      !! \param fileName The file name
+      !! \param searchKeys The search keys
+      !!
+      !!!>
       SUBROUTINE QFYAML_Print( yml, RC, fileName, searchKeys )
     !
     ! !USES:
@@ -2338,13 +2073,6 @@ MODULE QFYAML_Mod
     ! !OUTPUT PARAMETERS:
     !
         INTEGER,          INTENT(OUT)   :: RC
-    !
-    ! !REVISION HISTORY:
-    !  22 Jul 2022
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2503,22 +2231,16 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE QFYAML_Print
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_CleanUp
-    !
-    ! !DESCRIPTION: Clear all data from a QFYAML_t object, so that it can be reused.
-    !  Note that this also happens automatically when such an object goes out
-    !  of scope.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_CleanUp
+      !!
+      !! \details Clear all data from a QFYAML_t object, so that it can be reused.
+      !!  Note that this also happens automatically when such an object goes out
+      !!  of scope.
+      !!
+      !! \param[inout] yml
+      !!
+      !!!>
       SUBROUTINE QFYAML_CleanUp( yml )
     !
     ! !USES:
@@ -2528,13 +2250,7 @@ MODULE QFYAML_Mod
     ! !INPUT/OUTPUT PARAMETERS:
     !
         TYPE(QFYAML_t), INTENT(INOUT) :: yml
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
+
         !=======================================================================
         ! QFYAML_CleanUp begins here!
         !=======================================================================
@@ -2547,20 +2263,17 @@ MODULE QFYAML_Mod
         IF ( ALLOCATED( yml%vars ) ) DEALLOCATE( yml%vars )
 
       END SUBROUTINE QFYAML_CleanUp
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_Get_Size
-    !
-    ! !DESCRIPTION: Get the size of a variable.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_Get_Size
+      !!
+      !! \details Get the size of a variable.
+      !!
+      !! \param[in] yml
+      !! \param[in] var_name
+      !! \param[out] res
+      !! \param[out] RC
+      !!
+      !!!>
       SUBROUTINE QFYAML_Get_Size( yml, var_name, res, RC )
     !
     ! !INPUT PARAMETERS:
@@ -2572,13 +2285,6 @@ MODULE QFYAML_Mod
     !
         INTEGER,          INTENT(OUT) :: res
         INTEGER,          INTENT(OUT) :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !BOC
     !
     ! !LOCAL VARIABLES:
     !
@@ -2612,20 +2318,17 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE QFYAML_Get_Size
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: QFYAML_get_type
-    !
-    ! !DESCRIPTION: Get the type of a given variable of a configuration type
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief QFYAML_Get_Type
+      !!
+      !! \details Get the type of a given variable of a configuration type
+      !!
+      !! \param[in] yml
+      !! \param[in] var_name
+      !! \param[out] res
+      !! \param[out] RC
+      !!
+      !!!>
       SUBROUTINE QFYAML_Get_Type( yml, var_name, res, RC )
     !
     ! !INPUT PARAMETERS:
@@ -2637,13 +2340,7 @@ MODULE QFYAML_Mod
     !
         INTEGER,          INTENT(OUT) :: res
         INTEGER,          INTENT(OUT) :: RC
-    !
-    ! !REVISION HISTORY:
-    !  15 Apr 2020 - R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
-    !
+
         ! Scalars
         INTEGER                      :: ix
 
@@ -2674,21 +2371,14 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE QFYAML_get_type
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: First_Char_Pos
-    !
-    ! !DESCRIPTION:Returns the position of the first non-whitespace
-    !  character in a string
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief First_Char_Pos
+      !!
+      !! \details Returns the position of the first non-whitespace
+      !!  character in a string
+      !!
+      !! \param[in] str String to search
+      !!!>
       FUNCTION First_Char_Pos( str ) RESULT( pos )
     !
     ! !INPUT PARAMETERS:
@@ -2698,12 +2388,6 @@ MODULE QFYAML_Mod
     ! !RETURN VALUE:
     !
         INTEGER                      :: pos
-    !
-    ! !REVISION HISTORY:
-    !  09 Feb 2022- R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
     !
     ! !LOCAL VARIABLES:
     !
@@ -2716,20 +2400,17 @@ MODULE QFYAML_Mod
         pos  = INDEX( str, temp(1:1) )
 
       END FUNCTION First_Char_Pos
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Get_Sequence_VarName
-    !
-    ! !DESCRIPTION:  Computes the category and varname from the category stack.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+      !>
+      !! \brief Get_Sequence_VarName
+      !!
+      !! \details Computes the category and varname from the category stack.
+      !!
+      !! \param[in] cat_index
+      !! \param[in] cat_stack
+      !! \param[out] category
+      !! \param[out] var_name
+      !! \param[out] append
+      !!!>
       SUBROUTINE Get_Sequence_VarName( cat_index, cat_stack,                     &
                                        category,  var_name,  append             )
     !
@@ -2743,12 +2424,6 @@ MODULE QFYAML_Mod
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT) :: category
         CHARACTER(LEN=QFYAML_NamLen), INTENT(OUT) :: var_name
         LOGICAL,                      INTENT(OUT) :: append
-    !
-    ! !REVISION HISTORY:
-    !  09 Feb 2022- R. Yantosca - Initial version
-    !  See the subsequent Git history with the gitk browser!
-    !EOP
-    !------------------------------------------------------------------------------
     !
     ! !LOCAL VARIABLES:
     !
@@ -2784,7 +2459,7 @@ MODULE QFYAML_Mod
         ! Save for next iteration
         last_var = var_name
       END SUBROUTINE Get_Sequence_VarName
-    !EOC
+
     !############################################################################
     !### HERE FOLLOWS OVERLOADED MODULE PROCEDURES.
     !### THESE ARE SIMPLE ROUTINES, SO WE WILL OMIT ADDING SUBROUTINE HEADERS

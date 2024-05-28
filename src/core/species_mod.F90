@@ -1,12 +1,10 @@
 !>
 !! \file species_mod.F90
 !! \brief This file contains the module for catchem species
-!! \author Barry Baker
-!! \date 05/2023
-!! \version 0.1
 !!
 !! This file contains the module for catchem species
 !!
+!!!>
 
 module species_mod
 
