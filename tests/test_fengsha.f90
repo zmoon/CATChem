@@ -27,12 +27,12 @@ program test_fengha
 
    MetState%DSOILTYPE = 1
    MetState%SSM = 0.5_fp
-   MetState%RDRAG = 0.5_fp
+   MetState%RDRAG = 0.8_fp
    MetState%TSKIN = 300._fp
    MetState%CLAYFRAC = 0.5_fp
    MetState%SANDFRAC = 0.5_fp
-   MetState%GWETTOP = 0.5_fp
-   MetState%USTAR = 0.25_fp
+   MetState%GWETTOP = 0.01_fp
+   MetState%USTAR = 0.5_fp
    MetState%USTAR_THRESHOLD = 0.1_fp
    allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
