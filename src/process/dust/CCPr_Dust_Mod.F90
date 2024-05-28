@@ -15,9 +15,7 @@ MODULE CCPr_Dust_mod
 
       IMPLICIT NONE
       PRIVATE
-    !
-    ! !PUBLIC MEMBER FUNCTIONS:
-    !
+
       PUBLIC :: CCPR_Dust_Run
       PUBLIC :: CCPR_Dust_Init
       PUBLIC :: CCPR_Dust_Finalize
@@ -40,9 +38,9 @@ MODULE CCPr_Dust_mod
 
         ! INPUT PARAMETERS
         !-----------------
-        TYPE(ConfigType),    POINTER :: Config     ! Config options
-        TYPE(DustStateType), POINTER :: DustState  ! Nullify Dust State During INIT
-        TYPE(ChemStateType), POINTER :: ChemState  ! Chemical State
+        TYPE(ConfigType),    intent(in)    :: Config     ! Config options
+        TYPE(DustStateType), intent(inout) :: DustState  ! Nullify Dust State During INIT
+        TYPE(ChemStateType), intent(in)    :: ChemState  ! Chemical State
 
         ! INPUT/OUTPUT PARAMETERS
         !------------------------

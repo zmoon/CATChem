@@ -94,7 +94,7 @@ contains
           do n = 1, nbins
 
             ! get threshold friction velocity following MB97
-            call MB97_threshold_velocity(DustState%DustDensity(n), MetState%AIRDEN, DustState%EffectiveRadius(n), u_thresh0)
+            call MB97_threshold_velocity(DustState%DustDensity(n), MetState%AIRDEN(1), DustState%EffectiveRadius(n), u_thresh0)
 
             ! get 10m mean wind speed
             w10m = sqrt(MetState%U10M ** 2 + MetState%V10M ** 2)

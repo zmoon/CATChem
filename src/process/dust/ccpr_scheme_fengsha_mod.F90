@@ -31,7 +31,7 @@ contains
         use precision_mod, only : fp, ZERO
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
-        Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE
+        Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE, CC_Error
         Use CCPr_Dust_Common_Mod, Only : DustStateType
 
         IMPLICIT NONE

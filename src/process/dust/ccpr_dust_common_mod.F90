@@ -18,6 +18,7 @@ module CCPr_Dust_Common_Mod
     public :: Draxler_HorizFlux
     public :: Kawamura_HorizFlux
     public :: MB95_DragParitition
+    public :: MB97_threshold_velocity
     public :: DustStateType
 
     !> \brief Type for CATCHem Dust Process
