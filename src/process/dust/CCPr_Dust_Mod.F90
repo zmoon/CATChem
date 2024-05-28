@@ -167,6 +167,7 @@ MODULE CCPr_Dust_mod
 
         ! USE
         USE CCPr_Scheme_Fengsha_Mod, ONLY: CCPr_Scheme_Fengsha  ! Fengsha Dust Scheme
+        USE CCPr_Scheme_Ginoux_Mod,  ONLY: CCPr_Scheme_Ginoux   ! Ginoux Dust Scheme
 
         IMPLICIT NONE
 
@@ -199,12 +200,24 @@ MODULE CCPr_Dust_mod
 
             ! Run the Dust Scheme
             !--------------------
-            if (DustState%SchemeOpt == 1) then
-                call CCPr_Scheme_Fengsha( MetState, DiagState, DustState, RC)
+            if (DustState%SchemeOpt == 1) then ! FENGSHA
+                call CCPr_Scheme_Fengsha( MetState, DiagState, DustState, RC )
+                if (RC /= CC_SUCCESS) then
+                    errMsg = 'Error in CCPr_Scheme_Fengsha'
+                    CALL CC_Error( errMsg, RC, thisLoc )
+                endif
+            else if (DustState%SchemeOpt == 2) then ! GINOUX
+                call CCPr_Scheme_Ginoux( MetState, DiagState, DustState, RC )
+                if (RC /= CC_SUCCESS) then
+                    errMsg = 'Error in CCPr_Scheme_Ginoux'
+                    CALL CC_Error( errMsg, RC, thisLoc )
+                endif
             else
-                write(*,*) 'TODO: Add other dust schemes'
+                write(*,*) 'ERROR: Unknown dust scheme option'
             endif
         endif
+
+
 
     END SUBROUTINE CCPr_Dust_Run
 
