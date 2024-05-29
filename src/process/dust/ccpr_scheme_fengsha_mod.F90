@@ -2,7 +2,13 @@
 !! \file
 !! \brief Contains the FENGSHA windblown dust emission scheme
 !!
-!! Reference here:
+!!
+!! Zhang, L., Montuoro, R., McKeen, S. A., Baker, B., Bhattacharjee, P. S., Grell, G. A.,
+!! Henderson, J., Pan, L., Frost, G. J., McQueen, J., Saylor, R., Li, H., Ahmadov, R.,
+!! Wang, J., Stajner, I., Kondragunta, S., Zhang, X., and Li, F.:
+!! Development and evaluation of the Aerosol Forecast Member in the National Center for Environment
+!! Prediction (NCEP)'s Global Ensemble Forecast System (GEFS-Aerosols v1),
+!! Geosci. Model Dev., 15, 5337–5369, https://doi.org/10.5194/gmd-15-5337-2022, 2022.
 !!
 !! \author Barry baker
 !! \date 05/2024
