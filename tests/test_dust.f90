@@ -9,6 +9,7 @@ program test_dust
    use CCPr_Scheme_Fengsha_Mod, only: CCPr_Scheme_Fengsha
    use CCPr_Dust_mod, only: CCPr_Dust_Init, CCPr_Dust_Run, CCPr_Dust_Finalize
    use Error_Mod, only: CC_Error, CC_SUCCESS
+   use testing_mod, only: assert
    implicit none
 
    type(ConfigType) :: Config
