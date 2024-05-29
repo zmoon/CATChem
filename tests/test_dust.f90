@@ -1,4 +1,5 @@
 program test_dust
+   use testing_mod
    use precision_mod, only: fp
    use Config_Opt_Mod, only: ConfigType
    use ChemState_Mod, only: ChemStateType
@@ -90,7 +91,7 @@ program test_dust
       stop 1
    end if
 
-   call assert (DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
+   call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
    title = "Dust Test 3 - test horizontal flux change"
    MetState%z0 = .001_fp
@@ -109,7 +110,7 @@ program test_dust
       stop 1
    end if
 
-   call assert (DiagState%dust_total_flux > 1000.0_fp, "Test different horizontal flux")
+   call assert(DiagState%dust_total_flux > 1000.0_fp, "Test different horizontal flux")
    write(*,*) 'Test 3 Success!!!!!'
 
    call CCPr_Dust_Finalize(DustState, RC)
@@ -144,7 +145,7 @@ program test_dust
       stop 1
    end if
 
-   call assert (DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
+   call assert(DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
 
 contains
 
