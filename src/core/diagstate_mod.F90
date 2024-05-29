@@ -19,8 +19,8 @@ module DiagState_Mod
    type, public :: DiagStateType
 
       ! Surface or single-level variables
-      REAL(fp) :: dust_total_flux      !> Total flux of dust particles [kg m-2 s-1]
-      REAL(fp) :: sea_salt_total_flux  !> Total flux of sea salt particles [kg m-2 s-1]
+      REAL(fp) :: dust_total_flux      !< Total flux of dust particles [kg m-2 s-1]
+      REAL(fp) :: sea_salt_total_flux  !< Total flux of sea salt particles [kg m-2 s-1]
 
       ! Vertically-resolved variables
       ! real(fp), pointer :: x(:)
