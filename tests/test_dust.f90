@@ -76,8 +76,7 @@ program test_dust
       stop 1
    end if
    ! Expected Result = 2.78159837E-06
-   write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
-   write(*,*) 'Test 1 Success!!!!!'
+   call assert (DiagState%dust_total_flux > 2780.0_fp, "Test Fengsha Dust Scheme")
 
    title = "Dust Test 2 - ustar == ustar_threshold"
    MetState%USTAR = 0.1_fp
@@ -91,9 +90,7 @@ program test_dust
       stop 1
    end if
 
-   ! Expected Result = 0
-   write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
-   write(*,*) 'Test 2 Success!!!!!'
+   call assert (DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
    title = "Dust Test 3 - test horizontal flux change"
    MetState%z0 = .001_fp
@@ -112,7 +109,7 @@ program test_dust
       stop 1
    end if
 
-   write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
+   call assert (DiagState%dust_total_flux > 1000.0_fp, "Test different horizontal flux")
    write(*,*) 'Test 3 Success!!!!!'
 
    call CCPr_Dust_Finalize(DustState, RC)
@@ -147,8 +144,7 @@ program test_dust
       stop 1
    end if
 
-   write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
-   write(*,*) 'Test 4 Success!!!!!'
+   call assert (DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
 
 contains
 
