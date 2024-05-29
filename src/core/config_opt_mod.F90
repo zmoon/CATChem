@@ -75,7 +75,7 @@ MODULE Config_Opt_Mod
       LOGICAL                     :: dust_activate
       INTEGER                     :: dust_scheme
       INTEGER                     :: dust_drag_opt  ! Fengsha Option for drag Paramertization (1 MB95; 2) Input Value)
-      INTEGER                     :: dust_moist_opt ! Fengsha Option for moisture Paramertization (1 Fecan; 2 Shao)
+      INTEGER                     :: dust_moist_opt ! Fengsha Option for moisture Parameterization (1 Fecan; 2 Shao)
       INTEGER                     :: dust_horizflux_opt ! Horizontal Flux Calculation Option
 
 
