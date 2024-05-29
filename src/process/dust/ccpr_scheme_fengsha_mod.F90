@@ -38,33 +38,33 @@ contains
       IMPLICIT NONE
 
       ! Arguments
-      type(MetStateType),  intent(in)    :: MetState     ! Meteorological Variables
-      type(DiagStateType), intent(inout) :: DiagState    ! Diagnostic Variables
-      type(DustStateType), intent(inout) :: DustState    ! Dust Variables
+      type(MetStateType),  intent(in)    :: MetState     !< Meteorological Variables
+      type(DiagStateType), intent(inout) :: DiagState    !< Diagnostic Variables
+      type(DustStateType), intent(inout) :: DustState    !< Dust Variables
 
-      integer, intent(out) :: RC                      ! Success or Failure
+      integer, intent(out) :: RC                      !< Success or Failure
 
       ! Local Variables
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_dust                               ! Enable Dust Calculation Flag
       integer :: n                                     ! loop couters
-      integer :: nbins                                 ! number of dust bins
-      real(fp) :: hflux                                ! Horizontal Flux
-      real(fp) :: R                                    ! Drag Paritition [1]
-      real(fp) :: h_to_v_ratio                         ! Horizontal to Vertical Mass Flux Ratio
+      integer :: nbins                                 !< number of dust bins
+      real(fp) :: hflux                                !< Horizontal Flux
+      real(fp) :: R                                    !< Drag Paritition [1]
+      real(fp) :: h_to_v_ratio                         !< Horizontal to Vertical Mass Flux Ratio
       real(fp) :: airmass                              ! Air Mass at lowest model level
-      real(fp) :: H                                    ! Soil Moisture Attenuation Factor
-      real(fp) :: distribution(DustState%nDustSpecies) ! Distribution Weights
-      real(fp) :: EmissBins(DustState%nDustSpecies)    ! Emission Rate per Bin
-      real(fp) :: SEP                                  ! Soil Erosion Potential
-      real(fp) :: alpha_grav                           ! Alpha Parameter over Gravity
-      real(fp) :: HorizFlux                            ! Horizontal Mass Flux
-      real(fp) :: FengshaScaling                       ! Total Scaling Factor
-      real(fp) :: TotalFlux                            ! Total Mass Flux
+      real(fp) :: H                                    !< Soil Moisture Attenuation Factor
+      real(fp) :: distribution(DustState%nDustSpecies) !< Distribution Weights
+      real(fp) :: EmissBins(DustState%nDustSpecies)    !< Emission Rate per Bin
+      real(fp) :: SEP                                  !< Soil Erosion Potential
+      real(fp) :: alpha_grav                           !< Alpha Parameter over Gravity
+      real(fp) :: HorizFlux                            !< Horizontal Mass Flux
+      real(fp) :: FengshaScaling                       !< Total Scaling Factor
+      real(fp) :: TotalFlux                            !< Total Mass Flux
 
       real(fp), parameter :: clay_thresh = 0.2
-      real(fp), parameter :: kvhmax = 2.0e-4 ! Max. Vertical to Horizontal Mass Flux Ratio
+      real(fp), parameter :: kvhmax = 2.0e-4 !< Max. Vertical to Horizontal Mass Flux Ratio
 
       ! Initialize
       errMsg = ''
@@ -100,17 +100,17 @@ contains
 
       ! Check for valid inputs from SSM and RDRAG
       !------------------------------------------
-      if (MetState%SSM < 0.15 .or. MetState%SSM > 1) then
+      if (MetState%SSM < 0.15_fp .or. MetState%SSM > 1.0_fp) then
          do_dust = .false.
       endif
 
-      if (MetState%RDRAG < 0.15 .or. MetState%RDRAG > 1) then
+      if (MetState%RDRAG < 0.15_fp .or. MetState%RDRAG > 1.0_fp) then
          do_dust = .false.
       endif
 
       ! Don't do dust over frozen soil
       !--------------------------------
-      if (MetState%TSKIN <= 273.15) then
+      if (MetState%TSKIN <= 273.15_fp) then
          do_dust = .false.
       endif
 
@@ -138,7 +138,7 @@ contains
          if (MetState%CLAYFRAC > clay_thresh) then
             h_to_v_ratio = kvhmax
          else
-            h_to_v_ratio = 10.0**(13.4*MetState%CLAYFRAC-6.0)
+            h_to_v_ratio = 10.0_fp**(13.4_fp*MetState%CLAYFRAC-6.0_fp)
          end if
 
          ! Compute the soil erosion potential
