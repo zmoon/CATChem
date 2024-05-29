@@ -25,7 +25,7 @@ module constants
    REAL(fp), PARAMETER :: Rdg0 = Rd / g0                   !<  Gas Constant in Dry Air divided by gravity
    REAL(fp), PARAMETER :: Rv = 461.00_fp                   !<  Gas Constant for water vapor [J/K/kg]
    REAL(fp), PARAMETER :: SCALE_HEIGHT = 7600.0_fp         !<  Scale height of atmosphere [m]
-   REAL(fp), PARAMETER :: VON_KARMAN = 0.41_fp              !<  Von Karman's constant [-]
+   REAL(fp), PARAMETER :: VON_KARMAN = 0.41_fp             !<  Von Karman's constant [-]
    REAL(fp), PARAMETER :: RSTARG = 8.3144598_fp            !<  Molar gas constant [J/K/mol]  (Source: NIST, 2014)
    REAL(fp), PARAMETER :: XNUMOLAIR = AVO / ( AIRMW * 1.e-3_fp )  !<  Molecules dry air per kg dry air
    REAL(fp), PARAMETER :: BOLTZ = 1.38064852e-23_fp        !<  Boltzmann's constant [J/K] (Source: NIST, 2014)
