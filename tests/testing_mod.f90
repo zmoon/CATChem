@@ -7,27 +7,29 @@ module testing_mod
 
 contains
 
+   !> Error out if `cond` is false, with optional `msg`.
    subroutine assert(cond, msg)
-      logical, intent(in) :: cond
-      character(len=*), intent(in), optional :: msg
+      logical, intent(in) :: cond  !< A conditional expression or variable
+      character(len=*), intent(in), optional :: msg  !< Brief description of the assertion
 
       character(len=:), allocatable :: msg_
 
       if (.not. present(msg)) then
-         msg_ = 'Condition is false'
+         msg_ = "Assertion failed"
       else
-         msg_ = msg
+         msg_ = "Assertion '"//trim(adjustl(msg))//"' failed"
       end if
 
       if (.not. cond) then
-         print '("Error: ", a)', msg
+         print "(a)", msg_
          stop 1
       end if
    end subroutine assert
 
+   !> Error out if `a` and `b` are not within `tol` of each other.
    subroutine assert_close(a, b, tol)
       real(rk), intent(in) :: a, b
-      real(rk), intent(in), optional :: tol  !> Absolute tolerance, defaults to TINY
+      real(rk), intent(in), optional :: tol  !< Absolute tolerance, defaults to TINY
 
       real(rk) :: diff, tol_
 
@@ -38,8 +40,8 @@ contains
       end if
 
       diff = abs(a - b)
-      if (diff > tol) then
-         print '("Error: ", g8.3, " != ", g8.3)', a, b
+      if (diff > tol_) then
+         print '("Closeness assertion failed: ", g9.4, " != ", g9.4)', a, b
          stop 1
       end if
    end subroutine assert_close
