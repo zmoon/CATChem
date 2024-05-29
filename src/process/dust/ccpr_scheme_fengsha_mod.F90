@@ -1,4 +1,5 @@
 !>
+!! \file
 !! \brief Contains the FENGSHA windblown dust emission scheme
 !!
 !! Reference here:
