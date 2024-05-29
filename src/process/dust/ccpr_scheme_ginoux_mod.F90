@@ -1,4 +1,5 @@
 !>
+!! \file
 !! \brief Contains the Ginoux windblown dust emission scheme
 !!
 !! Reference here:
