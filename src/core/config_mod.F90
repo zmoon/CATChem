@@ -47,7 +47,7 @@ CONTAINS
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
-      TYPE(ConfigType), INTENT(INOUT) :: Config    ! Input options
+      TYPE(ConfigType),    INTENT(INOUT) :: Config    ! Input options
       TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State object
 !
 ! !OUTPUT PARAMETERS:
@@ -123,7 +123,7 @@ CONTAINS
       !========================================================================
       ! Further error-checking and initialization
       !========================================================================
-      CALL QFYAML_CleanUp( ConfigInput         )
+      CALL QFYAML_CleanUp( ConfigInput )
       CALL QFYAML_CleanUp( ConfigAnchored )
 
    END SUBROUTINE Read_Input_File
@@ -405,14 +405,32 @@ CONTAINS
          ENDIF
          Config%dust_scheme = v_int
 
-         key = 'process%dust%dust_fengsha_drag_opt'
+         key = 'process%dust%dust_drag_opt'
          v_int = MISSING_INT
          CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
          IF ( RC /= CC_SUCCESS ) THEN
             errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            Config%dust_scheme = 1
+            Config%dust_drag_opt = 1
          ENDIF
-         Config%dust_fengsha_drag_opt = v_int
+         Config%dust_drag_opt = v_int
+
+         key = 'process%dust%dust_moist_opt'
+         v_int = MISSING_INT
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%dust_moist_opt = 1
+         ENDIF
+         Config%dust_moist_opt = v_int
+
+         key = 'process%dust%dust_horizflux_opt'
+         v_int = MISSING_INT
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%dust_horizflux_opt = 1
+         ENDIF
+         Config%dust_horizflux_opt = v_int
       ENDIF
 
    END SUBROUTINE Config_Process_Dust

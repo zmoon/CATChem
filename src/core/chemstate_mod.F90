@@ -37,7 +37,7 @@ module ChemState_Mod
    !> - GasIndex: An array containing the gas species index.
    !> - DustIndex: An array containing the dust species index.
    !> - SeaSaltIndex: An array containing the sea salt species index.
-   !> - chemSpecies: A 3D array containing the concentration of each species.
+   !> - chemSpecies: A 2-D array containing the concentration of each species.
    type, public :: ChemStateType
       !---------------------------------------------------------------------
       ! Name of variables containing chemistry information
@@ -61,7 +61,7 @@ module ChemState_Mod
       !---------------------------------------------------------------------
       ! Reals
       !---------------------------------------------------------------------
-      REAL(fp), POINTER :: chemSpecies(:,:,:,:)
+      REAL(fp), POINTER :: chemSpecies(:,:)
 
       ! TODO: Add properties for species
    end type ChemStateType
@@ -102,9 +102,7 @@ CONTAINS
       ChemState%chemSpecies => NULL()
 
       ! Allocate
-      ALLOCATE( ChemState%chemSpecies( GridState%NX, GridState%NY, &
-         GridState%number_of_levels, ChemState%nSpecies ), &
-         STAT=RC )
+      ALLOCATE( ChemState%chemSpecies( GridState%number_of_levels, ChemState%nSpecies ), STAT=RC )
       CALL CC_CheckVar( 'ChemState%chemSpecies', 0, RC )
       IF ( RC /= CC_SUCCESS ) RETURN
       ChemState%chemSpecies = TINY

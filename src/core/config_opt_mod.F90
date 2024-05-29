@@ -74,8 +74,10 @@ MODULE Config_Opt_Mod
       ! Dust Process
       LOGICAL                     :: dust_activate
       INTEGER                     :: dust_scheme
-      INTEGER                     :: dust_fengsha_drag_opt  ! Fengsha Option for drag Paramertization (1 MB95; 2) Input Value)
-      INTEGER                     :: dust_fengsha_moist_opt ! Fengsha Option for moisture Paramertization (1 Fecan; 2 Shao)
+      INTEGER                     :: dust_drag_opt  ! Fengsha Option for drag Parameterization (1 MB95; 2 Input Value)
+      INTEGER                     :: dust_moist_opt ! Fengsha Option for moisture Parameterization (1 Fecan; 2 Shao)
+      INTEGER                     :: dust_horizflux_opt ! Horizontal Flux Calculation Option
+
 
       ! SeaSalt Process
       LOGICAL                     :: seasalt_activate
@@ -142,8 +144,9 @@ CONTAINS
       ! Dust Process
       Config%dust_activate = .FALSE.
       Config%dust_scheme = 1
-      Config%dust_fengsha_drag_opt = 1
-      Config%dust_fengsha_moist_opt = 1
+      Config%dust_drag_opt = 1
+      Config%dust_moist_opt = 1
+      Config%dust_horizflux_opt = 1
 
       ! SeaSalt Process
       Config%seasalt_activate = .FALSE.

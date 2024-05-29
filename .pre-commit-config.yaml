@@ -1,7 +1,7 @@
 repos:
   - repo: meta
     hooks:
-      # - id: check-hooks-apply  # FIMXE: after CMake added
+      - id: check-hooks-apply
       - id: check-useless-excludes
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -22,7 +22,7 @@ repos:
             (?x)^(
                 src/core/charpak_mod\.F90|
                 src/core/qfyaml_mod\.F90|
-                src/process/.*\.F90|
+                src/process/old/.*\.F90|
                 drivers/ccpp/.*\.F90|
                 parameters/.*\.F90
             )$

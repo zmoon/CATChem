@@ -23,7 +23,7 @@ program test_main
    RC = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
-   write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
+   write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'

@@ -37,4 +37,4 @@ jobs:
           FC: ${{ matrix.compiler }}
 
       - name: Test
-        run: ctest --test-dir ${BUILD_DIR}/tests
+        run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure
