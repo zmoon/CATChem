@@ -28,9 +28,8 @@ contains
     subroutine CCPr_Scheme_Ginoux(MetState, DiagState, DustState, RC)
 
         ! Uses
-        USE Constants,     Only : g0
         Use CCPr_Dust_Common_Mod
-        use precision_mod, only : fp, ZERO
+        use precision_mod, only : fp
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
         Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE
@@ -50,7 +49,7 @@ contains
         logical :: do_dust                               ! Enable Dust Calculation Flag
         integer :: n                                     ! loop couters
         integer :: nbins                                 ! number of dust bins
-        integer :: ginoux_scaling                        ! Ginoux scaling
+        real(fp) :: ginoux_scaling                        ! Ginoux scaling
         real(fp) :: u_thresh0                            ! Dry threshold wind speed [m/s]
         real(fp) :: u_thresh                             ! Moisture Corrected threshold wind speed [m/s]
         real(fp) :: w10m                                 ! 10m wind speed [m/s]
