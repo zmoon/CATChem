@@ -107,7 +107,7 @@ contains
       !--------------------------------------------
       ! Compute Saturated Volumetric Water Content
       !--------------------------------------------
-      vsat = 0.489 - 0.00126 * (100. * sand)
+      vsat = 0.489_fp - 0.00126_fp * (100._fp * sand)
 
       !--------------------------------------------
       ! Compute Gravimetric Soil moisture
