@@ -1,5 +1,4 @@
 program test_dust
-   use testing_mod
    use precision_mod, only: fp
    use Config_Opt_Mod, only: ConfigType
    use ChemState_Mod, only: ChemStateType
