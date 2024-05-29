@@ -2,7 +2,9 @@
 !! \file
 !! \brief Contains the Ginoux windblown dust emission scheme
 !!
-!! Reference here:
+!! Ginoux, P., “Sources and distributions of dust aerosols simulated with the GOCART model”,
+!! <Journal of Geophysical Research, vol. 106, no. D17, pp. 20, 255–20, 273, 2001.
+!! doi:10.1029/2000JD000053.
 !!
 !! \author Barry baker
 !! \date 05/2024
