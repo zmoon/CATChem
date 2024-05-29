@@ -7,7 +7,7 @@ OPTIMIZE_FOR_FORTRAN = YES
 
 INPUT = start.md
 INPUT += ../src/core
-INPUT += ../src/process/ccpr_fengsha_mod.F90
+INPUT += ../src/process/dust
 USE_MDFILE_AS_MAINPAGE = start.md
 HTML_EXTRA_STYLESHEET = ../docs2/static/doxygen-awesome.css
 HTML_COLORSTYLE = LIGHT
