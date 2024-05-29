@@ -16,16 +16,16 @@ program test_dust
    type(DiagStateType) :: DiagState
    type(DustStateType) :: DustState
 
+   character(len=:), allocatable :: title
+
    ! Error Handling variables
    integer :: rc
    CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
-
-   !error handling
+   ! Error handling
    rc = CC_SUCCESS
    ErrMsg = ''
    thisLoc = ' -> at main (in tests/test_dust.f90)'
-
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
@@ -34,11 +34,8 @@ program test_dust
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
    write(*,*) ''
    write(*,*) ''
-   ! Dust Test 1
-   !------------
 
    ! Configuration Options
-   !----------------------
    Config%dust_activate = .true.
    Config%dust_scheme = 1
    Config%dust_drag_opt = 1
@@ -61,29 +58,8 @@ program test_dust
    allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
-   write(*,*) '======================================='
-   write(*,*) '        Dust Test 1'
-   write(*,*) '======================================='
-   write(*,*)
-   write(*,*) '*************'
-   write(*,*) 'Configuration '
-   write(*,*) '*************'
-   write(*,*) 'DustState%activate = ', Config%dust_activate
-   write(*,*) 'DustState%dust_scheme = ', Config%dust_scheme
-   write(*,*) 'DustState%dust_moist_opt = ', Config%dust_drag_opt
-   write(*,*) 'DustState%dust_horizflux_opt = ', Config%dust_moist_opt
-   write(*,*) 'ChemState%nSpeciesDust = ', Config%dust_horizflux_opt
-   write(*,*) 'MetState%DSOILTYPE = ', MetState%DSOILTYPE
-   write(*,*) 'MetState%SSM = ', MetState%SSM
-   write(*,*) 'MetState%RDRAG = ', MetState%RDRAG
-   write(*,*) 'MetState%TSKIN =', MetState%TSKIN
-   write(*,*) 'MetState%CLAYFRAC =', MetState%CLAYFRAC
-   write(*,*) 'MetState%SANDFRAC =', MetState%SANDFRAC
-   write(*,*) 'MetState%GWETTOP =', MetState%GWETTOP
-   write(*,*) 'MetState%USTAR =', MetState%USTAR
-   write(*,*) 'MetState%USTAR_THRESHOLD =', MetState%USTAR_THRESHOLD
-   write(*,*) 'MetState%AIRDEN =', MetState%AIRDEN
-
+   title = "Dust Test 1"
+   call print_info(Config, MetState, title)
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -103,31 +79,11 @@ program test_dust
    write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
    write(*,*) 'Test 1 Success!!!!!'
 
-   ! Dust Test 2
-   !------------
+   title = "Dust Test 2 - ustar == ustar_threshold"
    MetState%USTAR = 0.1_fp
-   write(*,*) '======================================='
-   write(*,*) '        Dust Test 2'
-   write(*,*) '======================================='
-   write(*,*)
-   write(*,*) '*************'
-   write(*,*) 'Configuration '
-   write(*,*) '*************'
-   write(*,*) 'DustState%activate = ', Config%dust_activate
-   write(*,*) 'DustState%dust_scheme = ', Config%dust_scheme
-   write(*,*) 'DustState%dust_moist_opt = ', Config%dust_drag_opt
-   write(*,*) 'DustState%dust_horizflux_opt = ', Config%dust_moist_opt
-   write(*,*) 'ChemState%nSpeciesDust = ', Config%dust_horizflux_opt
-   write(*,*) 'MetState%DSOILTYPE = ', MetState%DSOILTYPE
-   write(*,*) 'MetState%SSM = ', MetState%SSM
-   write(*,*) 'MetState%RDRAG = ', MetState%RDRAG
-   write(*,*) 'MetState%TSKIN =', MetState%TSKIN
-   write(*,*) 'MetState%CLAYFRAC =', MetState%CLAYFRAC
-   write(*,*) 'MetState%SANDFRAC =', MetState%SANDFRAC
-   write(*,*) 'MetState%GWETTOP =', MetState%GWETTOP
-   write(*,*) 'MetState%USTAR =', MetState%USTAR
-   write(*,*) 'MetState%USTAR_THRESHOLD =', MetState%USTAR_THRESHOLD
-   write(*,*) 'MetState%AIRDEN =', MetState%AIRDEN
+
+   call print_info(Config, MetState, title)
+
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       ErrMsg = 'Error in CCPr_Dust_Run'
@@ -139,35 +95,16 @@ program test_dust
    write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
    write(*,*) 'Test 2 Success!!!!!'
 
-   ! Dust Test 3 - Test horizontal flux change
+   title = "Dust Test 3 - test horizontal flux change"
    MetState%z0 = .001_fp
    DustState%HorizFluxOpt = 2
    MetState%USTAR = 0.5_fp
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
    DiagState%dust_total_flux = 0.0_fp
-   write(*,*) '======================================='
-   write(*,*) '        Dust Test 3'
-   write(*,*) '======================================='
-   write(*,*)
-   write(*,*) '*************'
-   write(*,*) 'Configuration '
-   write(*,*) '*************'
-   write(*,*) 'DustState%activate = ', Config%dust_activate
-   write(*,*) 'DustState%dust_scheme = ', Config%dust_scheme
-   write(*,*) 'DustState%dust_moist_opt = ', Config%dust_drag_opt
-   write(*,*) 'DustState%dust_horizflux_opt = ', Config%dust_moist_opt
-   write(*,*) 'ChemState%nSpeciesDust = ', Config%dust_horizflux_opt
-   write(*,*) 'MetState%DSOILTYPE = ', MetState%DSOILTYPE
-   write(*,*) 'MetState%SSM = ', MetState%SSM
-   write(*,*) 'MetState%RDRAG = ', MetState%RDRAG
-   write(*,*) 'MetState%TSKIN =', MetState%TSKIN
-   write(*,*) 'MetState%CLAYFRAC =', MetState%CLAYFRAC
-   write(*,*) 'MetState%SANDFRAC =', MetState%SANDFRAC
-   write(*,*) 'MetState%GWETTOP =', MetState%GWETTOP
-   write(*,*) 'MetState%USTAR =', MetState%USTAR
-   write(*,*) 'MetState%USTAR_THRESHOLD =', MetState%USTAR_THRESHOLD
-   write(*,*) 'MetState%AIRDEN =', MetState%AIRDEN
+
+   call print_info(Config, MetState, title)
+
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       ErrMsg = 'Error in CCPr_Dust_Run'
@@ -185,8 +122,7 @@ program test_dust
       stop 1
    endif
 
-   ! Change Dust scheme
-   ! ------------------
+   title = "Dust Test 4 - Change Dust Scheme"
    Config%dust_activate = .true.
    Config%dust_scheme = 2
    Config%dust_drag_opt = 1
@@ -194,28 +130,8 @@ program test_dust
    Config%dust_horizflux_opt = 1
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
-   write(*,*) '======================================='
-   write(*,*) '        Dust Test 4'
-   write(*,*) '======================================='
-   write(*,*)
-   write(*,*) '*************'
-   write(*,*) 'Configuration '
-   write(*,*) '*************'
-   write(*,*) 'DustState%activate = ', Config%dust_activate
-   write(*,*) 'DustState%dust_scheme = ', Config%dust_scheme
-   write(*,*) 'DustState%dust_moist_opt = ', Config%dust_drag_opt
-   write(*,*) 'DustState%dust_horizflux_opt = ', Config%dust_moist_opt
-   write(*,*) 'ChemState%nSpeciesDust = ', Config%dust_horizflux_opt
-   write(*,*) 'MetState%DSOILTYPE = ', MetState%DSOILTYPE
-   write(*,*) 'MetState%SSM = ', MetState%SSM
-   write(*,*) 'MetState%RDRAG = ', MetState%RDRAG
-   write(*,*) 'MetState%TSKIN =', MetState%TSKIN
-   write(*,*) 'MetState%CLAYFRAC =', MetState%CLAYFRAC
-   write(*,*) 'MetState%SANDFRAC =', MetState%SANDFRAC
-   write(*,*) 'MetState%GWETTOP =', MetState%GWETTOP
-   write(*,*) 'MetState%USTAR =', MetState%USTAR
-   write(*,*) 'MetState%USTAR_THRESHOLD =', MetState%USTAR_THRESHOLD
-   write(*,*) 'MetState%AIRDEN =', MetState%AIRDEN
+
+   call print_info(Config, MetState, title)
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -234,6 +150,35 @@ program test_dust
    write(*,*) 'dust_total_flux = ', DiagState%dust_total_flux
    write(*,*) 'Test 4 Success!!!!!'
 
+contains
 
+   subroutine print_info(Config_, MetState_, title_)
+      type(ConfigType), intent(in) :: Config_
+      type(MetStateType), intent(in) :: MetState_
+      character(len=*), intent(in) :: title_
 
-end program
+      write(*,*) '======================================='
+      write(*,*) title_
+      write(*,*) '======================================='
+      write(*,*) '*************'
+      write(*,*) 'Configuration '
+      write(*,*) '*************'
+      write(*,*) 'DustState%activate = ', Config_%dust_activate
+      write(*,*) 'DustState%dust_scheme = ', Config_%dust_scheme
+      write(*,*) 'DustState%dust_moist_opt = ', Config_%dust_drag_opt
+      write(*,*) 'DustState%dust_horizflux_opt = ', Config_%dust_moist_opt
+      write(*,*) 'ChemState%nSpeciesDust = ', Config_%dust_horizflux_opt
+      write(*,*) 'MetState%DSOILTYPE = ', MetState_%DSOILTYPE
+      write(*,*) 'MetState%SSM = ', MetState_%SSM
+      write(*,*) 'MetState%RDRAG = ', MetState_%RDRAG
+      write(*,*) 'MetState%TSKIN =', MetState_%TSKIN
+      write(*,*) 'MetState%CLAYFRAC =', MetState_%CLAYFRAC
+      write(*,*) 'MetState%SANDFRAC =', MetState_%SANDFRAC
+      write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
+      write(*,*) 'MetState%USTAR =', MetState_%USTAR
+      write(*,*) 'MetState%USTAR_THRESHOLD =', MetState_%USTAR_THRESHOLD
+      write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
+
+   end subroutine print_info
+
+end program test_dust
