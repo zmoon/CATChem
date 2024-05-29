@@ -1,4 +1,5 @@
 !>
+!! \file
 !! \brief Contains a Template for any given CCPr Scheme
 !!
 !! Reference here: Please include citation here
