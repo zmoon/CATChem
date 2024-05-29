@@ -80,7 +80,7 @@ contains
         H = ZERO
         EmissBins = ZERO
         TotalFlux = ZERO
-
+        DustState%TotalEmission = ZERO
 
         nbins = size(DustState%EffectiveRadius)
 
@@ -180,7 +180,17 @@ contains
 
             ! Compute the Total Dust Flux
             !----------------------------
-            FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN(1) / g0
+            FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN(1) &
+                             / g0 * 1.0e9_fp
+
+            ! write(*,*) 'FengshaScaling = ', FengshaScaling
+            ! write(*,*) 'HorizFlux = ', HorizFlux
+            ! write(*,*) 'h_to_v_ratio = ', h_to_v_ratio
+            ! write(*,*) 'USTAR = ', MetState%USTAR
+            ! write(*,*) 'USTAR_THRESHOLD = ', MetState%USTAR_THRESHOLD
+            ! write(*,*) 'R = ', R
+            ! write(*,*) 'H = ', H
+            ! write(*,*) 'u_ts = ', MetState%USTAR_THRESHOLD * H / R
 
             TotalFlux = FengshaScaling * HorizFlux * h_to_v_ratio
 
