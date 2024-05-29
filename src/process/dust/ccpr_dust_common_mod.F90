@@ -356,7 +356,7 @@ contains
         !--------------------------------------------
         ! MB95 Drag Paritition
         !--------------------------------------------
-        R = 1 - (log(z0 / z0s ) / log(0.7 * (10.0 / z0s) ** 0.8))
+        R = 1 - (log(z0 / z0s ) / log(0.7 * (0.1 / z0s) ** 0.8))
         return
 
     end subroutine MB95_DragParitition
