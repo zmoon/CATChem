@@ -23,7 +23,7 @@ module CCPr_Dust_Common_Mod
 
    !> \brief Type for CATCHem Dust Process
    !!
-   !! \details Contains all the information needed to run the CATCHem Dust Process
+   !! \details Contains all the information needed to run the CATChem Dust Process
    !!
    !! This type contains the following variables:
    !! - Activate : Activate Process (True/False)
@@ -112,7 +112,7 @@ contains
       !--------------------------------------------
       ! Compute Gravimetric Soil moisture
       !--------------------------------------------
-      gravimetric_soil_moisture = volumetric_soil_moisture * 1000.0 / (1.0 - vsat)
+      gravimetric_soil_moisture = volumetric_soil_moisture * 1000.0_fp / (1.0_fp - vsat)
 
       !--------------------------------------------
       ! Compute Dry Limit
@@ -122,7 +122,7 @@ contains
       !--------------------------------------------
       ! Compute attenuation factor
       !--------------------------------------------
-      H = sqrt(1 + 1.21 * max(0., gravimetric_soil_moisture - DryLimit)**0.68)
+      H = sqrt(1.0_fp + 1.21_fp * max(0._fp, gravimetric_soil_moisture - DryLimit)**0.68_fp)
       return
 
    end subroutine Fecan_SoilMoisture
@@ -150,10 +150,10 @@ contains
       !--------------------------------------------
       ! Compute attenuation factor
       !--------------------------------------------
-      if (volumetric_soil_moisture <= 0.03) THEN
-         H = exp(22.7 * volumetric_soil_moisture)
+      if (volumetric_soil_moisture <= 0.03_fp) THEN
+         H = exp(22.7_fp * volumetric_soil_moisture)
       else
-         H = exp(93.5 * volumetric_soil_moisture - 2.029)
+         H = exp(93.5_fp * volumetric_soil_moisture - 2.029_fp)
       endif
 
       return
@@ -201,10 +201,10 @@ contains
       nbins = size(radius)
 
       do n = 1, nbins
-         diameter = radius(n) * 2.0
+         diameter = radius(n) * 2.0_fp
          dlam = diameter / lambda
-         dvol = 4. / 3. * pi * diameter**3
-         diameter = (1. + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
+         dvol = 4._fp / 3._fp * pi * diameter**3.0_fp
+         diameter = (1._fp + erf(factor * log(diameter/mmd))) * exp(-dlam * dlam * dlam) * log(rUp(n)/rLow(n))
          dvol = dvol + dist(n)
       end do
 
@@ -238,7 +238,7 @@ contains
       ! Compute SEP
       !--------------------------------------------
       if (clayfrac > 0.0 .and. sandfrac > 0.0) then
-         SEP = (0.08 * clayfrac + 0.12 * sandfrac + (1 - sandfrac - clayfrac))
+         SEP = (0.08_fp * clayfrac + 0.12_fp * sandfrac + (1 - sandfrac - clayfrac))
       endif
 
       return
@@ -283,7 +283,7 @@ contains
       u_ts = ustar_threshold * H / R
 
       if (ustar >= ustar_threshold) then
-         HorizFlux = max(0. ,(ustar * R) ** 3.0 * (1 - ( u_ts / ustar ) ** 2.0))
+         HorizFlux = max(0._fp ,(ustar * R) ** 3.0_fp * (1.0_fp - ( u_ts / ustar ) ** 2.0_fp))
       endif
 
 
@@ -326,7 +326,7 @@ contains
       !--------------------------------------------
       u_ts = ustar_threshold * H / R
 
-      HorizFlux = MAX(0., (ustar ** 3.0 * (1 - (u_ts / ustar) ** 2.) * (1 + (u_ts / ustar) ** 2. ) ) )
+      HorizFlux = MAX(0._fp, (ustar ** 3.0_fp * (1.0_fp - (u_ts / ustar) ** 2.0_fp) * (1.0_fp + (u_ts / ustar) ** 2.0_fp ) ) )
 
       return
    end subroutine Kawamura_HorizFlux
@@ -356,7 +356,7 @@ contains
       !--------------------------------------------
       ! MB95 Drag Paritition
       !--------------------------------------------
-      R = 1 - (log(z0 / z0s ) / log(0.7 * (0.1 / z0s) ** 0.8))
+      R = 1.0_fp - (log(z0 / z0s ) / log(0.7_fp * (0.1_fp / z0s) ** 0.8_fp))
       return
 
    end subroutine MB95_DragParitition
@@ -392,10 +392,10 @@ contains
       !-----------------
       real(fp) :: diameter
 
-      diameter = 2.0 * radius
-      ustar_threshold = 0.13 * sqrt(soil_density*g0*diameter/air_density) &
-         * sqrt(1.+6.e-7/(soil_density*g0*diameter**2.5)) &
-         / sqrt(1.928*(1331.*(100.*diameter)**1.56+0.38)**0.092 - 1.)
+      diameter = 2.0_fp * radius
+      ustar_threshold = 0.13_fp * sqrt(soil_density*g0*diameter/air_density) &
+         * sqrt(1.0_fp + 6.e-7_fp/(soil_density*g0*diameter**2.5_fp)) &
+         / sqrt(1.928_fp*(1331.0_fp*(100._fp*diameter)**1.56_fp+0.38_fp)**0.092_fp - 1.0_fp)
 
       return
 
