@@ -1,0 +1,35 @@
+name: Doxygen docs
+
+on:
+  push:
+    branches: [feature/catchem_begins]
+  pull_request:
+    branches: [feature/catchem_begins]
+permissions:
+  contents: write
+
+jobs:
+  doxygen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install -y doxygen graphviz
+
+      - name: Build
+        run: |
+          cd docs2
+          doxygen
+          cd -
+
+      - name: Deploy
+        if: github.ref == 'refs/heads/feature/catchem_begins'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs2/html
+          git-config-name: github-actions
+          git-config-email: 41898282+github-actions[bot]@users.noreply.github.com
+          clean: true
+          clean-exclude: .nojekyll
