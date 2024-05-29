@@ -32,7 +32,7 @@ contains
         use precision_mod, only : fp
         Use MetState_Mod,  Only : MetStateType
         Use DiagState_Mod, Only : DiagStateType
-        Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE
+        Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE, CC_Error
         Use CCPr_Dust_Common_Mod, Only : DustStateType
 
         implicit none
@@ -49,11 +49,11 @@ contains
         logical :: do_dust                               ! Enable Dust Calculation Flag
         integer :: n                                     ! loop couters
         integer :: nbins                                 ! number of dust bins
-        real(fp) :: ginoux_scaling                        ! Ginoux scaling
+        real(fp) :: ginoux_scaling                       ! Ginoux scaling
         real(fp) :: u_thresh0                            ! Dry threshold wind speed [m/s]
         real(fp) :: u_thresh                             ! Moisture Corrected threshold wind speed [m/s]
         real(fp) :: w10m                                 ! 10m wind speed [m/s]
-        real(fp) :: EmissionBin(DustState%nDustSpecies)  ! Emission Rate per Bin
+        real(fp), allocatable :: EmissionBin(:)          ! Emission Rate per Bin
 
         ! Initialize
         errMsg = ''
@@ -61,6 +61,12 @@ contains
         RC = CC_FAILURE
 
         nbins = size(DustState%EffectiveRadius)
+        ALLOCATE(EmissionBin(nbins), STAT=RC)
+        if (RC /= CC_SUCCESS) then
+            errMsg = 'Error Allocating EmissionBin'
+            call CC_Error(errMsg, RC, thisLoc)
+            return
+        endif
 
         !--------------------------------------------------------------------
         ! Don't do dust over certain criteria
@@ -98,7 +104,6 @@ contains
             ! get 10m mean wind speed
             w10m = sqrt(MetState%U10M ** 2 + MetState%V10M ** 2)
 
-
             if (MetState%GWETTOP .lt. 0.5) then
 
                 ! add the moisture correction following Ginoux et al. (2001)
@@ -113,6 +118,7 @@ contains
           enddo ! nbins
 
           DustState%TotalEmission = sum(DustState%EmissionPerSpecies)
+          DiagState%dust_total_flux = DustState%TotalEmission
 
         endif ! do_dust
 
