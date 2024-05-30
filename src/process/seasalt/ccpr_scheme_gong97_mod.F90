@@ -51,9 +51,6 @@ contains
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
       integer :: n, ir                                 !< loop couters
       integer :: nbins                                 !< number of SeaSalt bins
-      real(fp) :: ginoux_scaling                       !< Ginoux scaling
-      real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
-      real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
       real(fp), allocatable :: NumberEmissionBin(:)    !< Number of particles emitted per bin [#/m2/s]
@@ -122,10 +119,10 @@ contains
 
          ! Gong 03 Params
          !---------------
-         scalefac = 1.
-         rpow     = 1.05
-         exppow   = 1.19
-         wpow     = 3.41
+         scalefac = 1._fp
+         rpow     = 1.0E5_fp
+         exppow   = 1.19_fp
+         wpow     = 3.41_fp
 
          do n = 1, nbins
 
@@ -155,8 +152,9 @@ contains
                NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
 
                ! Mass emissions flux (kg m-2 s-1)
-               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
+               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, aFac, bFac, rpow, exppow, wpow )
 
+               ! sub radius incriments
                DryRadius = DryRadius + DeltaDryRadius
 
             enddo

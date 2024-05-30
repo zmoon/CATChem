@@ -90,6 +90,14 @@ CONTAINS
          !--------------------------------
          DustState%MoistOpt = Config%dust_moist_opt
 
+         ! Set the Alpha Parameter
+         !------------------------
+         DustState%AlphaScaleFactor = Config%dust_alpha
+
+         ! Set the beta scalefactor
+         !-------------------------
+         DustState%BetaScaleFactor = Config%dust_beta
+
          ! Set Horizontal Flux Calculation Option
          !---------------------------------------
          DustState%HorizFluxOpt = Config%dust_horizflux_opt

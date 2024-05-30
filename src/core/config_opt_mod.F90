@@ -5,21 +5,21 @@
 !!
 !!!>
 MODULE Config_Opt_Mod
-!
-! !USES:
-!
+   !
+   ! !USES:
+   !
    USE PRECISION_MOD    ! For CATChem Precision (fp)
 
    IMPLICIT NONE
    PRIVATE
-!
-! !PUBLIC MEMBER FUNCTIONS:
-!
+   !
+   ! !PUBLIC MEMBER FUNCTIONS:
+   !
    PUBLIC :: Set_Config
    PUBLIC :: Cleanup_Config
-!
-! !PUBLIC DATA MEMBERS:
-!
+   !
+   ! !PUBLIC DATA MEMBERS:
+   !
    !=========================================================================
    ! Derived type for Input Options
    !=========================================================================
@@ -72,20 +72,19 @@ MODULE Config_Opt_Mod
       !-----------------------------------------
 
       ! Dust Process
-      !-------------
-      LOGICAL                     :: dust_activate      !< Activation Parameter for Dust Process
-      INTEGER                     :: dust_scheme        !< Option for dust scheme (1 FENGSHA; 2 Ginoux)
-      INTEGER                     :: dust_drag_opt      !< Option for drag Parameterization (1 MB95; 2 Input Value)
-      INTEGER                     :: dust_moist_opt     !< Option for moisture Parameterization (1 Fecan; 2 Shao)
-      INTEGER                     :: dust_horizflux_opt !< Horizontal Flux Calculation Option
-      REAL(fp)                    :: dust_alpha         !< Linear Scaling Parameter [1]
-      REAL(fp)                    :: dust_beta          !< Beta Scaling Factor
+      LOGICAL                     :: dust_activate
+      INTEGER                     :: dust_scheme
+      INTEGER                     :: dust_drag_opt  ! Fengsha Option for drag Parameterization (1 MB95; 2 Input Value)
+      INTEGER                     :: dust_moist_opt ! Fengsha Option for moisture Parameterization (1 Fecan; 2 Shao)
+      INTEGER                     :: dust_horizflux_opt ! Horizontal Flux Calculation Option
+      real(fp)                    :: dust_alpha
+      real(fp)                    :: dust_beta
+
 
       ! SeaSalt Process
-      !----------------
-      LOGICAL                     :: seasalt_activate     !< Activation Parameter for SeaSalt Process
-      INTEGER                     :: seasalt_scheme       !< Seasalt Scheme (1 Gong 2003; 2 Gong 1997; 3 GEOS5 2012 )
-      REAL(fp)                    :: seasalt_scalefactor  !< Seasalt Linear Scaling Factor
+      LOGICAL                     :: seasalt_activate
+      INTEGER                     :: seasalt_scheme
+      real(fp)                    :: seasalt_scalefactor
 
 
    END TYPE ConfigType
@@ -100,25 +99,25 @@ CONTAINS
    !! \param RC         The return code
    !!!>
    SUBROUTINE Set_Config( am_I_Root, Config, RC )
-!
-! !USES:
-!
+      !
+      ! !USES:
+      !
       USE Error_Mod
-!
-! !INPUT PARAMETERS:
-!
+      !
+      ! !INPUT PARAMETERS:
+      !
       LOGICAL,        INTENT(IN)    :: am_I_Root   ! Are we on the root CPU?
-!
-! !INPUT/OUTPUT PARAMETERS:
-!
+      !
+      ! !INPUT/OUTPUT PARAMETERS:
+      !
       TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
-!
-! !OUTPUT PARAMETERS:
-!
+      !
+      ! !OUTPUT PARAMETERS:
+      !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure?
-!
-! !LOCAL VARIABLES:
-!
+      !
+      ! !LOCAL VARIABLES:
+      !
       ! Strings
       CHARACTER(LEN=30) :: arrayId
 
@@ -167,17 +166,17 @@ CONTAINS
    !! \param RC         The return code
    !!!>
    SUBROUTINE Cleanup_Config( Config, RC )
-!
-! !USES:
-!
+      !
+      ! !USES:
+      !
       USE Error_Mod
-!
-! !INPUT/OUTPUT PARAMETERS:
-!
+      !
+      ! !INPUT/OUTPUT PARAMETERS:
+      !
       TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
-!
-! !OUTPUT PARAMETERS:
-!
+      !
+      ! !OUTPUT PARAMETERS:
+      !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
 
       ! Assume success

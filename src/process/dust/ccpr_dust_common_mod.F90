@@ -55,7 +55,7 @@ module CCPr_Dust_Common_Mod
       REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)       !< Upper bin radius        [m]
       REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)      !< Effective radius        [m]
       REAL(fp), ALLOCATABLE           :: DustDensity(:)          !< Dust density            [kg/m^3]
-      REAL(fp)                        :: GammaScaleFactor        !< Gamma Scaling Parameter  [1]
+      REAL(fp)                        :: BetaScaleFactor         !< Gamma Scaling Parameter  [1]
       REAL(fp)                        :: AlphaScaleFactor        !< Alpha Scaling Parameter [1]
       REAL(fp), ALLOCATABLE           :: TotalEmission           !< Total emission          [kg/m^2/s]
       REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]

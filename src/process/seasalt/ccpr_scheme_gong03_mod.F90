@@ -51,9 +51,6 @@ contains
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
       integer :: n, ir                                 !< loop couters
       integer :: nbins                                 !< number of SeaSalt bins
-      real(fp) :: ginoux_scaling                       !< Ginoux scaling
-      real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
-      real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
       real(fp), allocatable :: NumberEmissionBin(:)    !< Number of particles emitted per bin [#/m2/s]
@@ -71,6 +68,7 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
+      real(fp) :: tmp
 
       ! Initialize
       errMsg = ''
@@ -148,14 +146,16 @@ contains
                ! Effective Delta Wet Radius
                drwet = r80fac * DeltaDryRadius
 
-               aFac     = 4.7_fp*(1._fp + 30._fp*rwet)**(-0.017_fp*rwet**(-1.44_fp))
-               bFac     = (0.433_fp-log10(rwet))/0.433_fp
+               aFac = 4.7_fp*(1._fp + 30._fp*rwet)**(-0.017_fp*rwet**(-1.44_fp))
+               bFac = (0.433_fp-log10(rwet))/0.433_fp
 
                ! Number emissions flux (# m-2 s-1)
-               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
+               tmp = SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
+               NumberEmissions = NumberEmissions + tmp
 
                ! Mass emissions flux (kg m-2 s-1)
-               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
+               tmp = SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, aFac, bFac, rpow, exppow, wpow )
+               MassEmissions = MassEmissions + tmp
 
                DryRadius = DryRadius + DeltaDryRadius
 

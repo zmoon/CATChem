@@ -147,7 +147,7 @@ contains
                NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, MetState%USTAR, scalefac, aFac, bFac, rpow, exppow, wpow )
 
                ! Mass emissions flux (kg m-2 s-1)
-               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, MetState%USTAR, scalefac, aFac, bFac, rpow, exppow, wpow )
+               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, MetState%USTAR, MassScaleFac, aFac, bFac, rpow, exppow, wpow )
 
                DryRadius = DryRadius + DeltaDryRadius
 

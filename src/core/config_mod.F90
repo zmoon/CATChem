@@ -360,6 +360,9 @@ CONTAINS
       INTEGER                      :: N
       INTEGER                      :: C
 
+      ! Reals
+      REAL(fp)                     :: v_real
+
       ! Arrays
       INTEGER                      :: a_int(4)
 
@@ -431,6 +434,24 @@ CONTAINS
             Config%dust_horizflux_opt = 1
          ENDIF
          Config%dust_horizflux_opt = v_int
+
+         key = 'process%dust%dust_alpha'
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%dust_alpha = 1
+         ENDIF
+         Config%dust_alpha = v_real
+
+         key = 'process%dust%dust_beta'
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%dust_beta = 1
+         ENDIF
+         Config%dust_beta = v_real
       ENDIF
 
    END SUBROUTINE Config_Process_Dust
@@ -447,7 +468,6 @@ CONTAINS
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod
       USE Config_Opt_Mod,  ONLY : ConfigType
-      use precision_mod, only : fp
 
       TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput  ! YAML Config object
       TYPE(ConfigType),    INTENT(INOUT) :: Config       ! Input options
