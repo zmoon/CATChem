@@ -72,16 +72,20 @@ MODULE Config_Opt_Mod
       !-----------------------------------------
 
       ! Dust Process
-      LOGICAL                     :: dust_activate
-      INTEGER                     :: dust_scheme
-      INTEGER                     :: dust_drag_opt  ! Fengsha Option for drag Parameterization (1 MB95; 2 Input Value)
-      INTEGER                     :: dust_moist_opt ! Fengsha Option for moisture Parameterization (1 Fecan; 2 Shao)
-      INTEGER                     :: dust_horizflux_opt ! Horizontal Flux Calculation Option
-
+      !-------------
+      LOGICAL                     :: dust_activate      !< Activation Parameter for Dust Process
+      INTEGER                     :: dust_scheme        !< Option for dust scheme (1 FENGSHA; 2 Ginoux)
+      INTEGER                     :: dust_drag_opt      !< Option for drag Parameterization (1 MB95; 2 Input Value)
+      INTEGER                     :: dust_moist_opt     !< Option for moisture Parameterization (1 Fecan; 2 Shao)
+      INTEGER                     :: dust_horizflux_opt !< Horizontal Flux Calculation Option
+      REAL(fp)                    :: dust_alpha         !< Linear Scaling Parameter [1]
+      REAL(fp)                    :: dust_beta          !< Beta Scaling Factor
 
       ! SeaSalt Process
-      LOGICAL                     :: seasalt_activate
-      INTEGER                     :: seasalt_scheme
+      !----------------
+      LOGICAL                     :: seasalt_activate     !< Activation Parameter for SeaSalt Process
+      INTEGER                     :: seasalt_scheme       !< Seasalt Scheme (1 Gong 2003; 2 Gong 1997; 3 GEOS5 2012 )
+      REAL(fp)                    :: seasalt_scalefactor  !< Seasalt Linear Scaling Factor
 
 
    END TYPE ConfigType
