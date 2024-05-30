@@ -381,7 +381,7 @@ CONTAINS
 
       ! Initialize
       RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Grid (in CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Config_Process_Dust (in CATChem/src/core/config_mod.F90)'
       errMsg = ''
 
       key   = "process%dust%activate"
@@ -434,5 +434,91 @@ CONTAINS
       ENDIF
 
    END SUBROUTINE Config_Process_Dust
+
+   !> \brief Process seasalt configuration
+   !!
+   !! This function processes the seasalt configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   SUBROUTINE Config_Process_SeaSalt( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
+      use precision_mod, only : fp
+
+      TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput  ! YAML Config object
+      TYPE(ConfigType),    INTENT(INOUT) :: Config       ! Input options
+
+      ! OUTPUT PARAMETERS:
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+      ! LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      INTEGER                      :: v_int
+      INTEGER                      :: nSubStrs
+      INTEGER                      :: N
+      INTEGER                      :: C
+
+      ! Arrays
+      INTEGER                      :: a_int(4)
+
+      ! Strings
+      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
+      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
+      CHARACTER(LEN=255)           :: thisLoc,  nLev
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+      CHARACTER(LEN=QFYAML_StrLen) :: v_str
+
+      ! String arrays
+      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
+      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
+
+      !========================================================================
+      ! Config_Process_SeaSalt begins here!
+      !========================================================================
+
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
+
+      key   = "process%seasalt%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%SeaSalt_Activate = v_bool
+
+      IF ( Config%seasalt_activate ) THEN
+         key   = "process%seasalt%scheme_opt"
+         v_int = MISSING_INT
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%seasalt_scheme = 1
+            RETURN
+         ENDIF
+         Config%seasalt_scheme = v_int
+
+         key = 'process%seasalt%scale_factor'
+         v_int = MISSING_INT
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            Config%seasalt_scalefactor = 1.0_fp
+         ENDIF
+         Config%seasalt_scalefactor = v_int
+
+      ENDIF
+
+   END SUBROUTINE Config_Process_SeaSalt
 
 END MODULE config_mod
