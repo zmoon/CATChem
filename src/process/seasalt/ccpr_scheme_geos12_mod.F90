@@ -30,7 +30,7 @@ contains
 
       ! Uses
       Use CCPr_SeaSalt_Common_Mod
-      use precision_mod, only : fp, ZERO
+      use precision_mod, only : fp, ZERO, ONE, f8
       use constants,     only : PI
       Use MetState_Mod,  Only : MetStateType
       Use DiagState_Mod, Only : DiagStateType
@@ -67,12 +67,17 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
+      real(fp) :: gweibull
+      real(fp) :: fsstemis
+      real(fp) :: fhoppel
+      real(fp) :: scale
+      real(f8) :: ustar
 
       ! Initialize
       errMsg = ''
       thisLoc = ' -> at CCPr_Scheme_Gong97 (in ccpr_scheme_gong97_mod.F90)'
       RC = CC_FAILURE
-
+      write(*,*) 'in GEOS12 BEGIN: '
       nbins = size(SeaSaltState%EffectiveRadius)
       ALLOCATE(EmissionBin(nbins), STAT=RC)
       if (RC /= CC_SUCCESS) then
@@ -91,6 +96,7 @@ contains
       SeaSaltState%EmissionPerSpecies = ZERO
       MassEmissions = ZERO
       NumberEmissions = ZERO
+      gweibull = ONE
       !--------------------------------------------------------------------
       ! Don't do Sea Salt over certain criteria
       !--------------------------------------------------------------------
@@ -98,42 +104,41 @@ contains
 
       ! Don't do Sea Salt over land
       !----------------------------------------------------------------
-      if (MetState%IsLand) then
-         do_seasalt = .false.
+      scale = MetState%FROCEAN - MetState%FRSEAICE
+
+      if (scale .eq. 0) then
+         do_seasalt = .False.
       endif
-      write(*,*) 'do_seasalt', do_seasalt
-      if (MetState%IsIce) then
-         do_seasalt = .false.
-      endif
-      write(*,*) 'do_seasalt', do_seasalt
-      if (MetState%IsSnow) then
-         do_seasalt = .false.
-      endif
-      write(*,*) 'do_seasalt', do_seasalt
+
       if (do_seasalt) then
 
-         write(*,*) 'HERE'
-         ! Gong 03 Params
+         ! GEOS 12 Params
          !---------------
          scalefac = 33.0e3_fp
          rpow     = 3.45_fp
          exppow   = 1.607_fp
          wpow     = 3.41_fp - 1._fp
 
+         ! Get Jeagle SST Correction
+         call jeagleSSTcorrection(fsstemis, MetState%SST,1, RC)
+         scale = scale * fsstemis * SeaSaltState%SeaSaltScaleFactor
+
+         ustar = MetState%USTAR
+
          do n = 1, nbins
 
             ! delta dry radius
             !-----------------
-            DeltaDryRadius = (SeaSaltState%UpperBinRadius(n) - SeaSaltState%LowerBinRadius(n) ) * 1.0e6 / nr ! convert to microns from meters
+            DeltaDryRadius = (SeaSaltState%UpperBinRadius(n) - SeaSaltState%LowerBinRadius(n) ) / nr
 
             ! Dry Radius Substep
             !-------------------
-            DryRadius = SeaSaltState%LowerBinRadius(n)*1.0e6 + 0.5 * DeltaDryRadius ! convert to microns from meters
+            DryRadius = SeaSaltState%LowerBinRadius(n) + 0.5 * DeltaDryRadius
+
+            ! Mass scale fcator
+            MassScaleFac = scalefac * 4._fp/3._fp*PI*SeaSaltState%SeaSaltDensity(n)*(DryRadius**3._fp) * 1.e-18_fp
 
             do ir = 1, nr ! SubSteps
-
-               ! Mass scale fcator
-               MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
 
                ! Effective Wet Radius in Sub Step
                rwet  = r80fac * DryRadius
@@ -145,19 +150,21 @@ contains
                bFac     = (0.380_fp-log10(rwet))/0.65_fp
 
                ! Number emissions flux (# m-2 s-1)
-               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, MetState%USTAR, scalefac, &
-                  aFac, bFac, rpow, exppow, wpow )
+               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, ustar, scalefac, aFac, &
+                  bFac, rpow, exppow, wpow )
 
                ! Mass emissions flux (kg m-2 s-1)
-               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, MetState%USTAR, MassScaleFac, &
+               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, ustar, MassScaleFac, &
                   aFac, bFac, rpow, exppow, wpow )
 
                DryRadius = DryRadius + DeltaDryRadius
 
             enddo
-
-            SeaSaltState%EmissionPerSpecies(n) = MassEmissions * 1.0e9_fp
-            SeaSaltState%NumberEmissionBin(n) = NumberEmissions
+            write(*,*) 'MassEmissions = ', MassEmissions
+            write(*,*) 'Scale = ', scale
+            write(*,*) 'fsstemis = ', fsstemis
+            SeaSaltState%EmissionPerSpecies(n) = MassEmissions * scale * 1.0e9_fp ! convert to kg m-2 s-1 from ug m-2 s-1
+            SeaSaltState%NumberEmissionBin(n) = NumberEmissions * scale
 
             MassEmissions = ZERO
             NumberEmissions = ZERO
@@ -169,7 +176,7 @@ contains
          SeaSaltState%TotalNumberEmission = sum(SeaSaltState%NumberEmissionBin)
 
       endif ! do_Sea Salt
-
+      write(*,*) 'in GEOS12: '
       RC = CC_SUCCESS
    end subroutine CCPr_Scheme_GEOS12
 

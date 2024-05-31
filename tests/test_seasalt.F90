@@ -57,7 +57,11 @@ program test_dust
       stop 1
    endif
    title = 'SeaSalt Test 1 | Read Config'
-   ! call print_info(Config, SeaSaltState, MetState, title)
+   write(*,*) 'title = ', title
+   write(*,*) 'Config%seasalt_activate = ', Config%seasalt_activate
+   write(*,*) 'Config%seasalt_scheme = ', Config%seasalt_scheme
+   write(*,*) 'Config%seasalt_scalefactor = ', Config%seasalt_scalefactor
+   write(*,*) 'Config%seasalt_weibull = ', Config%seasalt_weibull
 
 
    !----------------------------
@@ -67,17 +71,18 @@ program test_dust
    ChemState%nSpeciesSeaSalt = 0
 
    ! Meteorological State
-   MetState%IsLand = .False.
-   MetState%IsIce = .False.
-   MetState%IsSnow = .False.
-   MetState%U10M = 10.0_fp
-   MetState%V10M = 10.0_fp
-   MetState%USTAR = 5.0_fp
-   MetState%USTAR_THRESHOLD = 0.1_fp
+   MetState%SST=300.0_fp
+   MetState%FROCEAN = 1.0_fp
+   MetState%FRSEAICE = 0.0_fp
+   MetState%U10M = 20.0_fp
+   MetState%V10M = 20.0_fp
+   MetState%USTAR = 10.0_fp
    allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
    title = "SeaSalt Test 2 | Test GEOS12 defaults"
+   Config%seasalt_activate = .TRUE.
+
    SeaSaltState%SchemeOpt=3
 
    call CCPr_SeaSalt_Init(Config, SeaSaltState, ChemState, rc)
@@ -95,8 +100,40 @@ program test_dust
    end if
 
    call print_info(Config, SeaSaltState, MetState, title)
-   call assert(DiagState%sea_salt_total_flux > 50.0_fp, "Test Fengsha SeaSalt Scheme")
+   call assert(SeaSaltState%TotalEmission > 0.0_fp, "Test GEOS12 SeaSalt Scheme")
+   SeaSaltState%TotalEmission = 0.0_fp
+   !-------------------------
+   ! Test Gong03 Scheme
+   !-------------------------
+   title = "SeaSalt Test 2 | Test Gong03"
+   SeaSaltState%SchemeOpt=1
 
+   call CCPr_SeaSalt_Run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   if (rc /= CC_SUCCESS) then
+      ErrMsg = 'Error in CCPr_SeaSalt_Run'
+      call CC_Error( ErrMsg, rc, thisLoc )
+      stop 1
+   end if
+
+   call print_info(Config, SeaSaltState, MetState, title)
+   call assert(SeaSaltState%TotalEmission > 0.0_fp, "Test GEOS12 SeaSalt Scheme")
+   SeaSaltState%TotalEmission = 0.0_fp
+   !-------------------------
+   ! Test Gong03 Scheme
+   !-------------------------
+   title = "SeaSalt Test 3 | Test Gong97"
+   SeaSaltState%SchemeOpt=2
+
+   call CCPr_SeaSalt_Run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   if (rc /= CC_SUCCESS) then
+      ErrMsg = 'Error in CCPr_SeaSalt_Run'
+      call CC_Error( ErrMsg, rc, thisLoc )
+      stop 1
+   end if
+
+   call print_info(Config, SeaSaltState, MetState, title)
+   call assert(SeaSaltState%TotalEmission > 0.0_fp, "Test Gong97 SeaSalt Scheme")
+   SeaSaltState%TotalEmission = 0.0_fp
 contains
 
    subroutine print_info(Config_, SeaSaltState_, MetState_, title_)
@@ -114,9 +151,8 @@ contains
       write(*,*) 'SeaSaltState%activate = ', SeaSaltState_%activate
       write(*,*) 'SeaSaltState%SchemeOpt = ', SeaSaltState_%SchemeOpt
       write(*,*) 'SeaSaltState%SeaSaltScaleFactor = ', SeaSaltState_%SeaSaltScaleFactor
-      write(*,*) 'MetState%IsLand = ', MetState_%IsLand
-      write(*,*) 'MetState%IsIce = ', MetState_%IsIce
-      write(*,*) 'MetState%IsSnow = ', MetState_%IsSnow
+      write(*,*) 'MetState%FROCEAN = ', MetState_%FROCEAN
+      write(*,*) 'MetState%FRSEAICE = ', MetState_%FRSEAICE
       write(*,*) 'MetState%U10M =', MetState_%U10M
       write(*,*) 'MetState%V10M =', MetState_%V10M
       write(*,*) 'MetState%USTAR =', MetState_%USTAR

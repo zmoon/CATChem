@@ -54,21 +54,21 @@ CONTAINS
          2200., &
          2200., &
          2200. /)
-      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultEffectiveRadius = (/ 0.079e-6, &
-         0.316e-6, &
-         1.119e-6, &
-         2.818e-6, &
-         7.772e-6 /)
-      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultLowerBinRadius  = (/ 0.03e-6, &
-         0.1e-6,  &
-         0.5e-6,  &
-         1.5e-6,  &
-         5.0e-6  /)
-      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultUpperBinRadius  = (/ 0.1e-6, &
-         0.5e-6, &
-         1.5e-6, &
-         5.0e-6, &
-         10.0e-6 /)
+      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultEffectiveRadius = (/ 0.079, &
+         0.316, &
+         1.119, &
+         2.818, &
+         7.772 /)
+      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultLowerBinRadius  = (/ 0.03, &
+         0.1,  &
+         0.5,  &
+         1.5,  &
+         5.0  /)
+      REAL(fp), DIMENSION(nSeaSaltBinsDefault), Parameter :: DefaultUpperBinRadius  = (/ 0.1, &
+         0.5, &
+         1.5, &
+         5.0, &
+         10. /)
 
       INTEGER :: k ! Loop Counter
 
@@ -87,7 +87,7 @@ CONTAINS
       if (Config%seasalt_activate) then
 
          ! Activate SeaSalt Process
-         !----------------------
+         !-------------------------
          SeaSaltState%Activate = .true.
 
          ! Set number of seasalt species
@@ -110,6 +110,12 @@ CONTAINS
          else
             SeaSaltState%SeaSaltScaleFactor = Config%seasalt_scalefactor
          endif
+
+         ! Set Weibull Distribution flag following Fan and Toon 2011 | Default = .true.
+         SeaSaltState%WeibullFlag = Config%seasalt_weibull
+
+         ! Set Hoppel Correction flag following Fan and Toon 2011 | Default = .true.
+         SeaSaltState%HoppelFlag = Config%seasalt_hoppel
 
          if (SeaSaltState%nSeaSaltSpecies == 0) then
 
@@ -168,7 +174,10 @@ CONTAINS
          endif
 
       else
-
+         SeaSaltState%TotalEmission = ZERO
+         SeaSaltState%TotalNumberEmission = ZERO
+         SeaSaltState%SeaSaltScaleFactor = ZERO
+         SeaSaltState%SchemeOpt = 3
          SeaSaltState%Activate = .false.
 
       endif
@@ -223,19 +232,19 @@ CONTAINS
 
          ! Run the SeaSalt Scheme
          !--------------------
-         if (SeaSaltState%SchemeOpt == 1) then ! FENGSHA
+         if (SeaSaltState%SchemeOpt == 1) then ! Gong2003
             call CCPr_Scheme_Gong03( MetState, DiagState, SeaSaltState, RC )
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in CCPr_Scheme_Gong03'
                CALL CC_Error( errMsg, RC, thisLoc )
             endif
-         else if (SeaSaltState%SchemeOpt == 2) then ! GINOUX
+         else if (SeaSaltState%SchemeOpt == 2) then ! Gong1997
             call CCPr_Scheme_Gong97( MetState, DiagState, SeaSaltState, RC )
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in CCPr_Scheme_Gong97'
                CALL CC_Error( errMsg, RC, thisLoc )
             endif
-         else if (SeaSaltState%SchemeOpt == 3) then ! GINOUX
+         else if (SeaSaltState%SchemeOpt == 3) then ! GEOS2012
             call CCPr_Scheme_GEOS12( MetState, DiagState, SeaSaltState, RC )
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in CCPr_Scheme_GEOS12'

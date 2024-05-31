@@ -30,7 +30,7 @@ contains
 
       ! Uses
       Use CCPr_SeaSalt_Common_Mod
-      use precision_mod, only : fp, ZERO
+      use precision_mod, only : fp, ZERO, ONE, f8
       use constants,     only : PI
       Use MetState_Mod,  Only : MetStateType
       Use DiagState_Mod, Only : DiagStateType
@@ -51,7 +51,7 @@ contains
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
       integer :: n, ir                                 !< loop couters
       integer :: nbins                                 !< number of SeaSalt bins
-      real(fp) :: w10m                                 !< 10m wind speed [m/s]
+      real(f8) :: w10m                                 !< 10m wind speed [m/s]
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
       real(fp), allocatable :: NumberEmissionBin(:)    !< Number of particles emitted per bin [#/m2/s]
       integer, parameter :: nr = 10                    !< Number of (linear) sub-size bins
@@ -68,6 +68,10 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
+      real(fp) :: gweibull
+      real(fp) :: fsstemis
+      real(fp) :: fhoppel
+      real(fp) :: scale
 
       ! Initialize
       errMsg = ''
@@ -92,6 +96,9 @@ contains
       SeaSaltState%EmissionPerSpecies = ZERO
       MassEmissions = ZERO
       NumberEmissions = ZERO
+      gweibull = ONE
+      fsstemis = ONE
+      fhoppel = ONE
       !--------------------------------------------------------------------
       ! Don't do Sea Salt over certain criteria
       !--------------------------------------------------------------------
@@ -99,16 +106,9 @@ contains
 
       ! Don't do Sea Salt over land
       !----------------------------------------------------------------
-      if (MetState%IsLand) then
-         do_seasalt = .false.
-      endif
-
-      if (MetState%IsIce) then
-         do_seasalt = .false.
-      endif
-
-      if (MetState%IsSnow) then
-         do_seasalt = .false.
+      scale = MetState%FROCEAN - MetState%FRSEAICE
+      if (scale .eq. 0) then
+         do_seasalt = .False.
       endif
 
       if (do_seasalt) then
@@ -119,16 +119,25 @@ contains
 
          ! Gong 03 Params
          !---------------
-         scalefac = 1.
-         rpow     = 3.45
-         exppow   = 1.607
-         wpow     = 3.41
+         scalefac = 1._fp
+         rpow     = 3.45_fp
+         exppow   = 1.607_fp
+         wpow     = 3.41_fp
+
+         ! Weibull Distibution following Fan and Toon 2011 if SeaSaltState%WeibullFlag
+         !----------------------------------------------------------------------------
+         call weibullDistribution(gweibull, SeaSaltState%WeibullFlag, w10m, RC)
+
+         ! Get Jeagle SST Correction
+         call jeagleSSTcorrection(fsstemis, MetState%SST,1, RC)
+
+         scale = scale * gweibull * fsstemis * SeaSaltState%SeaSaltScaleFactor
 
          do n = 1, nbins
 
             ! delta dry radius
             !-----------------
-            DeltaDryRadius = (SeaSaltState%UpperBinRadius(n) - SeaSaltState%LowerBinRadius(n) ) / nr
+            DeltaDryRadius = (SeaSaltState%UpperBinRadius(n) - SeaSaltState%LowerBinRadius(n) )/ nr
 
             ! Dry Radius Substep
             !-------------------
@@ -137,7 +146,7 @@ contains
             do ir = 1, nr ! SubSteps
 
                ! Mass scale fcator
-               MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
+               MassScaleFac = scalefac * 4._fp/3._fp*PI*SeaSaltState%SeaSaltDensity(n)*(DryRadius**3._fp) * 1.e-18_fp
 
                ! Effective Wet Radius in Sub Step
                rwet  = r80fac * DryRadius
@@ -160,8 +169,8 @@ contains
 
             enddo
 
-            SeaSaltState%EmissionPerSpecies(n) = MassEmissions
-            SeaSaltState%NumberEmissionBin(n) = NumberEmissions
+            SeaSaltState%EmissionPerSpecies(n) = MassEmissions * scale * 1.0e9_fp ! Convert to kg/m2/s from ug/m2/s
+            SeaSaltState%NumberEmissionBin(n) = NumberEmissions * scale
 
             MassEmissions = ZERO
             NumberEmissions = ZERO
