@@ -160,9 +160,7 @@ contains
                DryRadius = DryRadius + DeltaDryRadius
 
             enddo
-            write(*,*) 'MassEmissions = ', MassEmissions
-            write(*,*) 'Scale = ', scale
-            write(*,*) 'fsstemis = ', fsstemis
+
             SeaSaltState%EmissionPerSpecies(n) = MassEmissions * scale * 1.0e9_fp ! convert to kg m-2 s-1 from ug m-2 s-1
             SeaSaltState%NumberEmissionBin(n) = NumberEmissions * scale
 
@@ -176,8 +174,9 @@ contains
          SeaSaltState%TotalNumberEmission = sum(SeaSaltState%NumberEmissionBin)
 
       endif ! do_Sea Salt
-      write(*,*) 'in GEOS12: '
+
       RC = CC_SUCCESS
+
    end subroutine CCPr_Scheme_GEOS12
 
 end module CCPr_Scheme_GEOS12_Mod
