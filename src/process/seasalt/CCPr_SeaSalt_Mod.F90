@@ -91,16 +91,25 @@ CONTAINS
          SeaSaltState%Activate = .true.
 
          ! Set number of seasalt species
-         !---------------------------
+         !------------------------------
          SeaSaltState%nSeaSaltSpecies = ChemState%nSpeciesSeaSalt
 
-         ! Set Scheme Options
-         !-------------------
+         ! Set Scheme Options | Default GEOS 2012 scheme
+         !----------------------------------------------
+         if (Config%seasalt_scheme < 0) then
+            SeaSaltState%SeaSaltScaleFactor = 3
+         else
+            SeaSaltState%SeaSaltScaleFactor = Config%seasalt_scheme
+         endif
          SeaSaltState%SchemeOpt = Config%seasalt_scheme
 
          ! Set Tuning Scale Factor | Default = 1 if not set
          !-------------------------------------------------
-         SeaSaltState%SeaSaltScaleFactor = Config%seasalt_scalefactor
+         if (Config%seasalt_scalefactor < 0) then
+            SeaSaltState%SeaSaltScaleFactor = 1
+         else
+            SeaSaltState%SeaSaltScaleFactor = Config%seasalt_scalefactor
+         endif
 
          if (SeaSaltState%nSeaSaltSpecies == 0) then
 
@@ -179,7 +188,9 @@ CONTAINS
    SUBROUTINE CCPr_SeaSalt_Run( MetState, DiagState, SeaSaltState, ChemState, RC )
 
       ! USE
-      USE CCPr_Scheme_Gong03_mod,  ONLY: CCPr_Scheme_Gong03   ! Ginoux SeaSalt Scheme
+      USE CCPr_Scheme_Gong03_mod,  ONLY: CCPr_Scheme_Gong03   !< Gong2003 SeaSalt Scheme
+      USE CCPr_Scheme_Gong97_mod,  ONLY: CCPr_Scheme_Gong97   !< Gong1997 SeaSalt Scheme
+      USE CCPr_Scheme_GEOS12_mod,  ONLY: CCPr_Scheme_GEOS12   !< Gong1997 SeaSalt Scheme
 
       IMPLICIT NONE
 
@@ -218,14 +229,23 @@ CONTAINS
                errMsg = 'Error in CCPr_Scheme_Gong03'
                CALL CC_Error( errMsg, RC, thisLoc )
             endif
-            !   else if (SeaSaltState%SchemeOpt == 2) then ! GINOUX
-            !      call CCPr_Scheme_Ginoux( MetState, DiagState, SeaSaltState, RC )
-            !      if (RC /= CC_SUCCESS) then
-            !         errMsg = 'Error in CCPr_Scheme_Ginoux'
-            !         CALL CC_Error( errMsg, RC, thisLoc )
-            !      endif
+         else if (SeaSaltState%SchemeOpt == 2) then ! GINOUX
+            call CCPr_Scheme_Gong97( MetState, DiagState, SeaSaltState, RC )
+            if (RC /= CC_SUCCESS) then
+               errMsg = 'Error in CCPr_Scheme_Gong97'
+               CALL CC_Error( errMsg, RC, thisLoc )
+            endif
+         else if (SeaSaltState%SchemeOpt == 3) then ! GINOUX
+            call CCPr_Scheme_GEOS12( MetState, DiagState, SeaSaltState, RC )
+            if (RC /= CC_SUCCESS) then
+               errMsg = 'Error in CCPr_Scheme_GEOS12'
+               CALL CC_Error( errMsg, RC, thisLoc )
+            endif
          else
-            write(*,*) 'ERROR: Unknown seasalt scheme option'
+            errMsg =  'ERROR: Unknown seasalt scheme option'
+            RC = CC_FAILURE
+            CALL CC_Error( errMsg, RC, thisLoc )
+            return
          endif
       endif
 

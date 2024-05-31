@@ -8,7 +8,7 @@
 !! \author Barry baker
 !! \date 05/2024
 !!!>
-module CCPr_Scheme_Gong03_Mod
+module CCPr_Scheme_Gong97_Mod
 
    implicit none
 
@@ -134,10 +134,10 @@ contains
             !-------------------
             DryRadius = SeaSaltState%LowerBinRadius(n) + 0.5 * DeltaDryRadius
 
-            ! Mass scale fcator
-            MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
-
             do ir = 1, nr ! SubSteps
+
+               ! Mass scale fcator
+               MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
 
                ! Effective Wet Radius in Sub Step
                rwet  = r80fac * DryRadius
@@ -149,10 +149,12 @@ contains
                bFac     = (0.380_fp-log10(rwet))/0.65_fp
 
                ! Number emissions flux (# m-2 s-1)
-               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
+               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, &
+                  aFac, bFac, rpow, exppow, wpow )
 
                ! Mass emissions flux (kg m-2 s-1)
-               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, aFac, bFac, rpow, exppow, wpow )
+               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, &
+                  aFac, bFac, rpow, exppow, wpow )
 
                ! sub radius incriments
                DryRadius = DryRadius + DeltaDryRadius

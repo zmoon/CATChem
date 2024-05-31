@@ -92,4 +92,56 @@ contains
 
    end function SeasaltEmissionGong
 
+   !>
+   !! \brief Jeagle et al. 2012 SST correction
+   !!
+   !! Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.:
+   !! Global distribution of sea salt aerosols: new constraints from in situ and remote
+   !! sensing observations, Atmos. Chem. Phys., 11, 3137–3157,
+   !! https://doi.org/10.5194/acp-11-3137-2011, 2011.
+   !!
+   !!
+   !!!>
+   subroutine jeagleSSTcorrection(fsstemis, sst, rc)
+
+      ! !USES:
+      implicit NONE
+
+      ! !INPUT/OUTPUT PARAMETERS:
+      real, dimension(:,:), intent(inout) :: fsstemis     !
+      real(fp), intent(in)  :: sst  ! surface temperature (K)
+
+      ! !OUTPUT PARAMETERS:
+      integer, optional, intent(out) :: rc
+      !EOP
+
+      ! !Local Variables
+      real, allocatable, dimension(:,:) :: tskin_c
+      !EOP
+      !-------------------------------------------------------------------------
+      !  Begin...
+
+      fsstemis = 1.0_fp
+
+      fsstemis = ZERO
+      tskin_c  = sst - 273.15
+
+      ! temperature range (0, 36) C
+      tskin_c = max(-0.1_fp, Tskin_c)
+      tskin_c = min(36.0, tskin_c)
+
+      fsstemis = (-1.107211_fp -0.010681_fp * tskin_c -0.002276_fp * tskin_c**2.0_fp &
+         + 60.288927_fp*1.0_fp/(40.0_fp - tskin_c))
+      fsstemis = max(0.0_fp, fsstemis)
+      fsstemis = min(7.0_fp, fsstemis)
+      where(fsstemis < 0.0) fsstemis = 0.0
+      where(fsstemis > 7.0) fsstemis = 7.0
+
+      deallocate( tskin_c )
+   end if
+
+   __RETURN__(__SUCCESS__)
+end subroutine jeagleSSTcorrection
+
+
 end module CCPr_SeaSalt_Common_Mod

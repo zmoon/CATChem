@@ -68,7 +68,6 @@ contains
       real(fp) :: exppow
       real(fp) :: wpow
       real(fp) :: MassScaleFac
-      real(fp) :: tmp
 
       ! Initialize
       errMsg = ''
@@ -135,10 +134,10 @@ contains
             !-------------------
             DryRadius = SeaSaltState%LowerBinRadius(n) + 0.5 * DeltaDryRadius
 
-            ! Mass scale fcator
-            MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
-
             do ir = 1, nr ! SubSteps
+
+               ! Mass scale fcator
+               MassScaleFac = scalefac * 4._fp/3._fp*PI*MetState%AIRDEN(1)*(DryRadius**3._fp) * 1.e-18_fp
 
                ! Effective Wet Radius in Sub Step
                rwet  = r80fac * DryRadius
@@ -150,12 +149,12 @@ contains
                bFac = (0.433_fp-log10(rwet))/0.433_fp
 
                ! Number emissions flux (# m-2 s-1)
-               tmp = SeasaltEmissionGong( rwet, drwet, w10m, scalefac, aFac, bFac, rpow, exppow, wpow )
-               NumberEmissions = NumberEmissions + tmp
+               NumberEmissions = NumberEmissions + SeasaltEmissionGong( rwet, drwet, w10m, scalefac, &
+                  aFac, bFac, rpow, exppow, wpow )
 
                ! Mass emissions flux (kg m-2 s-1)
-               tmp = SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, aFac, bFac, rpow, exppow, wpow )
-               MassEmissions = MassEmissions + tmp
+               MassEmissions = MassEmissions + SeasaltEmissionGong( rwet, drwet, w10m, MassScaleFac, &
+                  aFac, bFac, rpow, exppow, wpow )
 
                DryRadius = DryRadius + DeltaDryRadius
 
