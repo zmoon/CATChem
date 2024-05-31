@@ -2,7 +2,9 @@
 !! \file
 !! \brief Contains the Ginoux windblown dust emission scheme
 !!
-!! Reference here:
+!! Ginoux, P., “Sources and distributions of dust aerosols simulated with the GOCART model”,
+!! <Journal of Geophysical Research, vol. 106, no. D17, pp. 20, 255–20, 273, 2001.
+!! doi:10.1029/2000JD000053.
 !!
 !! \author Barry baker
 !! \date 05/2024
@@ -82,13 +84,13 @@ contains
 
       ! Check for valid inputs from SSM and RDRAG
       !------------------------------------------
-      if (MetState%SSM < 0.15 .or. MetState%SSM > 1) then
+      if (MetState%SSM < 0.15_fp .or. MetState%SSM > 1.0_fp) then
          do_dust = .false.
       endif
 
       ! Don't do dust over frozen soil
       !--------------------------------
-      if (MetState%TSKIN <= 273.15) then
+      if (MetState%TSKIN <= 273.15_fp) then
          do_dust = .false.
       endif
 
@@ -105,10 +107,10 @@ contains
             ! get 10m mean wind speed
             w10m = sqrt(MetState%U10M ** 2 + MetState%V10M ** 2)
 
-            if (MetState%GWETTOP .lt. 0.5) then
+            if (MetState%GWETTOP .lt. 0.5_fp) then
 
                ! add the moisture correction following Ginoux et al. (2001)
-               u_thresh = amax1(0., u_thresh0 * (1.2 + 0.2*alog10(max(1.e-3, MetState%GWETTOP))) )
+               u_thresh = amax1(0., u_thresh0 * (1.2_fp + 0.2_fp*alog10(max(1.e-3_fp, MetState%GWETTOP))) )
 
                if (w10m .gt. u_thresh) then
                   EmissionBin(n) = ginoux_scaling * w10m ** 2 * max(0.,(w10m - u_thresh) )
