@@ -33,7 +33,7 @@ program test_dust
    CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
 
    ! set thisLoc
-   thisLoc = 'test_dust -> at read CATChem_Conifg.yml'
+   thisLoc = 'test_dust -> at read CATChem_Config.yml'
    errMsg = ''
    RC = CC_SUCCESS
 

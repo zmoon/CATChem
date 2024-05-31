@@ -554,7 +554,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%seasalt_activate = v_bool
+      Config%seasalt_weibull = v_bool
 
 
       key   = "process%seasalt%scheme_opt"
@@ -566,7 +566,7 @@ CONTAINS
       ENDIF
       Config%seasalt_scheme = v_int
 
-      key = 'process%seasalt%seasalt_scalefactor'
+      key = 'process%seasalt%scale_factor'
       v_real = MISSING_REAL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
