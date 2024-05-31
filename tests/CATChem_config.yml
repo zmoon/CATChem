@@ -19,8 +19,6 @@ simulation:
 # Grid settings
 #============================================================================
 grid:
-  nx: 10
-  ny: 10
   number_of_levels: 28
 
 #============================================================================
@@ -36,7 +34,16 @@ timesteps:
 process:
   dust:
     activate: true
-    scheme: 1
+    scheme_opt: 1
+    dust_drag_opt: 1
+    dust_moist_opt: 1
+    dust_horizflux_opt: 1
+    dust_alpha: 1.0
+    dust_beta: 1.0
+  seasalt:
+    activate: true
+    scheme_opt: 3
+    scale_factor: 1.0
 
 #============================================================================
 # Settings for CATChem operations
