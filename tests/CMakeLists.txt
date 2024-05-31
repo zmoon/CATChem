@@ -29,7 +29,7 @@ add_test(
   COMMAND test_dust
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(test_seasalt test_seasalt.f90)
+add_executable(test_seasalt test_seasalt.F90)
 target_link_libraries(test_seasalt PRIVATE CATChem_core)
 target_link_libraries(test_seasalt PRIVATE CATChem_process_seasalt)
 target_link_libraries(test_seasalt PRIVATE testing)
