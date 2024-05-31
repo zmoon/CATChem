@@ -123,18 +123,18 @@ CONTAINS
       ! !========================================================================
       ! ! Config processes
       ! !========================================================================
-      call Config_Process_Dust(ConfigInput, Config, RC)
+      call Config_Process_SeaSalt(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error in "Config_Process_Dust"!'
+         errMsg = 'Error in "Config_Process_SeaSalt"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
          CALL QFYAML_CleanUp( ConfigInput         )
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       ENDIF
 
-      call Config_Process_SeaSalt(ConfigInput, Config, RC)
+      call Config_Process_Dust(ConfigInput, Config, RC)
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error in "Config_Process_SeaSalt"!'
+         errMsg = 'Error in "Config_Process_Dust"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
          CALL QFYAML_CleanUp( ConfigInput         )
          CALL QFYAML_CleanUp( ConfigAnchored )
@@ -230,23 +230,23 @@ CONTAINS
       !========================================================================
       ! Print to screen
       !========================================================================
-      IF ( Config%amIRoot ) THEN
-         WRITE( 6, 90  ) 'SIMULATION SETTINGS'
-         WRITE( 6, 95  ) '-------------------'
-         WRITE( 6, 110 ) 'Simulation name             : ',                     &
-            TRIM( Config%SimulationName )
-         WRITE( 6, 120 ) 'Turn on verbose output      : ',                     &
-            Config%Verbose
-         WRITE( 6, 110 ) 'Verbose output printed on   : ',                     &
-            TRIM( verboseMsg )
-      ENDIF
+!       IF ( Config%amIRoot ) THEN
+!          WRITE( 6, 90  ) 'SIMULATION SETTINGS'
+!          WRITE( 6, 95  ) '-------------------'
+!          WRITE( 6, 110 ) 'Simulation name             : ',                     &
+!             TRIM( Config%SimulationName )
+!          WRITE( 6, 120 ) 'Turn on verbose output      : ',                     &
+!             Config%Verbose
+!          WRITE( 6, 110 ) 'Verbose output printed on   : ',                     &
+!             TRIM( verboseMsg )
+!       ENDIF
 
-      ! Format statements
-90    FORMAT( /, A              )
-95    FORMAT( A                 )
-100   FORMAT( A, I8.8, 1X, I6.6 )
-110   FORMAT( A, A              )
-120   FORMAT( A, L5             )
+!       ! Format statements
+! 90    FORMAT( /, A              )
+! 95    FORMAT( A                 )
+! 100   FORMAT( A, I8.8, 1X, I6.6 )
+! 110   FORMAT( A, A              )
+! 120   FORMAT( A, L5             )
 
    END SUBROUTINE Config_Simulation
 
@@ -467,6 +467,16 @@ CONTAINS
          errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
       ENDIF
       Config%dust_beta = v_real
+      write(*,*) "Dust Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%dust%activate = ', Config%dust_activate
+      write(*,*) 'Config%dust%scheme_opt = ', Config%dust_scheme
+      write(*,*) 'Config%dust%dust_drag_opt = ', Config%dust_drag_opt
+      write(*,*) 'Config%dust%dust_moist_opt = ', Config%dust_moist_opt
+      write(*,*) 'Config%dust%dust_horizflux_opt = ', Config%dust_horizflux_opt
+      write(*,*) 'Config%dust%dust_alpha = ', Config%dust_alpha
+      write(*,*) 'Config%dust%dust_beta = ', Config%dust_beta
+      write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_Dust
 
@@ -564,6 +574,14 @@ CONTAINS
       ENDIF
       ! write(*,*) v_real
       Config%seasalt_scalefactor = v_real
+
+      write(*,*) "SeaSalt Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%seasalt_activate = ', Config%seasalt_activate
+      write(*,*) 'Config%seasalt_scheme = ', Config%seasalt_scheme
+      write(*,*) 'Config%seasalt_weibull = ', Config%seasalt_weibull
+      write(*,*) 'Config%seasalt_scalefactor = ', Config%seasalt_scalefactor
+      write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_SeaSalt
 
