@@ -80,11 +80,13 @@ MODULE Config_Opt_Mod
       real(fp)                    :: dust_alpha
       real(fp)                    :: dust_beta
 
-
       ! SeaSalt Process
       LOGICAL                     :: seasalt_activate
+      LOGICAL                     :: seasalt_weibull
+      LOGICAL                     :: seasalt_hoppel
       INTEGER                     :: seasalt_scheme
       real(fp)                    :: seasalt_scalefactor
+
 
 
    END TYPE ConfigType

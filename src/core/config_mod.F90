@@ -525,7 +525,7 @@ CONTAINS
       RC      = CC_SUCCESS
       thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
       errMsg = ''
-
+      ! TODO #105 Fix reading of config file
       key   = "process%seasalt%activate"
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
@@ -535,6 +535,17 @@ CONTAINS
          RETURN
       ENDIF
       Config%seasalt_activate = v_bool
+
+      key   = "process%seasalt%weibull"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%seasalt_activate = v_bool
+
 
       key   = "process%seasalt%scheme_opt"
       v_int = MISSING_INT
