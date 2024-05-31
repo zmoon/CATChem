@@ -80,27 +80,51 @@ CONTAINS
 
          ! Set Scheme Options
          !-------------------
-         duststate%SchemeOpt = Config%dust_scheme
+         if (Config%dust_scheme < 0) then ! not listed in config
+            DustState%SchemeOpt = 1
+         else
+            duststate%SchemeOpt = Config%dust_scheme
+         endif
 
          ! Set Drag Calculation Option
          !----------------------------
-         DustState%DragOpt = Config%dust_drag_opt
+         if (Config%dust_drag_opt < 0) then ! not listed in config
+            DustState%DragOpt = 1
+         else
+            duststate%DragOpt = Config%dust_drag_opt
+         endif
 
          ! Set Moisture Calculation Option
          !--------------------------------
-         DustState%MoistOpt = Config%dust_moist_opt
+         if (Config%dust_moist_opt < 0) then ! not listed in config
+            DustState%MoistOpt = 1
+         else
+            duststate%MoistOpt = Config%dust_moist_opt
+         endif
 
          ! Set the Alpha Parameter
          !------------------------
-         DustState%AlphaScaleFactor = Config%dust_alpha
+         if (Config%dust_alpha < 0) then ! not listed in config
+            DustState%AlphaScaleFactor = 1.0_fp
+         else
+            duststate%AlphaScaleFactor = Config%dust_alpha
+         endif
 
          ! Set the beta scalefactor
          !-------------------------
-         DustState%BetaScaleFactor = Config%dust_beta
+         if (Config%dust_beta < 0) then ! not listed in config
+            DustState%BetaScaleFactor = 1.0_fp
+         else
+            duststate%BetaScaleFactor = Config%dust_beta
+         endif
 
          ! Set Horizontal Flux Calculation Option
          !---------------------------------------
-         DustState%HorizFluxOpt = Config%dust_horizflux_opt
+         if (Config%dust_horizflux_opt < 0) then ! not listed i n config
+            DustState%HorizFluxOpt = 1
+         else
+            duststate%HorizFluxOpt = Config%dust_horizflux_opt
+         endif
 
          if (DustState%nDustSpecies == 0) then
 
@@ -219,7 +243,10 @@ CONTAINS
                CALL CC_Error( errMsg, RC, thisLoc )
             endif
          else
-            write(*,*) 'ERROR: Unknown dust scheme option'
+            errMsg =  'ERROR: Unknown dust scheme option'
+            RC = CC_FAILURE
+            CALL CC_Error( errMsg, RC, thisLoc )
+            return
          endif
       endif
 

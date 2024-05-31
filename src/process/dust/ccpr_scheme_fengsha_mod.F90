@@ -61,7 +61,6 @@ contains
       real(fp) :: alpha_grav                           !< Alpha Parameter over Gravity
       real(fp) :: HorizFlux                            !< Horizontal Mass Flux
       real(fp) :: FengshaScaling                       !< Total Scaling Factor
-      real(fp) :: TotalFlux                            !< Total Mass Flux
 
       real(fp), parameter :: clay_thresh = 0.2
       real(fp), parameter :: kvhmax = 2.0e-4 ! Max. Vertical to Horizontal Mass Flux Ratio
@@ -80,7 +79,6 @@ contains
       SEP = ZERO
       H = ZERO
       EmissBins = ZERO
-      TotalFlux = ZERO
       DustState%TotalEmission = ZERO
 
       nbins = size(DustState%EffectiveRadius)
@@ -193,17 +191,17 @@ contains
          ! write(*,*) 'H = ', H
          ! write(*,*) 'u_ts = ', MetState%USTAR_THRESHOLD * H / R
 
-         TotalFlux = FengshaScaling * HorizFlux * h_to_v_ratio
+         DustState%TotalEmission = FengshaScaling * HorizFlux * h_to_v_ratio
 
          ! Fill Diagnostic TotalFlux
          !--------------------------
-         DiagState%dust_total_flux = TotalFlux
+         DiagState%dust_total_flux = DustState%TotalEmission
 
          ! Compute the Dust Concentration
          !-------------------------------
          if (DustState%nDustSpecies > 0) then
             do n = 1, DustState%nDustSpecies
-               EmissBins(n) = distribution(n) * TotalFlux
+               EmissBins(n) = distribution(n) * DustState%TotalEmission
             enddo
          endif
 
