@@ -29,7 +29,7 @@ program test_main
    write(*,*) ''
 
    ! Read input file and initialize grid
-   call CC_Read_Input_File(Config, GridState, RC)
+   call CC_Read_Config(Config, GridState, RC)
    if (RC /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call CC_Error( errMsg, RC , thisLoc)

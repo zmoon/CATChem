@@ -6,7 +6,7 @@ module CATChem_core
    !
    use Config_Opt_Mod, only: ConfigType
    !
-   use Config_Mod, only: CC_Read_Input_File => Read_Input_File
+   use Config_Mod, only: CC_Read_Config => Read_Input_File
    !
    use DiagState_Mod, only: DiagStateType
    !
