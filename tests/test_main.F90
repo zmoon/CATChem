@@ -3,10 +3,8 @@
 !!
 !!!>
 program test_main
-   USE init_mod
-   USE Error_Mod
-   Use State_Mod
-   USE Config_Mod
+   use CATChem_core
+   use state_mod  ! FIXME: declare states here or move to a driver
 
    IMPLICIT NONE
 
@@ -31,7 +29,7 @@ program test_main
    write(*,*) ''
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config, GridState, RC)
+   call CC_Read_Input_File(Config, GridState, RC)
    if (RC /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call CC_Error( errMsg, RC , thisLoc)
@@ -45,7 +43,7 @@ program test_main
    write(*,*) 'Number of grid levels = ', GridState%number_of_levels
 
    ! initialize met
-   call Init_Met(GridState, MetState, RC)
+   call CC_Init_Met(GridState, MetState, RC)
    if (RC /= CC_success) then
       errMsg = 'Error initializing meteorology'
       call CC_Error( errMsg, RC , thisLoc)

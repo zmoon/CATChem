@@ -1,13 +1,6 @@
 program test_dust
-   use precision_mod, only: fp
-   use Config_Opt_Mod, only: ConfigType
-   use ChemState_Mod, only: ChemStateType
-   use MetState_Mod, only: MetStateType
-   use DiagState_Mod, only: DiagStateType
-   use CCPr_Dust_Common_Mod, only: DustStateType
-   use CCPr_Scheme_Fengsha_Mod, only: CCPr_Scheme_Fengsha
-   use CCPr_Dust_mod, only: CCPr_Dust_Init, CCPr_Dust_Run, CCPr_Dust_Finalize
-   use Error_Mod, only: CC_Error, CC_SUCCESS
+   use CATChem_core, fp => CC_RK
+   use CATChem_process
    use testing_mod, only: assert
    implicit none
 
@@ -62,17 +55,17 @@ program test_dust
    title = "Dust Test 1"
    call print_info(Config, MetState, title)
 
-   call CCPr_Dust_Init(Config, DustState, ChemState, rc)
+   call CC_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Init'
+      ErrMsg = 'Error in CC_Dust_Init'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
    DustState%AlphaScaleFactor = 1.0_fp
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call CC_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
+      ErrMsg = 'Error in CC_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
@@ -84,9 +77,9 @@ program test_dust
 
    call print_info(Config, MetState, title)
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call CC_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
+      ErrMsg = 'Error in CC_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
@@ -103,9 +96,9 @@ program test_dust
 
    call print_info(Config, MetState, title)
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call CC_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
+      ErrMsg = 'Error in CC_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
@@ -113,9 +106,9 @@ program test_dust
    call assert(DiagState%dust_total_flux > 1000.0_fp, "Test different horizontal flux")
    write(*,*) 'Test 3 Success!!!!!'
 
-   call CCPr_Dust_Finalize(DustState, RC)
+   call CC_Dust_Finalize(DustState, RC)
    if (RC /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Finalize'
+      ErrMsg = 'Error in CC_Dust_Finalize'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    endif
@@ -131,16 +124,16 @@ program test_dust
 
    call print_info(Config, MetState, title)
 
-   call CCPr_Dust_Init(Config, DustState, ChemState, rc)
+   call CC_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Init'
+      ErrMsg = 'Error in CC_Dust_Init'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call CC_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
+      ErrMsg = 'Error in CC_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
