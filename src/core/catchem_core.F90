@@ -22,7 +22,8 @@ module CATChem_core
    use init_mod, only: CC_Init_Met => Init_Met
    !
    use MetState_Mod, only: MetStateType
-   use MetState_Mod
+   !
+   use precision_mod, only: CC_RK => fp
    !
    use species_mod, only: SpeciesType
    !
