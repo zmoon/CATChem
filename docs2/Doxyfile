@@ -5,11 +5,20 @@ PROJECT_LOGO = ../data/CATChem_logo_h55.png
 
 OPTIMIZE_FOR_FORTRAN = YES
 
+CREATE_SUBDIRS         = NO
+CREATE_SUBDIRS_LEVEL   = 8
+
+ALLOW_UNICODE_NAMES    = NO
+OUTPUT_LANGUAGE        = English
+BRIEF_MEMBER_DESC      = YES
+MARKDOWN_SUPPORT       = YES
+
 INPUT = start.md
 INPUT += ../src/core
 INPUT += ../src/process/dust
 USE_MDFILE_AS_MAINPAGE = start.md
-HTML_EXTRA_STYLESHEET = ../docs2/static/doxygen-awesome.css
+HTML_EXTRA_STYLESHEET = ../docs2/static/doxygen-awesome.css \
+						../docs2/static/doxygen-awesome-sidebar-only.css
 HTML_COLORSTYLE = LIGHT
 DISABLE_INDEX = NO
 GENERATE_TREEVIEW = YES
