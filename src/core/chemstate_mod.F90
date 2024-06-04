@@ -47,16 +47,16 @@ module ChemState_Mod
       !---------------------------------------------------------------------
       ! Integers
       !---------------------------------------------------------------------
-      INTEGER              :: nSpecies          ! Total Number of Species
-      INTEGER              :: nSpeciesGas       ! Number of Gas Species
-      INTEGER              :: nSpeciesAero      ! Number of Aerosol Species
-      INTEGER              :: nSpeciesDust      ! Number of Dust Species
-      INTEGER              :: nSpeciesSeaSalt   ! Number of SeaSalt Species
-      INTEGER, ALLOCATABLE :: SpeciesIndex(:)   ! Total Species Index
-      INTEGER, ALLOCATABLE :: AeroIndex(:)      ! Aerosol Species Index
-      INTEGER, ALLOCATABLE :: GasIndex(:)       ! Gas Species Index
-      INTEGER, ALLOCATABLE :: DustIndex(:)      ! Dust Species Index
-      INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   ! SeaSalt Species Index
+      INTEGER              :: nSpecies          !< Total Number of Species
+      INTEGER              :: nSpeciesGas       !< Number of Gas Species
+      INTEGER              :: nSpeciesAero      !< Number of Aerosol Species
+      INTEGER              :: nSpeciesDust      !< Number of Dust Species
+      INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
+      INTEGER, ALLOCATABLE :: SpeciesIndex(:)   !< Total Species Index
+      INTEGER, ALLOCATABLE :: AeroIndex(:)      !< Aerosol Species Index
+      INTEGER, ALLOCATABLE :: GasIndex(:)       !< Gas Species Index
+      INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
+      INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   !< SeaSalt Species Index
 
       !---------------------------------------------------------------------
       ! Reals
@@ -69,7 +69,7 @@ module ChemState_Mod
 CONTAINS
 
 
-   subroutine Chem_Allocate(Config, GridState, Species,ChemState, RC)
+   subroutine Chem_Allocate(Config, GridState, Species, ChemState, RC)
 
       ! USES
       USE Config_Opt_Mod, ONLY : ConfigType

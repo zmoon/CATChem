@@ -24,4 +24,18 @@ target_link_libraries(test_dust PRIVATE CATChem_process_dust)
 target_link_libraries(test_dust PRIVATE testing)
 set_target_properties(test_dust PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
-add_test(NAME test_ccpr_dust COMMAND test_dust)
+add_test(
+  NAME test_ccpr_dust
+  COMMAND test_dust
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(test_seasalt test_seasalt.F90)
+target_link_libraries(test_seasalt PRIVATE CATChem_core)
+target_link_libraries(test_seasalt PRIVATE CATChem_process_seasalt)
+target_link_libraries(test_seasalt PRIVATE testing)
+set_target_properties(test_seasalt PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+
+add_test(
+  NAME test_ccpr_seasalt
+  COMMAND test_seasalt
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
