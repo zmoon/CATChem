@@ -13,3 +13,5 @@ currently under development and more information will be provided soon.
 CATChem is currently under development. The code is public to
 encourage collaboration amongst the community. Do not publish results using
 CATChem without consulting the development team.
+
+[How To Add a New Process](how_to_add_process.md)
