@@ -49,9 +49,9 @@ module CCPr_SeaSalt_Common_Mod
       REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)      ! Upper bin radius        [m]
       REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)     ! Effective radius        [m]
       REAL(fp), ALLOCATABLE           :: SeaSaltDensity(:)      ! SeaSalt density         [kg/m^3]
-      REAL(fp), ALLOCATABLE           :: TotalEmission          ! Total emission          [kg/m^2/s]
-      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    ! Total Number Emitted   [#/m2/s]
-      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  ! Emission per species    [kg/m^2/s]
+      REAL(fp), ALLOCATABLE           :: TotalEmission          ! Total emission          [ug/m^2/s]
+      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    ! Total Number Emitted    [#/m2/s]
+      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  ! Emission per species    [ug/m^2/s]
       REAL(fp), ALLOCATABLE           :: NumberEmissionBin(:)   ! Particle Number emission per species [#/m^2/s]
       REAL(fp), ALLOCATABLE           :: SeaSaltScaleFactor     ! SeaSalt Tuning Parameter [-]
 

@@ -28,19 +28,20 @@ module CCPr_Dust_Common_Mod
    !! This type contains the following variables:
    !! - Activate : Activate Process (True/False)
    !! - nDustSpecies : Number of dust processes
-   !! - SchemeOpt : Scheme Option
+   !! - SchemeOpt : Scheme Option (1=Fengsha, 2=Ginoux)
    !! - DustSpeciesIndex : Index of dust species
    !! - SpcIDs : CATChem species IDs
-   !! - LowerBinRadius : Lower bin radius        [m]
-   !! - UpperBinRadius : Upper bin radius        [m]
-   !! - EffectiveRadius : Effective radius        [m]
-   !! - DustDensity : Dust density            [kg/m^3]
+   !! - LowerBinRadius : Lower bin Radius        [m]
+   !! - UpperBinRadius : Upper bin Radius        [m]
+   !! - EffectiveRadius : Effective Radius        [m]
+   !! - DustDensity : Dust Particle Density            [kg/m^3]
    !! - BetaScaleFactor : Beta Scaling Parameter  [1]
    !! - AlphaScaleFactor : Alpha Scaling Parameter [1]
-   !! - TotalEmission : Total emission          [kg/m^2/s]
-   !! - EmissionRate : Emission rate            [kg/m^2/s]
-   !! - FengshaMoistureOpt : Fengsha-Moisture Calculation Option
-   !! - FengshaDragOpt : Fengsha-Drag Calculation Option
+   !! - TotalEmission : Total Emission          [ug/m^2/s]
+   !! - EmissionPerSpecies : Emission Rate per dust species  [ug/m^2/s]
+   !! - MoistOpt : Moisture Calculation Option
+   !! - DragOpt : Drag Calculation Option
+   !! - HorizFluxOpt : Horizontal Flux Calculation Option
    !!!>
    TYPE :: DustStateType
       ! Generic Variables for Every Process
