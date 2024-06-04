@@ -38,7 +38,7 @@ program test_dust
    RC = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
-   write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
+   write(*,*) '  C          A A       T     C       H       CCCC   EEEE   M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
@@ -76,7 +76,7 @@ program test_dust
    MetState%FRSEAICE = 0.0_fp
    MetState%U10M = 20.0_fp
    MetState%V10M = 20.0_fp
-   MetState%USTAR = 10.0_fp
+   MetState%USTAR = 2.0_fp
    allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
