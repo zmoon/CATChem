@@ -29,11 +29,16 @@ module CCPr_SeaSalt_Common_Mod
    !! - LowerBinRadius : Lower bin radius [m]
    !! - UpperBinRadius : Upper bin radius [m]
    !! - EffectiveRadius : Effective radius [m]
-   !! - SeaSaltDensity : SeaSalt density [kg/m^3]
-   !! - BetaScaleFactor : Beta Scaling Parameter  [1]
-   !! - AlphaScaleFactor : Scaling Parameter [1]
-   !! - TotalEmission : Total emission [kg/m^2/s]
-   !! - EmissionRate : Emission rate   [kg/m^2/s]
+   !! - SeaSaltDensity : SeaSalt density [kg m-3]
+   !! - BetaScaleFactor : Beta Scaling Parameter  [-]
+   !! - AlphaScaleFactor : Scaling Parameter [-]
+   !! - TotalEmission : Total emission [ug m-2 s-1]
+   !! - TotalNumberEmission : Total number emission [# m-2 s-1]
+   !! - EmissionPerSpecies : Emission rate   [ug m-2 s-1]
+   !! - SeaSaltScaleFactor : SeaSalt Tuning Parameter [-]
+   !! - WeibullFlag : Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
+   !! - HoppelFlag : Apply Hoppel Flag following Fan and Toon 2011
+   !! - NumberEmissionBin : Number of Emission per Bin [# m-2 s-1]
    !!!>
    TYPE, PUBLIC :: SeaSaltStateType
       ! Generic Variables for Every Process
@@ -42,17 +47,17 @@ module CCPr_SeaSalt_Common_Mod
       INTEGER                         :: SchemeOpt              ! Scheme Option
       INTEGER, ALLOCATABLE            :: SeaSaltSpeciesIndex(:) ! Index of SeaSalt species
       INTEGER, ALLOCATABLE            :: SpcIDs(:)              ! CATChem species IDs
-      Logical                         :: WeibullFlag          ! Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
-      Logical                         :: HoppelFlag           ! Apply Hoppel Flag following Fan and Toon 2011
+      Logical                         :: WeibullFlag            ! Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
+      Logical                         :: HoppelFlag             ! Apply Hoppel Flag following Fan and Toon 2011
       ! Process Specific Parameters
       REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)      ! Lower bin radius        [m]
       REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)      ! Upper bin radius        [m]
       REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)     ! Effective radius        [m]
-      REAL(fp), ALLOCATABLE           :: SeaSaltDensity(:)      ! SeaSalt density         [kg/m^3]
-      REAL(fp), ALLOCATABLE           :: TotalEmission          ! Total emission          [ug/m^2/s]
-      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    ! Total Number Emitted    [#/m2/s]
-      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  ! Emission per species    [ug/m^2/s]
-      REAL(fp), ALLOCATABLE           :: NumberEmissionBin(:)   ! Particle Number emission per species [#/m^2/s]
+      REAL(fp), ALLOCATABLE           :: SeaSaltDensity(:)      ! SeaSalt density         [kg m-3]
+      REAL(fp), ALLOCATABLE           :: TotalEmission          ! Total emission          [ug m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    ! Total Number Emitted    [# m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  ! Emission per species    [ug m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: NumberEmissionBin(:)   ! Particle Number emission per species [# m-2 s-1]
       REAL(fp), ALLOCATABLE           :: SeaSaltScaleFactor     ! SeaSalt Tuning Parameter [-]
 
       !=================================================================
