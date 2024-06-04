@@ -38,6 +38,8 @@ CONTAINS
    !! \param GridState The grid state containing information about the grid
    !! \param DiagState The diagnostic state to be allocated
    !! \param RC The return code
+   !! \ingroup Core_Modules
+   !!!>
    subroutine Diag_Allocate(Config, GridState, DiagState, RC)
       ! USES
       USE GridState_Mod, ONLY : GridStateType
