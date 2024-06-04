@@ -9,7 +9,7 @@ physics schemes. The first use of CATChem will be connecting it to NOAA's
 Unified Forecasting System (https://ufscommunity.org/) to create UFS-Chem. CATChem and UFS-Chem are
 currently under development and more information will be provided soon.
 
-### Warning
+## Warning
 CATChem is currently under development. The code is public to
 encourage collaboration amongst the community. Do not publish results using
 CATChem without consulting the development team.
