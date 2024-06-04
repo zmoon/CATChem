@@ -6,31 +6,31 @@ module CATChem
    !
    use Config_Opt_Mod, only: ConfigType
    !
-   use Config_Mod, only: CC_Read_Config => Read_Input_File
+   use Config_Mod, only: cc_read_config => Read_Input_File
    !
    use DiagState_Mod, only: DiagStateType
    !
-   use Error_Mod, only: CC_CheckVar
-   use Error_Mod, only: CC_Error
+   use Error_Mod, only: cc_check_var => CC_CheckVar
+   use Error_Mod, only: cc_error
    use Error_Mod, only: CC_FAILURE
    use Error_Mod, only: CC_SUCCESS
-   use Error_Mod, only: CC_Warning
+   use Error_Mod, only: cc_warn => CC_Warning
    !
    use GridState_Mod, only: GridStateType
    !
-   use init_mod, only: CC_Init_Diag => Init_Diag
-   use init_mod, only: CC_Init_Met => Init_Met
+   use init_mod, only: cc_init_diag => Init_Diag
+   use init_mod, only: cc_init_met => Init_Met
    !
    use MetState_Mod, only: MetStateType
    !
-   use precision_mod, only: CC_RK => fp
+   use precision_mod, only: cc_rk => fp
    !
    use species_mod, only: SpeciesType
    !
    use CCPr_Dust_Common_Mod, only: DustStateType
-   use CCPr_Dust_mod, only: CC_Dust_Init => CCPr_Dust_Init
-   use CCPr_Dust_mod, only: CC_Dust_Run => CCPr_Dust_Run
-   use CCPr_Dust_mod, only: CC_Dust_Finalize => CCPr_Dust_Finalize
+   use CCPr_Dust_mod, only: cc_dust_init => CCPr_Dust_Init
+   use CCPr_Dust_mod, only: cc_dust_run => CCPr_Dust_Run
+   use CCPr_Dust_mod, only: cc_dust_finalize => CCPr_Dust_Finalize
    !
    implicit none
 
