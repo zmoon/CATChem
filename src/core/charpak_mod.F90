@@ -3,6 +3,8 @@
 !!
 !! Original code from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/charpak_mod.F90
 !!
+!! \ingroup Core_Modules
+!!!>
 MODULE Charpak_Mod
     !
     ! !USES:

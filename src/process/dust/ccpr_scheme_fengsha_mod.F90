@@ -12,6 +12,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!! \ingroup CATChem_Dust_Processes
 !!!>
 module CCPr_Scheme_Fengsha_Mod
 
@@ -23,12 +24,14 @@ module CCPr_Scheme_Fengsha_Mod
 
 contains
 
-   !> \brief Brief description of the subroutine
+   !> \brief Calculates the FENGSHA dust emissions (total and per species) in ug m-2 s-1
    !!
    !! \param MetState     Meteorological Variables
    !! \param DiagState    Diagnostic Variables
    !! \param DustState    Dust Variables
    !! \param RC           Success or Failure
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine CCPr_Scheme_Fengsha(MetState, DiagState, DustState, RC)
 

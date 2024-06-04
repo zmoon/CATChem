@@ -4,6 +4,7 @@
 !!
 !! This module contains subroutines and functions related to the grid state.
 !!
+!! \ingroup Core_Modules
 !!!>
 module GridState_Mod
 
@@ -36,6 +37,8 @@ contains
    !! \param Config The input config object.
    !! \param GridState The GridState object to be initialized.
    !! \param RC The return code.
+   !!
+   !! \ingroup Core_Modules
    !!!>
    subroutine Grid_Init_State(Config, GridState, RC)
       use Error_Mod, only : CC_SUCCESS

@@ -1,7 +1,8 @@
 !> \file init_mod.F90
 !! \brief Contains the DiagStateType and Diag_Allocate subroutine
 !!
-!! This module contains subroutines and functions related to the DiagState instance of CATChem.
+!! \ingroup Core_Modules
+!! \details This module contains subroutines and functions related to the DiagState instance of CATChem.
 !! It includes subroutines for initializing of the DiagState.
 !!!>
 module DiagState_Mod

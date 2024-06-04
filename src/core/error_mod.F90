@@ -3,6 +3,8 @@
 !! \brief This file contains error handling routines for CATChem
 !! \author Barry Baker
 !!
+!! \ingroup Core_Modules
+!!
 !! This file contains error handling routines for CATChem
 !!!>
 MODULE Error_Mod
@@ -33,6 +35,7 @@ CONTAINS
    !! \param RC The return code
    !! \param ThisLoc The location of the error
    !! \param Instr Other instructions
+   !! \ingroup Core_Modules
    !!!>
    SUBROUTINE CC_Error( ErrMsg, RC, ThisLoc, Instr )
       !
@@ -95,6 +98,8 @@ CONTAINS
    !! \brief CC_Warning
    !!
    !! This subroutine prints a warning message and sets RC to CC_SUCCESS.
+   !!
+   !! \ingroup Core_Modules
    !!
    !! \param WarnMsg The warning message
    !! \param RC The return code
@@ -162,6 +167,7 @@ CONTAINS
    !! \param Variable The variable to check
    !! \param Operation 0=Allocate 1=Register 2=Deallocate
    !! \param RC The return code
+   !! \ingroup Core_Modules
    !!!>
    SUBROUTINE CC_CheckVar( Variable, Operation, RC )
       !

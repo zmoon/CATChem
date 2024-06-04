@@ -3,6 +3,8 @@
 !! \brief This file contains constants for catchem
 !!
 !! This file contains constants for catchem
+!! \ingroup Core_Modules
+!!!>
 module constants
 
    USE precision_mod

@@ -1,6 +1,8 @@
 !> \file qfyaml_mod.F90
 !! \brief This file contains the QFYAML module
 !!
+!! \ingroup Core_Modules
+!!
 !! Contains routines for reading a YAML file into Fortran,
 !!  based off the "config_fortran" package of H. J. Teunissen.
 !!
@@ -212,6 +214,7 @@ MODULE QFYAML_Mod
       !! \param var_name The name of the variable
       !! \param ix The index of the variable
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Get_Var_Index( yml, var_name, ix )
     !
@@ -263,6 +266,7 @@ MODULE QFYAML_Mod
       !! \param end_ix The index of the last variable with the anchor
       !! \param anchor_cat The category of the anchor
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Get_Anchor_Info( yml, anchor_ptr, begin_ix, end_ix, anchor_cat )
     !
@@ -314,6 +318,7 @@ MODULE QFYAML_Mod
       !! \param yml_anchored The YAML object
       !! \param RC Return code
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Init( fileName, yml, yml_anchored, RC )
     !
@@ -368,6 +373,7 @@ MODULE QFYAML_Mod
       !! \param yml The concatenated YAML object
       !! \param RC Return code
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Merge( yml1, yml2, yml, RC )
     !
@@ -435,6 +441,7 @@ MODULE QFYAML_Mod
       !! \param yml_anchored The configuration object for anchored variables
       !! \param RC Return code
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Read_File( yml, fileName, yml_anchored, RC )
     !
@@ -607,6 +614,8 @@ MODULE QFYAML_Mod
       !!  \param anchor_ptr The name of the variable
       !!  \param anchor_tgt The name of the variable
       !!  \param RC Return code
+      !!
+      !! \ingroup Core_Modules
       !!>
       SUBROUTINE Parse_Line( yml,        yml_anchored, set_by,                   &
                              line_arg,   valid_syntax, category,                 &
@@ -956,6 +965,8 @@ MODULE QFYAML_Mod
       !! \param set_by The variable was set by this routine
       !! \param append Whether to append to an existing variable
       !! \param RC Return code
+      !!
+      !! \ingroup Core_Modules
       !!>
       SUBROUTINE Add_Variable( yml,            line_arg,     anchor_ptr_arg,     &
                                anchor_tgt_arg, category_arg, var_name_arg,       &
@@ -1073,6 +1084,8 @@ MODULE QFYAML_Mod
       !! \param var_w_anchor Variable with the YAML anchor
       !! \param var_pt_to_anchor Variable that will be copied
       !! \param RC           Return code
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Copy_Anchor_Variable( yml,          anchor_ix,                  &
                                        var_w_anchor, var_pt_to_anchor,           &
@@ -1144,6 +1157,8 @@ MODULE QFYAML_Mod
       !!
       !! \param var Variable
       !! \param RC  Return code
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Read_Variable( var, RC )
     !
@@ -1262,6 +1277,8 @@ MODULE QFYAML_Mod
       !!
       !! \param[in]    line        Input line
       !! \param[in]    comment_chars Character(s) to be stripped
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Trim_Comment(line, comment_chars)
     !
@@ -1315,6 +1332,7 @@ MODULE QFYAML_Mod
       !! \param[in]    yml        Input QFYAML configuration variable
       !! \param[out]   RC         Return code
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Check( yml, RC )
     !
@@ -1399,6 +1417,8 @@ MODULE QFYAML_Mod
       !! \param[in]    trg_str    Target string
       !! \param[out]   n_matches  Number of variables that match the target
       !! \param[out]   match_vars Variable names that match the target
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_FindNextHigher( yml, trg_str, match_ct, match_vars )
     !
@@ -1480,6 +1500,8 @@ MODULE QFYAML_Mod
       !! \param[in]    variable   Input QFYAML configuration variable
       !! \param[out]   category   Output category
       !! \param[out]   var_name   Output variable name
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Split_Category( variable, category, var_name )
     !
@@ -1519,6 +1541,8 @@ MODULE QFYAML_Mod
       !!
       !! \param[in]    variable   Input QFYAML configuration variable
       !! \param[out]   variable   Output QFYAML configuration variable
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Resize_Storage( variable )
     !
@@ -1564,6 +1588,8 @@ MODULE QFYAML_Mod
       !! \param[in]    ix          Input index
       !! \param[out]   RC          Input return code
       !! \param[in]    dynamic_size
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Prepare_Store_Var( yml,      var_name,    var_type,             &
                                     var_size, description, ix,                   &
@@ -1658,6 +1684,8 @@ MODULE QFYAML_Mod
       !! \param var_size Variable size
       !! \param ix       Index of variable
       !! \param RC       Error code
+      !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Prepare_Get_Var( yml, var_name, var_type, var_size, ix, RC )
     !
@@ -1737,6 +1765,7 @@ MODULE QFYAML_Mod
       !!
       !! \param yml Configuration type
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Ensure_Free_Storage( yml )
 
@@ -1773,20 +1802,7 @@ MODULE QFYAML_Mod
         ENDIF
 
       END SUBROUTINE Ensure_Free_Storage
-    !EOC
-    !------------------------------------------------------------------------------
-    ! QFYAML: Bob Yantosca | yantosca@seas.harvard.edu | Apr 2020
-    ! Based on existing package https://github.com/jannisteunissen/config_fortran
-    !------------------------------------------------------------------------------
-    !BOP
-    !
-    ! !IROUTINE: Get_Fields_String
-    !
-    ! !DESCRIPTION: Routine to find the indices of entries in a string.
-    !\\
-    !\\
-    ! !INTERFACE:
-    !
+
       !>
       !! \brief Get_Fields_String
       !!
@@ -1800,6 +1816,7 @@ MODULE QFYAML_Mod
       !! \param ixs_start start pt. of ith entry
       !! \param ixs_end end pt.   of ith entry
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Get_Fields_String( line_arg, delims,  brackets,                 &
                                     n_max,    n_found, ixs_start, ixs_end       )
@@ -1881,6 +1898,7 @@ MODULE QFYAML_Mod
       !! \param var_name Variable name
       !! \param ix Index of variable
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Binary_Search_Variable( yml, var_name, ix )
     !
@@ -1929,6 +1947,7 @@ MODULE QFYAML_Mod
       !!
       !! \param yml The YAML object
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Sort( yml )
     !
@@ -1954,6 +1973,7 @@ MODULE QFYAML_Mod
       !!
       !! \param list The variable list
       !!
+      !! \ingroup Core_Modules
       !!!>
       RECURSIVE SUBROUTINE Qsort( list )
     !
@@ -1983,6 +2003,7 @@ MODULE QFYAML_Mod
       !! \param list The variable list
       !! \param marker The split position
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE Partition_Var_List(list, marker)
     !
@@ -2054,6 +2075,7 @@ MODULE QFYAML_Mod
       !! \param fileName The file name
       !! \param searchKeys The search keys
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Print( yml, RC, fileName, searchKeys )
     !
@@ -2240,6 +2262,7 @@ MODULE QFYAML_Mod
       !!
       !! \param[inout] yml
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_CleanUp( yml )
     !
@@ -2273,6 +2296,7 @@ MODULE QFYAML_Mod
       !! \param[out] res
       !! \param[out] RC
       !!
+      !! \ingroup Core_Modules
       !!!>
       SUBROUTINE QFYAML_Get_Size( yml, var_name, res, RC )
     !

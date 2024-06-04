@@ -4,6 +4,7 @@
 !!  many variables throughout catchem at compile-time.  Also contains
 !!  parameters that can be used to represent missing values.
 !!
+!! \ingroup Core_Modules Core Modules
 !!!>
 module precision_mod
    implicit none

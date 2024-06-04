@@ -4,6 +4,7 @@
 !! This module contains subroutines and functions related to the MetStateType instance of CATChem.
 !! It includes subroutines for initializing of the MetStateType.
 !!
+!! \ingroup Core_Modules
 !!!>
 MODULE MetState_Mod
    !
@@ -412,6 +413,11 @@ CONTAINS
 
    END SUBROUTINE Zero_MetState
 
+   !>
+   !! \brief Allocate the MetState object
+   !!
+   !! \ingroup Core_Modules
+   !!!>
    SUBROUTINE Met_Allocate( GridState, MetState, RC)
       ! USES
       USE GridState_Mod, Only : GridStateType

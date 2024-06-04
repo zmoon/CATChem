@@ -1,6 +1,9 @@
 !> \file CCPr_Dust_mod.F90
 !! \brief Driver for the CATCHem Process: Dust
 !!
+!! \defgroup CATChem_Dust_Processes CATChem Dust Processes
+!!
+!! The CATChem Dust Process group holds all the CATCHem dust processes.
 !!!>
 MODULE CCPr_Dust_mod
 
@@ -30,6 +33,7 @@ CONTAINS
    !! \param ChmState    CATCHem chemical state
    !! \param RC          Error return code
    !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    SUBROUTINE CCPR_Dust_Init( Config, DustState, ChemState, RC)
       ! USES

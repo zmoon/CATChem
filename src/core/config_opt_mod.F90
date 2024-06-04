@@ -3,6 +3,7 @@
 !!
 !! This file contains the module for catchem configuration options
 !!
+!! \ingroup Core_Modules
 !!!>
 MODULE Config_Opt_Mod
 !

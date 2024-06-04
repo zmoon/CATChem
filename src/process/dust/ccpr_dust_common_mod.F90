@@ -2,6 +2,8 @@
 !! \file ccpr_dust_common_mod.F90
 !! \brief Contains module ccpr_dust_common_mod
 !!
+!! \ingroup CATChem_Dust_Processes
+!!
 !! \author Barry Baker
 !! \date 05/2024
 !!!>
@@ -84,6 +86,7 @@ contains
    !! \param volumetric_soil_moisture Volumetric soil moisture
    !! \param H Soil moisture attenuation factor for dust emission
    !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine Fecan_SoilMoisture( clay, sand, volumetric_soil_moisture, H)
       IMPLICIT NONE

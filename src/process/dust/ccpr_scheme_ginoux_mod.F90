@@ -8,6 +8,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!! \ingroup CATChem_Dust_Processes
 !!!>
 
 module CCPr_Scheme_Ginoux_Mod
@@ -20,13 +21,16 @@ module CCPr_Scheme_Ginoux_Mod
 
 contains
 
-   !> \brief Run the Ginoux windblown dust emission scheme
+   !>
+   !! \brief Calculates the dust emission flux in ug m-2 s-1
    !!
    !! \param [IN] MetState The MetState object
    !! \param [INOUT] DiagState The DiagState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine CCPr_Scheme_Ginoux(MetState, DiagState, DustState, RC)
 
@@ -49,14 +53,14 @@ contains
       ! Local Variables
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
-      logical :: do_dust                               ! Enable Dust Calculation Flag
-      integer :: n                                     ! loop couters
-      integer :: nbins                                 ! number of dust bins
-      real(fp) :: ginoux_scaling                       ! Ginoux scaling
-      real(fp) :: u_thresh0                            ! Dry threshold wind speed [m/s]
-      real(fp) :: u_thresh                             ! Moisture Corrected threshold wind speed [m/s]
-      real(fp) :: w10m                                 ! 10m wind speed [m/s]
-      real(fp), allocatable :: EmissionBin(:)          ! Emission Rate per Bin
+      logical :: do_dust                               !< Enable Dust Calculation Flag
+      integer :: n                                     !< loop couters
+      integer :: nbins                                 !< number of dust bins
+      real(fp) :: ginoux_scaling                       !< Ginoux scaling
+      real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
+      real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
+      real(fp) :: w10m                                 !< 10m wind speed [m/s]
+      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin
 
       ! Initialize
       errMsg = ''
