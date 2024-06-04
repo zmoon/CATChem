@@ -3,7 +3,7 @@
 !!
 !!!>
 program test_main
-   use CATChem_core
+   use CATChem
    use state_mod  ! FIXME: declare states here or move to a driver
 
    IMPLICIT NONE

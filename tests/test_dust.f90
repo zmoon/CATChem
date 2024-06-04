@@ -1,6 +1,5 @@
 program test_dust
-   use CATChem_core, fp => CC_RK
-   use CATChem_process
+   use CATChem, fp => CC_RK
    use testing_mod, only: assert
    implicit none
 
