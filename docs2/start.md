@@ -1,5 +1,6 @@
 # CATChem
 
+## Description
 The Configurable ATmospheric Chemisty (CATChem) component that includes all chemical and aerosol processes needed to perform
 atmospheric chemistry and composition simulations within a model through a
 flexible, easy to modify, and well-documented infrastructure. CATChem will
