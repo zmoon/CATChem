@@ -36,6 +36,7 @@ CONTAINS
    !! \param GridState The grid state containing information about the grid
    !! \param RC The return code
    !!
+   !! \ingroup Core_Modules
    !!!>
    SUBROUTINE Read_Input_File( Config , GridState, RC )
 !
@@ -137,6 +138,7 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup Core_Modules
    !!!>
    SUBROUTINE Config_Simulation( ConfigInput, Config, RC )
 !
@@ -238,6 +240,7 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup Core_Modules
    !!!>
    SUBROUTINE Config_Grid( ConfigInput, Config, GridState, RC )
 !
@@ -340,6 +343,8 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup Core_Modules
+   !!!>
    SUBROUTINE Config_Process_Dust( ConfigInput, Config, RC )
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod
