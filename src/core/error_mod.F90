@@ -20,8 +20,8 @@ MODULE Error_Mod
    !
    ! !DEFINED PARAMETERS:
    !
-   INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   ! Routine returns success
-   INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   ! Routine returns failure
+   INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   !< Routine returns success
+   INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   !< Routine returns failure
 
 CONTAINS
    !>
@@ -42,13 +42,13 @@ CONTAINS
       !
       ! !INPUT PARAMETERS:
       !
-      CHARACTER(LEN=*), INTENT(IN)            :: ErrMsg  ! Message to display
-      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: ThisLoc ! Location of error
-      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: Instr   ! Other instructions
+      CHARACTER(LEN=*), INTENT(IN)            :: ErrMsg  !< Message to display
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: ThisLoc !< Location of error
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: Instr   !< Other instructions
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      INTEGER,          INTENT(INOUT)            :: RC      ! Error code
+      INTEGER,          INTENT(INOUT)            :: RC      !< Error code
 
       CHARACTER(LEN=1000) :: Message
       !=======================================================================
@@ -109,13 +109,13 @@ CONTAINS
       !!
       ! !INPUT PARAMETERS:
       !
-      CHARACTER(LEN=*), INTENT(IN   )            :: WarnMsg ! Message to display
-      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: ThisLoc ! Location of warning
-      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: Instr   ! Other instructions
+      CHARACTER(LEN=*), INTENT(IN   )            :: WarnMsg !< Message to display
+      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: ThisLoc !< Location of warning
+      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: Instr   !< Other instructions
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      INTEGER,          INTENT(INOUT)            :: RC
+      INTEGER,          INTENT(INOUT)            :: RC !< Error code
 
       CHARACTER(LEN=1000) :: Message
 
