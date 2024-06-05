@@ -7,6 +7,8 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!!
+!! \ingroup CATChem_SeaSalt_Processes
 !!!>
 module CCPr_Scheme_GEOS12_Mod
 
@@ -25,6 +27,7 @@ contains
    !! \param [INOUT] ChemState The ChemState object
    !! \param [INOUT] SeaSalt The SeaSalt object
    !! \param [OUT] RC Return code
+   !! \ingroup CATChem_SeaSalt_Processes
    !!!>
    subroutine CCPr_Scheme_GEOS12(MetState, DiagState, SeaSaltState, RC)
 
