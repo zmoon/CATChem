@@ -1,6 +1,8 @@
 !> \file CCPr_SeaSalt_mod.F90
 !! \brief Driver for the CATCHem Process: SeaSalt
 !!
+!! Driver for the seasalt process.
+!!
 !! \defgroup CATChem_SeaSalt_Processes CATChem SeaSalt Processes
 !!
 !! The CATChem SeaSalt Process group holds all the CATCHem SeaSalt processes.
