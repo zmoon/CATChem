@@ -30,7 +30,7 @@ subroutine CCPr_Scheme_<SCHEME>(MetState, DiagState, DustState, RC)
    USE Constants,     Only : g0 ! Example to pull in a constant from the CONSTANTS MODULE < Modify as needed >
    use precision_mod, only : fp, ZERO  ! Example to pull in a precision from the PRECISION MODULE < Modify as needed >
    Use MetState_Mod,  Only : MetStateType  ! Needed to access Meteorological Variables
-   Use DiagState_Mod, Only : DiagStateType ! Diagnostic Varaibles are added through DiagState below
+   Use DiagState_Mod, Only : DiagStateType ! Diagnostic Variables are added through DiagState below
    Use Error_Mod,     Only : CC_SUCCESS    ! Error Check Success
    Use CCPr_<PROCESS>_mod, Only : <PROCESS>StateType  ! Overall PROCESS State Type - Controlling PROCESS
 

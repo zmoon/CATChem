@@ -55,7 +55,7 @@ MODULE QFYAML_Mod
     !
     !  The back end is code that was taken from the "config_fortran" package
     !  (https://github.com/jannisteunissen/config_fortran) by H. J. Teunissen.
-    !  and subsequently modified by myse;lf
+    !  and subsequently modified by myself.
     !
     !  The front end (parser) has been modified to accept YAML format instead of
     !  configuration file format.  Not all features of YAML have been implemented.
@@ -63,7 +63,7 @@ MODULE QFYAML_Mod
     !  can try to add other YAML features.
     !
     !  At present, nested levels of variables are not supported, but
-    !  might bein the future.
+    !  might be in the future.
     !
     !  I have removed some routines that are not as pertinent to YAML input
     !  from the original config-fortran code.
@@ -558,7 +558,7 @@ MODULE QFYAML_Mod
         !=======================================================================
         DO N = 1, yml_anchored%num_vars
 
-           ! Get proprties of each variable that points to an anchor
+           ! Get properties of each variable that points to an anchor
            anchor_ptr = yml_anchored%vars(N)%anchor_ptr
            category   = yml_anchored%vars(N)%category
            var_name   = yml_anchored%vars(N)%var_name
@@ -1730,7 +1730,7 @@ MODULE QFYAML_Mod
 
         ELSE IF ( yml%vars(ix)%var_type /= var_type ) THEN
 
-           ! Variable is different type than expected: exit wit error
+           ! Variable is different type than expected: exit with error
            WRITE( errMsg, "(a)" )                                                &
                 "Variable " // TRIM( var_name ) // " has different type ("    // &
                 TRIM( QFYAML_type_names( yml%vars(ix)%var_type ) )            // &
@@ -1760,7 +1760,7 @@ MODULE QFYAML_Mod
       !!
       !! \details This routine is used to ensure that enough storage is allocated
       !!  for the configuration type. If not the new size will be twice as much
-      !!  as the current size. If no storage is allocated yet a minumum amount
+      !!  as the current size. If no storage is allocated yet a minimum amount
       !!  of storage is allocated.
       !!
       !! \param yml Configuration type

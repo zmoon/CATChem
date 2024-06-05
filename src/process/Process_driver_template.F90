@@ -1,6 +1,6 @@
 !> \brief Template for a new process driver
 !!
-!! More indepth descrition here
+!! More in-depth description here
 !!
 !! \author Barry baker
 !! \date 05/2024

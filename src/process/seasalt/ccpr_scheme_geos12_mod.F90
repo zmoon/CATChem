@@ -53,7 +53,7 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
-      integer :: n, ir                                 !< loop couters
+      integer :: n, ir                                 !< Loop counter
       integer :: nbins                                 !< number of SeaSalt bins
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
       real(fp), allocatable :: NumberEmissionBin(:)    !< Number of particles emitted per bin [#/m2/s]

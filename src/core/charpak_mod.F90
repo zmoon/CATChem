@@ -95,7 +95,7 @@ MODULE Charpak_Mod
            ENDDO
         ENDDO
 
-        ! Return positions where matches occured (OPTIONAL)
+        ! Return positions where matches occurred (OPTIONAL)
         IF ( PRESENT( Locations ) ) Locations = TmpLocations
 
       END SUBROUTINE CntMat
@@ -291,7 +291,7 @@ MODULE Charpak_Mod
         ! Loop until all matches found, or end of string
         DO WHILE ( IFLAG == 0 )
 
-           ! Look for strings beteeen separator string
+           ! Look for strings between separator string
            CALL TXTEXT ( SEP, TRIM( STR ), COL, WORD, IFLAG )
 
            ! Store substrings in RESULT array

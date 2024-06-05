@@ -64,13 +64,13 @@ contains
       ! Local Variables
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
-      logical :: do_dust                               ! Enable Dust Calculation Flag
-      integer :: n                                     ! loop couters
+      logical :: do_dust                               !< Enable Dust Calculation Flag
+      integer :: n                                     !< Bin index
       integer :: nbins                                 !< number of dust bins
       real(fp) :: hflux                                !< Horizontal Flux
-      real(fp) :: R                                    !< Drag Paritition [1]
+      real(fp) :: R                                    !< Drag Partition [1]
       real(fp) :: h_to_v_ratio                         !< Horizontal to Vertical Mass Flux Ratio
-      real(fp) :: airmass                              ! Air Mass at lowest model level
+      real(fp) :: airmass                              !< Air Mass at lowest model level
       real(fp) :: H                                    !< Soil Moisture Attenuation Factor
       real(fp) :: distribution(DustState%nDustSpecies) !< Distribution Weights
       real(fp) :: EmissBins(DustState%nDustSpecies)    !< Emission Rate per Bin
@@ -108,7 +108,7 @@ contains
       !--------------------------------------------------------------------
       do_dust = .true. ! Default value for all cases
 
-      ! Don't do dust over bedrock, lava, or Permanant Ice (15, 16, 18)
+      ! Don't do dust over bedrock, lava, or Permanent Ice (15, 16, 18)
       !----------------------------------------------------------------
       if (MetState%DSOILTYPE == 15 .or. MetState%DSOILTYPE == 16 .or. MetState%DSOILTYPE == 18) then
          do_dust = .false.
@@ -161,7 +161,7 @@ contains
          !-----------------------------------
          call Soil_Erosion_Potential(MetState%CLAYFRAC, MetState%SANDFRAC, SEP)
 
-         ! Compute the Drag Paritition
+         ! Compute the Drag Partition
          ! 1: Input Drag Partition
          ! 2: MB95 Drag Partition
          ! 3: Darmenova 2009
@@ -169,7 +169,7 @@ contains
          if (DustState%DragOpt == 1) then
             R = MetState%RDRAG
          elseif (DustState%DragOpt == 2) then
-            call MB95_DragParitition(MetState%z0, R)
+            call MB95_DragPartition(MetState%z0, R)
          elseif (DustState%DragOpt == 3) then
             ! call Darmenova_DragPartition(MetState%z0, R) -> TODO: Darmenova 2009
             write(*,*) 'Place Holder'
