@@ -1,9 +1,10 @@
 !>
 !! \file
-!! \brief Contains the Gong 1997
+!! \brief Contains the GEOS2012 Sea Salt Emission algorithm
 !!
-!! Gong, S. L., L. A. Barrie, and J.-P. Blanchet (1997), Modeling sea-salt aerosols in the atmosphere:
-!! 1. Model development, J. Geophys. Res., 102(D3), 3805–3818, doi:10.1029/96JD02953.
+!! Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols:
+!! new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157,
+!! https://doi.org/10.5194/acp-11-3137-2011, 2011.
 !!
 !! \author Barry baker
 !! \date 05/2024
@@ -20,7 +21,7 @@ module CCPr_Scheme_GEOS12_Mod
 
 contains
 
-   !> \brief Run the Ginoux windblown dust emission scheme
+   !> \brief Scheme GEOS2012 Sea Salt Emission scheme
    !!
    !! \param [IN] MetState The MetState object
    !! \param [INOUT] DiagState The DiagState object
