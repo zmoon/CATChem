@@ -279,7 +279,7 @@ contains
       IMPLICIT NONE
       ! Parameters
       real(fp), intent(in)  :: ustar            !< friction velocity [m/s]
-      real(fp), intent(in)  :: ustar_threshold  !< dry threshold fricition velocity [m/s]
+      real(fp), intent(in)  :: ustar_threshold  !< dry threshold friction velocity [m/s]
       real(fp), intent(in)  :: R                !< Drag partition (0-1)
       real(fp), intent(in)  :: H                !< Soil Moisture Attenuation Factor
       real(fp), intent(inout) :: HorizFlux      !< Horizontal Mass Flux [kg/m2/s]
@@ -326,7 +326,7 @@ contains
       IMPLICIT NONE
       ! Parameters
       real(fp), intent(in)  :: ustar           !< friction velocity [m/s]
-      real(fp), intent(in)  :: ustar_threshold !< dry threshold fricition velocity [m/s]
+      real(fp), intent(in)  :: ustar_threshold !< dry threshold friction velocity [m/s]
       real(fp), intent(in)  :: R               !< Drag partition (0-1)
       real(fp), intent(in)  :: H               !< Soil Moisture Attenuation Factor
       real(fp), intent(inout) :: HorizFlux     !<
