@@ -45,9 +45,9 @@ contains
       implicit none
 
       ! Arguments
-      type(MetStateType),  intent(in)    :: MetState
-      type(DiagStateType), intent(inout) :: DiagState
-      type(DustStateType), intent(inout) :: DustState
+      type(MetStateType),  intent(in)    :: MetState   !< Meteorological Variables
+      type(DiagStateType), intent(inout) :: DiagState  !< Diagnostic Variables
+      type(DustStateType), intent(inout) :: DustState  !< Dust Variables
       integer, intent(out) :: RC
 
       ! Local Variables
@@ -60,7 +60,7 @@ contains
       real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
       real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
-      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin
+      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [ug/m2/s]
 
       ! Initialize
       errMsg = ''

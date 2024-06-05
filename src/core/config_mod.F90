@@ -122,6 +122,27 @@ CONTAINS
          RETURN
       ENDIF
 
+      ! !========================================================================
+      ! ! Config processes
+      ! !========================================================================
+      call Config_Process_SeaSalt(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_SeaSalt"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
+      call Config_Process_Dust(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_Dust"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
       !========================================================================
       ! Further error-checking and initialization
       !========================================================================
@@ -212,23 +233,23 @@ CONTAINS
       !========================================================================
       ! Print to screen
       !========================================================================
-      IF ( Config%amIRoot ) THEN
-         WRITE( 6, 90  ) 'SIMULATION SETTINGS'
-         WRITE( 6, 95  ) '-------------------'
-         WRITE( 6, 110 ) 'Simulation name             : ',                     &
-            TRIM( Config%SimulationName )
-         WRITE( 6, 120 ) 'Turn on verbose output      : ',                     &
-            Config%Verbose
-         WRITE( 6, 110 ) 'Verbose output printed on   : ',                     &
-            TRIM( verboseMsg )
-      ENDIF
+!       IF ( Config%amIRoot ) THEN
+!          WRITE( 6, 90  ) 'SIMULATION SETTINGS'
+!          WRITE( 6, 95  ) '-------------------'
+!          WRITE( 6, 110 ) 'Simulation name             : ',                     &
+!             TRIM( Config%SimulationName )
+!          WRITE( 6, 120 ) 'Turn on verbose output      : ',                     &
+!             Config%Verbose
+!          WRITE( 6, 110 ) 'Verbose output printed on   : ',                     &
+!             TRIM( verboseMsg )
+!       ENDIF
 
-      ! Format statements
-90    FORMAT( /, A              )
-95    FORMAT( A                 )
-100   FORMAT( A, I8.8, 1X, I6.6 )
-110   FORMAT( A, A              )
-120   FORMAT( A, L5             )
+!       ! Format statements
+! 90    FORMAT( /, A              )
+! 95    FORMAT( A                 )
+! 100   FORMAT( A, I8.8, 1X, I6.6 )
+! 110   FORMAT( A, A              )
+! 120   FORMAT( A, L5             )
 
    END SUBROUTINE Config_Simulation
 
@@ -366,6 +387,9 @@ CONTAINS
       INTEGER                      :: N
       INTEGER                      :: C
 
+      ! Reals
+      REAL(fp)                     :: v_real
+
       ! Arrays
       INTEGER                      :: a_int(4)
 
@@ -387,12 +411,12 @@ CONTAINS
 
       ! Initialize
       RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Grid (in CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Config_Process_Dust (in CATChem/src/core/config_mod.F90)'
       errMsg = ''
 
       key   = "process%dust%activate"
       v_bool = MISSING_BOOL
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error parsing ' // TRIM( key ) // '!'
          CALL CC_Error( errMsg, RC, thisLoc )
@@ -400,45 +424,171 @@ CONTAINS
       ENDIF
       Config%Dust_Activate = v_bool
 
-      IF ( Config%Dust_Activate ) THEN
-         key   = "process%dust%scheme_opt"
-         v_int = MISSING_INT
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            Config%dust_scheme = 1
-            RETURN
-         ENDIF
-         Config%dust_scheme = v_int
-
-         key = 'process%dust%dust_drag_opt'
-         v_int = MISSING_INT
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            Config%dust_drag_opt = 1
-         ENDIF
-         Config%dust_drag_opt = v_int
-
-         key = 'process%dust%dust_moist_opt'
-         v_int = MISSING_INT
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            Config%dust_moist_opt = 1
-         ENDIF
-         Config%dust_moist_opt = v_int
-
-         key = 'process%dust%dust_horizflux_opt'
-         v_int = MISSING_INT
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            Config%dust_horizflux_opt = 1
-         ENDIF
-         Config%dust_horizflux_opt = v_int
+      key   = "process%dust%scheme_opt"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         RETURN
       ENDIF
+      Config%dust_scheme = v_int
+
+      key = 'process%dust%dust_drag_opt'
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      Config%dust_drag_opt = v_int
+
+      key = 'process%dust%dust_moist_opt'
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      Config%dust_moist_opt = v_int
+
+      key = 'process%dust%dust_horizflux_opt'
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      Config%dust_horizflux_opt = v_int
+
+      key = 'process%dust%dust_alpha'
+      v_real = MISSING_REAL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      ! write(*,*) v_real
+      Config%dust_alpha = v_real
+
+      key = 'process%dust%dust_beta'
+      v_real = MISSING_REAL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      Config%dust_beta = v_real
+      write(*,*) "Dust Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%dust%activate = ', Config%dust_activate
+      write(*,*) 'Config%dust%scheme_opt = ', Config%dust_scheme
+      write(*,*) 'Config%dust%dust_drag_opt = ', Config%dust_drag_opt
+      write(*,*) 'Config%dust%dust_moist_opt = ', Config%dust_moist_opt
+      write(*,*) 'Config%dust%dust_horizflux_opt = ', Config%dust_horizflux_opt
+      write(*,*) 'Config%dust%dust_alpha = ', Config%dust_alpha
+      write(*,*) 'Config%dust%dust_beta = ', Config%dust_beta
+      write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_Dust
+
+   !> \brief Process seasalt configuration
+   !!
+   !! This function processes the seasalt configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   SUBROUTINE Config_Process_SeaSalt( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
+
+      TYPE(QFYAML_t),      INTENT(INOUT) ::ConfigInput      ! YAML Config object
+      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+
+      !
+      ! !OUTPUT PARAMETERS:
+      !
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+      ! !LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      INTEGER                      :: v_int
+      INTEGER                      :: nSubStrs
+      INTEGER                      :: N
+      INTEGER                      :: C
+
+      ! Reals
+      REAL(fp)                     :: v_real
+
+      ! Arrays
+      INTEGER                      :: a_int(4)
+
+      ! Strings
+      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
+      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
+      CHARACTER(LEN=255)           :: thisLoc,  nLev
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+      CHARACTER(LEN=QFYAML_StrLen) :: v_str
+
+      ! String arrays
+      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
+      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
+
+      !========================================================================
+      ! Config_Process_SeaSalt begins here!
+      !========================================================================
+
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
+      ! TODO #105 Fix reading of config file
+      key   = "process%seasalt%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%seasalt_activate = v_bool
+
+      key   = "process%seasalt%weibull"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%seasalt_weibull = v_bool
+
+
+      key   = "process%seasalt%scheme_opt"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         RETURN
+      ENDIF
+      Config%seasalt_scheme = v_int
+
+      key = 'process%seasalt%scale_factor'
+      v_real = MISSING_REAL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+      ENDIF
+      ! write(*,*) v_real
+      Config%seasalt_scalefactor = v_real
+
+      write(*,*) "SeaSalt Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%seasalt_activate = ', Config%seasalt_activate
+      write(*,*) 'Config%seasalt_scheme = ', Config%seasalt_scheme
+      write(*,*) 'Config%seasalt_weibull = ', Config%seasalt_weibull
+      write(*,*) 'Config%seasalt_scalefactor = ', Config%seasalt_scalefactor
+      write(*,*) '------------------------------------'
+
+   END SUBROUTINE Config_Process_SeaSalt
 
 END MODULE config_mod

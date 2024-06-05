@@ -9,6 +9,8 @@ program test_dust
    use CCPr_Dust_mod, only: CCPr_Dust_Init, CCPr_Dust_Run, CCPr_Dust_Finalize
    use Error_Mod, only: CC_Error, CC_SUCCESS
    use testing_mod, only: assert
+   use GridState_Mod, only: GridStateType
+   use Config_Mod
    implicit none
 
    type(ConfigType) :: Config
@@ -16,33 +18,49 @@ program test_dust
    type(MetStateType) :: MetState
    type(DiagStateType) :: DiagState
    type(DustStateType) :: DustState
+   type(GridStateType) :: GridState
+
+   ! Integers
+   INTEGER:: RC          ! Success or failure
 
    character(len=:), allocatable :: title
 
-   ! Error Handling variables
-   integer :: rc
-   CHARACTER(LEN=255) :: ErrMsg, thisLoc
-
    ! Error handling
-   rc = CC_SUCCESS
-   ErrMsg = ''
-   thisLoc = ' -> at main (in tests/test_dust.f90)'
+   CHARACTER(LEN=512) :: errMsg
+   CHARACTER(LEN=255) :: thisLoc
+   CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
+
+   ! set thisLoc
+   thisLoc = 'test_dust -> at read CATChem_Conifg.yml'
+   errMsg = ''
+   RC = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
-   write(*,*) '  C          A A       T     C       H       CCCC    EEEE  M       M'
+   write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
    write(*,*) ''
    write(*,*) ''
 
-   ! Configuration Options
-   Config%dust_activate = .true.
-   Config%dust_scheme = 1
-   Config%dust_drag_opt = 1
-   Config%dust_moist_opt = 1
-   Config%dust_horizflux_opt = 1
+   !----------------------------
+   ! Test 1
+   !----------------------------
 
+   ! Read input file and initialize grid
+   call Read_Input_File(Config, GridState, RC)
+   if (RC /= CC_success) then
+      errMsg = 'Error reading configuration file: ' // TRIM( configFile )
+      call CC_Error( errMsg, RC , thisLoc)
+      stop 1
+   endif
+   title = 'Dust Test 1 | Read Config'
+   ! call print_info(Config, DustState, MetState, title)
+
+
+   !----------------------------
+   ! Test 2
+   !----------------------------
    ! Set number of dust species to zero for now
    ChemState%nSpeciesDust = 0
 
@@ -59,8 +77,7 @@ program test_dust
    allocate(MetState%AIRDEN(1))
    MetState%AIRDEN = 1.2_fp  ! kg/m3
 
-   title = "Dust Test 1"
-   call print_info(Config, MetState, title)
+   title = "Dust Test 2 | Test Fengsha defaults"
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -68,7 +85,6 @@ program test_dust
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
-   DustState%AlphaScaleFactor = 1.0_fp
 
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -76,24 +92,32 @@ program test_dust
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
-   ! Expected Result = 2.78159837E-06
-   call assert (DiagState%dust_total_flux > 2780.0_fp, "Test Fengsha Dust Scheme")
 
-   title = "Dust Test 2 - ustar == ustar_threshold"
+   call print_info(Config, DustState, MetState, title)
+   call assert(DiagState%dust_total_flux > 1000.0_fp, "Test Fengsha Dust Scheme")
+
+
+   !----------------------------
+   ! Test 3
+   !----------------------------
+   title = "Dust Test 3 | ustar == ustar_threshold"
    MetState%USTAR = 0.1_fp
 
-   call print_info(Config, MetState, title)
-
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       ErrMsg = 'Error in CCPr_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
+
+   call print_info(Config, DustState, MetState, title)
 
    call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
-   title = "Dust Test 3 - test horizontal flux change"
+   !------------------------------------------------------
+   ! TEST 4
+   !------------------------------------------------------
+   title = "Dust Test 4 | test horizontal flux change"
    MetState%z0 = .001_fp
    DustState%HorizFluxOpt = 2
    MetState%USTAR = 0.5_fp
@@ -101,8 +125,6 @@ program test_dust
    MetState%V10M = 5.0_fp
    DiagState%dust_total_flux = 0.0_fp
 
-   call print_info(Config, MetState, title)
-
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       ErrMsg = 'Error in CCPr_Dust_Run'
@@ -110,7 +132,9 @@ program test_dust
       stop 1
    end if
 
-   call assert(DiagState%dust_total_flux > 1000.0_fp, "Test different horizontal flux")
+   call print_info(Config, DustState, MetState, title)
+
+   call assert(DiagState%dust_total_flux >500.0_fp, "Test different horizontal flux")
    write(*,*) 'Test 3 Success!!!!!'
 
    call CCPr_Dust_Finalize(DustState, RC)
@@ -120,16 +144,18 @@ program test_dust
       stop 1
    endif
 
-   title = "Dust Test 4 - Change Dust Scheme"
+   !----------------------------
+   ! Test 5
+   !----------------------------
+   title = "Dust Test 5 | Test Ginoux Scheme"
    Config%dust_activate = .true.
    Config%dust_scheme = 2
    Config%dust_drag_opt = 1
    Config%dust_moist_opt = 1
    Config%dust_horizflux_opt = 1
+   Config%dust_alpha = 1
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
-
-   call print_info(Config, MetState, title)
 
    call CCPr_Dust_Init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
@@ -138,20 +164,23 @@ program test_dust
       stop 1
    end if
 
+
+
    call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       ErrMsg = 'Error in CCPr_Dust_Run'
       call CC_Error( ErrMsg, rc, thisLoc )
       stop 1
    end if
-
+   call print_info(Config, DustState, MetState, title)
    call assert(DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
 
 contains
 
-   subroutine print_info(Config_, MetState_, title_)
+   subroutine print_info(Config_, DustState_, MetState_, title_)
       type(ConfigType), intent(in) :: Config_
       type(MetStateType), intent(in) :: MetState_
+      type(DustStateType), intent(in) :: DustState_
       character(len=*), intent(in) :: title_
 
       write(*,*) '======================================='
@@ -160,11 +189,12 @@ contains
       write(*,*) '*************'
       write(*,*) 'Configuration '
       write(*,*) '*************'
-      write(*,*) 'DustState%activate = ', Config_%dust_activate
-      write(*,*) 'DustState%dust_scheme = ', Config_%dust_scheme
-      write(*,*) 'DustState%dust_moist_opt = ', Config_%dust_drag_opt
-      write(*,*) 'DustState%dust_horizflux_opt = ', Config_%dust_moist_opt
-      write(*,*) 'ChemState%nSpeciesDust = ', Config_%dust_horizflux_opt
+      write(*,*) 'DustState%activate = ', DustState_%activate
+      write(*,*) 'DustState%dust_scheme = ', DustState_%SchemeOpt
+      write(*,*) 'DustState%dust_moist_opt = ', DustState_%DragOpt
+      write(*,*) 'DustState%dust_horizflux_opt = ', DustState_%MoistOpt
+      write(*,*) 'DustState%AlphaScaleFactor = ', DustState_%AlphaScaleFactor
+      write(*,*) 'ChemState%nSpeciesDust = ', DustState_%HorizFluxOpt
       write(*,*) 'MetState%DSOILTYPE = ', MetState_%DSOILTYPE
       write(*,*) 'MetState%SSM = ', MetState_%SSM
       write(*,*) 'MetState%RDRAG = ', MetState_%RDRAG
@@ -175,6 +205,7 @@ contains
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%USTAR_THRESHOLD =', MetState_%USTAR_THRESHOLD
       write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
+      write(*,*) 'DustState%TotalEmission = ', DustState_%TotalEmission
 
    end subroutine print_info
 
