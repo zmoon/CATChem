@@ -19,7 +19,7 @@ module CCPr_Dust_Common_Mod
    public :: Soil_Erosion_Potential
    public :: Draxler_HorizFlux
    public :: Kawamura_HorizFlux
-   public :: MB95_DragParitition
+   public :: MB95_DragPartition
    public :: MB97_threshold_velocity
    public :: DustStateType
 
