@@ -23,6 +23,7 @@ repos:
                 src/core/charpak_mod\.F90|
                 src/core/qfyaml_mod\.F90|
                 src/process/old/.*\.F90|
+                src/process/Process_driver_template.F90|
                 drivers/ccpp/.*\.F90|
                 parameters/.*\.F90
             )$

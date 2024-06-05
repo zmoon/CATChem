@@ -1,126 +1,129 @@
 !> \brief Template for a new process driver
 !!
+!! To use:
+!! - replace <PROCESS> by an identifier for the process group (e.g. 'Dust')
+!!
 !! More in-depth description here
 !!
 !! \author Barry baker
 !! \date 05/2024
 !!!>
 MODULE CCPR_<PROCESS>_mod
-USE Precision_mod
-USE Error_Mod
-USE DiagState_Mod, Only : DiagStateType
-USE MetState_Mod,  Only : MetStateType
-USE ChemState_Mod, Only : ChemStateType
-USE Config_Mod,    Only : ConfigType
+   USE Precision_mod
+   USE Error_Mod
+   USE DiagState_Mod, Only : DiagStateType
+   USE MetState_Mod,  Only : MetStateType
+   USE ChemState_Mod, Only : ChemStateType
+   USE Config_Mod,    Only : ConfigType
 
-IMPLICIT NONE
+   IMPLICIT NONE
 
-PRIVATE
+   PRIVATE
 
-PUBLIC :: CCPR_<PROCESS>_Init
-PUBLIC :: CCPR_<PROCESS>_Run
-PUBLIC :: CCPR_<PROCESS>_Final
+   PUBLIC :: CCPR_<PROCESS>_Init
+   PUBLIC :: CCPR_<PROCESS>_Run
+   PUBLIC :: CCPR_<PROCESS>_Final
 
 
- !> \brief <PROCESS>StateType
- !!
- !! <PROCESS>StateType is the process-specific derived type. It should hold all module
- !! variables and arrays that are required to compute the emissions.
- !! For instance, if the process relies on an input field read through the
- !! CATChem configuration file (e.g. MY_INPUT_FIELD), the data array pointer
- !! to that field should be listed within the instance and NOT outside of it.
- !! This ensures that the same process can be invoked in various instances,
- !! all of them potentially pointing to different data fields.
- !!
- !! \param Activate Activate Process (True/False)
- !! \param SchemeOpt Scheme Option
- !! \param <Process>SpeciesIndex Effected Chemical Species from <Process>
- !! \param nSpc # of species
- !! \param SpcIDs CATChem species IDs
- !! \param ScaleFactor Scale Factor
- !!!>
-TYPE :: <PROCESS>StateType
-LOGICAL                         :: Activate              ! Activate Process (True/False)
-INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
-INTEGER                         :: <Process>SpeciesIndex ! Effected Chemical Species from <Process>
-INTEGER                         :: nSpc                  ! # of species
-INTEGER,  ALLOCATABLE           :: SpcIDs(:)             ! CATChem species IDs
+   !> \brief <PROCESS>StateType
+   !!
+   !! <PROCESS>StateType is the process-specific derived type. It should hold all module
+   !! variables and arrays that are required to compute the emissions.
+   !! For instance, if the process relies on an input field read through the
+   !! CATChem configuration file (e.g. MY_INPUT_FIELD), the data array pointer
+   !! to that field should be listed within the instance and NOT outside of it.
+   !! This ensures that the same process can be invoked in various instances,
+   !! all of them potentially pointing to different data fields.
+   !!
+   !! \param Activate Activate Process (True/False)
+   !! \param SchemeOpt Scheme Option
+   !! \param <Process>SpeciesIndex Effected Chemical Species from <Process>
+   !! \param nSpc # of species
+   !! \param SpcIDs CATChem species IDs
+   !! \param ScaleFactor Scale Factor
+   !!!>
+   TYPE :: <PROCESS>StateType
+      LOGICAL                         :: Activate              ! Activate Process (True/False)
+      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
+      INTEGER                         :: <Process>SpeciesIndex ! Effected Chemical Species from <Process>
+      INTEGER                         :: nSpc                  ! # of species
+      INTEGER,  ALLOCATABLE           :: SpcIDs(:)             ! CATChem species IDs
 
- ! Namelist parameters for specific <PROCESS> goes here as well
- !=================================================================
- ! Module specific variables/arrays/data pointers come below
- !=================================================================
-integer                         :: <Process><Scheme>Opt  ! Scheme Option
-real(fp)                        :: ScaleFactor           ! Scale Factor
-END TYPE <PROCESS>StateType
+      ! Namelist parameters for specific <PROCESS> goes here as well
+      !=================================================================
+      ! Module specific variables/arrays/data pointers come below
+      !=================================================================
+      integer                         :: <Process><Scheme>Opt  ! Scheme Option
+      real(fp)                        :: ScaleFactor           ! Scale Factor
+   END TYPE <PROCESS>StateType
 
 
 CONTAINS
 
- !>
- !! \brief Initialize the CATChem <PROCESS> module
- !!
- !! \param Config_Opt       CATCHem configuration options
- !! \param <PROCESS>State   CATCHem PROCESS state
- !! \param ChmState         CATCHem chemical state
- !! \param RC               Error return code
- !!
- !!!>
-SUBROUTINE CCPR_<yourname>_Init( Config, ChemState, <Process>State, RC )
-   ! USE
+   !>
+   !! \brief Initialize the CATChem <PROCESS> module
+   !!
+   !! \param Config_Opt       CATCHem configuration options
+   !! \param <PROCESS>State   CATCHem PROCESS state
+   !! \param ChmState         CATCHem chemical state
+   !! \param RC               Error return code
+   !!
+   !!!>
+   SUBROUTINE CCPR_<yourname>_Init( Config, ChemState, <Process>State, RC )
+      ! USE
 
-   IMPLICIT NONE
-   ! INPUT PARAMETERS
-   !-----------------
-   TYPE(ConfigOptType), POINTER       :: Config    ! Module options
-   TYPE(ChemStateType), POINTER       :: ChemState ! Chemical state
+      IMPLICIT NONE
+      ! INPUT PARAMETERS
+      !-----------------
+      TYPE(ConfigOptType), POINTER       :: Config    ! Module options
+      TYPE(ChemStateType), POINTER       :: ChemState ! Chemical state
 
-   ! INPUT/OUTPUT PARAMETERS
-   !------------------------
-   TYPE(<PROCESS>StateType), POINTER :: <Process>State ! <PROCESS> state
-   INTEGER,         INTENT(INOUT)    :: RC         ! Success or failure
+      ! INPUT/OUTPUT PARAMETERS
+      !------------------------
+      TYPE(<PROCESS>StateType), POINTER :: <Process>State ! <PROCESS> state
+      INTEGER,         INTENT(INOUT)    :: RC         ! Success or failure
 
-   ! Error handling
-   !---------------
-   CHARACTER(LEN=255)    :: ErrMsg
-   CHARACTER(LEN=255)    :: ThisLoc
+      ! Error handling
+      !---------------
+      CHARACTER(LEN=255)    :: ErrMsg
+      CHARACTER(LEN=255)    :: ThisLoc
 
-   ! LOCAL VARIABLES
-   !----------------
+      ! LOCAL VARIABLES
+      !----------------
 
-   ! Put any local variables here
+      ! Put any local variables here
 
-   !=================================================================
-   ! CCPR_<yourname>_Init begins here!
-   !=================================================================
-   ThisLoc = ' -> at CCPR_<PROCESS>_INIT (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
+      !=================================================================
+      ! CCPR_<yourname>_Init begins here!
+      !=================================================================
+      ThisLoc = ' -> at CCPR_<PROCESS>_INIT (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
 
-   ! First check if process is activated in config | if not don't allocate arrays or pointers
-   if (Config%<process>activate) then
+      ! First check if process is activated in config | if not don't allocate arrays or pointers
+      if (Config%<process>activate) then
 
-      ! Activate Process
-      !------------------
-      <Process>State%Activate = .true.
+         ! Activate Process
+         !------------------
+         <Process>State%Activate = .true.
 
-      ! Set number of species
-      !----------------------
-      <Process>State%nSpc = 1
+         ! Set number of species
+         !----------------------
+         <Process>State%nSpc = 1
 
-      ! Set scheme option
-      !------------------
-      <Process>State%SchemeOpt = config%<process><Scheme>Opt
+         ! Set scheme option
+         !------------------
+         <Process>State%SchemeOpt = config%<process><Scheme>Opt
 
-      ! Allocate any arrays here for scheme to run
-      ALLOCATE(<Process>State%SpcIDs(<Process>State%nSpc))
-      CALL CC_CheckVar(<Process>State%SpcIDs(<Process>State%nSpc), 0, RC)  ! Assumed here that the length of SpcIDs is equal to <Process>State%nSpc
-      IF (RC /= CC_SUCCESS) RETURN
-      <Process>State%SpcIDs(<Process>State%nSpc) = 1
+         ! Allocate any arrays here for scheme to run
+         ALLOCATE(<Process>State%SpcIDs(<Process>State%nSpc))
+         CALL CC_CheckVar(<Process>State%SpcIDs(<Process>State%nSpc), 0, RC)  ! Assumed here that the length of SpcIDs is equal to <Process>State%nSpc
+         IF (RC /= CC_SUCCESS) RETURN
+         <Process>State%SpcIDs(<Process>State%nSpc) = 1
 
-   else
+      else
 
-      <Process>State%Activate = .false.
+         <Process>State%Activate = .false.
 
-   endif
+      endif
 
    end subroutine CCPR_<yourname>_Init
 
@@ -175,41 +178,41 @@ SUBROUTINE CCPR_<yourname>_Init( Config, ChemState, <Process>State, RC )
 
       endif
 
-      end subroutine CCPr_<PROCESS>_Run
+   end subroutine CCPr_<PROCESS>_Run
 
-      !>
-      !! \brief Finalize the <Process>
-      !!
-      !! \param [INOUT] <Process>State
-      !! \param [OUT] RC Return code
-      !!!>
-      SUBROUTINE CCPr_<PROCESS>_Final( <PROCESS>State, RC )
+   !>
+   !! \brief Finalize the <Process>
+   !!
+   !! \param [INOUT] <Process>State
+   !! \param [OUT] RC Return code
+   !!!>
+   SUBROUTINE CCPr_<PROCESS>_Final( <PROCESS>State, RC )
 
-         ! USE
-         !----
+      ! USE
+      !----
 
-         IMPLICIT NONE
+      IMPLICIT NONE
 
-         ! INPUT/OUTPUT PARAMETERS
-         TYPE(<PROCESS>State_type), INTENT(INOUT) :: <PROCESS>State  ! <PROCESS>State Instance
+      ! INPUT/OUTPUT PARAMETERS
+      TYPE(<PROCESS>State_type), INTENT(INOUT) :: <PROCESS>State  ! <PROCESS>State Instance
 
-         ! OUTPUT PARAMETERS
-         INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+      ! OUTPUT PARAMETERS
+      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
 
-         ! LOCAL VARIABLES
-         CHARACTER(LEN=255) :: ErrMsg, thisLoc
+      ! LOCAL VARIABLES
+      CHARACTER(LEN=255) :: ErrMsg, thisLoc
 
-         ! Initialize
-         RC = CC_SUCCESS
-         errMsg = ''
-         thisLoc = ' -> at CCPr_<PROCESS>_Final (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
+      ! Initialize
+      RC = CC_SUCCESS
+      errMsg = ''
+      thisLoc = ' -> at CCPr_<PROCESS>_Final (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
 
-         ! Deallocate any arrays here
-         DELLOCATE( <PROCESS>State%SpcIDs, STAT=RC )
-         CALL CC_CheckVar('<PROCESS>State%SpcIDs', 0, RC)
-         IF (RC /= CC_SUCCESS) RETURN
-         <PROCESS>State%SpcIDs => NULL()
+      ! Deallocate any arrays here
+      DELLOCATE( <PROCESS>State%SpcIDs, STAT=RC )
+      CALL CC_CheckVar('<PROCESS>State%SpcIDs', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
+      <PROCESS>State%SpcIDs => NULL()
 
-         end subroutine CCPr_<PROCESS>_Final
+   end subroutine CCPr_<PROCESS>_Final
 
-         END MODULE CCPR_<yourname>_Mod
+END MODULE CCPR_<yourname>_Mod
