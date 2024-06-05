@@ -34,3 +34,14 @@ repos:
         additional_dependencies: [PyYAML]
       - id: cmake-lint
         additional_dependencies: [PyYAML]
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        exclude: |
+            (?x)^(
+                src/process/old/.*\.F90|
+                drivers/ccpp/.*\.F90|
+                parameters/.*\.F90
+            )$
