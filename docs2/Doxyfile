@@ -18,8 +18,8 @@ INPUT += ../src/core
 INPUT += ../src/process/dust
 INPUT += ../src/process/seasalt
 USE_MDFILE_AS_MAINPAGE = start.md
-HTML_EXTRA_STYLESHEET = ../docs2/static/doxygen-awesome.css \
-						../docs2/static/doxygen-awesome-sidebar-only.css
+HTML_EXTRA_STYLESHEET = static/doxygen-awesome.css \
+                        static/doxygen-awesome-sidebar-only.css
 HTML_COLORSTYLE = LIGHT
 DISABLE_INDEX = NO
 GENERATE_TREEVIEW = YES
