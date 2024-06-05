@@ -130,6 +130,7 @@ MODULE MetState_Mod
       REAL(fp)           :: PS_DRY         !< Dry surface pressure at start of timestep [hPa]
       REAL(fp)           :: QV2M           !< Specific Humidity at 2m [kg/kg]
       REAL(fp)           :: T2M
+      REAL(fp)           :: SST            !< Sea surface temperature [K]
 
       REAL(fp)           :: SLP            !< Sea level pressure [hPa]
 
@@ -272,145 +273,6 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
 
-      !=======================================================================
-      ! Nullify all fields for safety's sake before allocating them
-      ! This can prevent compilation errors caused by uninitialized values
-      !=======================================================================
-      ! MetState%ALBD_VIS       => NULL() ! Visible albedo
-      ! MetState%ALBD_NIR       => NULL() ! Near-IR albedo
-      ! MetState%ALBD_UV        => NULL() ! UV albedo
-      ! MetState%AREA_M2        => NULL() ! Area of grid box
-      ! MetState%CLDFRC         => NULL() ! Cloud fraction
-      ! ! MetState%CLDTOPS        => NULL() ! Cloud top level
-      ! MetState%CONV_DEPTH     => NULL() ! Convective depth
-      ! MetState%EFLUX          => NULL() ! Surface flux
-      ! MetState%FLASH_DENS     => NULL() ! Flash density
-      ! MetState%FRLAKE         => NULL() ! Fraction Lake of grid box
-      ! MetState%FRLAND         => NULL() ! Fraction Land of grid box
-      ! MetState%FRLANDIC       => NULL() ! Fraction LandIce of grid box
-      ! MetState%FROCEAN        => NULL() ! Fraction Ocean of grid box
-      ! MetState%FRSEAICE       => NULL() ! Fraction SeaIce of grid box
-      ! MetState%FRSNO          => NULL() ! Fraction Snow of grid box
-      ! MetState%GWETROOT       => NULL() ! Soil Moisture Root Zone
-      ! MetState%GWETTOP        => NULL() ! Soil Moisture Top Level
-      ! MetState%HFLUX          => NULL() ! Surface flux
-      ! MetState%IsLand         => NULL() ! Is this grid box land?
-      ! MetState%IsWater        => NULL() ! Is this grid box water?
-      ! MetState%IsIce          => NULL() ! Is this grid box ice?
-      ! MetState%IsSnow         => NULL() ! Is this grid box snow?
-      ! MetState%LAI            => NULL() ! Leaf Area Index
-      ! MetState%PARDR          => NULL() ! Direct  downward PAR
-      ! MetState%PARDF          => NULL() ! Diffuse downward PAR
-      ! MetState%PBLH           => NULL() ! PBL height
-      ! MetState%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
-      ! MetState%PBL_TOP_L      => NULL() ! PBL top [levels]
-      ! MetState%PBL_TOP_m      => NULL() ! PBL top [m]
-      ! MetState%PBL_THICK      => NULL() ! PBL thickness
-      ! MetState%PHIS           => NULL() ! Surface geopotential
-      ! MetState%PRECANV        => NULL() ! Canopy evaporation
-      ! MetState%PRECCON        => NULL() ! Convective precipitation
-      ! MetState%PRECLSC        => NULL() ! Large-scale precipitation
-      ! MetState%PRECTOT        => NULL() ! Total precipitation
-      ! MetState%PS1_WET        => NULL()
-      ! MetState%PS2_WET        => NULL()
-      ! MetState%PSC2_WET       => NULL()
-      ! MetState%PS1_DRY        => NULL()
-      ! MetState%PS2_DRY        => NULL()
-      ! MetState%PSC2_DRY       => NULL()
-      ! MetState%QV2M           => NULL() ! 2-m specific humidity
-      ! MetState%SEAICE00       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE10       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE20       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE30       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE40       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE50       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE60       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE70       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE80       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE90       => NULL() ! Sea ice fraction
-      ! MetState%SLP            => NULL() ! Sea level pressure
-      ! MetState%SNODP          => NULL() ! Snow depth
-      ! MetState%SNOMAS         => NULL() ! Snow mass
-      ! MetState%SUNCOS         => NULL() ! Cosine of solar zenith angle
-      ! MetState%SUNCOSmid      => NULL() ! Cosine of solar zenith angle
-      ! MetState%SUNCOSsum      => NULL() ! Cosine of solar zenith angle
-      ! MetState%SZAFACT        => NULL() ! Cosine of solar zenith angle
-      ! MetState%SWGDN          => NULL() ! Surface downward SW radiation
-      ! MetState%TO3            => NULL() ! Total ozone
-      ! MetState%TROPP          => NULL() ! Topopause level pressure
-      ! MetState%TropLev        => NULL() ! Topopause level
-      ! MetState%TropHt         => NULL() ! Top level height
-      ! MetState%TS             => NULL() ! Surface temperature
-      ! MetState%TSKIN          => NULL() ! Skin temperature
-      ! MetState%U10M           => NULL() ! 10-m zonal wind
-      ! MetState%USTAR          => NULL() ! Friction velocity
-      ! MetState%V10M           => NULL() ! 10-m meridional wind
-      ! MetState%Z0             => NULL() ! Surface roughness
-      ! MetState%CNV_FRC        => NULL() ! Convective fraction
-      ! MetState%CLDF           => NULL() ! Cloud fraction
-      ! MetState%CMFMC          => NULL() ! Convective mass flux
-      ! MetState%DQRCU          => NULL()
-      ! MetState%DQRLSAN        => NULL()
-      ! MetState%DTRAIN         => NULL()
-      ! MetState%F_OF_PBL       => NULL()
-      ! MetState%F_UNDER_PBLTOP => NULL()
-      ! MetState%OMEGA          => NULL()
-      ! MetState%OPTD           => NULL()
-      ! MetState%PEDGE          => NULL()
-      ! MetState%PFICU          => NULL()
-      ! MetState%PFILSAN        => NULL()
-      ! MetState%PFLCU          => NULL()
-      ! MetState%PFLLSAN        => NULL()
-      ! MetState%QI             => NULL()
-      ! MetState%QL             => NULL()
-      ! MetState%RH             => NULL()
-      ! MetState%SPHU           => NULL()
-      ! MetState%SPHU1          => NULL()
-      ! MetState%SPHU2          => NULL()
-      ! MetState%T              => NULL()
-      ! MetState%TAUCLI         => NULL()
-      ! MetState%TAUCLW         => NULL()
-      ! MetState%TMPU1          => NULL()
-      ! MetState%TMPU2          => NULL()
-      ! MetState%U              => NULL()
-      ! MetState%UPDVVEL        => NULL()
-      ! MetState%V              => NULL()
-      ! MetState%PEDGE_DRY      => NULL()
-      ! MetState%PMID           => NULL()
-      ! MetState%PMID_DRY       => NULL()
-      ! MetState%THETA          => NULL()
-      ! MetState%TV             => NULL()
-      ! MetState%MAIRDEN        => NULL()
-      ! MetState%AIRDEN         => NULL()
-      ! MetState%AIRNUMDEN      => NULL()
-      ! MetState%AVGW           => NULL()
-      ! MetState%BXHEIGHT       => NULL()
-      ! MetState%DELP           => NULL()
-      ! MetState%DELP_DRY       => NULL()
-      ! MetState%AD             => NULL()
-      ! MetState%PS             => NULL()
-      ! MetState%AIRVOL         => NULL()
-      ! MetState%DP_DRY_PREV    => NULL()
-      ! MetState%SPHU_PREV      => NULL()
-      ! MetState%IREG           => NULL()
-      ! MetState%ILAND          => NULL()
-      ! MetState%IUSE           => NULL()
-      ! MetState%MODISLAI       => NULL()
-      ! MetState%XLAI           => NULL()
-      ! MetState%LandTypeFrac   => NULL()
-      ! MetState%XLAI_NATIVE    => NULL()
-      ! MetState%XLAI2          => NULL()
-      ! MetState%InChemGrid     => NULL()
-      ! MetState%InPbl          => NULL()
-      ! MetState%InStratMeso    => NULL()
-      ! MetState%InStratosphere => NULL()
-      ! MetState%InTroposphere  => NULL()
-      ! MetState%LocalSolarTime => NULL()
-      ! MetState%IsLocalNoon    => NULL()
-      ! MetState%IMIX           => NULL()
-      ! MetState%FPBL           => NULL()
-      ! MetState%PBL_MAX_L      = 0
-
    END SUBROUTINE Zero_MetState
 
    !>
@@ -485,6 +347,7 @@ CONTAINS
       MetState%SSM = ZERO
       MetState%CLAYFRAC = ZERO
       MetSTate%SANDFRAC = ZERO
+      MetState%SST = ZERO
 
       ! Allocate Column Fields
       !-----------------------

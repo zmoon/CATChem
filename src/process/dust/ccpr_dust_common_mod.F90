@@ -30,42 +30,44 @@ module CCPr_Dust_Common_Mod
    !! This type contains the following variables:
    !! - Activate : Activate Process (True/False)
    !! - nDustSpecies : Number of dust processes
-   !! - SchemeOpt : Scheme Option
+   !! - SchemeOpt : Scheme Option (1=Fengsha, 2=Ginoux)
    !! - DustSpeciesIndex : Index of dust species
    !! - SpcIDs : CATChem species IDs
-   !! - LowerBinRadius : Lower bin radius        [m]
-   !! - UpperBinRadius : Upper bin radius        [m]
-   !! - EffectiveRadius : Effective radius        [m]
-   !! - DustDensity : Dust density            [kg/m^3]
+   !! - LowerBinRadius : Lower bin Radius        [m]
+   !! - UpperBinRadius : Upper bin Radius        [m]
+   !! - EffectiveRadius : Effective Radius        [m]
+   !! - DustDensity : Dust Particle Density            [kg/m^3]
    !! - BetaScaleFactor : Beta Scaling Parameter  [1]
    !! - AlphaScaleFactor : Alpha Scaling Parameter [1]
-   !! - TotalEmission : Total emission          [kg/m^2/s]
-   !! - EmissionRate : Emission rate            [kg/m^2/s]
-   !! - FengshaMoistureOpt : Fengsha-Moisture Calculation Option
-   !! - FengshaDragOpt : Fengsha-Drag Calculation Option
+   !! - TotalEmission : Total Emission          [ug/m^2/s]
+   !! - EmissionPerSpecies : Emission Rate per dust species  [ug/m^2/s]
+   !! - MoistOpt : Moisture Calculation Option
+   !! - DragOpt : Drag Calculation Option
+   !! - HorizFluxOpt : Horizontal Flux Calculation Option
    !!!>
    TYPE :: DustStateType
       ! Generic Variables for Every Process
-      Logical                         :: Activate            !< Activate Process (True/False)
-      INTEGER                         :: nDustSpecies        !< Number of dust processes
-      INTEGER                         :: SchemeOpt           !< Scheme Option
-      INTEGER, ALLOCATABLE            :: DustSpeciesIndex(:) !< Index of dust species
-      INTEGER, ALLOCATABLE            :: SpcIDs(:)           !< CATChem species IDs
+      Logical                         :: Activate                !< Activate Process (True/False)
+      INTEGER                         :: nDustSpecies            !< Number of dust processes
+      INTEGER                         :: SchemeOpt               !< Scheme Option
+      INTEGER, ALLOCATABLE            :: DustSpeciesIndex(:)     !< Index of dust species
+      INTEGER, ALLOCATABLE            :: SpcIDs(:)               !< CATChem species IDs
 
       ! Process Specific Parameters
-      REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)         !< Lower bin radius        [m]
-      REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)         !< Upper bin radius        [m]
-      REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)        !< Effective radius        [m]
-      REAL(fp), ALLOCATABLE           :: DustDensity(:)            !< Dust density            [kg/m^3]
-      REAL(fp)                        :: BetaScaleFactor           !< Beta Scaling Parameter  [1]
-      REAL(fp)                        :: AlphaScaleFactor          !< Alpha Scaling Parameter [1]
-      REAL(fp), ALLOCATABLE           :: TotalEmission             !< Total emission          [kg/m^2/s]
-      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)     !< Emission per species    [kg/m^2/s]
+      REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)       !< Lower bin radius        [m]
+      REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)       !< Upper bin radius        [m]
+      REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)      !< Effective radius        [m]
+      REAL(fp), ALLOCATABLE           :: DustDensity(:)          !< Dust density            [kg/m^3]
+      REAL(fp)                        :: BetaScaleFactor         !< Gamma Scaling Parameter  [1]
+      REAL(fp)                        :: AlphaScaleFactor        !< Alpha Scaling Parameter [1]
+      REAL(fp), ALLOCATABLE           :: TotalEmission           !< Total emission          [kg/m^2/s]
+      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
 
       ! Scheme Options
-      INTEGER                         :: MoistOpt  !< Fengsha-Moisture Calculation Option
-      INTEGER                         :: DragOpt      !< Fengsha-Drag Calculation Option
-      INTEGER                         :: HorizFluxOpt        !< Horizontal Flux Calculation Option
+      INTEGER                         :: MoistOpt                !< Fengsha-Moisture Calculation Option
+      INTEGER                         :: DragOpt                 !< Fengsha-Drag Calculation Option
+      INTEGER                         :: HorizFluxOpt            !< Horizontal Flux Calculation Option
+
 
       !=================================================================
       ! Module specific variables/arrays/data pointers come below
@@ -100,6 +102,7 @@ contains
       ! Local Variables
       !----------------
       real(fp) :: vsat                      !< Saturated volumetric water content (sand-dependent) [m3 m-3]
+
       real(fp) :: gravimetric_soil_moisture !< Gravimetric soil moisture [kg/kg]
       real(fp) :: DryLimit                  !< Dry limit of the soil moisture [kg/kg]
 
@@ -236,9 +239,10 @@ contains
 
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: clayfrac !< Fractional Clay Content (0-1)
-      real(fp), intent(in)  :: sandfrac !< Fractional Sand Content (0-1)
-      real(fp), intent(inout) :: SEP    !< Soil Erosion Potential (0-1)
+      real(fp), intent(in)    :: clayfrac !< Fractional Clay Content (0-1)
+      real(fp), intent(in)    :: sandfrac !< Fractional Sand Content (0-1)
+      real(fp), intent(inout) :: SEP      !< Soil Erosion Potential (0-1)
+
 
       ! Initialize
       SEP = ZERO
@@ -282,7 +286,7 @@ contains
 
       ! Local Variables
       !----------------
-      real(fp) :: u_ts    ! Modified threshold fricition velocity
+      real(fp) :: u_ts    !< Modified threshold fricition velocity
 
       ! Initialize
       !-----------
@@ -403,6 +407,7 @@ contains
       ! Output Parameters
       !------------------
       real(fp), intent(out) :: ustar_threshold !< threshold friction velocity
+
 
       ! Local Variables
       !-----------------

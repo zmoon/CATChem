@@ -24,7 +24,15 @@ module CCPr_Scheme_Fengsha_Mod
 
 contains
 
-   !> \brief Calculates the FENGSHA dust emissions (total and per species) in ug m-2 s-1
+
+   !> \brief This is the FENGSHA dust emission scheme developed at NOAA Air Resources Laboratory
+   !!
+   !! This is the FENGSHA dust emission scheme developed at NOAA Air Resources Laboratory.  Originally developed
+   !! by Daniel Tong and revised by Barry Baker.  FENGSHA is implemented operationally at the NOAA National
+   !! Weather Service in the Global Ensamble Forecast System (GEFS) version 12 and has been implemented in
+   !! some fashion in the National Air Quality Forecast System Capability (NAQFC) since 2012.
+   !!
+   !! outputs emission flux in [ug m-2 s-1]
    !!
    !! \param MetState     Meteorological Variables
    !! \param DiagState    Diagnostic Variables
@@ -70,7 +78,7 @@ contains
       real(fp) :: alpha_grav                           !< Alpha Parameter over Gravity
       real(fp) :: HorizFlux                            !< Horizontal Mass Flux
       real(fp) :: FengshaScaling                       !< Total Scaling Factor
-      real(fp) :: TotalFlux                            !< Total Mass Flux
+
 
       real(fp), parameter :: clay_thresh = 0.2
       real(fp), parameter :: kvhmax = 2.0e-4 !< Max. Vertical to Horizontal Mass Flux Ratio
@@ -89,7 +97,6 @@ contains
       SEP = ZERO
       H = ZERO
       EmissBins = ZERO
-      TotalFlux = ZERO
       DustState%TotalEmission = ZERO
 
       nbins = size(DustState%EffectiveRadius)
@@ -188,31 +195,22 @@ contains
             return
          endif
 
-         ! Compute the Total Dust Flux
-         !----------------------------
+         ! Compute the Total Dust Flux (ug/m2/s)
+         !--------------------------------------
          FengshaScaling = DustState%AlphaScaleFactor * (MetState%SSM ** DustState%BetaScaleFactor) * MetState%AIRDEN(1) &
             / g0 * 1.0e9_fp
 
-         ! write(*,*) 'FengshaScaling = ', FengshaScaling
-         ! write(*,*) 'HorizFlux = ', HorizFlux
-         ! write(*,*) 'h_to_v_ratio = ', h_to_v_ratio
-         ! write(*,*) 'USTAR = ', MetState%USTAR
-         ! write(*,*) 'USTAR_THRESHOLD = ', MetState%USTAR_THRESHOLD
-         ! write(*,*) 'R = ', R
-         ! write(*,*) 'H = ', H
-         ! write(*,*) 'u_ts = ', MetState%USTAR_THRESHOLD * H / R
-
-         TotalFlux = FengshaScaling * HorizFlux * h_to_v_ratio
+         DustState%TotalEmission = FengshaScaling * HorizFlux * h_to_v_ratio
 
          ! Fill Diagnostic TotalFlux
          !--------------------------
-         DiagState%dust_total_flux = TotalFlux
+         DiagState%dust_total_flux = DustState%TotalEmission
 
          ! Compute the Dust Concentration
          !-------------------------------
          if (DustState%nDustSpecies > 0) then
             do n = 1, DustState%nDustSpecies
-               EmissBins(n) = distribution(n) * TotalFlux
+               EmissBins(n) = distribution(n) * DustState%TotalEmission
             enddo
          endif
 
