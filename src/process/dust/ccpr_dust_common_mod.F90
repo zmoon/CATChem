@@ -140,6 +140,7 @@ contains
    !! \param volumetric_soil_moisture Volumetric soil moisture
    !! \param H Soil moisture attenuation factor for dust emission
    !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine Shao_SoilMoisture( volumetric_soil_moisture, H)
       IMPLICIT NONE
@@ -175,6 +176,8 @@ contains
    !! \param rLow Lower radius
    !! \param rUp Upper radius
    !! \param dist Distribution
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine KokDistribution(radius, rLow, rUp, dist)
       use constants, only: pi
@@ -226,6 +229,9 @@ contains
    !! \param clayfrac clay fraction
    !! \param sandfrac sand fraction
    !! \param SEP soil erosion potential
+   !!
+   !! \ingroup CATChem_Dust_Processes
+   !!!>
    subroutine Soil_Erosion_Potential(clayfrac, sandfrac, SEP)
 
       IMPLICIT NONE
@@ -262,6 +268,8 @@ contains
    !! \param H Soil Moisture Attenuation Factor
    !! \param HorizFlux Horizontal Mass Flux
    !!
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine Draxler_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
@@ -308,6 +316,7 @@ contains
    !! \param H Soil Moisture Attenuation Factor
    !! \param HorizFlux Horizontal Mass Flux
    !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine Kawamura_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
@@ -343,6 +352,8 @@ contains
    !!
    !! \param z0 roughness length
    !! \param R Drag partition
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine MB95_DragParitition(z0, R)
       IMPLICIT NONE
@@ -375,6 +386,8 @@ contains
    !! \param air_density air density
    !! \param radius particle radius
    !! \param ustar_threshold threshold friction velocity
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    subroutine MB97_threshold_velocity(soil_density, air_density, radius, ustar_threshold)
       ! USES
