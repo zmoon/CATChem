@@ -196,6 +196,8 @@ CONTAINS
    !! \param [INOUT] DustState The DustState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    SUBROUTINE CCPr_Dust_Run( MetState, DiagState, DustState, ChemState, RC )
 
@@ -263,6 +265,8 @@ CONTAINS
    !!
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup CATChem_Dust_Processes
    !!!>
    SUBROUTINE CCPr_Dust_Finalize( DustState, RC )
 
