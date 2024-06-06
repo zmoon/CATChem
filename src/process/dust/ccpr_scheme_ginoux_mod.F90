@@ -41,22 +41,22 @@ contains
       implicit none
 
       ! Arguments
-      type(MetStateType),  intent(in)    :: MetState
-      type(DiagStateType), intent(inout) :: DiagState
-      type(DustStateType), intent(inout) :: DustState
+      type(MetStateType),  intent(in)    :: MetState   !< Meteorological Variables
+      type(DiagStateType), intent(inout) :: DiagState  !< Diagnostic Variables
+      type(DustStateType), intent(inout) :: DustState  !< Dust Variables
       integer, intent(out) :: RC
 
       ! Local Variables
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
-      logical :: do_dust                               ! Enable Dust Calculation Flag
-      integer :: n                                     ! loop couters
-      integer :: nbins                                 ! number of dust bins
-      real(fp) :: ginoux_scaling                       ! Ginoux scaling
-      real(fp) :: u_thresh0                            ! Dry threshold wind speed [m/s]
-      real(fp) :: u_thresh                             ! Moisture Corrected threshold wind speed [m/s]
-      real(fp) :: w10m                                 ! 10m wind speed [m/s]
-      real(fp), allocatable :: EmissionBin(:)          ! Emission Rate per Bin
+      logical :: do_dust                               !< Enable Dust Calculation Flag
+      integer :: n                                     !< loop couters
+      integer :: nbins                                 !< number of dust bins
+      real(fp) :: ginoux_scaling                       !< Ginoux scaling
+      real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
+      real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
+      real(fp) :: w10m                                 !< 10m wind speed [m/s]
+      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
 
       ! Initialize
       errMsg = ''

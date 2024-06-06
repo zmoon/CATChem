@@ -73,136 +73,125 @@ MODULE MetState_Mod
 
       ! Radiation Related Surface Fields
       !---------------------------------
-      REAL(fp)           :: ALBD_VIS       ! Visible surface albedo [1]
-      REAL(fp)           :: ALBD_NIR       ! Near-IR surface albedo [1]
-      REAL(fp)           :: ALBD_UV        ! UV surface albedo [1]
-      REAL(fp)           :: PARDR          ! Direct photsynthetically active radiation [W/m2]
-      REAL(fp)           :: PARDF          ! Diffuse photsynthetically active radiation [W/m2]
-      REAL(fp)           :: SUNCOS         ! COS(solar zenith angle) at current time
-      REAL(fp)           :: SUNCOSmid      ! COS(solar zenith angle) at midpoint of chem timestep
-      REAL(fp)           :: SUNCOSsum      ! Sum of COS(SZA) for HEMCO OH diurnal variability
-      REAL(fp)           :: SZAFACT        ! Diurnal scale factor for HEMCO OH diurnal variability (computed) [1]
-      REAL(fp)           :: SWGDN          ! Incident radiation @ ground [W/m2]
+      REAL(fp)           :: ALBD_VIS       !< Visible surface albedo [1]
+      REAL(fp)           :: ALBD_NIR       !< Near-IR surface albedo [1]
+      REAL(fp)           :: ALBD_UV        !< UV surface albedo [1]
+      REAL(fp)           :: PARDR          !< Direct photsynthetically active radiation [W/m2]
+      REAL(fp)           :: PARDF          !< Diffuse photsynthetically active radiation [W/m2]
+      REAL(fp)           :: SUNCOS         !< COS(solar zenith angle) at current time
+      REAL(fp)           :: SUNCOSmid      !< COS(solar zenith angle) at midpoint of chem timestep
+      REAL(fp)           :: SUNCOSsum      !< Sum of COS(SZA) for HEMCO OH diurnal variability
+      REAL(fp)           :: SZAFACT        !< Diurnal scale factor for HEMCO OH diurnal variability (computed) [1]
+      REAL(fp)           :: SWGDN          !< Incident radiation @ ground [W/m2]
 
       ! Soil Related Fields
       !--------------------
-      REAL(fp)           :: GWETTOP        ! Top soil moisture [1]
-      REAL(fp)           :: GWETROOT       ! Root Zone soil moisture [1]
+      REAL(fp)           :: GWETTOP        !< Top soil moisture [1]
+      REAL(fp)           :: GWETROOT       !< Root Zone soil moisture [1]
 
       ! Flux Related Fields
       !--------------------
-      REAL(fp)           :: EFLUX          ! Latent heat flux [W/m2]
-      REAL(fp)           :: HFLUX          ! Sensible heat flux [W/m2]
-      REAL(fp)           :: U10M           ! E/W wind speed @ 10m ht [m/s]
-      REAL(fp)           :: USTAR          ! Friction velocity [m/s]
-      REAL(fp)           :: V10M           ! N/S wind speed @ 10m ht [m/s]
-      REAL(fp)           :: Z0             ! Surface roughness height [m]
+      REAL(fp)           :: EFLUX          !< Latent heat flux [W/m2]
+      REAL(fp)           :: HFLUX          !< Sensible heat flux [W/m2]
+      REAL(fp)           :: U10M           !< E/W wind speed @ 10m ht [m/s]
+      REAL(fp)           :: USTAR          !< Friction velocity [m/s]
+      REAL(fp)           :: V10M           !< N/S wind speed @ 10m ht [m/s]
+      REAL(fp)           :: Z0             !< Surface roughness height [m]
 
       ! Cloud Related Fields
       !---------------------
-      REAL(fp)           :: CLDFRC         ! Column cloud fraction [1]
-      REAL(fp)           :: CONV_DEPTH     ! Convective cloud depth [m]
-      REAL(fp)           :: FLASH_DENS     ! Lightning flash density [#/km2/s]
+      REAL(fp)           :: CLDFRC         !< Column cloud fraction [1]
+      REAL(fp)           :: CONV_DEPTH     !< Convective cloud depth [m]
+      REAL(fp)           :: FLASH_DENS     !< Lightning flash density [#/km2/s]
 
 
 
 
 
 
-      REAL(fp)           :: PBLH           ! PBL height [m]
-      REAL(fp)           :: PBL_TOP_hPa    ! PBL top [hPa]
-      REAL(fp)           :: PBL_TOP_L      ! PBL top [level]
-      REAL(fp)           :: PBL_TOP_m      ! PBL top [m]
-      REAL(fp)           :: PBL_THICK      ! PBL thickness [hPa]
-      REAL(fp)           :: PHIS           ! Surface geopotential height [m2/s2]
-      REAL(fp)           :: PRECANV        ! Anvil previp @ ground [kg/m2/s] -> [mm/day]
-      REAL(fp)           :: PRECCON        ! Conv  precip @ ground [kg/m2/s] -> [mm/day]
-      REAL(fp)           :: PRECLSC        ! Large-scale precip @ ground kg/m2/s] -> [mm/day]
-      REAL(fp)           :: PRECTOT        ! Total precip @ ground [kg/m2/s] -> [mm/day]
-      REAL(fp)           :: PS_WET         ! Wet surface pressure at start of timestep [hPa]
-      REAL(fp)           :: PS_DRY         ! Dry surface pressure at start of timestep [hPa]
-      REAL(fp)           :: QV2M           ! Specific Humidity at 2m [kg/kg]
+      REAL(fp)           :: PBLH           !< PBL height [m]
+      REAL(fp)           :: PBL_TOP_hPa    !< PBL top [hPa]
+      REAL(fp)           :: PBL_TOP_L      !< PBL top [level]
+      REAL(fp)           :: PBL_TOP_m      !< PBL top [m]
+      REAL(fp)           :: PBL_THICK      !< PBL thickness [hPa]
+      REAL(fp)           :: PHIS           !< Surface geopotential height [m2/s2]
+      REAL(fp)           :: PRECANV        !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
+      REAL(fp)           :: PRECCON        !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
+      REAL(fp)           :: PRECLSC        !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
+      REAL(fp)           :: PRECTOT        !< Total precip @ ground [kg/m2/s] -> [mm/day]
+      REAL(fp)           :: PS_WET         !< Wet surface pressure at start of timestep [hPa]
+      REAL(fp)           :: PS_DRY         !< Dry surface pressure at start of timestep [hPa]
+      REAL(fp)           :: QV2M           !< Specific Humidity at 2m [kg/kg]
       REAL(fp)           :: T2M
+      REAL(fp)           :: SST            !< Sea surface temperature [K]
 
-      REAL(fp)           :: SLP            ! Sea level pressure [hPa]
+      REAL(fp)           :: SLP            !< Sea level pressure [hPa]
 
-      REAL(fp)           :: PS             ! Surface Pressure [hPa]
+      REAL(fp)           :: PS             !< Surface Pressure [hPa]
 
 
-      REAL(fp)           :: TO3            ! Total overhead O3 column [DU]
-      REAL(fp)           :: TROPP          ! Tropopause pressure [hPa]
-      INTEGER            :: TropLev        ! Tropopause level [1]
-      REAL(fp)           :: TropHt         ! Tropopause height [km]
-      REAL(fp)           :: TS             ! Surface temperature [K]
-      REAL(fp)           :: TSKIN          ! Surface skin temperature [K]
+      REAL(fp)           :: TO3            !< Total overhead O3 column [DU]
+      REAL(fp)           :: TROPP          !< Tropopause pressure [hPa]
+      INTEGER            :: TropLev        !< Tropopause level [1]
+      REAL(fp)           :: TropHt         !< Tropopause height [km]
+      REAL(fp)           :: TS             !< Surface temperature [K]
+      REAL(fp)           :: TSKIN          !< Surface skin temperature [K]
 
-      REAL(fp)           :: CNV_FRC        ! Convective fraction [1]
+      REAL(fp)           :: CNV_FRC        !< Convective fraction [1]
 
       !----------------------------------------------------------------------
       ! Column Fields
       !----------------------------------------------------------------------
-      REAL(fp), POINTER :: CLDF          (:) ! 3-D cloud fraction [1]
-      REAL(fp), POINTER :: CMFMC         (:) ! Cloud mass flux [kg/m2/s]
-      REAL(fp), POINTER :: DQRCU         (:) ! Conv precip production rate [kg/kg/s] (assume per dry air)
-      REAL(fp), POINTER :: DQRLSAN       (:) ! LS precip prod rate [kg/kg/s] (assume per dry air)
-      REAL(fp), POINTER :: DTRAIN        (:) ! Detrainment flux [kg/m2/s]
-      REAL(fp), POINTER :: F_OF_PBL      (:) ! Fraction of box within PBL [1]
-      REAL(fp), POINTER :: F_UNDER_PBLTOP(:) ! Fraction of box under PBL top
-      REAL(fp), POINTER :: OMEGA         (:) ! Updraft velocity [Pa/s]
-      REAL(fp), POINTER :: OPTD          (:) ! Visible optical depth [1]
-      REAL(fp), POINTER :: PEDGE         (:) ! Wet air press @ level edges [hPa]
-      REAL(fp), POINTER :: PFICU         (:) ! Dwn flux ice prec:conv [kg/m2/s]
-      REAL(fp), POINTER :: PFILSAN       (:) ! Dwn flux ice prec:LS+anv [kg/m2/s]
-      REAL(fp), POINTER :: PFLCU         (:) ! Dwn flux liq prec:conv [kg/m2/s]
-      REAL(fp), POINTER :: PFLLSAN       (:) ! Dwn flux ice prec:LS+anv [kg/m2/s]
-      REAL(fp), POINTER :: QI            (:) ! Mass fraction of cloud ice water [kg/kg dry air]
-      REAL(fp), POINTER :: QL            (:) ! Mass fraction of cloud liquid water [kg/kg dry air]
-      REAL(fp), POINTER :: RH            (:) ! Relative humidity [%]
-      REAL(fp), POINTER :: SPHU          (:) ! Specific humidity
-      !  [g H2O/kg tot air]
-      REAL(fp), POINTER :: SPHU1         (:) ! Specific humidity at start
-      !  of timestep [g/kg]
-      REAL(fp), POINTER :: SPHU2         (:) ! Specific humidity at end
-      !  of timestep [g/kg]
-      REAL(fp), POINTER :: T             (:) ! Temperature [K]
-      REAL(fp), POINTER :: TAUCLI        (:) ! Opt depth of ice clouds [1]
-      REAL(fp), POINTER :: TAUCLW        (:) ! Opt depth of H2O clouds [1]
-      REAL(fp), POINTER :: TMPU1         (:) ! Temperature at start of
-      !  timestep [K]
-      REAL(fp), POINTER :: TMPU2         (:) ! Temperature at end of
-      !  timestep [K]
-      REAL(fp), POINTER :: U             (:) ! E/W component of wind [m s-1]
-      REAL(fp), POINTER :: UPDVVEL       (:) ! Updraft vertical velocity
-      !  [hPa/s]
-      REAL(fp), POINTER :: V             (:) ! N/S component of wind [m s-1]
+      REAL(fp), POINTER :: CLDF          (:) !< 3-D cloud fraction [1]
+      REAL(fp), POINTER :: CMFMC         (:) !< Cloud mass flux [kg/m2/s]
+      REAL(fp), POINTER :: DQRCU         (:) !< Conv precip production rate [kg/kg/s] (assume per dry air)
+      REAL(fp), POINTER :: DQRLSAN       (:) !< LS precip prod rate [kg/kg/s] (assume per dry air)
+      REAL(fp), POINTER :: DTRAIN        (:) !< Detrainment flux [kg/m2/s]
+      REAL(fp), POINTER :: F_OF_PBL      (:) !< Fraction of box within PBL [1]
+      REAL(fp), POINTER :: F_UNDER_PBLTOP(:) !< Fraction of box under PBL top
+      REAL(fp), POINTER :: OMEGA         (:) !< Updraft velocity [Pa/s]
+      REAL(fp), POINTER :: OPTD          (:) !< Visible optical depth [1]
+      REAL(fp), POINTER :: PEDGE         (:) !< Wet air press @ level edges [hPa]
+      REAL(fp), POINTER :: PFICU         (:) !< Dwn flux ice prec:conv [kg/m2/s]
+      REAL(fp), POINTER :: PFILSAN       (:) !< Dwn flux ice prec:LS+anv [kg/m2/s]
+      REAL(fp), POINTER :: PFLCU         (:) !< Dwn flux liq prec:conv [kg/m2/s]
+      REAL(fp), POINTER :: PFLLSAN       (:) !< Dwn flux ice prec:LS+anv [kg/m2/s]
+      REAL(fp), POINTER :: QI            (:) !< Mass fraction of cloud ice water [kg/kg dry air]
+      REAL(fp), POINTER :: QL            (:) !< Mass fraction of cloud liquid water [kg/kg dry air]
+      REAL(fp), POINTER :: RH            (:) !< Relative humidity [%]
+      REAL(fp), POINTER :: SPHU          (:) !< Specific humidity [g H2O/kg tot air]
+      REAL(fp), POINTER :: SPHU1         (:) !< Specific humidity at start of timestep [g/kg]
+      REAL(fp), POINTER :: SPHU2         (:) !< Specific humidity at end of timestep [g/kg]
+      REAL(fp), POINTER :: T             (:) !< Temperature [K]
+      REAL(fp), POINTER :: TAUCLI        (:) !< Opt depth of ice clouds [1]
+      REAL(fp), POINTER :: TAUCLW        (:) !< Opt depth of H2O clouds [1]
+      REAL(fp), POINTER :: TMPU1         (:) !< Temperature at start of timestep [K]
+      REAL(fp), POINTER :: TMPU2         (:) !< Temperature at end of timestep [K]
+      REAL(fp), POINTER :: U             (:) !< E/W component of wind [m s-1]
+      REAL(fp), POINTER :: UPDVVEL       (:) !< Updraft vertical velocity [hPa/s]
+      REAL(fp), POINTER :: V             (:) !< N/S component of wind [m s-1]
 
       !----------------------------------------------------------------------
       ! Air quantities assigned in AIRQNT
       !----------------------------------------------------------------------
       ! Note on pressures: PMID is calculated from PEDGE,
       ! and dry air pressures assume constant RH and T across grid box
-      REAL(fp), POINTER :: PEDGE_DRY     (:) ! Dry air partial pressure
-      !  @ level edges [hPa]
-      REAL(fp), POINTER :: PMID          (:) ! Average wet air pressure [hPa]
-      !  defined as arithmetic
-      !  average of edge pressures
-      REAL(fp), POINTER :: PMID_DRY      (:) ! Dry air partial pressure [hPa]
-      !  defined as arithmetic avg
-      !  of edge pressures
-      REAL(fp), POINTER :: THETA         (:) ! Potential temperature [K]
-      REAL(fp), POINTER :: TV            (:) ! Virtual temperature [K]
-      REAL(fp), POINTER :: MAIRDEN       (:) ! Moist air density [kg/m3]
-      REAL(fp), POINTER :: AIRDEN        (:) ! Dry air density [kg/m3]
-      REAL(fp), POINTER :: AIRNUMDEN     (:) ! Dry air density [molec/cm3]
-      REAL(fp), POINTER :: AVGW          (:) ! Water vapor volume mixing
-      !  ratio [vol H2O/vol dry air]
-      REAL(fp), POINTER :: BXHEIGHT      (:) ! Grid box height [m] (dry air)
-      REAL(fp), POINTER :: DELP          (:) ! Delta-P (wet) across box [hPa]
-      REAL(fp), POINTER :: DELP_DRY      (:) ! Delta-P (dry) across box [hPa]
-      REAL(fp), POINTER :: DAIRMASS      (:) ! Dry air mass [kg] in grid box
-      REAL(fp), POINTER :: AIRVOL        (:) ! Grid box volume [m3] (dry air)
-      REAL(fp), POINTER :: DP_DRY_PREV   (:) ! Previous MetState%DELP_DRY
-      REAL(fp), POINTER :: SPHU_PREV     (:) ! Previous MetState%SPHU
+      REAL(fp), POINTER :: PEDGE_DRY     (:) !< Dry air partial pressure @ level edges [hPa]
+      REAL(fp), POINTER :: PMID          (:) !< Average wet air pressure [hPa] defined as arithmetic average of edge pressures
+      REAL(fp), POINTER :: PMID_DRY      (:) !< Dry air partial pressure [hPa] defined as arithmetic avg of edge pressures
+      REAL(fp), POINTER :: THETA         (:) !< Potential temperature [K]
+      REAL(fp), POINTER :: TV            (:) !< Virtual temperature [K]
+      REAL(fp), POINTER :: MAIRDEN       (:) !< Moist air density [kg/m3]
+      REAL(fp), POINTER :: AIRDEN        (:) !< Dry air density [kg/m3]
+      REAL(fp), POINTER :: AIRNUMDEN     (:) !< Dry air density [molec/cm3]
+      REAL(fp), POINTER :: AVGW          (:) !< Water vapor volume mixing ratio [vol H2O/vol dry air]
+      REAL(fp), POINTER :: BXHEIGHT      (:) !< Grid box height [m] (dry air)
+      REAL(fp), POINTER :: DELP          (:) !< Delta-P (wet) across box [hPa]
+      REAL(fp), POINTER :: DELP_DRY      (:) !< Delta-P (dry) across box [hPa]
+      REAL(fp), POINTER :: DAIRMASS      (:) !< Dry air mass [kg] in grid box
+      REAL(fp), POINTER :: AIRVOL        (:) !< Grid box volume [m3] (dry air)
+      REAL(fp), POINTER :: DP_DRY_PREV   (:) !< Previous MetState%DELP_DRY
+      REAL(fp), POINTER :: SPHU_PREV     (:) !< Previous MetState%SPHU
 
 
       !  !----------------------------------------------------------------------
@@ -281,145 +270,6 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
 
-      !=======================================================================
-      ! Nullify all fields for safety's sake before allocating them
-      ! This can prevent compilation errors caused by uninitialized values
-      !=======================================================================
-      ! MetState%ALBD_VIS       => NULL() ! Visible albedo
-      ! MetState%ALBD_NIR       => NULL() ! Near-IR albedo
-      ! MetState%ALBD_UV        => NULL() ! UV albedo
-      ! MetState%AREA_M2        => NULL() ! Area of grid box
-      ! MetState%CLDFRC         => NULL() ! Cloud fraction
-      ! ! MetState%CLDTOPS        => NULL() ! Cloud top level
-      ! MetState%CONV_DEPTH     => NULL() ! Convective depth
-      ! MetState%EFLUX          => NULL() ! Surface flux
-      ! MetState%FLASH_DENS     => NULL() ! Flash density
-      ! MetState%FRLAKE         => NULL() ! Fraction Lake of grid box
-      ! MetState%FRLAND         => NULL() ! Fraction Land of grid box
-      ! MetState%FRLANDIC       => NULL() ! Fraction LandIce of grid box
-      ! MetState%FROCEAN        => NULL() ! Fraction Ocean of grid box
-      ! MetState%FRSEAICE       => NULL() ! Fraction SeaIce of grid box
-      ! MetState%FRSNO          => NULL() ! Fraction Snow of grid box
-      ! MetState%GWETROOT       => NULL() ! Soil Moisture Root Zone
-      ! MetState%GWETTOP        => NULL() ! Soil Moisture Top Level
-      ! MetState%HFLUX          => NULL() ! Surface flux
-      ! MetState%IsLand         => NULL() ! Is this grid box land?
-      ! MetState%IsWater        => NULL() ! Is this grid box water?
-      ! MetState%IsIce          => NULL() ! Is this grid box ice?
-      ! MetState%IsSnow         => NULL() ! Is this grid box snow?
-      ! MetState%LAI            => NULL() ! Leaf Area Index
-      ! MetState%PARDR          => NULL() ! Direct  downward PAR
-      ! MetState%PARDF          => NULL() ! Diffuse downward PAR
-      ! MetState%PBLH           => NULL() ! PBL height
-      ! MetState%PBL_TOP_hPa    => NULL() ! PBL top [hPa]
-      ! MetState%PBL_TOP_L      => NULL() ! PBL top [levels]
-      ! MetState%PBL_TOP_m      => NULL() ! PBL top [m]
-      ! MetState%PBL_THICK      => NULL() ! PBL thickness
-      ! MetState%PHIS           => NULL() ! Surface geopotential
-      ! MetState%PRECANV        => NULL() ! Canopy evaporation
-      ! MetState%PRECCON        => NULL() ! Convective precipitation
-      ! MetState%PRECLSC        => NULL() ! Large-scale precipitation
-      ! MetState%PRECTOT        => NULL() ! Total precipitation
-      ! MetState%PS1_WET        => NULL()
-      ! MetState%PS2_WET        => NULL()
-      ! MetState%PSC2_WET       => NULL()
-      ! MetState%PS1_DRY        => NULL()
-      ! MetState%PS2_DRY        => NULL()
-      ! MetState%PSC2_DRY       => NULL()
-      ! MetState%QV2M           => NULL() ! 2-m specific humidity
-      ! MetState%SEAICE00       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE10       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE20       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE30       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE40       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE50       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE60       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE70       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE80       => NULL() ! Sea ice fraction
-      ! MetState%SEAICE90       => NULL() ! Sea ice fraction
-      ! MetState%SLP            => NULL() ! Sea level pressure
-      ! MetState%SNODP          => NULL() ! Snow depth
-      ! MetState%SNOMAS         => NULL() ! Snow mass
-      ! MetState%SUNCOS         => NULL() ! Cosine of solar zenith angle
-      ! MetState%SUNCOSmid      => NULL() ! Cosine of solar zenith angle
-      ! MetState%SUNCOSsum      => NULL() ! Cosine of solar zenith angle
-      ! MetState%SZAFACT        => NULL() ! Cosine of solar zenith angle
-      ! MetState%SWGDN          => NULL() ! Surface downward SW radiation
-      ! MetState%TO3            => NULL() ! Total ozone
-      ! MetState%TROPP          => NULL() ! Topopause level pressure
-      ! MetState%TropLev        => NULL() ! Topopause level
-      ! MetState%TropHt         => NULL() ! Top level height
-      ! MetState%TS             => NULL() ! Surface temperature
-      ! MetState%TSKIN          => NULL() ! Skin temperature
-      ! MetState%U10M           => NULL() ! 10-m zonal wind
-      ! MetState%USTAR          => NULL() ! Friction velocity
-      ! MetState%V10M           => NULL() ! 10-m meridional wind
-      ! MetState%Z0             => NULL() ! Surface roughness
-      ! MetState%CNV_FRC        => NULL() ! Convective fraction
-      ! MetState%CLDF           => NULL() ! Cloud fraction
-      ! MetState%CMFMC          => NULL() ! Convective mass flux
-      ! MetState%DQRCU          => NULL()
-      ! MetState%DQRLSAN        => NULL()
-      ! MetState%DTRAIN         => NULL()
-      ! MetState%F_OF_PBL       => NULL()
-      ! MetState%F_UNDER_PBLTOP => NULL()
-      ! MetState%OMEGA          => NULL()
-      ! MetState%OPTD           => NULL()
-      ! MetState%PEDGE          => NULL()
-      ! MetState%PFICU          => NULL()
-      ! MetState%PFILSAN        => NULL()
-      ! MetState%PFLCU          => NULL()
-      ! MetState%PFLLSAN        => NULL()
-      ! MetState%QI             => NULL()
-      ! MetState%QL             => NULL()
-      ! MetState%RH             => NULL()
-      ! MetState%SPHU           => NULL()
-      ! MetState%SPHU1          => NULL()
-      ! MetState%SPHU2          => NULL()
-      ! MetState%T              => NULL()
-      ! MetState%TAUCLI         => NULL()
-      ! MetState%TAUCLW         => NULL()
-      ! MetState%TMPU1          => NULL()
-      ! MetState%TMPU2          => NULL()
-      ! MetState%U              => NULL()
-      ! MetState%UPDVVEL        => NULL()
-      ! MetState%V              => NULL()
-      ! MetState%PEDGE_DRY      => NULL()
-      ! MetState%PMID           => NULL()
-      ! MetState%PMID_DRY       => NULL()
-      ! MetState%THETA          => NULL()
-      ! MetState%TV             => NULL()
-      ! MetState%MAIRDEN        => NULL()
-      ! MetState%AIRDEN         => NULL()
-      ! MetState%AIRNUMDEN      => NULL()
-      ! MetState%AVGW           => NULL()
-      ! MetState%BXHEIGHT       => NULL()
-      ! MetState%DELP           => NULL()
-      ! MetState%DELP_DRY       => NULL()
-      ! MetState%AD             => NULL()
-      ! MetState%PS             => NULL()
-      ! MetState%AIRVOL         => NULL()
-      ! MetState%DP_DRY_PREV    => NULL()
-      ! MetState%SPHU_PREV      => NULL()
-      ! MetState%IREG           => NULL()
-      ! MetState%ILAND          => NULL()
-      ! MetState%IUSE           => NULL()
-      ! MetState%MODISLAI       => NULL()
-      ! MetState%XLAI           => NULL()
-      ! MetState%LandTypeFrac   => NULL()
-      ! MetState%XLAI_NATIVE    => NULL()
-      ! MetState%XLAI2          => NULL()
-      ! MetState%InChemGrid     => NULL()
-      ! MetState%InPbl          => NULL()
-      ! MetState%InStratMeso    => NULL()
-      ! MetState%InStratosphere => NULL()
-      ! MetState%InTroposphere  => NULL()
-      ! MetState%LocalSolarTime => NULL()
-      ! MetState%IsLocalNoon    => NULL()
-      ! MetState%IMIX           => NULL()
-      ! MetState%FPBL           => NULL()
-      ! MetState%PBL_MAX_L      = 0
-
    END SUBROUTINE Zero_MetState
 
    SUBROUTINE Met_Allocate( GridState, MetState, RC)
@@ -489,6 +339,7 @@ CONTAINS
       MetState%SSM = ZERO
       MetState%CLAYFRAC = ZERO
       MetSTate%SANDFRAC = ZERO
+      MetState%SST = ZERO
 
       ! Allocate Column Fields
       !-----------------------
