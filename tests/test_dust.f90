@@ -103,7 +103,6 @@ program test_dust
    end if
 
    call print_info(Config, DustState, MetState, title)
-
    call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
    !------------------------------------------------------
@@ -117,9 +116,6 @@ program test_dust
    MetState%V10M = 5.0_fp
    DiagState%dust_total_flux = 0.0_fp
 
-
-   call print_info(Config, MetState, title)
-
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
 
    if (rc /= CC_SUCCESS) then
@@ -129,9 +125,7 @@ program test_dust
    end if
 
    call print_info(Config, DustState, MetState, title)
-
    call assert(DiagState%dust_total_flux >500.0_fp, "Test different horizontal flux")
-   write(*,*) 'Test 3 Success!!!!!'
 
    call cc_dust_finalize(DustState, RC)
    if (RC /= CC_SUCCESS) then
@@ -153,8 +147,6 @@ program test_dust
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
 
-   call print_info(Config, MetState, title)
-
    call cc_dust_init(Config, DustState, ChemState, rc)
 
    if (rc /= CC_SUCCESS) then
@@ -170,6 +162,7 @@ program test_dust
       call cc_error( ErrMsg, rc, thisLoc )
       stop 1
    end if
+
    call print_info(Config, DustState, MetState, title)
    call assert(DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
 
