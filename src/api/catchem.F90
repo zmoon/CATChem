@@ -1,5 +1,10 @@
-!> \file
+!> \file catchem.F90
 !! CATChem core data types and routines.
+!!
+!! \defgroup catchem_api
+!! CATChem core data types and routines.
+!!
+!!!>
 module CATChem
    !
    use ChemState_Mod, only: ChemStateType
@@ -31,6 +36,11 @@ module CATChem
    use CCPr_Dust_mod, only: cc_dust_init => CCPr_Dust_Init
    use CCPr_Dust_mod, only: cc_dust_run => CCPr_Dust_Run
    use CCPr_Dust_mod, only: cc_dust_finalize => CCPr_Dust_Finalize
+   !
+   use CCPr_Salt_Common_Mod, only: SaltStateType
+   use CCPr_Salt_mod, only: cc_salt_init => CCPr_Salt_Init
+   use CCPr_Salt_mod, only: cc_salt_run => CCPr_Salt_Run
+   use CCPr_Salt_mod, only: cc_salt_finalize => CCPr_Salt_Finalize
    !
    implicit none
 
