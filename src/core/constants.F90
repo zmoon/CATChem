@@ -3,7 +3,7 @@
 !! \brief This file contains constants for catchem
 !!
 !! This file contains constants for catchem
-!! \ingroup Core_Modules
+!! \ingroup core_modules
 !!!>
 module constants
 

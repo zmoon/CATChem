@@ -1,7 +1,7 @@
 !> \file init_mod.F90
 !! \brief Contains the DiagStateType and Diag_Allocate subroutine
 !!
-!! \ingroup Core_Modules
+!! \ingroup core_modules
 !! \details This module contains subroutines and functions related to the DiagState instance of CATChem.
 !! It includes subroutines for initializing of the DiagState.
 !!!>
@@ -38,7 +38,7 @@ CONTAINS
    !! \param GridState The grid state containing information about the grid
    !! \param DiagState The diagnostic state to be allocated
    !! \param RC The return code
-   !! \ingroup Core_Modules
+   !! \ingroup core_modules
    !!!>
    subroutine Diag_Allocate(Config, GridState, DiagState, RC)
       ! USES

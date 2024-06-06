@@ -4,7 +4,7 @@
 !! This module contains subroutines and functions related to the MetStateType instance of CATChem.
 !! It includes subroutines for initializing of the MetStateType.
 !!
-!! \ingroup Core_Modules
+!! \ingroup core_modules
 !!!>
 MODULE MetState_Mod
    !
@@ -32,9 +32,8 @@ MODULE MetState_Mod
 
    !> \brief Derived type for Meteorology State
    !!
-   !! MetStateType contains the following variables:
-
-
+   !! \ingroup core_modules
+   !!!>
    TYPE, PUBLIC :: MetStateType
 
       !----------------------------------------------------------------------
@@ -278,7 +277,11 @@ CONTAINS
    !>
    !! \brief Allocate the MetState object
    !!
-   !! \ingroup Core_Modules
+   !! \ingroup core_modules
+   !!
+   !! \param GridState   CATCHem grid state
+   !! \param MetState    CATCHem met state
+   !! \param RC          Error return code
    !!!>
    SUBROUTINE Met_Allocate( GridState, MetState, RC)
       ! USES
@@ -287,9 +290,9 @@ CONTAINS
       IMPLICIT NONE
 
       ! Arguments
-      TYPE(GridStateType), INTENT(IN)  :: GridState
-      TYPE(MetStateType),  INTENT(OUT) :: MetState
-      INTEGER,             INTENT(OUT) :: RC
+      TYPE(GridStateType), INTENT(IN)  :: GridState !< Grid state
+      TYPE(MetStateType), INTENT(INOUT) :: MetState !< Meteorological state
+      INTEGER,            INTENT(OUT)   :: RC       !< Return code
 
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc

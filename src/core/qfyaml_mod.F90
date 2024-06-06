@@ -1,7 +1,7 @@
 !> \file qfyaml_mod.F90
 !! \brief This file contains the QFYAML module
 !!
-!! \ingroup Core_Modules
+!! \ingroup core_modules
 !!
 !! Contains routines for reading a YAML file into Fortran,
 !!  based off the "config_fortran" package of H. J. Teunissen.
@@ -181,6 +181,7 @@ MODULE QFYAML_Mod
     !! \param RC Return code
     !! \param thisLoc The location of the error
     !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE Handle_Error( errMsg, RC, thisLoc )
     !
@@ -214,7 +215,7 @@ MODULE QFYAML_Mod
       !! \param var_name The name of the variable
       !! \param ix The index of the variable
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Get_Var_Index( yml, var_name, ix )
     !
@@ -266,7 +267,7 @@ MODULE QFYAML_Mod
       !! \param end_ix The index of the last variable with the anchor
       !! \param anchor_cat The category of the anchor
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Get_Anchor_Info( yml, anchor_ptr, begin_ix, end_ix, anchor_cat )
     !
@@ -318,7 +319,7 @@ MODULE QFYAML_Mod
       !! \param yml_anchored The YAML object
       !! \param RC Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Init( fileName, yml, yml_anchored, RC )
     !
@@ -373,7 +374,7 @@ MODULE QFYAML_Mod
       !! \param yml The concatenated YAML object
       !! \param RC Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Merge( yml1, yml2, yml, RC )
     !
@@ -441,7 +442,7 @@ MODULE QFYAML_Mod
       !! \param yml_anchored The configuration object for anchored variables
       !! \param RC Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Read_File( yml, fileName, yml_anchored, RC )
     !
@@ -615,7 +616,7 @@ MODULE QFYAML_Mod
       !!  \param anchor_tgt The name of the variable
       !!  \param RC Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!>
       SUBROUTINE Parse_Line( yml,        yml_anchored, set_by,                   &
                              line_arg,   valid_syntax, category,                 &
@@ -966,7 +967,7 @@ MODULE QFYAML_Mod
       !! \param append Whether to append to an existing variable
       !! \param RC Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!>
       SUBROUTINE Add_Variable( yml,            line_arg,     anchor_ptr_arg,     &
                                anchor_tgt_arg, category_arg, var_name_arg,       &
@@ -1085,7 +1086,7 @@ MODULE QFYAML_Mod
       !! \param var_pt_to_anchor Variable that will be copied
       !! \param RC           Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Copy_Anchor_Variable( yml,          anchor_ix,                  &
                                        var_w_anchor, var_pt_to_anchor,           &
@@ -1158,7 +1159,7 @@ MODULE QFYAML_Mod
       !! \param var Variable
       !! \param RC  Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Read_Variable( var, RC )
     !
@@ -1278,7 +1279,7 @@ MODULE QFYAML_Mod
       !! \param[in]    line        Input line
       !! \param[in]    comment_chars Character(s) to be stripped
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Trim_Comment(line, comment_chars)
     !
@@ -1332,7 +1333,7 @@ MODULE QFYAML_Mod
       !! \param[in]    yml        Input QFYAML configuration variable
       !! \param[out]   RC         Return code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Check( yml, RC )
     !
@@ -1379,6 +1380,8 @@ MODULE QFYAML_Mod
       !! Find the depth of a category or variable name
       !!
       !! \param[in]    name        Input name
+      !!
+      !! ingroup core_modules
       !!!>
       FUNCTION QFYAML_FindDepth( name ) RESULT( depth )
     !
@@ -1418,7 +1421,7 @@ MODULE QFYAML_Mod
       !! \param[out]   n_matches  Number of variables that match the target
       !! \param[out]   match_vars Variable names that match the target
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_FindNextHigher( yml, trg_str, match_ct, match_vars )
     !
@@ -1501,7 +1504,7 @@ MODULE QFYAML_Mod
       !! \param[out]   category   Output category
       !! \param[out]   var_name   Output variable name
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Split_Category( variable, category, var_name )
     !
@@ -1542,7 +1545,7 @@ MODULE QFYAML_Mod
       !! \param[in]    variable   Input QFYAML configuration variable
       !! \param[out]   variable   Output QFYAML configuration variable
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Resize_Storage( variable )
     !
@@ -1589,7 +1592,7 @@ MODULE QFYAML_Mod
       !! \param[out]   RC          Input return code
       !! \param[in]    dynamic_size
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Prepare_Store_Var( yml,      var_name,    var_type,             &
                                     var_size, description, ix,                   &
@@ -1685,7 +1688,7 @@ MODULE QFYAML_Mod
       !! \param ix       Index of variable
       !! \param RC       Error code
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Prepare_Get_Var( yml, var_name, var_type, var_size, ix, RC )
     !
@@ -1765,7 +1768,7 @@ MODULE QFYAML_Mod
       !!
       !! \param yml Configuration type
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Ensure_Free_Storage( yml )
 
@@ -1816,7 +1819,7 @@ MODULE QFYAML_Mod
       !! \param ixs_start start pt. of ith entry
       !! \param ixs_end end pt.   of ith entry
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Get_Fields_String( line_arg, delims,  brackets,                 &
                                     n_max,    n_found, ixs_start, ixs_end       )
@@ -1898,7 +1901,7 @@ MODULE QFYAML_Mod
       !! \param var_name Variable name
       !! \param ix Index of variable
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Binary_Search_Variable( yml, var_name, ix )
     !
@@ -1947,7 +1950,7 @@ MODULE QFYAML_Mod
       !!
       !! \param yml The YAML object
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Sort( yml )
     !
@@ -1973,7 +1976,7 @@ MODULE QFYAML_Mod
       !!
       !! \param list The variable list
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       RECURSIVE SUBROUTINE Qsort( list )
     !
@@ -2003,7 +2006,7 @@ MODULE QFYAML_Mod
       !! \param list The variable list
       !! \param marker The split position
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE Partition_Var_List(list, marker)
     !
@@ -2075,7 +2078,7 @@ MODULE QFYAML_Mod
       !! \param fileName The file name
       !! \param searchKeys The search keys
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Print( yml, RC, fileName, searchKeys )
     !
@@ -2262,7 +2265,7 @@ MODULE QFYAML_Mod
       !!
       !! \param[inout] yml
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_CleanUp( yml )
     !
@@ -2296,7 +2299,7 @@ MODULE QFYAML_Mod
       !! \param[out] res
       !! \param[out] RC
       !!
-      !! \ingroup Core_Modules
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Get_Size( yml, var_name, res, RC )
     !
@@ -2352,6 +2355,7 @@ MODULE QFYAML_Mod
       !! \param[out] res
       !! \param[out] RC
       !!
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE QFYAML_Get_Type( yml, var_name, res, RC )
     !
@@ -2402,6 +2406,8 @@ MODULE QFYAML_Mod
       !!  character in a string
       !!
       !! \param[in] str String to search
+      !!
+      !! \ingroup core_modules
       !!!>
       FUNCTION First_Char_Pos( str ) RESULT( pos )
     !
@@ -2434,6 +2440,8 @@ MODULE QFYAML_Mod
       !! \param[out] category
       !! \param[out] var_name
       !! \param[out] append
+      !!
+      !! \group core_modules
       !!!>
       SUBROUTINE Get_Sequence_VarName( cat_index, cat_stack,                     &
                                        category,  var_name,  append             )
@@ -2529,6 +2537,20 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Real
 
+      !>
+      !! \brief Add_Real_Array
+      !!
+      !! \details Add a YAML variable with an array of type REAL
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    real_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !! \param[in]    dynamic_size
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Real_Array( yml,     var_name,  real_data,                  &
                                  comment, RC,        dynamic_size               )
         !
@@ -2572,6 +2594,19 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Real_Array
 
+      !>
+      !! \brief Add_Int
+      !!
+      !! \details Add a YAML variable with an INTEGER value
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Int( yml, var_name, int_data, comment, RC )
         !
         ! Add a YAML variable with an INTEGER value
@@ -2612,17 +2647,31 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Int
 
+      !>
+      !! \brief Add_Int_Array
+      !!
+      !! \details Add a YAML variable with an array of type INTEGER
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !! \param[in]    dynamic_size
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Int_Array( yml,     var_name, int_data,                     &
                                 comment, RC,       dynamic_size                 )
         !
         ! Add a YAML variable with an array of type INTEGER
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(IN   ) :: int_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        LOGICAL,          OPTIONAL      :: dynamic_size
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml            !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name       !> Name of the variable to add
+        INTEGER,          INTENT(IN   ) :: int_data(:)    !> Array of data to be added
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment        !> Comment to be added
+        LOGICAL,          OPTIONAL      :: dynamic_size   !> Allow dynamic size
+        INTEGER,          INTENT(OUT  ) :: RC             !> Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -2654,15 +2703,27 @@ MODULE QFYAML_Mod
         ENDIF
       END SUBROUTINE Add_Int_Array
 
+      !>
+      !! \brief Add_String
+      !! \details Add a YAML variable with an CHARACTER value
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    char_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_String( yml, var_name, char_data, comment, RC )
         !
         ! Add a YAML variable with an CHARACTER value
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        CHARACTER(LEN=*), INTENT(IN   ) :: char_data
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml        !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name   !> Name of the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: char_data  !> Value of the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment    !> Comment for the variable to add
+        INTEGER,          INTENT(OUT)   :: RC         !< Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -2695,17 +2756,30 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_String
 
+      !>
+      !! \brief Add_String_Array
+      !! \details Add a YAML variable with an array of type character
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    char_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !! \param[in]    dynamic_size
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_String_Array( yml,     var_name,  char_data,                &
                                    comment, RC,        dynamic_size             )
         !
         ! Add a YAML variable with an array of type character
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        CHARACTER(LEN=*), INTENT(IN   ) :: char_data(:)
-        INTEGER,          INTENT(OUT  ) :: RC
-        LOGICAL,          OPTIONAL      :: dynamic_size
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml              !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name         !> Name of the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment          !> Comment for the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: char_data(:)     !> Value of the variable to add
+        INTEGER,          INTENT(OUT  ) :: RC               !> Return code
+        LOGICAL,          OPTIONAL      :: dynamic_size     !> Dynamic size
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -2733,15 +2807,27 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_String_Array
 
+      !>
+      !! \brief Add_Bool
+      !! \details Add a YAML variable with an logical value
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Bool( yml, var_name, bool_data, comment, RC )
         !
         ! Add a YAML variable with an logical value
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(IN   ) :: bool_data
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml         !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name    !> Name of the variable to add
+        LOGICAL,          INTENT(IN   ) :: bool_data   !> Value of the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment     !> Comment for the variable to add
+        INTEGER,          INTENT(OUT  ) :: RC          !> Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -2774,17 +2860,30 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Bool
 
+      !>
+      !! \brief Add_Bool_Array
+      !! \details Add a YAML variable with an array of type LOGICAL
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !! \param[in]    comment
+      !! \param[out]   RC
+      !! \param[in]    dynamic_size
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Bool_Array(yml,     var_name, bool_data,                    &
                                 comment, RC,       dynamic_size                 )
         !
         ! Add a YAML variable with an array of type LOGICAL
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(IN   ) :: bool_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
-        LOGICAL,          OPTIONAL      :: dynamic_size
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Name of the variable to add
+        LOGICAL,          INTENT(IN   ) :: bool_data(:)  !> Value of the variable to add
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment       !> Comment for the variable to add
+        INTEGER,          INTENT(OUT  ) :: RC            !> Return code
+        LOGICAL,          OPTIONAL      :: dynamic_size  !> Enable dynamic size
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -2817,14 +2916,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Bool_Array
 
+      !>
+      !! \brief Get_Real_Array
+      !! \details Get a real array of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    real_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Real_Array( yml, var_name, real_data, RC )
         !
         ! Get a real array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(INOUT) :: real_data(:)
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Name of the variable
+        REAL(yp),         INTENT(INOUT) :: real_data(:)  !> Value of the variable
+        INTEGER,          INTENT(OUT  ) :: RC            !> Return code
 
         INTEGER                         :: ix
         INTEGER                         :: sz_data
@@ -2869,15 +2979,26 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Real_Array
 
+      !>
+      !! \brief Get_Int_Array
+      !! \details Get a INTEGER array of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Int_Array( yml, var_name, int_data, RC )
         !
         ! Get a INTEGER array of a given name
         !
 
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(INOUT) :: int_data(:)
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml          !> QFYAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name     !> Variable name
+        INTEGER,          INTENT(INOUT) :: int_data(:)  !> Integer data
+        INTEGER,          INTENT(OUT  ) :: RC           !> Return code
 
         INTEGER                         :: ix
         INTEGER                         :: sz_data
@@ -2922,14 +3043,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Int_Array
 
+      !>
+      !! \brief Get_String_Array
+      !! \details Get a character array of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    char_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_String_Array( yml, var_name, char_data, RC )
         !
         ! Get a character array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml            !> QFYAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name       !> Variable name
+        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)   !> Character data
+        INTEGER,          INTENT(OUT  ) :: RC             !> Return code
 
         INTEGER                         :: ix
         INTEGER                         :: sz_data
@@ -2975,14 +3107,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_String_Array
 
+      !>
+      !! \brief Get_Bool_Array
+      !! \details Get a LOGICAL array of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Bool_Array( yml, var_name, bool_data, RC )
         !
         ! Get a LOGICAL array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(INOUT) :: bool_data(:)
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml          !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name     !> Variable name
+        LOGICAL,          INTENT(INOUT) :: bool_data(:) !> Logical array
+        INTEGER,          INTENT(OUT  ) :: RC           !> Return code
 
         INTEGER                         :: ix
         INTEGER                         :: sz_data
@@ -3027,14 +3170,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Bool_Array
 
+      !>
+      !! \brief Get_Real
+      !! \details Get a real value of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    res
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Real( yml, var_name, res, RC )
         !
         ! Get a real value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(OUT  ) :: res
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml       !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name  !> Variable name
+        REAL(yp),         INTENT(OUT  ) :: res       !> Real value
+        INTEGER,          INTENT(OUT  ) :: RC        !> Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -3056,6 +3210,17 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Real
 
+      !>
+      !! \brief Get_Int
+      !! \details Get a INTEGER value of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    res
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Int( yml, var_name, res, RC )
         !
         ! Get a INTEGER value of a given name
@@ -3085,14 +3250,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Int
 
+      !>
+      !! \brief Get_Bool
+      !! \details Get a LOGICAL value of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    res
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_Bool( yml, var_name, res, RC )
         !
         ! Get a LOGICAL value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(OUT  ) :: res
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml      !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name !> Variable name
+        LOGICAL,          INTENT(OUT  ) :: res      !> Logical value
+        INTEGER,          INTENT(OUT  ) :: RC       !> Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -3114,14 +3290,25 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_Bool
 
+      !>
+      !! \brief Get_String
+      !! \details Get a character value of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    res
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Get_String( yml, var_name, res, RC )
         !
         ! Get a character value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(OUT  ) :: res
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml      !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name !> Variable name
+        LOGICAL,          INTENT(OUT  ) :: res      !> Logical value
+        INTEGER,          INTENT(OUT  ) :: RC       !> Return code
 
         INTEGER                         :: ix
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
@@ -3143,17 +3330,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Get_String
 
+      !>
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !! \brief Get a character value of a given name
       SUBROUTINE Add_Get_Real_Array( yml,     var_name,  real_data,              &
                                      comment, RC,        dynamic_size           )
         !
         ! Get or add a real array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(INOUT) :: real_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
-        LOGICAL,          OPTIONAL      :: dynamic_size
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml                       !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name                  !> Variable name
+        REAL(yp),         INTENT(INOUT) :: real_data(:)              !> Real array
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment                   !> Comment
+        INTEGER,          INTENT(OUT  ) :: RC                        !> Return code
+        LOGICAL,          OPTIONAL      :: dynamic_size              !> Dynamic size
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3179,17 +3371,30 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Real_Array
 
+      !>
+      !! \brief Get or add a integer array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_Int_Array( yml,     var_name,  int_data,                &
                                     comment, RC,        dynamic_size            )
         !
         ! Get or add a INTEGER array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(INOUT) :: int_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        LOGICAL,          OPTIONAL      :: dynamic_size
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        INTEGER,          INTENT(INOUT) :: int_data(:)   !> Integer array
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment       !> Comment
+        LOGICAL,          OPTIONAL      :: dynamic_size  !> Dynamic size
+        INTEGER,          INTENT(OUT  ) :: RC            !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3215,17 +3420,29 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Int_Array
 
+      !>
+      !! \brief Get or add a character array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    char_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_String_Array( yml,     var_name, char_data,             &
                                        comment, RC,       dynamic_size          )
         !
         ! Get or add a character array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        LOGICAL,          OPTIONAL      :: dynamic_size
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)  !> Character array
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment       !> Comment
+        LOGICAL,          OPTIONAL      :: dynamic_size  !> Dynamic size
+        INTEGER,          INTENT(OUT  ) :: RC            !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3251,17 +3468,29 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_String_Array
 
+      !>
+      !! \brief Get or add a LOGICAL array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_Bool_Array(yml,     var_name, bool_data,                &
                                     comment, RC,       dynamic_size             )
         !
         ! Get or add a LOGICAL array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(INOUT) :: bool_data(:)
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        LOGICAL,          OPTIONAL      :: dynamic_size
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        LOGICAL,          INTENT(INOUT) :: bool_data(:)  !> Logical array
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment       !> Comment
+        LOGICAL,          OPTIONAL      :: dynamic_size  !> Dynamic size
+        INTEGER,          INTENT(OUT  ) :: RC            !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3287,15 +3516,26 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Bool_Array
 
+      !> Get or add a real value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    real_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_Real( yml, var_name, real_data, comment, RC )
         !
         ! Get or add a real value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(INOUT) :: real_data
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml         !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name    !> Variable name
+        REAL(yp),         INTENT(INOUT) :: real_data   !> Real value
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment     !> Comment
+        INTEGER,          INTENT(OUT  ) :: RC          !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3321,15 +3561,27 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Real
 
+      !>
+      !! \brief Get or add a INTEGER value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_Int( yml, var_name, int_data, comment, RC )
         !
         ! Get or add a INTEGER value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(INOUT) :: int_data
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml       !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name  !> Variable name
+        INTEGER,          INTENT(INOUT) :: int_data  !> Integer value
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment   !> Comment
+        INTEGER,          INTENT(OUT  ) :: RC        !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3355,6 +3607,18 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Int
 
+      !>
+      !! \brief Get or add a LOGICAL value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_Bool( yml, var_name, bool_data, comment, RC)
         !
         ! Get or add a LOGICAL value of a given name
@@ -3389,15 +3653,27 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_Bool
 
+      !>
+      !! \brief Get or add a CHARACTER value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    string_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Add_Get_String( yml, var_name, string_data, comment, RC )
 
         ! Get a character value of a given name
 
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(INOUT) :: string_data
-        CHARACTER(LEN=*), INTENT(IN   ) :: comment
-        INTEGER,          INTENT(OUT  ) :: RC
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml          !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name     !> Variable name
+        CHARACTER(LEN=*), INTENT(INOUT) :: string_data  !> String value
+        CHARACTER(LEN=*), INTENT(IN   ) :: comment      !> Comment
+        INTEGER,          INTENT(OUT  ) :: RC           !> Return code
 
         CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
         CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -3423,14 +3699,26 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Add_Get_String
 
+      !>
+      !! \brief Get or add a REAL array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    real_data
+      !! \param[out]   RC
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Update_Real_Array( yml, var_name, real_data )
         !
         ! Get or add a real array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(INOUT) :: real_data(:)
-        INTEGER                         :: ix
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        REAL(yp),         INTENT(INOUT) :: real_data(:)  !> Real value
+        INTEGER                         :: ix            !> Index
 
         CALL Get_Var_Index( yml, var_name, ix )
         IF ( ix > 0 ) THEN
@@ -3440,13 +3728,24 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Real_Array
 
+      !>
+      !! \brief Get or add a INTEGER array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Update_Int_Array(yml, var_name, int_data)
         !
         ! Get or add a INTEGER array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(INOUT) :: int_data(:)
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        INTEGER,          INTENT(INOUT) :: int_data(:)   !> Integer value
         INTEGER                         :: ix
 
         CALL Get_Var_Index(yml, var_name, ix)
@@ -3457,13 +3756,24 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Int_Array
 
+      !>
+      !! \brief Get or add a CHARACTER array of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    char_data
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Update_String_Array( yml, var_name, char_data )
         !
         ! Get or add a character array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        CHARACTER(LEN=*), INTENT(INOUT) :: char_data(:)  !> Character value
         INTEGER                         :: ix
 
         CALL Get_Var_Index( yml, var_name, ix )
@@ -3474,13 +3784,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_String_Array
 
+      !>
+      !! \brief Get or add a LOGICAL array of a given name
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !!
+      !! \ingroup core_modules
+      !!!>
       SUBROUTINE Update_Bool_Array( yml, var_name, bool_data )
         !
         ! Get or add a LOGICAL array of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(INOUT) :: bool_data(:)
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml           !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name      !> Variable name
+        LOGICAL,          INTENT(INOUT) :: bool_data(:)  !> Logical value
         INTEGER                         :: ix
 
         CALL Get_Var_Index( yml, var_name, ix )
@@ -3491,13 +3810,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Bool_Array
 
+      !>
+      !! \brief Get or add a REAL value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    real_data
+      !!!>
       SUBROUTINE Update_Real( yml, var_name, real_data )
         !
         ! Get or add a real value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        REAL(yp),         INTENT(INOUT) :: real_data
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml         !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name    !> Variable name
+        REAL(yp),         INTENT(INOUT) :: real_data   !> Real value
         INTEGER                         :: ix
 
         CALL Get_Var_Index(yml, var_name, ix)
@@ -3508,13 +3836,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Real
 
+      !>
+      !! \brief Get or add a INTEGER value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    int_data
+      !!!>
       SUBROUTINE Update_Int(yml, var_name, int_data)
         !
         ! Get or add a INTEGER value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        INTEGER,          INTENT(INOUT) :: int_data
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml         !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name    !> Variable name
+        INTEGER,          INTENT(INOUT) :: int_data    !> Integer value
         INTEGER                         :: ix
 
         CALL Get_Var_Index( yml, var_name, ix )
@@ -3525,13 +3862,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Int
 
+      !>
+      !! \brief Get or add a LOGICAL value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    bool_data
+      !!!>
       SUBROUTINE Update_Bool( yml, var_name, bool_data )
         !
         ! Get or add a LOGICAL value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        LOGICAL,          INTENT(INOUT) :: bool_data
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml        !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name   !> Variable name
+        LOGICAL,          INTENT(INOUT) :: bool_data  !> Logical value
         INTEGER                         :: ix
 
         CALL Get_Var_Index( yml, var_name, ix )
@@ -3542,13 +3888,22 @@ MODULE QFYAML_Mod
 
       END SUBROUTINE Update_Bool
 
+      !>
+      !! \brief Get or add a CHARACTER(LEN=*) value of a given name
+      !!
+      !! \ingroup core_modules
+      !!
+      !! \param[inout] yml
+      !! \param[in]    var_name
+      !! \param[in]    string_data
+      !!!>
       SUBROUTINE Update_String(yml, var_name, string_data)
         !
         ! Get a character value of a given name
         !
-        TYPE(QFYAML_t),   INTENT(INOUT) :: yml
-        CHARACTER(LEN=*), INTENT(IN   ) :: var_name
-        CHARACTER(LEN=*), INTENT(INOUT) :: string_data
+        TYPE(QFYAML_t),   INTENT(INOUT) :: yml          !> YAML object
+        CHARACTER(LEN=*), INTENT(IN   ) :: var_name     !> Variable name
+        CHARACTER(LEN=*), INTENT(INOUT) :: string_data  !> String value
         INTEGER                         :: ix
 
         CALL Get_Var_Index( yml, var_name, ix )

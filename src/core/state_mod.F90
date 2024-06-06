@@ -2,7 +2,8 @@
 !!
 !! \brief This file contains the module for CATChem state
 !!
-!! \defgroup Core_Modules Core Modules
+!! \defgroup core_modules
+!! \ingroup core_modules
 !!
 !!!>
 module state_mod
