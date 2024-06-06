@@ -2,7 +2,10 @@
 !!
 !! \brief This file contains the module for CATChem state
 !!
-
+!! \defgroup core_modules
+!! \ingroup core_modules
+!!
+!!!>
 module state_mod
    use precision_mod
    use Config_Opt_Mod, only : ConfigType

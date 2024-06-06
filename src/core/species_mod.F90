@@ -2,6 +2,8 @@
 !! \file species_mod.F90
 !! \brief This file contains the module for catchem species
 !!
+!! \ingroup core_modules
+!!
 !! This file contains the module for catchem species
 !!
 !!!>

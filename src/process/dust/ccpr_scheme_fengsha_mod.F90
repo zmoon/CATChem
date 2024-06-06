@@ -12,6 +12,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!! \ingroup catchem_dust_process
 !!!>
 module CCPr_Scheme_Fengsha_Mod
 
@@ -22,6 +23,7 @@ module CCPr_Scheme_Fengsha_Mod
    public :: CCPr_Scheme_Fengsha
 
 contains
+
 
    !> \brief This is the FENGSHA dust emission scheme developed at NOAA Air Resources Laboratory
    !!
@@ -36,6 +38,8 @@ contains
    !! \param DiagState    Diagnostic Variables
    !! \param DustState    Dust Variables
    !! \param RC           Success or Failure
+   !!
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine CCPr_Scheme_Fengsha(MetState, DiagState, DustState, RC)
 

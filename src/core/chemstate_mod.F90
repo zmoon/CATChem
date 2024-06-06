@@ -1,10 +1,12 @@
 !> \file
 !! \brief Contains the `ChemStateType` data type and related subroutines and functions.
 !!
-!! \defgroup ChemState_Mod Chem State Module
 !!
 !! The `ChemState_Mod` module contains the chemstate_mod::chemstatetype data type
 !! and related subroutines and functions for managing the state of the chemical model.
+!!
+!! \ingroup Core_Modules
+!!!>
 module ChemState_Mod
    !
    ! USES:

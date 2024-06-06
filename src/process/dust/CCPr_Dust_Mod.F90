@@ -1,6 +1,9 @@
 !> \file CCPr_Dust_mod.F90
 !! \brief Driver for the CATCHem Process: Dust
 !!
+!! \defgroup catchem_dust_process
+!!
+!! The CATChem Dust Process group holds all the CATCHem dust processes.
 !!!>
 MODULE CCPr_Dust_mod
 
@@ -30,6 +33,7 @@ CONTAINS
    !! \param ChmState    CATCHem chemical state
    !! \param RC          Error return code
    !!
+   !! \ingroup catchem_dust_process
    !!!>
    SUBROUTINE CCPR_Dust_Init( Config, DustState, ChemState, RC)
       ! USES
@@ -192,6 +196,8 @@ CONTAINS
    !! \param [INOUT] DustState The DustState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup catchem_dust_process
    !!!>
    SUBROUTINE CCPr_Dust_Run( MetState, DiagState, DustState, ChemState, RC )
 
@@ -259,6 +265,8 @@ CONTAINS
    !!
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup catchem_dust_process
    !!!>
    SUBROUTINE CCPr_Dust_Finalize( DustState, RC )
 

@@ -4,6 +4,8 @@
 !!
 !! \author Barry Baker
 !! \date 05/2024
+!!
+!! \ingroup catchem_seasalt_process
 !!!>
 module CCPr_SeaSalt_Common_Mod
    use precision_mod, Only : fp, ZERO, f8
@@ -39,26 +41,28 @@ module CCPr_SeaSalt_Common_Mod
    !! - WeibullFlag : Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
    !! - HoppelFlag : Apply Hoppel Flag following Fan and Toon 2011
    !! - NumberEmissionBin : Number of Emission per Bin [# m-2 s-1]
+   !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    TYPE, PUBLIC :: SeaSaltStateType
       ! Generic Variables for Every Process
-      Logical                         :: Activate               ! Activate Process (True/False)
-      INTEGER                         :: nSeaSaltSpecies        ! Number of SeaSalt processes
-      INTEGER                         :: SchemeOpt              ! Scheme Option
-      INTEGER, ALLOCATABLE            :: SeaSaltSpeciesIndex(:) ! Index of SeaSalt species
-      INTEGER, ALLOCATABLE            :: SpcIDs(:)              ! CATChem species IDs
-      Logical                         :: WeibullFlag            ! Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
-      Logical                         :: HoppelFlag             ! Apply Hoppel Flag following Fan and Toon 2011
+      Logical                         :: Activate               !< Activate Process (True/False)
+      INTEGER                         :: nSeaSaltSpecies        !< Number of SeaSalt processes
+      INTEGER                         :: SchemeOpt              !< Scheme Option
+      INTEGER, ALLOCATABLE            :: SeaSaltSpeciesIndex(:) !< Index of SeaSalt species
+      INTEGER, ALLOCATABLE            :: SpcIDs(:)              !< CATChem species IDs
+      Logical                         :: WeibullFlag            !< Apply Weibull Distribution to 10m wind speeds following Fan and Toon 2011
+      Logical                         :: HoppelFlag             !< Apply Hoppel Flag following Fan and Toon 2011
       ! Process Specific Parameters
-      REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)      ! Lower bin radius        [m]
-      REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)      ! Upper bin radius        [m]
-      REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)     ! Effective radius        [m]
-      REAL(fp), ALLOCATABLE           :: SeaSaltDensity(:)      ! SeaSalt density         [kg m-3]
-      REAL(fp), ALLOCATABLE           :: TotalEmission          ! Total emission          [ug m-2 s-1]
-      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    ! Total Number Emitted    [# m-2 s-1]
-      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  ! Emission per species    [ug m-2 s-1]
-      REAL(fp), ALLOCATABLE           :: NumberEmissionBin(:)   ! Particle Number emission per species [# m-2 s-1]
-      REAL(fp), ALLOCATABLE           :: SeaSaltScaleFactor     ! SeaSalt Tuning Parameter [-]
+      REAL(fp), ALLOCATABLE           :: LowerBinRadius(:)      !< Lower bin radius        [m]
+      REAL(fp), ALLOCATABLE           :: UpperBinRadius(:)      !< Upper bin radius        [m]
+      REAL(fp), ALLOCATABLE           :: EffectiveRadius(:)     !< Effective radius        [m]
+      REAL(fp), ALLOCATABLE           :: SeaSaltDensity(:)      !< SeaSalt density         [kg m-3]
+      REAL(fp), ALLOCATABLE           :: TotalEmission          !< Total emission          [ug m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: TotalNumberEmission    !< Total Number Emitted    [# m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)  !< Emission per species    [ug m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: NumberEmissionBin(:)   !< Particle Number emission per species [# m-2 s-1]
+      REAL(fp), ALLOCATABLE           :: SeaSaltScaleFactor     !< SeaSalt Tuning Parameter [-]
 
       !=================================================================
       ! Module specific variables/arrays/data pointers come below
@@ -75,6 +79,8 @@ contains
    !! Functional form is from Gong 2003:
    !!  dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))
    !! where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed
+   !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    function SeasaltEmissionGong ( r, dr, w, scalefac, aFac, bFac, rpow, exppow, wpow )
 
@@ -108,7 +114,7 @@ contains
    !! sensing observations, Atmos. Chem. Phys., 11, 3137–3157,
    !! https://doi.org/10.5194/acp-11-3137-2011, 2011.
    !!
-   !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    subroutine jeagleSSTcorrection(fsstemis, sst, sstFlag, rc)
 
@@ -163,6 +169,8 @@ contains
    !! \param[in]    weibullFlag  Flag for weibull correction
    !! \param[in]    wm 10m wind speed
    !! \param[out]   RC Return Code
+   !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    subroutine weibullDistribution(gweibull, weibullFlag, wm, RC)
 
@@ -221,6 +229,9 @@ contains
    !! \param[in]    A
    !! \param[in]    X
    !! \param[out]   RC
+   !!
+   !! \ingroup catchem_seasalt_process
+   !!!>
    DOUBLE PRECISION function igamma(A, X, rc)
 
       IMPLICIT NONE
