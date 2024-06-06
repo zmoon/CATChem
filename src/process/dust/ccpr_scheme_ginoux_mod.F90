@@ -54,7 +54,7 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_dust                               !< Enable Dust Calculation Flag
-      integer :: n                                     !< loop couters
+      integer :: n                                     !< Bin index
       integer :: nbins                                 !< number of dust bins
       real(fp) :: ginoux_scaling                       !< Ginoux scaling
       real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
@@ -80,7 +80,7 @@ contains
       !--------------------------------------------------------------------
       do_dust = .true. ! Default value for all cases
 
-      ! Don't do dust over bedrock, lava, or Permanant Ice (15, 16, 18)
+      ! Don't do dust over bedrock, lava, or Permanent Ice (15, 16, 18)
       !----------------------------------------------------------------
       if (MetState%DSOILTYPE == 15 .or. MetState%DSOILTYPE == 16 .or. MetState%DSOILTYPE == 18) then
          do_dust = .false.

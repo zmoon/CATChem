@@ -19,7 +19,7 @@ module CCPr_Dust_Common_Mod
    public :: Soil_Erosion_Potential
    public :: Draxler_HorizFlux
    public :: Kawamura_HorizFlux
-   public :: MB95_DragParitition
+   public :: MB95_DragPartition
    public :: MB97_threshold_velocity
    public :: DustStateType
 
@@ -204,7 +204,7 @@ contains
       real(fp), parameter :: mmd = 3.4                               !< median mass diameter [microns]
       real(fp), parameter :: stddev = 3.0                            !< standard deviation [microns]
       real(fp), parameter :: lambda = 12.0                           !< crack propagation length [um]
-      real(fp), parameter :: factor = 1. / ( sqrt(2.) * log(stddev)) !< auxilary constant for the distribution
+      real(fp), parameter :: factor = 1. / ( sqrt(2.) * log(stddev)) !< auxiliary constant for the distribution
 
       ! Initialize
       dvol = ZERO
@@ -361,7 +361,7 @@ contains
    !!
    !! \ingroup catchem_dust_process
    !!!>
-   subroutine MB95_DragParitition(z0, R)
+   subroutine MB95_DragPartition(z0, R)
       IMPLICIT NONE
       ! Parameters
       real(fp), intent(in)  :: z0   !< roughness length [m]
@@ -374,12 +374,12 @@ contains
       R = ZERO
 
       !--------------------------------------------
-      ! MB95 Drag Paritition
+      ! MB95 Drag Partition
       !--------------------------------------------
       R = 1.0_fp - (log(z0 / z0s ) / log(0.7_fp * (0.1_fp / z0s) ** 0.8_fp))
       return
 
-   end subroutine MB95_DragParitition
+   end subroutine MB95_DragPartition
 
    !>
    !! \brief Computes the Threshold Friction Velocity from MB97

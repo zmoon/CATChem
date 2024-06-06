@@ -53,7 +53,7 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
-      integer :: n, ir                                 !< loop couters
+      integer :: n, ir                                 !< loop counter
       integer :: nbins                                 !< number of SeaSalt bins
       real(f8) :: w10m                                 !< 10m wind speed [m/s]
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
@@ -128,7 +128,7 @@ contains
          exppow   = 1.607_fp
          wpow     = 3.41_fp
 
-         ! Weibull Distibution following Fan and Toon 2011 if SeaSaltState%WeibullFlag
+         ! Weibull Distribution following Fan and Toon 2011 if SeaSaltState%WeibullFlag
          !----------------------------------------------------------------------------
          call weibullDistribution(gweibull, SeaSaltState%WeibullFlag, w10m, RC)
 
