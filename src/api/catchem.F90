@@ -37,10 +37,10 @@ module CATChem
    use CCPr_Dust_mod, only: cc_dust_run => CCPr_Dust_Run
    use CCPr_Dust_mod, only: cc_dust_finalize => CCPr_Dust_Finalize
    !
-   use CCPr_Salt_Common_Mod, only: SaltStateType
-   use CCPr_Salt_mod, only: cc_salt_init => CCPr_Salt_Init
-   use CCPr_Salt_mod, only: cc_salt_run => CCPr_Salt_Run
-   use CCPr_Salt_mod, only: cc_salt_finalize => CCPr_Salt_Finalize
+   use CCPr_SeaSalt_Common_Mod, only: SeaSaltStateType
+   use CCPr_SeaSalt_mod, only: cc_seasalt_init => CCPr_SeaSalt_Init
+   use CCPr_SeaSalt_mod, only: cc_seasalt_run => CCPr_SeaSalt_Run
+   use CCPr_SeaSalt_mod, only: cc_seasalt_finalize => CCPr_SeaSalt_Finalize
    !
    implicit none
 
