@@ -7,7 +7,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
-!! \ingroup CATChem_SeaSalt_Processes
+!! \ingroup catchem_seasalt_process
 !!!>
 module CCPr_Scheme_Gong97_Mod
 
@@ -27,7 +27,7 @@ contains
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
    !!
-   !! \ingroup CATChem_SeaSalt_Processes
+   !! \ingroup catchem_seasalt_process
    !!!>
    subroutine CCPr_Scheme_Gong97(MetState, DiagState, SeaSaltState, RC)
 

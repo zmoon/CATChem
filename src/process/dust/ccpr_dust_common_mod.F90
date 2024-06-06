@@ -2,7 +2,7 @@
 !! \file ccpr_dust_common_mod.F90
 !! \brief Contains module ccpr_dust_common_mod
 !!
-!! \ingroup CATChem_Dust_Processes
+!! \ingroup catchem_dust_process
 !!
 !! \author Barry Baker
 !! \date 05/2024
@@ -44,6 +44,8 @@ module CCPr_Dust_Common_Mod
    !! - MoistOpt : Moisture Calculation Option
    !! - DragOpt : Drag Calculation Option
    !! - HorizFluxOpt : Horizontal Flux Calculation Option
+   !!
+   !! \ingroup catchem_dust_process
    !!!>
    TYPE :: DustStateType
       ! Generic Variables for Every Process
@@ -88,7 +90,7 @@ contains
    !! \param volumetric_soil_moisture Volumetric soil moisture
    !! \param H Soil moisture attenuation factor for dust emission
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine Fecan_SoilMoisture( clay, sand, volumetric_soil_moisture, H)
       IMPLICIT NONE
@@ -143,7 +145,7 @@ contains
    !! \param volumetric_soil_moisture Volumetric soil moisture
    !! \param H Soil moisture attenuation factor for dust emission
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine Shao_SoilMoisture( volumetric_soil_moisture, H)
       IMPLICIT NONE
@@ -180,7 +182,7 @@ contains
    !! \param rUp Upper radius
    !! \param dist Distribution
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine KokDistribution(radius, rLow, rUp, dist)
       use constants, only: pi
@@ -233,7 +235,7 @@ contains
    !! \param sandfrac sand fraction
    !! \param SEP soil erosion potential
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine Soil_Erosion_Potential(clayfrac, sandfrac, SEP)
 
@@ -267,13 +269,13 @@ contains
    !! https://doi.org/10.1016/S1352-2310(01)00159-5
    !!
    !! \param ustar friction velocity
-   !! \param ustar_threshold dry threshold fricition velocity
+   !! \param ustar_threshold dry threshold friction velocity
    !! \param R Drag partition
    !! \param H Soil Moisture Attenuation Factor
    !! \param HorizFlux Horizontal Mass Flux
    !!
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine Draxler_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
@@ -286,7 +288,7 @@ contains
 
       ! Local Variables
       !----------------
-      real(fp) :: u_ts    !< Modified threshold fricition velocity
+      real(fp) :: u_ts    !< Modified threshold friction velocity
 
       ! Initialize
       !-----------
@@ -315,12 +317,12 @@ contains
    !! Aeolian Research. 42:100560. https://doi.org/10.1016/j.aeolia.2019.100560.
    !!
    !! \param ustar friction velocity
-   !! \param ustar_threshold dry threshold fricition velocity
+   !! \param ustar_threshold dry threshold friction velocity
    !! \param R Drag partition
    !! \param H Soil Moisture Attenuation Factor
    !! \param HorizFlux Horizontal Mass Flux
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine Kawamura_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
@@ -332,7 +334,7 @@ contains
       real(fp), intent(inout) :: HorizFlux     !<
 
       ! Local Variables
-      real(fp) :: u_ts !< Modified threshold fricition velocity
+      real(fp) :: u_ts !< Modified threshold friction velocity
 
       ! Initialize
       HorizFlux = ZERO
@@ -357,7 +359,7 @@ contains
    !! \param z0 roughness length
    !! \param R Drag partition
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine MB95_DragPartition(z0, R)
       IMPLICIT NONE
@@ -391,7 +393,7 @@ contains
    !! \param radius particle radius
    !! \param ustar_threshold threshold friction velocity
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine MB97_threshold_velocity(soil_density, air_density, radius, ustar_threshold)
       ! USES

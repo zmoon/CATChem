@@ -8,7 +8,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
-!! \ingroup CATChem_Dust_Processes
+!! \ingroup catchem_dust_process
 !!!>
 
 module CCPr_Scheme_Ginoux_Mod
@@ -30,7 +30,7 @@ contains
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine CCPr_Scheme_Ginoux(MetState, DiagState, DustState, RC)
 

@@ -12,7 +12,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
-!! \ingroup CATChem_Dust_Processes
+!! \ingroup catchem_dust_process
 !!!>
 module CCPr_Scheme_Fengsha_Mod
 
@@ -39,7 +39,7 @@ contains
    !! \param DustState    Dust Variables
    !! \param RC           Success or Failure
    !!
-   !! \ingroup CATChem_Dust_Processes
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine CCPr_Scheme_Fengsha(MetState, DiagState, DustState, RC)
 

@@ -3,7 +3,9 @@
 !!
 !! Driver for the seasalt process.
 !!
-!! \defgroup CATChem_SeaSalt_Processes CATChem SeaSalt Processes
+!! \defgroup catchem_seasalt_process
+!! \ingroup catchem
+!!
 !!
 !! The CATChem SeaSalt Process group holds all the CATCHem SeaSalt processes.
 !!!>
@@ -35,7 +37,7 @@ CONTAINS
    !! \param ChmState    CATCHem chemical state
    !! \param RC          Error return code
    !!
-   !! \ingroup CATChem_SeaSalt_Processes
+   !! \ingroup catchem_seasalt_process
    !!!>
    SUBROUTINE CCPR_SeaSalt_Init( Config, SeaSaltState, ChemState, RC)
       ! USES
