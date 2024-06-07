@@ -16,10 +16,10 @@ module CATChem
    use DiagState_Mod, only: DiagStateType
    !
    use Error_Mod, only: cc_check_var => CC_CheckVar
-   use Error_Mod, only: cc_error
+   use Error_Mod, only: cc_emit_error => CC_Error
    use Error_Mod, only: CC_FAILURE
    use Error_Mod, only: CC_SUCCESS
-   use Error_Mod, only: cc_warn => CC_Warning
+   use Error_Mod, only: cc_emit_warning => CC_Warning
    !
    use GridState_Mod, only: GridStateType
    !

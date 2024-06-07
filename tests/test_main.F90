@@ -32,7 +32,7 @@ program test_main
    call cc_read_config(Config, GridState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -46,7 +46,7 @@ program test_main
    call cc_init_met(GridState, MetState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error initializing meteorology'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 

@@ -40,7 +40,7 @@ program test_dust
    call cc_read_config(Config, GridState, rc)
    if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
    title = 'SeaSalt Test 1 | Read Config'
@@ -74,14 +74,14 @@ program test_dust
    call cc_seasalt_init(Config, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_init'
-      call CC_Error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
-      call CC_Error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -97,7 +97,7 @@ program test_dust
    call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
-      call CC_Error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -113,7 +113,7 @@ program test_dust
    call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
-      call CC_Error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 

@@ -40,7 +40,7 @@ program test_dust
    call cc_read_config(Config, GridState, rc)
    if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -72,14 +72,14 @@ program test_dust
    call cc_dust_init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_init'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -96,7 +96,7 @@ program test_dust
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -117,7 +117,7 @@ program test_dust
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -127,7 +127,7 @@ program test_dust
    call cc_dust_finalize(DustState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_finalize'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -147,14 +147,14 @@ program test_dust
    call cc_dust_init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_init'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
-      call cc_error(errMsg, rc, thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
