@@ -1,5 +1,5 @@
 !> \file
-!! CATChem core data types and routines.
+!! \brief CATChem core data types and routines.
 !!
 !! \defgroup catchem_api
 !! CATChem core data types and routines.
