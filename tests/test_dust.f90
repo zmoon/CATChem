@@ -1,8 +1,6 @@
 program test_dust
    use CATChem, fp => cc_rk
    use testing_mod, only: assert
-   use GridState_Mod, only: GridStateType
-   use Config_Mod
    implicit none
 
    type(ConfigType) :: Config
@@ -13,7 +11,7 @@ program test_dust
    type(GridStateType) :: GridState
 
    ! Integers
-   INTEGER:: RC          ! Success or failure
+   INTEGER:: rc          ! Success or failure
 
    character(len=:), allocatable :: title
 
@@ -22,13 +20,12 @@ program test_dust
    CHARACTER(LEN=255) :: thisLoc
    CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
 
-   ! set thisLoc
-   thisLoc = 'test_dust -> at read CATChem_Conifg.yml'
+   thisLoc = 'test_dust -> at read CATChem_Config.yml'
    errMsg = ''
-   RC = CC_SUCCESS
+   rc = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
-   write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
+   write(*,*) '  C          A A       T     C       H       CCCC   EEEE   M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
@@ -40,12 +37,13 @@ program test_dust
    !----------------------------
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config, GridState, RC)
-   if (RC /= CC_success) then
+   call cc_read_config(Config, GridState, rc)
+   if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call CC_Error( errMsg, RC , thisLoc)
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    endif
+
    title = 'Dust Test 1 | Read Config'
    ! call print_info(Config, DustState, MetState, title)
 
@@ -73,15 +71,15 @@ program test_dust
 
    call cc_dust_init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_init'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_init'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_run'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -97,8 +95,8 @@ program test_dust
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_run'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -117,20 +115,19 @@ program test_dust
    DiagState%dust_total_flux = 0.0_fp
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
-
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_run'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call print_info(Config, DustState, MetState, title)
    call assert(DiagState%dust_total_flux >500.0_fp, "Test different horizontal flux")
 
-   call cc_dust_finalize(DustState, RC)
-   if (RC /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_finalize'
-      call cc_error( ErrMsg, rc, thisLoc )
+   call cc_dust_finalize(DustState, rc)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_dust_finalize'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -148,18 +145,16 @@ program test_dust
    MetState%V10M = 5.0_fp
 
    call cc_dust_init(Config, DustState, ChemState, rc)
-
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_init'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_init'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
-
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in cc_dust_run'
-      call cc_error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
