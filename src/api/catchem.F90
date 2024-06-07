@@ -1,4 +1,4 @@
-!> \file catchem.F90
+!> \file
 !! CATChem core data types and routines.
 !!
 !! \defgroup catchem_api
