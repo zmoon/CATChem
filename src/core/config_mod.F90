@@ -1,8 +1,9 @@
 !> \file config_mod.F90
 !!\brief Contains the ConfigType type and Read_Input_File subroutine
 !!
-!! This module contains subroutines and functions related to the ConfigType instance of CATChem.
+!! This module contains subroutines and functions related to the ConfigType DataType of CATChem.
 !! It includes subroutines for reading the configuration file.
+!! \ingroup core_modules
 !!!>
 MODULE Config_Mod
 !
@@ -35,6 +36,7 @@ CONTAINS
    !! \param GridState The grid state containing information about the grid
    !! \param RC The return code
    !!
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE Read_Input_File( Config , GridState, RC )
 !
@@ -157,6 +159,7 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE Config_Simulation( ConfigInput, Config, RC )
 !
@@ -258,6 +261,7 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE Config_Grid( ConfigInput, Config, GridState, RC )
 !
@@ -360,6 +364,8 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup core_modules
+   !!!>
    SUBROUTINE Config_Process_Dust( ConfigInput, Config, RC )
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod
@@ -488,6 +494,8 @@ CONTAINS
    !! \param[inout] Config The configuration object
    !! \param[out] RC The return code
    !!
+   !! \ingroup core_modules
+   !!!>
    SUBROUTINE Config_Process_SeaSalt( ConfigInput, Config, RC )
       USE CharPak_Mod,    ONLY : StrSplit
       USE Error_Mod

@@ -3,6 +3,7 @@
 !!
 !! This file contains the module for catchem configuration options
 !!
+!! \ingroup core_modules
 !!!>
 MODULE Config_Opt_Mod
    !
@@ -41,6 +42,8 @@ MODULE Config_Opt_Mod
    !! - `dust_scheme_opt` : Scheme option for dust process
    !! - `seasalt_activate` : Activate seasalt process
    !! - `seasalt_scheme_opt` : Scheme option for seasalt process
+   !!
+   !! \ingroup core_modules
    !!!>
    TYPE, PUBLIC :: ConfigType
 
@@ -92,6 +95,7 @@ MODULE Config_Opt_Mod
    END TYPE ConfigType
 
 CONTAINS
+
    !> \brief Initialize the Config options
    !!
    !! This subroutine initializes the Config options
@@ -99,6 +103,8 @@ CONTAINS
    !! \param am_I_Root  Are we on the root CPU?
    !! \param Config     The Config object
    !! \param RC         The return code
+   !!
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE Set_Config( am_I_Root, Config, RC )
       !
@@ -166,6 +172,8 @@ CONTAINS
    !!
    !! \param Config     The Config object
    !! \param RC         The return code
+   !!
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE Cleanup_Config( Config, RC )
       !

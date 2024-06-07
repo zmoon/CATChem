@@ -4,6 +4,7 @@
 !! This module contains subroutines and functions related to the MetStateType instance of CATChem.
 !! It includes subroutines for initializing of the MetStateType.
 !!
+!! \ingroup core_modules
 !!!>
 MODULE MetState_Mod
    !
@@ -28,6 +29,11 @@ MODULE MetState_Mod
    !=========================================================================
    ! Derived type for Meteorology State
    !=========================================================================
+
+   !> \brief Derived type for Meteorology State
+   !!
+   !! \ingroup core_modules
+   !!!>
    TYPE, PUBLIC :: MetStateType
 
       !----------------------------------------------------------------------
@@ -36,39 +42,39 @@ MODULE MetState_Mod
 
       ! Logicals
       !---------
-      LOGICAL            :: IsLand         ! Is this a land  grid box?
-      LOGICAL            :: IsWater        ! Is this a water grid box?
-      LOGICAL            :: IsIce          ! Is this a ice   grid box?
-      LOGICAL            :: IsSnow         ! Is this a snow  grid box?
+      LOGICAL            :: IsLand         !< Is this a land  grid box?
+      LOGICAL            :: IsWater        !< Is this a water grid box?
+      LOGICAL            :: IsIce          !< Is this a ice   grid box?
+      LOGICAL            :: IsSnow         !< Is this a snow  grid box?
 
       ! Land Specific Fields
       !---------------------
-      REAL(fp)           :: AREA_M2         ! Grid box surface area [m2]
-      REAL(fp)           :: CLAYFRAC        ! Fraction of clay [1]
-      INTEGER            :: DSOILTYPE       ! Dominant soil type
-      REAL(fp)           :: FRLAKE          ! Fraction of lake [1]
-      REAL(fp)           :: FRLAND          ! Fraction of land [1]
-      REAL(fp)           :: FRLANDIC        ! Fraction of land ice [1]
-      REAL(fp)           :: FROCEAN         ! Fraction of ocean [1]
-      REAL(fp)           :: FRSEAICE        ! Sfc sea ice fraction
-      REAL(fp)           :: FRSNO           ! Sfc snow fraction
-      REAL(fp)           :: LAI             ! Leaf area index [m2/m2] (online)
-      REAL(fp)           :: RDRAG           ! Drag Partition [1]
-      REAL(fp)           :: SANDFRAC        ! Fraction of sand [1]
-      REAL(fp)           :: SEAICE00        ! Sea ice coverage 00-10%
-      REAL(fp)           :: SEAICE10        ! Sea ice coverage 10-20%
-      REAL(fp)           :: SEAICE20        ! Sea ice coverage 20-30%
-      REAL(fp)           :: SEAICE30        ! Sea ice coverage 30-40%
-      REAL(fp)           :: SEAICE40        ! Sea ice coverage 40-50%
-      REAL(fp)           :: SEAICE50        ! Sea ice coverage 50-60%
-      REAL(fp)           :: SEAICE60        ! Sea ice coverage 60-70%
-      REAL(fp)           :: SEAICE70        ! Sea ice coverage 70-80%
-      REAL(fp)           :: SEAICE80        ! Sea ice coverage 80-90%
-      REAL(fp)           :: SEAICE90        ! Sea ice coverage 90-100%
-      REAL(fp)           :: SNODP           ! Snow depth [m]
-      REAL(fp)           :: SNOMAS          ! Snow mass [kg/m2]
-      REAL(fp)           :: SSM             ! Sediment Supply Map [1]
-      REAL(fp)           :: USTAR_THRESHOLD ! Threshold friction velocity [m/s]
+      REAL(fp)           :: AREA_M2         !< Grid box surface area [m2]
+      REAL(fp)           :: CLAYFRAC        !< Fraction of clay [1]
+      INTEGER            :: DSOILTYPE       !< Dominant soil type
+      REAL(fp)           :: FRLAKE          !< Fraction of lake [1]
+      REAL(fp)           :: FRLAND          !< Fraction of land [1]
+      REAL(fp)           :: FRLANDIC        !< Fraction of land ice [1]
+      REAL(fp)           :: FROCEAN         !< Fraction of ocean [1]
+      REAL(fp)           :: FRSEAICE        !< Sfc sea ice fraction
+      REAL(fp)           :: FRSNO           !< Sfc snow fraction
+      REAL(fp)           :: LAI             !< Leaf area index [m2/m2] (online)
+      REAL(fp)           :: RDRAG           !< Drag Partition [1]
+      REAL(fp)           :: SANDFRAC        !< Fraction of sand [1]
+      REAL(fp)           :: SEAICE00        !< Sea ice coverage 00-10%
+      REAL(fp)           :: SEAICE10        !< Sea ice coverage 10-20%
+      REAL(fp)           :: SEAICE20        !< Sea ice coverage 20-30%
+      REAL(fp)           :: SEAICE30        !< Sea ice coverage 30-40%
+      REAL(fp)           :: SEAICE40        !< Sea ice coverage 40-50%
+      REAL(fp)           :: SEAICE50        !< Sea ice coverage 50-60%
+      REAL(fp)           :: SEAICE60        !< Sea ice coverage 60-70%
+      REAL(fp)           :: SEAICE70        !< Sea ice coverage 70-80%
+      REAL(fp)           :: SEAICE80        !< Sea ice coverage 80-90%
+      REAL(fp)           :: SEAICE90        !< Sea ice coverage 90-100%
+      REAL(fp)           :: SNODP           !< Snow depth [m]
+      REAL(fp)           :: SNOMAS          !< Snow mass [kg/m2]
+      REAL(fp)           :: SSM             !< Sediment Supply Map [1]
+      REAL(fp)           :: USTAR_THRESHOLD !< Threshold friction velocity [m/s]
 
 
       ! Radiation Related Surface Fields
@@ -202,18 +208,14 @@ MODULE MetState_Mod
       !----------------------------------------------------------------------
       ! Offline land type, leaf area index, and chlorophyll fields
       !----------------------------------------------------------------------
-      INTEGER,  POINTER :: IREG           ! # of landtypes in box (I,J)
-      INTEGER,  POINTER :: ILAND         (:) ! Land type at (I,J);
-      !  1..IREG(I,J)
-      INTEGER,  POINTER :: IUSE          (:) ! Fraction (per mil) of box
-      !  (I,J) occupied by each land
-      REAL(fp), POINTER :: MODISLAI       ! Daily LAI computed from
-      !  monthly offline MODIS [m2/m2]
-      REAL(fp), POINTER :: XLAI          (:) ! MODIS LAI per land type,
-      !  for this month
-      REAL(fp), POINTER :: LandTypeFrac  (:) ! Olson frac per type (I,J,type)
-      REAL(fp), POINTER :: XLAI_NATIVE   (:) ! avg LAI per type (I,J,type)
-      REAL(fp), POINTER :: XLAI2         (:) ! MODIS LAI per land type,
+      INTEGER,  POINTER :: IREG           !< # of landtypes in box (I,J)
+      INTEGER,  POINTER :: ILAND         (:) !< Land type at (I,J); 1..IREG(I,J)
+      INTEGER,  POINTER :: IUSE          (:) !< Fraction (per mil) of box (I,J) occupied by each land
+      REAL(fp), POINTER :: MODISLAI       !< Daily LAI computed from monthly offline MODIS [m2/m2]
+      REAL(fp), POINTER :: XLAI          (:) !< MODIS LAI per land type, for this month
+      REAL(fp), POINTER :: LandTypeFrac  (:) !< Olson frac per type (I,J,type)
+      REAL(fp), POINTER :: XLAI_NATIVE   (:) !< avg LAI per type (I,J,type)
+      REAL(fp), POINTER :: XLAI2         (:) !< MODIS LAI per land type,
       !  for next month
 
       !----------------------------------------------------------------------
@@ -272,6 +274,15 @@ CONTAINS
 
    END SUBROUTINE Zero_MetState
 
+   !>
+   !! \brief Allocate the MetState object
+   !!
+   !! \ingroup core_modules
+   !!
+   !! \param GridState   CATCHem grid state
+   !! \param MetState    CATCHem met state
+   !! \param RC          Error return code
+   !!!>
    SUBROUTINE Met_Allocate( GridState, MetState, RC)
       ! USES
       USE GridState_Mod, Only : GridStateType
@@ -279,9 +290,9 @@ CONTAINS
       IMPLICIT NONE
 
       ! Arguments
-      TYPE(GridStateType), INTENT(IN)  :: GridState
-      TYPE(MetStateType),  INTENT(OUT) :: MetState
-      INTEGER,             INTENT(OUT) :: RC
+      TYPE(GridStateType), INTENT(IN)  :: GridState !< Grid state
+      TYPE(MetStateType), INTENT(INOUT) :: MetState !< Meteorological state
+      INTEGER,            INTENT(OUT)   :: RC       !< Return code
 
       ! Local variables
       CHARACTER(LEN=255) :: ErrMsg, thisLoc

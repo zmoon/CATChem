@@ -1,6 +1,13 @@
 !> \file CCPr_SeaSalt_mod.F90
 !! \brief Driver for the CATCHem Process: SeaSalt
 !!
+!! Driver for the seasalt process.
+!!
+!! \defgroup catchem_seasalt_process
+!! \ingroup catchem
+!!
+!!
+!! The CATChem SeaSalt Process group holds all the CATCHem SeaSalt processes.
 !!!>
 MODULE CCPr_SeaSalt_mod
 
@@ -30,6 +37,7 @@ CONTAINS
    !! \param ChmState    CATCHem chemical state
    !! \param RC          Error return code
    !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    SUBROUTINE CCPR_SeaSalt_Init( Config, SeaSaltState, ChemState, RC)
       ! USES
@@ -193,6 +201,8 @@ CONTAINS
    !! \param [INOUT] SeaSaltState The SeaSaltState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup CATChem_SeaSalt_Processes
    !!!>
    SUBROUTINE CCPr_SeaSalt_Run( MetState, DiagState, SeaSaltState, ChemState, RC )
 
@@ -267,6 +277,8 @@ CONTAINS
    !!
    !! \param [INOUT] SeaSaltState The SeaSaltState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup CATChem_SeaSalt_Processes
    !!!>
    SUBROUTINE CCPr_SeaSalt_Finalize( SeaSaltState, RC )
 

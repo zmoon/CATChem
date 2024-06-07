@@ -7,6 +7,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!! \ingroup catchem_seasalt_process
 !!!>
 module CCPr_Scheme_Gong97_Mod
 
@@ -25,6 +26,8 @@ contains
    !! \param [INOUT] ChemState The ChemState object
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup catchem_seasalt_process
    !!!>
    subroutine CCPr_Scheme_Gong97(MetState, DiagState, SeaSaltState, RC)
 
@@ -49,7 +52,7 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
-      integer :: n, ir                                 !< loop couters
+      integer :: n, ir                                 !< Loop counter
       integer :: nbins                                 !< number of SeaSalt bins
       real(f8) :: w10m                                 !< 10m wind speed [m/s]
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
@@ -124,7 +127,7 @@ contains
          exppow   = 1.19_fp
          wpow     = 3.41_fp
 
-         ! Weibull Distibution following Fan and Toon 2011 if SeaSaltState%WeibullFlag
+         ! Weibull Distribution following Fan and Toon 2011 if SeaSaltState%WeibullFlag
          !----------------------------------------------------------------------------
          call weibullDistribution(gweibull, SeaSaltState%WeibullFlag, w10m, RC)
 

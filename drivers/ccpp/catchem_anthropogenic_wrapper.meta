@@ -222,7 +222,7 @@
   intent = in
 [kemit_in]
   standard_name = k_emit_dry_dep
-  long_name = catchem k emit dimention for dry deoposition
+  long_name = catchem k emit dimension for dry deposition
   units = index
   dimensions = ()
   type = integer

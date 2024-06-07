@@ -4,6 +4,7 @@
 !! This module contains subroutines and functions related to the initialization of the program.
 !! It includes subroutines for initializing the grid, the time step, and the solution.
 !!
+!! \ingroup core_modules
 !!!>
 module init_mod
 
@@ -21,8 +22,9 @@ contains
    !! \param GridState The grid state containing information about the grid.
    !! \param MetState The met state to be initialized.
    !! \param RC The return code.
+   !!
+   !! \ingroup core_modules
    !!!>
-
    subroutine Init_Met(GridState, MetState, RC)
       !
       use GridState_Mod, Only : GridStateType
@@ -60,6 +62,7 @@ contains
    !! \param DiagState The diag state to be initialized.
    !! \param RC The return code.
    !!
+   !! \ingroup core_modules
    !!!>
    subroutine Init_Diag(Config, GridState, DiagState, RC)
       use DiagState_Mod

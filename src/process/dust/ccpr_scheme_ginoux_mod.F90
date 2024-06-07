@@ -8,6 +8,7 @@
 !!
 !! \author Barry baker
 !! \date 05/2024
+!! \ingroup catchem_dust_process
 !!!>
 
 module CCPr_Scheme_Ginoux_Mod
@@ -20,13 +21,16 @@ module CCPr_Scheme_Ginoux_Mod
 
 contains
 
-   !> \brief Run the Ginoux windblown dust emission scheme
+   !>
+   !! \brief Calculates the dust emission flux in ug m-2 s-1
    !!
    !! \param [IN] MetState The MetState object
    !! \param [INOUT] DiagState The DiagState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [INOUT] DustState The DustState object
    !! \param [OUT] RC Return code
+   !!
+   !! \ingroup catchem_dust_process
    !!!>
    subroutine CCPr_Scheme_Ginoux(MetState, DiagState, DustState, RC)
 
@@ -50,13 +54,13 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_dust                               !< Enable Dust Calculation Flag
-      integer :: n                                     !< loop couters
+      integer :: n                                     !< Bin index
       integer :: nbins                                 !< number of dust bins
       real(fp) :: ginoux_scaling                       !< Ginoux scaling
       real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
       real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
       real(fp) :: w10m                                 !< 10m wind speed [m/s]
-      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
+      real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [ug/m2/s]
 
       ! Initialize
       errMsg = ''
@@ -76,7 +80,7 @@ contains
       !--------------------------------------------------------------------
       do_dust = .true. ! Default value for all cases
 
-      ! Don't do dust over bedrock, lava, or Permanant Ice (15, 16, 18)
+      ! Don't do dust over bedrock, lava, or Permanent Ice (15, 16, 18)
       !----------------------------------------------------------------
       if (MetState%DSOILTYPE == 15 .or. MetState%DSOILTYPE == 16 .or. MetState%DSOILTYPE == 18) then
          do_dust = .false.

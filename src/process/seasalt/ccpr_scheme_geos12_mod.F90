@@ -1,12 +1,15 @@
 !>
 !! \file
-!! \brief Contains the Gong 1997
+!! \brief Contains the GEOS2012 Sea Salt Emission algorithm
 !!
-!! Gong, S. L., L. A. Barrie, and J.-P. Blanchet (1997), Modeling sea-salt aerosols in the atmosphere:
-!! 1. Model development, J. Geophys. Res., 102(D3), 3805–3818, doi:10.1029/96JD02953.
+!! Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols:
+!! new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157,
+!! https://doi.org/10.5194/acp-11-3137-2011, 2011.
 !!
 !! \author Barry baker
 !! \date 05/2024
+!!
+!! \ingroup catchem_seasalt_process
 !!!>
 module CCPr_Scheme_GEOS12_Mod
 
@@ -18,13 +21,14 @@ module CCPr_Scheme_GEOS12_Mod
 
 contains
 
-   !> \brief Run the Ginoux windblown dust emission scheme
+   !> \brief Scheme GEOS2012 Sea Salt Emission scheme
    !!
    !! \param [IN] MetState The MetState object
    !! \param [INOUT] DiagState The DiagState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [INOUT] SeaSalt The SeaSalt object
    !! \param [OUT] RC Return code
+   !! \ingroup catchem_seasalt_process
    !!!>
    subroutine CCPr_Scheme_GEOS12(MetState, DiagState, SeaSaltState, RC)
 
@@ -49,7 +53,7 @@ contains
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
       logical :: do_seasalt                            !< Enable Dust Calculation Flag
-      integer :: n, ir                                 !< loop couters
+      integer :: n, ir                                 !< Loop counter
       integer :: nbins                                 !< number of SeaSalt bins
       real(fp), allocatable :: EmissionBin(:)          !< Emission Rate per Bin [kg/m2/s]
       real(fp), allocatable :: NumberEmissionBin(:)    !< Number of particles emitted per bin [#/m2/s]

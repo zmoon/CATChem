@@ -3,6 +3,8 @@
 !!
 !! Original code from https://github.com/geoschem/geos-chem/blob/20e2402baf56c682cc04af74adb139efdb6ca000/Headers/charpak_mod.F90
 !!
+!! \ingroup core_modules
+!!!>
 MODULE Charpak_Mod
     !
     ! !USES:
@@ -50,6 +52,8 @@ MODULE Charpak_Mod
     !! \param[out] imat  Number of matches
     !! \param[out] locations  Positions of matches
     !!
+    !! \ingroup core_modules
+    !!!>
       SUBROUTINE CntMat( Str1, Str2, Imat, Locations )
     !
     ! !INPUT PARAMETERS:
@@ -93,7 +97,7 @@ MODULE Charpak_Mod
            ENDDO
         ENDDO
 
-        ! Return positions where matches occured (OPTIONAL)
+        ! Return positions where matches occurred (OPTIONAL)
         IF ( PRESENT( Locations ) ) Locations = TmpLocations
 
       END SUBROUTINE CntMat
@@ -103,6 +107,8 @@ MODULE Charpak_Mod
       !! \param[in]  col  Starting column
       !! \param[in]  str1  String to copy from
       !! \param[out] str2  String to copy to
+      !!
+      !! \ingroup core_modules
       !!!>
       SUBROUTINE CopyTxt( col, str1, str2 )
     !
@@ -140,6 +146,8 @@ MODULE Charpak_Mod
     !!
     !! \param[inout] text        String to be modified
     !! \param[in]    KeepSpaces  If =T, then keep spaces
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE CStrip( text, KeepSpaces )
     !
@@ -187,9 +195,12 @@ MODULE Charpak_Mod
         ENDIF
 
       END SUBROUTINE CStrip
+
     !> \brief Check if a character is a digit
     !!
     !! \param[in]  ch  Character to check
+    !!
+    !! \ingroup core_modules
     !!!>
       FUNCTION IsDigit( ch ) RESULT( lnum )
     !
@@ -217,6 +228,8 @@ MODULE Charpak_Mod
     !! \param[inout] str  String to be modified
     !! \param[in]    Pattern  Pattern to search for
     !! \param[in]    ReplTxt  Text to replace
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE StrRepl( Str, Pattern, ReplTxt )
     !
@@ -258,6 +271,8 @@ MODULE Charpak_Mod
     !! \param[in]  Sep  Separator character
     !! \param[out] Result  Substrings
     !! \param[out] N_SubStrs  # of substrings
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE StrSplit( Str, Sep, Result, N_SubStrs )
     !
@@ -289,7 +304,7 @@ MODULE Charpak_Mod
         ! Loop until all matches found, or end of string
         DO WHILE ( IFLAG == 0 )
 
-           ! Look for strings beteeen separator string
+           ! Look for strings between separator string
            CALL TXTEXT ( SEP, TRIM( STR ), COL, WORD, IFLAG )
 
            ! Store substrings in RESULT array
@@ -305,6 +320,8 @@ MODULE Charpak_Mod
     !> \brief Remove leading and trailing blanks from a string
     !!
     !! \param[inout]  Str  String to be manipulated
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE StrSqueeze( Str )
     !
@@ -345,6 +362,8 @@ MODULE Charpak_Mod
     !> \brief Translate a character variable to all upper case letters.
     !!
     !! \param[inout]  text  String to be manipulated
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE TranUc( text )
     !
@@ -372,6 +391,8 @@ MODULE Charpak_Mod
     !! \param[inout]  col  Column position
     !! \param[out]  word  Extracted text
     !! \param[out]  iflg  0: normal termination; 1: text not found
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE TxtExt(ch,text,col,word,iflg)
     !
@@ -481,6 +502,9 @@ MODULE Charpak_Mod
     !> \brief Convert a string to uppercase
     !!
     !! \param[in]  Text  String to be manipulated
+    !! \param[out]  UpCaseText  Uppercase string
+    !!
+    !! \ingroup core_modules
     !!!>
       FUNCTION To_UpperCase( Text ) RESULT( UpCaseText )
     !
@@ -523,6 +547,9 @@ MODULE Charpak_Mod
     !! \param[out] EndOfFile  Denotes EOF condition
     !! \param[out] IoStatus   I/O status code
     !! \param[in]  Squeeze    Call Strsqueeze?
+    !!
+    !! \ingroup core_modules
+    !! \return Line read from file
     !!!>
       FUNCTION ReadOneLine( fId, EndOfFile, IoStatus, Squeeze ) RESULT( Line )
     !
@@ -571,6 +598,9 @@ MODULE Charpak_Mod
     !> \brief Clean up a string
     !!
     !! \param[in]  Str  Original string
+    !! \return Cleaned-up string
+    !!
+    !! \ingroup core_modules
     !!!>
       FUNCTION CleanText( Str ) RESULT( CleanStr )
     !
@@ -601,6 +631,8 @@ MODULE Charpak_Mod
     !! \param[in]  Text        String to print
     !! \param[in]  LineWidth   Width (characters) of lines
     !! \param[in]  Delimiter   Delimiter between words
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE WordWrapPrint( Text, LineWidth, Delimiter )
     !
@@ -683,6 +715,8 @@ MODULE Charpak_Mod
     !!
     !! \param[in]  vec  Input array
     !! \param[out] vec_unique  Unique elements
+    !!
+    !! \ingroup core_modules
     !!!>
       SUBROUTINE Unique( vec, vec_unique )
     !
@@ -741,6 +775,8 @@ MODULE Charpak_Mod
     !!
     !! \param[in]  charArray  Character array
     !! \param[in]  N          Dimension of charArray
+    !! \result     string     Output string
+    !! \ingroup core_modules
     !!!>
       FUNCTION charArr2Str( charArray, N ) RESULT( string )
     !
@@ -777,6 +813,8 @@ MODULE Charpak_Mod
     !!
     !! \param[in]  string  String
     !! \param[in]  N       Length of string
+    !! \result     charArray  Character array
+    !! \ingroup core_modules
     !!!>
       FUNCTION str2CharArr( string, N ) RESULT( charArray )
     !

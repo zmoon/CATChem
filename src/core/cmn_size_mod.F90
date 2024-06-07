@@ -1,6 +1,7 @@
 !> \file cmn_size_mod.F90
 !! \brief Module for common size parameters
 !!
+!! \ingroup Core_Modules
 !!!>
 MODULE CMN_SIZE_MOD
    !

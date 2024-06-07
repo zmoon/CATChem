@@ -3,6 +3,8 @@
 !! \brief This file contains error handling routines for CATChem
 !! \author Barry Baker
 !!
+!! \ingroup core_modules
+!!
 !! This file contains error handling routines for CATChem
 !!!>
 MODULE Error_Mod
@@ -20,8 +22,8 @@ MODULE Error_Mod
    !
    ! !DEFINED PARAMETERS:
    !
-   INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   ! Routine returns success
-   INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   ! Routine returns failure
+   INTEGER, PUBLIC, PARAMETER :: CC_SUCCESS =  0   !< Routine returns success
+   INTEGER, PUBLIC, PARAMETER :: CC_FAILURE = -1   !< Routine returns failure
 
 CONTAINS
    !>
@@ -33,6 +35,7 @@ CONTAINS
    !! \param RC The return code
    !! \param ThisLoc The location of the error
    !! \param Instr Other instructions
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE CC_Error( ErrMsg, RC, ThisLoc, Instr )
       !
@@ -42,13 +45,13 @@ CONTAINS
       !
       ! !INPUT PARAMETERS:
       !
-      CHARACTER(LEN=*), INTENT(IN)            :: ErrMsg  ! Message to display
-      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: ThisLoc ! Location of error
-      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: Instr   ! Other instructions
+      CHARACTER(LEN=*), INTENT(IN)            :: ErrMsg  !< Message to display
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: ThisLoc !< Location of error
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL  :: Instr   !< Other instructions
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      INTEGER,          INTENT(INOUT)            :: RC      ! Error code
+      INTEGER,          INTENT(INOUT)            :: RC      !< Error code
 
       CHARACTER(LEN=1000) :: Message
       !=======================================================================
@@ -96,6 +99,8 @@ CONTAINS
    !!
    !! This subroutine prints a warning message and sets RC to CC_SUCCESS.
    !!
+   !! \ingroup core_modules
+   !!
    !! \param WarnMsg The warning message
    !! \param RC The return code
    !! \param ThisLoc The location of the warning
@@ -109,13 +114,13 @@ CONTAINS
       !!
       ! !INPUT PARAMETERS:
       !
-      CHARACTER(LEN=*), INTENT(IN   )            :: WarnMsg ! Message to display
-      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: ThisLoc ! Location of warning
-      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: Instr   ! Other instructions
+      CHARACTER(LEN=*), INTENT(IN   )            :: WarnMsg !< Message to display
+      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: ThisLoc !< Location of warning
+      CHARACTER(LEN=*), INTENT(IN   ), OPTIONAL  :: Instr   !< Other instructions
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      INTEGER,          INTENT(INOUT)            :: RC
+      INTEGER,          INTENT(INOUT)            :: RC !< Error code
 
       CHARACTER(LEN=1000) :: Message
 
@@ -162,6 +167,7 @@ CONTAINS
    !! \param Variable The variable to check
    !! \param Operation 0=Allocate 1=Register 2=Deallocate
    !! \param RC The return code
+   !! \ingroup core_modules
    !!!>
    SUBROUTINE CC_CheckVar( Variable, Operation, RC )
       !
