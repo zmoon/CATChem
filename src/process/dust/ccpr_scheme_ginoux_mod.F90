@@ -28,8 +28,21 @@ contains
    !!
    !! \ingroup catchem_dust_process
    !!!>
-   subroutine CCPr_Scheme_Ginoux(DSOILTYPE, SSM, TSKIN, FROCEAN, FRSNO, airden, u10m, v10m, gwettop, AlphaScaleFactor, &
-      EffectiveRadius, DustDensity, TotalEmission, EmissionPerSpecies, RC)
+   subroutine CCPr_Scheme_Ginoux(DSOILTYPE,          &
+      SSM,                &
+      TSKIN,              &
+      FROCEAN,            &
+      FRSNO,              &
+      airden,             &
+      u10m,               &
+      v10m,               &
+      gwettop,            &
+      AlphaScaleFactor,   &
+      EffectiveRadius,    &
+      DustDensity,        &
+      TotalEmission,      &
+      EmissionPerSpecies, &
+      RC)
 
       ! Uses
       Use CCPr_Dust_Common_Mod

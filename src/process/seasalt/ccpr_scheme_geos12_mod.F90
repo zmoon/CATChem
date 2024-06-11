@@ -40,9 +40,20 @@ contains
    !!
    !! \ingroup catchem_seasalt_process
    !!!>
-   subroutine CCPr_Scheme_GEOS12(FROCEAN, FRSEAICE, USTAR, SST, &
-      SeaSaltScaleFactor, UpperBinRadius, LowerBinRadius, EffectiveRadius, SeaSaltDensity, &
-      EmissionBin, NumberEmissionBin, TotalEmission, TotalNumberEmission, RC)
+   subroutine CCPr_Scheme_GEOS12(FROCEAN,             &
+      FRSEAICE,            &
+      USTAR,               &
+      SST,                 &
+      SeaSaltScaleFactor,  &
+      UpperBinRadius,      &
+      LowerBinRadius,      &
+      EffectiveRadius,     &
+      SeaSaltDensity,      &
+      EmissionBin,         &
+      NumberEmissionBin,   &
+      TotalEmission,       &
+      TotalNumberEmission, &
+      RC)
 
       ! Uses
       Use CCPr_SeaSalt_Common_Mod

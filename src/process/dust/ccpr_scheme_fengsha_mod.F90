@@ -63,9 +63,32 @@ contains
    !!
    !! \ingroup catchem_dust_process
    !!!>
-   subroutine CCPr_Scheme_Fengsha(nDustSpecies, DSOILTYPE, SSM, RDRAG, TSKIN, USTAR, USTAR_THRESHOLD, GWETTOP, z0, &
-      CLAYFRAC, SANDFRAC, AIRDEN, FROCEAN, FRLANDICE, FRSNOW, alpha, gamma, &
-      reff, rlower, rupper, MoistOpt, DragOpt, HorizFluxOpt, TotalEmission, EmissionBin, RC)
+   subroutine CCPr_Scheme_Fengsha(nDustSpecies,    &
+      DSOILTYPE,        &
+      SSM,              &
+      RDRAG,            &
+      TSKIN,            &
+      USTAR,            &
+      USTAR_THRESHOLD,  &
+      GWETTOP,          &
+      z0,               &
+      CLAYFRAC,         &
+      SANDFRAC,         &
+      AIRDEN,           &
+      FROCEAN,          &
+      FRLANDICE,        &
+      FRSNOW,           &
+      alpha,            &
+      gamma,            &
+      reff,             &
+      rlower,           &
+      rupper,           &
+      MoistOpt,         &
+      DragOpt,          &
+      HorizFluxOpt,     &
+      TotalEmission,    &
+      EmissionBin,      &
+      RC)
 
       ! Uses
       USE Constants,     Only : g0
