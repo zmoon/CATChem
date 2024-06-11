@@ -41,7 +41,7 @@ contains
    !!
    !! \ingroup catchem_seasalt_process
    !!!>
-   subroutine CCPr_Scheme_Gong97(FROCEAN,              &
+   subroutine CCPr_Scheme_Gong03(FROCEAN,              &
       FRSEAICE,             &
       U10M,                 &
       V10M,                 &
