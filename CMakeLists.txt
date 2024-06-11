@@ -7,6 +7,8 @@ project(
 
 include(CMakePrintHelpers)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 # If GNU compiler and Debug build type, add extra debug flags
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
