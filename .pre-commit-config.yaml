@@ -34,8 +34,14 @@ repos:
     hooks:
       - id: cmake-format
         additional_dependencies: [PyYAML]
+        exclude: (?x)^(
+            cmake/FindNetCDF.cmake
+          )$
       - id: cmake-lint
         additional_dependencies: [PyYAML]
+        exclude: (?x)^(
+            cmake/FindNetCDF.cmake
+          )$
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.3.0
