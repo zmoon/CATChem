@@ -25,7 +25,8 @@ repos:
                 src/process/old/.*\.F90|
                 src/process/Process_driver_template.F90|
                 drivers/ccpp/.*\.F90|
-                parameters/.*\.F90
+                parameters/.*\.F90|
+                src/external/GOCART/.*
             )$
 
   - repo: https://github.com/cheshirekow/cmake-format-precommit
@@ -44,5 +45,6 @@ repos:
             (?x)^(
                 src/process/old/.*\.F90|
                 drivers/ccpp/.*\.F90|
-                parameters/.*\.F90
+                parameters/.*\.F90|
+                src/external/GOCART/.*
             )$
