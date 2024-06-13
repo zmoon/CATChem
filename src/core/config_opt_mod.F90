@@ -35,6 +35,7 @@ MODULE Config_Opt_Mod
    !! - `DryRun` : Is this a dry run?
    !! - `SimulationName` : Name of the simulation
    !! - `SpcDatabaseFile` : Name of the species database file
+   !! - `SpcMetaDataOutFile` : Name of the species Metadata output file
    !! - `VerboseRequested` : Is the user requesting verbose mode
    !! - `VerboseOnCores` : Which cores should be verbose
    !! - `Verbose` : Is verbose mode on?
@@ -66,9 +67,21 @@ MODULE Config_Opt_Mod
       !----------------------------------------
       CHARACTER(LEN=255)          :: SimulationName
       CHARACTER(LEN=255)          :: SpcDatabaseFile
+      CHARACTER(LEN=255)          :: SpcMetaDataOutFile
       LOGICAL                     :: VerboseRequested
       CHARACTER(LEN=10)           :: VerboseOnCores
       LOGICAL                     :: Verbose
+      INTEGER                     :: SimLengthSec
+      CHARACTER(LEN=255)          :: RUN_DIR
+      CHARACTER(LEN=255)          :: DATA_DIR
+      CHARACTER(LEN=255)          :: CHEM_INPUTS_DIR
+      CHARACTER(LEN=255)          :: MetField
+      LOGICAL                     :: ITS_AN_AEROSOL_SIM
+      LOGICAL                     :: ITS_A_CARBON_SIM
+      LOGICAL                     :: ITS_A_CH4_SIM
+      LOGICAL                     :: ITS_A_CO2_SIM
+      LOGICAL                     :: ITS_A_FULLCHEM_SIM
+
 
       !-----------------------------------------
       ! PROCESSING MENU fields
