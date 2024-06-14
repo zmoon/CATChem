@@ -9,7 +9,6 @@
 !!!>
 module CCPr_Dust_Common_Mod
    use precision_mod, only: fp, ZERO
-   ! use Error_Mod
    implicit none
    private
 
