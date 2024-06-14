@@ -146,6 +146,9 @@ contains
       real(fp) :: FengshaScaling                       !< Total Scaling Factor
       real(fp), parameter :: clay_thresh = 0.2
       real(fp), parameter :: kvhmax = 2.0e-4 !< Max. Vertical to Horizontal Mass Flux Ratio
+      integer :: MoistOpt_
+      integer :: DragOpt_
+      integer :: HorizFluxOpt_
 
       ! Initialize
       RC = 0
@@ -163,9 +166,21 @@ contains
 
       nbins = size(reff)
 
-      if (present(MoistOpt) .eqv. .false.) MoistOpt = 1
-      if (present(DragOpt) .eqv. .false.) DragOpt = 1
-      if (present(HorizFluxOpt) .eqv. .false.) HorizFluxOpt = 1
+      if (present(MoistOpt) .eqv. .false.) then
+         MoistOpt_ = 1
+      else
+         MoistOpt_ = MoistOpt
+      endif
+      if (present(DragOpt) .eqv. .false.) then
+         DragOpt_ = 1
+      else
+         DragOpt_ = DragOpt
+      endif
+      if (present(HorizFluxOpt) .eqv. .false.) then
+         HorizFluxOpt_ = 1
+      else
+         HorizFluxOpt_ = HorizFluxOpt
+      endif
 
       alpha_grav = alpha / g0
 
@@ -203,9 +218,9 @@ contains
 
          ! Calculate soil moisture
          !--------------------------------
-         if (MoistOpt == 1) then
+         if (MoistOpt_ == 1) then
             call Fecan_SoilMoisture(CLAYFRAC, SANDFRAC, GWETTOP, H)
-         elseif (MoistOpt == 2) then
+         elseif (MoistOpt_ == 2) then
             call Shao_SoilMoisture(GWETTOP, H)
          endif
 
@@ -232,11 +247,11 @@ contains
          ! 2: MB95 Drag Partition
          ! 3: Darmenova 2009
          !----------------------------
-         if (DragOpt == 1) then
+         if (DragOpt_ == 1) then
             R = RDRAG
-         elseif (DragOpt == 2) then
+         elseif (DragOpt_ == 2) then
             call MB95_DragPartition(z0, R)
-         elseif (DragOpt == 3) then
+         elseif (DragOpt_ == 3) then
             ! call Darmenova_DragPartition(z0, R) -> TODO: Darmenova 2009
             write(*,*) 'Place Holder'
          else
@@ -248,9 +263,9 @@ contains
          ! 1: Kawamura 1951 / Webb 2020
          ! 2: Draxler 2001
          !----------------------------------
-         if (HorizFluxOpt == 1) then
+         if (HorizFluxOpt_ == 1) then
             call Kawamura_HorizFlux(USTAR, USTAR_THRESHOLD, R, H, HorizFlux)
-         elseif (HorizFluxOpt == 2) then
+         elseif (HorizFluxOpt_ == 2) then
             call Draxler_HorizFlux(USTAR, USTAR_THRESHOLD, R, H, HorizFlux)
          else
             RC = -1
@@ -267,7 +282,7 @@ contains
          !-------------------------------
          if (nDustSpecies > 0) then
             do n = 1, nDustSpecies
-               EmissBins(n) = distribution(n) * TotalEmission
+               EmissionBin(n) = distribution(n) * TotalEmission
             enddo
          endif
 
