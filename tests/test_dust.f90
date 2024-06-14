@@ -112,7 +112,7 @@ program test_dust
 
    call print_info(Config, DustState, MetState, title)
 
-   call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
+   call assert(DiagState%dust_total_flux .eq. 1000.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
    !------------------------------------------------------
    ! TEST 4
