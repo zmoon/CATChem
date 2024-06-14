@@ -17,6 +17,7 @@ INPUT = start.md
 INPUT += ../src/core
 INPUT += ../src/process/dust
 INPUT += ../src/process/seasalt
+INPUT += ../src/api
 USE_MDFILE_AS_MAINPAGE = start.md
 HTML_EXTRA_STYLESHEET = static/doxygen-awesome.css \
                         static/doxygen-awesome-sidebar-only.css
