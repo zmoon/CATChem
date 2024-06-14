@@ -213,7 +213,6 @@ contains
          enddo ! nbins
 
          TotalEmission = sum(EmissionBin)
-         ! DiagState%sea_salt_total_flux = TotalEmission
          TotalNumberEmission = sum(NumberEmissionBin)
 
       endif ! do_Sea Salt
