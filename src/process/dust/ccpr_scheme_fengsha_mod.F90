@@ -120,9 +120,9 @@ contains
       real(fp), dimension(:), intent(in) :: rlower          !< Lower Radius
       real(fp), dimension(:), intent(in) :: rupper         !< Upper Radius
 
-      integer,  intent(in) :: MoistOpt        !< Option for moisture
-      integer,  intent(in) :: DragOpt         !< Option for drag
-      integer,  intent(in) :: HorizFluxOpt    !< Option for horizontal flux
+      integer,  intent(inout), optional :: MoistOpt        !< Option for moisture
+      integer,  intent(inout), optional :: DragOpt         !< Option for drag
+      integer,  intent(inout), optional :: HorizFluxOpt    !< Option for horizontal flux
 
       ! Outputs
       real(fp), intent(inout) :: TotalEmission  !< Total Emission
@@ -162,6 +162,10 @@ contains
       TotalEmission = ZERO
 
       nbins = size(reff)
+
+      if (present(MoistOpt) .eqv. .false.) MoistOpt = 1
+      if (present(DragOpt) .eqv. .false.) DragOpt = 1
+      if (present(HorizFluxOpt) .eqv. .false.) HorizFluxOpt = 1
 
       alpha_grav = alpha / g0
 
