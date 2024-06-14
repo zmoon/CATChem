@@ -195,7 +195,7 @@ contains
       ! Initialize
       errMsg = ''
       thisLoc = ' -> at weibullDistribution (in util/metutils_mod.F90)'
-      RC = -1
+      RC = 0
       gweibull = 1.0_fp
 
       wt = 4.d0
