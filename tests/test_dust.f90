@@ -1,16 +1,6 @@
 program test_dust
-   use precision_mod, only: fp
-   use Config_Opt_Mod, only: ConfigType
-   use ChemState_Mod, only: ChemStateType
-   use MetState_Mod, only: MetStateType
-   use DiagState_Mod, only: DiagStateType
-   use CCPr_Dust_Common_Mod, only: DustStateType
-   use CCPr_Scheme_Fengsha_Mod, only: CCPr_Scheme_Fengsha
-   use CCPr_Dust_mod, only: CCPr_Dust_Init, CCPr_Dust_Run, CCPr_Dust_Finalize
-   use Error_Mod, only: CC_Error, CC_SUCCESS
+   use CATChem, fp => cc_rk
    use testing_mod, only: assert
-   use GridState_Mod, only: GridStateType
-   use Config_Mod
    implicit none
 
    type(ConfigType) :: Config
@@ -21,7 +11,7 @@ program test_dust
    type(GridStateType) :: GridState
 
    ! Integers
-   INTEGER:: RC          ! Success or failure
+   INTEGER:: rc          ! Success or failure
 
    character(len=:), allocatable :: title
 
@@ -30,13 +20,12 @@ program test_dust
    CHARACTER(LEN=255) :: thisLoc
    CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
 
-   ! set thisLoc
-   thisLoc = 'test_dust -> at read CATChem_Conifg.yml'
+   thisLoc = 'test_dust -> at read CATChem_Config.yml'
    errMsg = ''
-   RC = CC_SUCCESS
+   rc = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
-   write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
+   write(*,*) '  C          A A       T     C       H       CCCC   EEEE   M       M'
    write(*,*) '  C         AAAAA      T     C       HHHHH  C      E    E  M M   M M'
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
@@ -48,12 +37,13 @@ program test_dust
    !----------------------------
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config, GridState, RC)
-   if (RC /= CC_success) then
+   call cc_read_config(Config, GridState, rc)
+   if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call CC_Error( errMsg, RC , thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
+
    title = 'Dust Test 1 | Read Config'
    ! call print_info(Config, DustState, MetState, title)
 
@@ -79,17 +69,17 @@ program test_dust
 
    title = "Dust Test 2 | Test Fengsha defaults"
 
-   call CCPr_Dust_Init(Config, DustState, ChemState, rc)
+   call cc_dust_init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Init'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_init'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -103,15 +93,14 @@ program test_dust
    title = "Dust Test 3 | ustar == ustar_threshold"
    MetState%USTAR = 0.1_fp
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call print_info(Config, DustState, MetState, title)
-
    call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
 
    !------------------------------------------------------
@@ -125,22 +114,20 @@ program test_dust
    MetState%V10M = 5.0_fp
    DiagState%dust_total_flux = 0.0_fp
 
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call print_info(Config, DustState, MetState, title)
-
    call assert(DiagState%dust_total_flux >500.0_fp, "Test different horizontal flux")
-   write(*,*) 'Test 3 Success!!!!!'
 
-   call CCPr_Dust_Finalize(DustState, RC)
-   if (RC /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Finalize'
-      call CC_Error( ErrMsg, rc, thisLoc )
+   call cc_dust_finalize(DustState, rc)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_dust_finalize'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -157,21 +144,20 @@ program test_dust
    MetState%U10M = 5.0_fp
    MetState%V10M = 5.0_fp
 
-   call CCPr_Dust_Init(Config, DustState, ChemState, rc)
+   call cc_dust_init(Config, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Init'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_init'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-
-
-   call CCPr_Dust_Run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_Dust_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_dust_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
+
    call print_info(Config, DustState, MetState, title)
    call assert(DiagState%dust_total_flux > 700.0_fp, "Test Ginoux Dust Scheme Success")
 

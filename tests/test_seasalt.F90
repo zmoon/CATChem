@@ -1,18 +1,6 @@
 program test_dust
-   use precision_mod, only: fp
-   use Config_Opt_Mod, only: ConfigType
-   use ChemState_Mod, only: ChemStateType
-   use MetState_Mod, only: MetStateType
-   use DiagState_Mod, only: DiagStateType
-   use CCPr_SeaSalt_Common_Mod, only: SeaSaltStateType
-   use CCPr_Scheme_GEOS12_Mod, only: CCPr_Scheme_GEOS12
-   use CCPr_Scheme_Gong03_Mod, only: CCPr_Scheme_Gong03
-   use CCPr_Scheme_Gong97_Mod, only: CCPr_Scheme_Gong97
-   use CCPr_SeaSalt_mod, only: CCPr_SeaSalt_Init, CCPr_SeaSalt_Run, CCPr_SeaSalt_Finalize
-   use Error_Mod, only: CC_Error, CC_SUCCESS
+   use CATChem, fp => cc_rk
    use testing_mod, only: assert
-   use GridState_Mod, only: GridStateType
-   use Config_Mod
    implicit none
 
    type(ConfigType) :: Config
@@ -23,7 +11,7 @@ program test_dust
    type(GridStateType) :: GridState
 
    ! Integers
-   INTEGER:: RC          ! Success or failure
+   INTEGER:: rc          ! Success or failure
 
    character(len=:), allocatable :: title
 
@@ -32,10 +20,9 @@ program test_dust
    CHARACTER(LEN=255) :: thisLoc
    CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
 
-   ! set thisLoc
    thisLoc = 'test_dust -> at read CATChem_Config.yml'
    errMsg = ''
-   RC = CC_SUCCESS
+   rc = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC   EEEE   M       M'
@@ -50,10 +37,10 @@ program test_dust
    !----------------------------
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config, GridState, RC)
-   if (RC /= CC_success) then
+   call cc_read_config(Config, GridState, rc)
+   if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call CC_Error( errMsg, RC , thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
    title = 'SeaSalt Test 1 | Read Config'
@@ -62,7 +49,6 @@ program test_dust
    write(*,*) 'Config%seasalt_scheme = ', Config%seasalt_scheme
    write(*,*) 'Config%seasalt_scalefactor = ', Config%seasalt_scalefactor
    write(*,*) 'Config%seasalt_weibull = ', Config%seasalt_weibull
-
 
    !----------------------------
    ! Test 2
@@ -83,19 +69,19 @@ program test_dust
    title = "SeaSalt Test 2 | Test GEOS12 defaults"
    Config%seasalt_activate = .TRUE.
 
-   SeaSaltState%SchemeOpt=3
+   SeaSaltState%SchemeOpt = 3
 
-   call CCPr_SeaSalt_Init(Config, SeaSaltState, ChemState, rc)
+   call cc_seasalt_init(Config, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_SeaSalt_Init'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_seasalt_init'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call CCPr_SeaSalt_Run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_SeaSalt_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_seasalt_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -106,12 +92,12 @@ program test_dust
    ! Test Gong03 Scheme
    !-------------------------
    title = "SeaSalt Test 2 | Test Gong03"
-   SeaSaltState%SchemeOpt=1
+   SeaSaltState%SchemeOpt = 1
 
-   call CCPr_SeaSalt_Run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_SeaSalt_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_seasalt_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
@@ -122,18 +108,19 @@ program test_dust
    ! Test Gong03 Scheme
    !-------------------------
    title = "SeaSalt Test 3 | Test Gong97"
-   SeaSaltState%SchemeOpt=2
+   SeaSaltState%SchemeOpt = 2
 
-   call CCPr_SeaSalt_Run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
-      ErrMsg = 'Error in CCPr_SeaSalt_Run'
-      call CC_Error( ErrMsg, rc, thisLoc )
+      errMsg = 'Error in cc_seasalt_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
    call print_info(Config, SeaSaltState, MetState, title)
    call assert(SeaSaltState%TotalEmission > 0.0_fp, "Test Gong97 SeaSalt Scheme")
    SeaSaltState%TotalEmission = 0.0_fp
+
 contains
 
    subroutine print_info(Config_, SeaSaltState_, MetState_, title_)
