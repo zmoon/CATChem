@@ -212,7 +212,6 @@ contains
          endif
       endif
 
-      RC = 0
 
    end subroutine weibullDistribution
 
