@@ -83,12 +83,12 @@ contains
       reff,             &
       rlower,           &
       rupper,           &
-      MoistOpt,         &
-      DragOpt,          &
-      HorizFluxOpt,     &
       TotalEmission,    &
       EmissionBin,      &
-      RC)
+      RC,               &
+      MoistOpt,         &
+      DragOpt,          &
+      HorizFluxOpt)
 
       ! Uses
       USE Constants,     Only : g0
@@ -120,9 +120,9 @@ contains
       real(fp), dimension(:), intent(in) :: rlower          !< Lower Radius
       real(fp), dimension(:), intent(in) :: rupper         !< Upper Radius
 
-      integer,  intent(inout), optional :: MoistOpt        !< Option for moisture
-      integer,  intent(inout), optional :: DragOpt         !< Option for drag
-      integer,  intent(inout), optional :: HorizFluxOpt    !< Option for horizontal flux
+      integer,  intent(in), optional :: MoistOpt        !< Option for moisture
+      integer,  intent(in), optional :: DragOpt         !< Option for drag
+      integer,  intent(in), optional :: HorizFluxOpt    !< Option for horizontal flux
 
       ! Outputs
       real(fp), intent(inout) :: TotalEmission  !< Total Emission

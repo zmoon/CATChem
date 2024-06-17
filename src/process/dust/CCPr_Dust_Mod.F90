@@ -249,7 +249,7 @@ CONTAINS
                MetState%CLAYFRAC,               &
                MetSTate%SANDFRAC,               &
                MetState%AIRDEN(1),              &
-               MetState%FROCEAN,                 &
+               MetState%FROCEAN,                &
                MetState%FRLANDIC,               &
                MetState%FRSNO,                  &
                DustState%AlphaScaleFactor,      &
@@ -257,12 +257,12 @@ CONTAINS
                DustState%EffectiveRadius,       &
                DustState%LowerBinRadius,        &
                DustState%UpperBinRadius,        &
-               DustState%MoistOpt,              &
-               DustState%DragOpt,               &
-               DustState%HorizFluxOpt,          &
                DustState%TotalEmission,         &
                DustState%EmissionPerSpecies,    &
-               RC)
+               RC,                              &
+               MoistOpt=DustState%MoistOpt,     &
+               DragOpt=DustState%DragOpt,       &
+               HorizFluxOpt=DustState%HorizFluxOpt)
 
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in CCPr_Scheme_Fengsha'
