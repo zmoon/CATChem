@@ -10,7 +10,7 @@ simulation:
   name: test
   start_date: 20240501 0000
   end_date: 20240501 0100
-  species_filename: /Users/l22-n04127-res/Documents/GitHub/CATChem_new/tests/CATChem_species.yml
+  species_filename: CATChem_species.yml
   verbose:
     activate: true
 #============================================================================
