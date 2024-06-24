@@ -38,19 +38,20 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Read_Input_File( Config , GridState, RC )
+   SUBROUTINE Read_Input_File( Config , GridState, ChemState, RC )
 !
 ! !USES:
 !
       USE Error_Mod
       USE Config_Opt_Mod,  ONLY : ConfigType
       USE GridState_Mod, ONLY : GridStateType
-
+      use ChemState_Mod, only : ChemStateType
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
       TYPE(ConfigType),    INTENT(INOUT) :: Config    ! Input options
       TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State object
+      type(ChemStateType), intent(inout) :: ChemState ! Chemical State
 !
 ! !OUTPUT PARAMETERS:
 !
@@ -66,6 +67,7 @@ CONTAINS
       ! Error handling
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
+      character(LEN=512) :: filename
 
       !========================================================================
       ! Read_Input_File begins here!
@@ -143,6 +145,19 @@ CONTAINS
          RETURN
       ENDIF
 
+      filename = Config%SpcDatabaseFile
+
+      ! call config_chemical_state(filename, ChemState, RC)
+      ! call Config_Chem_State(config%SpcDatabaseFile, ChemState, RC)
+      ! call Config_Chem_State(config%SpcDatabaseFile, ChemState, RC)
+      ! if (RC /= CC_SUCCESS) then
+      !    errMsg = 'Error in "Config_Process_Species"!'
+      !    CALL CC_Error( errMsg, RC, thisLoc  )
+      !    CALL QFYAML_CleanUp( ConfigInput         )
+      !    CALL QFYAML_CleanUp( ConfigAnchored )
+      !    RETURN
+      ! endif
+
       !========================================================================
       ! Further error-checking and initialization
       !========================================================================
@@ -150,6 +165,38 @@ CONTAINS
       CALL QFYAML_CleanUp( ConfigAnchored )
 
    END SUBROUTINE Read_Input_File
+
+   SUBROUTINE Config_Chem_State( filename, ChemState, RC )
+      USE ChemState_Mod, ONLY : ChemStateType
+      use Config_Opt_Mod, ONLY : ConfigType
+      use QFYAML_Mod, ONLY : QFYAML_t, QFYAML_Species_Init, QFYAML_CleanUp
+      IMPLICIT NONE
+
+      CHARACTER(LEN=*), INTENT(IN) :: filename
+      TYPE(ChemStateType), INTENT(INOUT) :: ChemState
+      INTEGER, INTENT(INOUT) :: RC
+
+      TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
+
+      CHARACTER(LEN=255) :: thisLoc ! where am i
+      CHARACTER(LEN=512) :: errMsg  ! error message
+      character(len=100), allocatable :: speciesName(:)
+
+      thisLoc = ' -> at Config_Chem_State (in module core/config_mod.F90)'
+
+      CALL QFYAML_Species_Init(filename, ConfigInput, ConfigAnchored, speciesName, RC )
+      IF (RC /= 0) THEN
+         errMsg = 'Error in "Config_Chem_State"!'
+         call CC_Error(errMsg, RC, thisLoc)
+         call QFYAML_CleanUp(ConfigInput)
+         RETURN
+      ENDIF
+
+
+   END SUBROUTINE Config_Chem_State
+
+
+
 
    !> \brief Process simulation configuration
    !!

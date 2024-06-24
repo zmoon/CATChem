@@ -13,6 +13,7 @@ module ChemState_Mod
    !
    USE Error_Mod
    USE Precision_Mod
+   use species_mod, only: SpeciesType
 
    IMPLICIT NONE
    PRIVATE
@@ -59,13 +60,13 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: GasIndex(:)       !< Gas Species Index
       INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   !< SeaSalt Species Index
+      CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  !< Species Names
 
       !---------------------------------------------------------------------
       ! Reals
       !---------------------------------------------------------------------
-      REAL(fp), POINTER :: chemSpecies(:,:)
+      type(SpeciesType), allocatable :: ChemSpecies(:)
 
-      ! TODO: Add properties for species
    end type ChemStateType
 
 CONTAINS
@@ -101,13 +102,13 @@ CONTAINS
       ! This can prevent compilation errors caused by uninitialized values
       ! Nullify all fields for safety's sake before allocating them
       ! This can prevent compilation errors caused by uninitialized values
-      ChemState%chemSpecies => NULL()
+      ! ChemState%chemSpecies => NULL()
 
       ! Allocate
-      ALLOCATE( ChemState%chemSpecies( GridState%number_of_levels, ChemState%nSpecies ), STAT=RC )
-      CALL CC_CheckVar( 'ChemState%chemSpecies', 0, RC )
-      IF ( RC /= CC_SUCCESS ) RETURN
-      ChemState%chemSpecies = TINY
+      ! ALLOCATE( ChemState%chemSpecies( GridState%number_of_levels, ChemState%nSpecies ), STAT=RC )
+      ! CALL CC_CheckVar( 'ChemState%chemSpecies', 0, RC )
+      ! IF ( RC /= CC_SUCCESS ) RETURN
+      ! ChemState%chemSpecies = TINY
 
       ! do other checks etc
 
