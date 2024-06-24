@@ -20,6 +20,7 @@ module ChemState_Mod
    !
    ! !PUBLIC MEMBER FUNCTIONS:
    PUBLIC :: Chem_Allocate
+   PUBLIC :: Find_Number_of_Species
    !
    ! !Private DATA MEMBERS:
    !
@@ -53,6 +54,7 @@ module ChemState_Mod
       INTEGER              :: nSpecies          !< Total Number of Species
       INTEGER              :: nSpeciesGas       !< Number of Gas Species
       INTEGER              :: nSpeciesAero      !< Number of Aerosol Species
+      INTEGER              :: nSpeciesTracer    !< Number of Tracer Species
       INTEGER              :: nSpeciesDust      !< Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
       INTEGER, ALLOCATABLE :: SpeciesIndex(:)   !< Total Species Index
@@ -70,6 +72,7 @@ module ChemState_Mod
    end type ChemStateType
 
 CONTAINS
+
 
 
    subroutine Chem_Allocate(Config, GridState, Species, ChemState, RC)
@@ -114,14 +117,16 @@ CONTAINS
 
    end subroutine Chem_Allocate
 
+   !> \brief Find the number of species
    !!
-   !=========================================================================
-   !
-   !<b>Find Number of Species</b>
-   !
-   !<p>This subroutine loops through the Species object and counts the number of species</p>
-   !
-   subroutine Find_Number_of_Species(ChemState, Species, RC)
+   !! This subroutine finds the number of species
+   !!
+   !! \param ChemState The ChemState object
+   !! \param RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   subroutine Find_Number_of_Species(ChemState, RC)
       ! USES
       USE Species_Mod,  ONLY :SpeciesType
 
@@ -129,7 +134,6 @@ CONTAINS
 
       ! INOUT Params
       type(ChemStateType), INTENT(inout) :: ChemState     ! chem State object
-      type(SpeciesType),   INTENT(INOUT) :: Species !Species object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
 
@@ -137,11 +141,55 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg
       CHARACTER(LEN=255) :: thisLoc
 
+      ! Local variables
+      INTEGER :: i
+      integer :: tmp
+
       ! Initialize
       RC = CC_SUCCESS
       ErrMsg = ''
       thisLoc = ' -> at Find_Number_of_Species (in core/chemstate_mod.F90)'
 
+
+      tmp = 0
+      do i = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(i)%is_gas .eqv. .true.) then
+            tmp = tmp + 1
+         endif
+      enddo
+      ChemState%nSpeciesGas = tmp
+
+      tmp = 0
+      do i = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(i)%is_aerosol .eqv. .true.) then
+            tmp = tmp + 1
+         endif
+      enddo
+      ChemState%nSpeciesAero = tmp
+
+      tmp = 0
+      do i = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(i)%is_tracer .eqv. .true.) then
+            tmp = tmp + 1
+         endif
+      enddo
+      ChemState%nSpeciesTracer = tmp
+
+      tmp = 0
+      do i = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(i)%is_dust .eqv. .true.) then
+            tmp = tmp + 1
+         endif
+      enddo
+      ChemState%nSpeciesDust = tmp
+
+      tmp = 0
+      do i = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(i)%is_seasalt .eqv. .true.) then
+            tmp = tmp + 1
+         endif
+      enddo
+      ChemState%nSpeciesSeaSalt = tmp
       ! do nothing yet
       ! loop through Species etc and find the number of species
 
@@ -151,7 +199,7 @@ CONTAINS
    !
    !=========================================================================
    !
-   subroutine Find_Index_of_Species(ChemState, Species, RC)
+   subroutine Find_Indicies_of_Species(ChemState, RC)
       ! USES
       USE Species_Mod,  ONLY : SpeciesType
 
@@ -159,7 +207,6 @@ CONTAINS
 
       ! INOUT Params
       type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
-      type(SpeciesType),   INTENT(INOUT) :: Species ! Species object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
 
@@ -170,12 +217,12 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       ErrMsg = ''
-      thisLoc = ' -> at Find_Index_of_Species (in core/chemstate_mod.F90)'
+      thisLoc = ' -> at Find_Indicies_of_Species (in core/chemstate_mod.F90)'
 
       ! do nothing yet
       ! loop through Species etc and find the number of species
 
 
-   end subroutine Find_Index_of_Species
+   end subroutine Find_Indicies_of_Species
 
 end module ChemState_Mod

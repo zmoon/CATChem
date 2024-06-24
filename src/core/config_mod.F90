@@ -145,7 +145,7 @@ CONTAINS
          RETURN
       ENDIF
 
-      call Config_Chem_State(config%SpcDatabaseFile, ChemState, RC)
+      call Config_Chem_State(config%SpcDatabaseFile, GridState,ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -162,14 +162,24 @@ CONTAINS
 
    END SUBROUTINE Read_Input_File
 
-   SUBROUTINE Config_Chem_State( filename, ChemState, RC )
-      USE ChemState_Mod, ONLY : ChemStateType, Chem_Allocate
+   !> Reads the species database
+   !!
+   !! \param   filename The name of the species database
+   !! \param   GridState The grid state object
+   !! \param   ChemState The chemical state object
+   !! \param   RC Return code
+   !!
+   !!!>
+   SUBROUTINE Config_Chem_State( filename, GridState, ChemState, RC )
+      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species
       use Config_Opt_Mod, ONLY : ConfigType
       use QFYAML_Mod, ONLY : QFYAML_t, QFYAML_Species_Init, QFYAML_CleanUp, QFYAML_NamLen
       USE Error_Mod
+      USE GridState_Mod, ONLY : GridStateType
 
       CHARACTER(LEN=*), INTENT(IN) :: filename
       TYPE(ChemStateType), INTENT(INOUT) :: ChemState
+      TYPE(GridStateType), INTENT(IN) :: GridState
       INTEGER, INTENT(INOUT) :: RC
 
       TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
@@ -264,7 +274,6 @@ CONTAINS
          !-----------------------------
 
          key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'name'
-         write(*,*) '  key: ', key
          v_str = MISSING_STR
          CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_str, "", RC )
          IF (RC /= CC_SUCCESS) then
@@ -471,14 +480,31 @@ CONTAINS
          ChemState%ChemSpecies(n)%viscosity = v_real
          write(*,*) '  viscosity: ', ChemState%ChemSpecies(n)%viscosity
 
+         !---------------------------------------
+         ! Allocate initial Species Concentration
+         !---------------------------------------
+         ALLOCATE(ChemState%ChemSpecies(n)%conc(GridState%number_of_levels), STAT=RC)
+
       enddo ! n
 
+      CALL Find_Number_of_Species(ChemState, RC)
+      IF (RC /= CC_SUCCESS) THEN
+         errMsg = 'Error in Find_Number_of_Species'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
 
+      write(*,*) '========================================================='
+      write(*,*) ' SUMMARY'
+      write(*,*) '  number_of_species: ', ChemState%nSpecies
+      write(*,*) '  number_of_aerosols: ', ChemState%nSpeciesAero
+      write(*,*) '  number_of_gases: ', ChemState%nSpeciesGas
+      write(*,*) '  number of tracers: ', ChemState%nSpeciesTracer
+      write(*,*) '  number of dust: ', ChemState%nSpeciesDust
+      write(*,*) '  number of seasalt: ', ChemState%nSpeciesSeaSalt
+      write(*,*) '========================================================='
 
    END SUBROUTINE Config_Chem_State
-
-
-
 
    !> \brief Process simulation configuration
    !!
