@@ -7,18 +7,19 @@
 dust1:
   name: dust1
   description: dust1
-  aerosol_lower_radius_in_um: 0.1
-  aerosol_upper_radius_in_um: 1.0
-  aerosol_effective_radius_in_um: .8
-  aerosol_density_in_g_cm3: 2500.
+  lower_radius: 0.1
+  upper_radius: 1.0
+  radius: .8
+  density: 2500.
   is_dust: true
   is_aerosol: true
 dust2:
   name: dust2
+  long_name: 'Dust Species Accumulation'
   description: dust2
-  aerosol_lower_radius_in_um: 0.1
-  aerosol_upper_radius_in_um: 5.0
-  aerosol_effective_radius_in_um: 3.
-  aerosol_density_in_g_cm3: 2500.
+  lower_radius: 0.1
+  upper_radius: 5.0
+  radius: 3.
+  density: 2500.
   is_dust: true
   is_aerosol: true
