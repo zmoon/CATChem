@@ -390,14 +390,14 @@ MODULE QFYAML_Mod
           ! Initialize
           RC      = QFYAML_success
           errMsg  = ''
-          thisLoc = ' -> at QFYAML_Init (in module qfyaml_mod.F90)'
+          thisLoc = ' -> at QFYAML_Species_Init (in module qfyaml_mod.F90)'
 
           ! Read the YML file
           CALL QFYAML_Read_Species_File( yml, fileName, yml_anchored, species_names, RC )
 
           ! Trap potential errors
           IF ( RC /= QFYAML_Success ) THEN
-             errMsg = 'Error encountered in "QFYAML_Read_File"!'
+             errMsg = 'Error encountered in "QFYAML_Read_Species_File"!'
              CALL Handle_Error( errMsg, RC, thisLoc )
              RETURN
           ENDIF
@@ -804,18 +804,22 @@ MODULE QFYAML_Mod
           ENDDO
 
           ALLOCATE(names(0), STAT=RC)
-          IF ( RC /= 0 ) THEN
-             errMsg = 'Error allocating "names"!'
-             CALL Handle_Error( errMsg, RC, thisLoc )
-             RETURN
-          ENDIF
+         !  IF ( RC /= 0 ) THEN
+         !     errMsg = 'Error allocating "names"!'
+         !     CALL Handle_Error( errMsg, RC, thisLoc )
+         !     RETURN
+         !  ENDIF
           current = ""
           i = 0
           do n = 1, yml%num_vars
             if (len(TRIM(yml%vars(n)%category)) > 0) then
-               if (TRIM(yml%vars(n)%category) .eq. TRIM(current)) then
+               if ( i == 0 ) then
                   i = i + 1
-                  names = [names, TRIM(yml%vars(n)%category)]
+                  current = TRIM(yml%vars(n)%category)
+                  names = [names, yml%vars(n)%category]
+               else if (TRIM(yml%vars(n)%category) /= TRIM(current)) then
+                  i = i + 1
+                  names = [names, yml%vars(n)%category]
                   current = TRIM(yml%vars(n)%category)
                endif
             endif
@@ -827,9 +831,23 @@ MODULE QFYAML_Mod
             CALL Handle_Error( errMsg, RC, thisLoc )
             RETURN
          ENDIF
-         do n = 1, i
-            species_names(i) = names(i)
+         current = ""
+         i = 0
+         do n = 1, yml%num_vars
+            if (len(TRIM(yml%vars(n)%category)) > 0) then
+               if ( i == 0 ) then
+                  i = i + 1
+                  current = TRIM(yml%vars(n)%category)
+                  species_names(i) = yml%vars(n)%category
+               else if (TRIM(yml%vars(n)%category) /= TRIM(current)) then
+                  i = i + 1
+                  species_names(i) = yml%vars(n)%category
+                  current = TRIM(yml%vars(n)%category)
+               endif
+               ! write(*,*) 'species_names(',i,') = ',species_names(i),current
+            endif
          enddo
+
 
 
 
