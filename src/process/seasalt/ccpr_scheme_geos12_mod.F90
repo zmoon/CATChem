@@ -140,6 +140,13 @@ contains
 
          ! Get Jeagle SST Correction
          call jeagleSSTcorrection(fsstemis, SST,1, RC)
+         if (RC /= 0) then
+            RC = -1
+            print *, 'Error in jeagleSSTcorrection'
+            return
+         endif
+
+         ! Total emission scale
          scale = scale * fsstemis * SeaSaltScaleFactor
 
          do n = 1, nbins

@@ -156,6 +156,7 @@ contains
          call weibullDistribution(gweibull, WeibullFlag, w10m, RC)
          if (RC /= 0) then
             RC = -1
+            print *, 'Error in weibullDistribution'
             return
          endif
 
@@ -163,6 +164,7 @@ contains
          call jeagleSSTcorrection(fsstemis, SST,1, RC)
          if (RC /= 0) then
             RC = -1
+            print *, 'Error in jeagleSSTcorrection'
             return
          endif
 
