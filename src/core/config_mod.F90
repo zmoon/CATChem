@@ -463,6 +463,23 @@ CONTAINS
          ChemState%ChemSpecies(n)%lower_radius = v_real
          write(*,*) '  lower_radius: ', ChemState%ChemSpecies(n)%lower_radius
 
+         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'upper_radius'
+         v_real = MISSING_REAL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
+         IF (RC /= CC_SUCCESS) then
+            if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .false.) then
+               ! assume that if upper_radius isn't in the species.yaml file assume 0.0
+               ChemState%ChemSpecies(n)%upper_radius = MISSING_REAL
+            else
+               ! if is_aerosol upper_radius must be present
+               errMsg = 'upper_radius required for aerosol species ' // TRIM(ChemState%SpeciesNames(n))
+               CALL CC_Error( errMsg, RC, thisLoc )
+               RETURN
+            endif
+         ENDIF
+         ChemState%ChemSpecies(n)%upper_radius = v_real
+         write(*,*) '  upper_radius: ', ChemState%ChemSpecies(n)%upper_radius
+
          key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'viscosity'
          v_real = MISSING_REAL
          CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
