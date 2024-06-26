@@ -58,6 +58,7 @@ module ChemState_Mod
       INTEGER              :: nSpeciesDust      !< Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
       INTEGER, ALLOCATABLE :: SpeciesIndex(:)   !< Total Species Index
+      INTEGER, ALLOCATABLE :: TracerIndex(:)    !< Tracer Species Index
       INTEGER, ALLOCATABLE :: AeroIndex(:)      !< Aerosol Species Index
       INTEGER, ALLOCATABLE :: GasIndex(:)       !< Gas Species Index
       INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
@@ -196,10 +197,14 @@ CONTAINS
 
    end subroutine Find_Number_of_Species
 
-   !
-   !=========================================================================
-   !
-   subroutine Find_Indicies_of_Species(ChemState, RC)
+   !> \brief Find the indices of species
+   !!
+   !! \param ChemState The ChemState object
+   !! \param RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   subroutine Find_indices_of_Species(ChemState, RC)
       ! USES
       USE Species_Mod,  ONLY : SpeciesType
 
@@ -214,15 +219,78 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg
       CHARACTER(LEN=255) :: thisLoc
 
+      integer :: n ! looping variable
+
       ! Initialize
       RC = CC_SUCCESS
       ErrMsg = ''
-      thisLoc = ' -> at Find_Indicies_of_Species (in core/chemstate_mod.F90)'
+      thisLoc = ' -> at Find_indices_of_Species (in core/chemstate_mod.F90)'
 
-      ! do nothing yet
-      ! loop through Species etc and find the number of species
+      ! Find indices of all aerosol species
+      ALLOCATE(Chemstate%AeroIndex(ChemState%nSpeciesAero), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%AeroIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+      do n = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
+            Chemstate%AeroIndex(n) = n
+         endif
+      enddo
 
+      ! Find indices for tracer species
+      ALLOCATE(Chemstate%TracerIndex(ChemState%nSpeciesTracer), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%TracerIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+      do n = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(n)%is_tracer .eqv. .true.) then
+            Chemstate%TracerIndex(n) = n
+         endif
+      enddo
 
-   end subroutine Find_Indicies_of_Species
+      ! Find indices of all gas species
+      ALLOCATE(Chemstate%GasIndex(ChemState%nSpeciesGas), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%GasIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+      do n = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
+            Chemstate%GasIndex(n) = n
+         endif
+      enddo
+
+      ! Find indices of all dust species
+      ALLOCATE(Chemstate%DustIndex(ChemState%nSpeciesDust), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%DustIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+      do n = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(n)%is_dust .eqv. .true.) then
+            Chemstate%DustIndex(n) = n
+         endif
+      enddo
+
+      ! Find indices of all SeaSalt Species
+      ALLOCATE(Chemstate%SeaSaltIndex(ChemState%nSpeciesSeaSalt), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%SeaSaltIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+      do n = 1, ChemState%nSpecies
+         if (ChemState%ChemSpecies(n)%is_seasalt .eqv. .true.) then
+            Chemstate%SeaSaltIndex(n) = n
+         endif
+      enddo
+
+   end subroutine Find_indices_of_Species
 
 end module ChemState_Mod
