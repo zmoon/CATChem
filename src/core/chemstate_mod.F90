@@ -21,6 +21,7 @@ module ChemState_Mod
    ! !PUBLIC MEMBER FUNCTIONS:
    PUBLIC :: Chem_Allocate
    PUBLIC :: Find_Number_of_Species
+   PUBLIC :: Find_Indices_of_Species
    !
    ! !Private DATA MEMBERS:
    !
@@ -204,7 +205,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   subroutine Find_indices_of_Species(ChemState, RC)
+   subroutine Find_Indices_of_Species(ChemState, RC)
       ! USES
       USE Species_Mod,  ONLY : SpeciesType
 
