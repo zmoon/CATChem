@@ -11,6 +11,7 @@ simulation:
   start_date: 20240501 0000
   end_date: 20240501 0100
   species_filename: CATChem_species.yml
+  emission_filename: CATChem_emission.yml
   verbose:
     activate: true
 #============================================================================
