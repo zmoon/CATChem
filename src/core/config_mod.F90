@@ -19,10 +19,6 @@ MODULE Config_Mod
 ! !PUBLIC MEMBER FUNCTIONS:
 !
    PUBLIC  :: Read_Input_File
-   PUBLIC  :: Config_Simulation
-   PUBLIC  :: Config_Grid
-   PUBLIC  :: Config_Process_Dust
-   PUBLIC  :: Config_Process_Seasalt
 
 !
 ! !DEFINED PARAMETERS:
@@ -147,6 +143,15 @@ CONTAINS
          RETURN
       ENDIF
 
+      call Config_Process_DryDep(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_DryDep"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
       !========================================================================
       ! Further error-checking and initialization
       !========================================================================
@@ -172,7 +177,7 @@ CONTAINS
       USE Charpak_Mod,   ONLY : To_UpperCase
       USE Error_Mod
       USE Config_Opt_Mod, ONLY : ConfigType
-!      USE QFYAML_Mod
+      ! USE Time_Mod
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
@@ -231,128 +236,8 @@ CONTAINS
       Config%SimulationName = TRIM( v_str )
 
 
-      ! Error check simulation name
-      Sim = To_UpperCase( TRIM( Config%SimulationName ) )
-      IF ( TRIM(Sim) /= 'AEROSOL' ) THEN
-         errMsg = Trim( Config%SimulationName) // ' is not a'            // &
-            ' valid simulation. Supported simulations are:'           // &
-            ' aerosol.'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-
-      ! Set simulation type flags in Config
-      Config%ITS_AN_AEROSOL_SIM   = ( TRIM(Sim) == 'AEROSOL'               )
-      Config%ITS_A_CARBON_SIM     = ( TRIM(Sim) == 'CARBON'                )
-      Config%ITS_A_CH4_SIM        = ( TRIM(Sim) == 'CH4'                   )
-      Config%ITS_A_CO2_SIM        = ( TRIM(Sim) == 'CO2'                   )
-      Config%ITS_A_FULLCHEM_SIM   = ( TRIM(Sim) == 'FULLCHEM'              )
-
-
-      !------------------------------------------------------------------------
-      ! Species database file
-      !------------------------------------------------------------------------
-      key   = "simulation%species_database_file"
-      v_str = MISSING_STR
-      !LDH: Config used to hold the yaml, now it's the variable that holds the input options
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%SpcDataBaseFile = TRIM( v_str )
-
-      !------------------------------------------------------------------------
-      ! Species metadata output file
-      !------------------------------------------------------------------------
-      key   = "simulation%species_metadata_output_file"
-      v_str = MISSING_STR
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%SpcMetaDataOutFile = TRIM( v_str )
-
-      !------------------------------------------------------------------------
-      ! Turn on debug output
-      !------------------------------------------------------------------------
-      key    = "simulation%verbose%activate"
-      v_bool = MISSING_BOOL
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%VerboseRequested = v_bool
-
-
-      !------------------------------------------------------------------------
-      ! Root data directory
-      !------------------------------------------------------------------------
-      key   = "simulation%root_data_dir"
-      v_str = MISSING_STR
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%Data_Dir = TRIM( v_str )
-
-      ! Make sure DATA-DIR ends with a "/" character
-      C = LEN_TRIM( Config%DATA_DIR )
-      IF ( Config%DATA_DIR(C:C) /= '/' ) THEN
-         Config%DATA_DIR = TRIM( Config%DATA_DIR ) // '/'
-      ENDIF
-
-      ! Create CHEM_INPUTS directory
-      Config%CHEM_INPUTS_DIR = TRIM( Config%DATA_DIR ) // &
-         'CHEM_INPUTS/'
-
-      !------------------------------------------------------------------------
-      ! Meteorology field
-      !------------------------------------------------------------------------
-      key   = "simulation%met_field"
-      v_str = MISSING_STR
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%MetField = TRIM( v_str )
-
-      ! Make sure a valid met field is specified
-      Met = To_UpperCase( TRIM( Config%MetField ) )
-      ! LDH:  A More comprehensive list of CATChem models need to be added
-      SELECT CASE( TRIM( Met ) )
-       CASE( 'UFS', 'UFS-CHEM' )
-         Config%MetField = 'UFS'
-       CASE( 'WRF', 'WRF-CHEM' )
-         Config%MetField = 'WRF'
-       CASE( 'RRFS')
-         Config%MetField = 'RRFS'
-       CASE( 'MODEL-X' )
-         Config%MetField = 'MODEL-X'
-       CASE( 'MPAS-A' )
-         Config%MetField = 'MPAS-A'
-       CASE DEFAULT
-         errMsg = Trim( Config%MetField ) // ' is not a valid '       // &
-            ' met field. Supported met fields are UFS, '          // &
-            ' WRF,  AQM, or MODEL-X. Please check your '              // &
-            '"CATChem_config.ymls" file.'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      END SELECT
-
-
       ! Return success
       RC = CC_SUCCESS
-
 
       !========================================================================
       ! Print to screen
@@ -374,9 +259,6 @@ CONTAINS
 ! 100   FORMAT( A, I8.8, 1X, I6.6 )
 ! 110   FORMAT( A, A              )
 ! 120   FORMAT( A, L5             )
-
-
-
 
    END SUBROUTINE Config_Simulation
 
@@ -720,5 +602,4 @@ CONTAINS
 
    END SUBROUTINE Config_Process_SeaSalt
 
-
-END MODULE Config_Mod
+END MODULE config_mod
