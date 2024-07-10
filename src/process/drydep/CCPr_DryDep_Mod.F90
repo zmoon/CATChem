@@ -233,41 +233,6 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DryDep_Final (in process/drydep/ccpr_DryDep_mod.F90)'
 
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%particleradius, STAT=RC )
-      CALL CC_CheckVar('DryDepState%particleradius', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%particleradius => NULL()
-
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%particledensity, STAT=RC )
-      CALL CC_CheckVar('DryDepState%particledensity', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%particledensity => NULL()
-
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%u10m, STAT=RC )
-      CALL CC_CheckVar('DryDepState%u10m', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%u10 => NULL()
-
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%v10m, STAT=RC )
-      CALL CC_CheckVar('DryDepState%v10m', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%v10 => NULL()
-
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%fraclake, STAT=RC )
-      CALL CC_CheckVar('DryDepState%fraclake', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%fraclake => NULL()
-
-      ! Deallocate any arrays here
-      DELLOCATE( DryDepState%gwettop, STAT=RC )
-      CALL CC_CheckVar('DryDepState%gwettop', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      DryDepState%gwettop => NULL()
 
 
    end subroutine CCPr_DryDep_Final
