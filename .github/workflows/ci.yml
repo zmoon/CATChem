@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        compiler: [gfortran-10, gfortran-11, gfortran-12, ifort]
+        compiler: [gfortran-10, gfortran-11, gfortran-12]
     defaults:
       run:
         shell: bash -l {0}
@@ -21,6 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Get Intel compilers with APT
         if: ${{ matrix.compiler == 'ifort' }}
@@ -28,6 +30,10 @@ jobs:
         with:
           compiler: intel-classic
           version: "2021.9"  # oneAPI 2023.1.0
+
+      - name: Install dependencies
+        if: ${{ startsWith(matrix.compiler, 'gfortran') }}
+        run: sudo apt-get install -y libnetcdf-dev libnetcdff-dev
 
       - name: Build
         run: |

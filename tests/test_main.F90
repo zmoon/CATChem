@@ -3,15 +3,13 @@
 !!
 !!!>
 program test_main
-   USE init_mod
-   USE Error_Mod
-   Use State_Mod
-   USE Config_Mod
+   use CATChem
+   use state_mod  ! FIXME: declare states here or move to a driver
 
    IMPLICIT NONE
 
    ! Integers
-   INTEGER:: RC          ! Success or failure
+   INTEGER:: rc          ! Success or failure
 
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
@@ -20,7 +18,7 @@ program test_main
    ! set thisLoc
    thisLoc = 'test_main::test_main() -> at read CATChem_Conifg.yml'
    errMsg = ''
-   RC = CC_SUCCESS
+   rc = CC_SUCCESS
 
    write(*,*) '   CCCCC      A     TTTTTTT   CCCCC  H'
    write(*,*) '  C          A A       T     C       H       CCCC   EEEEE  M       M'
@@ -31,10 +29,10 @@ program test_main
    write(*,*) ''
 
    ! Read input file and initialize grid
-   call Read_Input_File(Config, GridState, RC)
-   if (RC /= CC_success) then
+   call cc_read_config(Config, GridState, rc)
+   if (rc /= CC_SUCCESS) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
-      call CC_Error( errMsg, RC , thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
@@ -45,10 +43,10 @@ program test_main
    write(*,*) 'Number of grid levels = ', GridState%number_of_levels
 
    ! initialize met
-   call Init_Met(GridState, MetState, RC)
-   if (RC /= CC_success) then
+   call cc_init_met(GridState, MetState, rc)
+   if (rc /= CC_SUCCESS) then
       errMsg = 'Error initializing meteorology'
-      call CC_Error( errMsg, RC , thisLoc)
+      call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
 
