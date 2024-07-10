@@ -149,12 +149,12 @@ CONTAINS
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
-      TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
+      TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(DiagState_type), INTENT(INOUT)      :: DiagState       ! DiagState Instance
-      TYPE(DryDepState_type), INTENT(INOUT)    :: DryDepState     ! DryDepState Instance
-      TYPE(ChemState_type),  INTENT(INOUT)     :: ChemState       ! ChemState Instance
+      TYPE(DiagStateType), INTENT(INOUT)      :: DiagState       ! DiagState Instance
+      TYPE(DryDepStateType), INTENT(INOUT)    :: DryDepState     ! DryDepState Instance
+      TYPE(ChemStateType),  INTENT(INOUT)     :: ChemState       ! ChemState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT) :: RC                                  ! Return Code
@@ -220,7 +220,7 @@ CONTAINS
       IMPLICIT NONE
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(DryDepState_type), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
+      TYPE(DryDepStateType), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT) :: RC                                  ! Return Code
