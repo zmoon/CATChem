@@ -121,6 +121,7 @@ MODULE MetState_Mod
       REAL(fp)           :: PBL_TOP_m      !< PBL top [m]
       REAL(fp)           :: PBL_THICK      !< PBL thickness [hPa]
       REAL(fp)           :: PHIS           !< Surface geopotential height [m2/s2]
+      REAL(fp)           :: PHIT           !< Surface top-of-layer geopotential height [m2/s2]
       REAL(fp)           :: PRECANV        !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
       REAL(fp)           :: PRECCON        !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
       REAL(fp)           :: PRECLSC        !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
