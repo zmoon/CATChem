@@ -58,9 +58,6 @@ CONTAINS
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
 !
 ! !LOCAL VARIABLES:
-!
-      ! Strings
-      CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml' ! base configuration file
       ! Objects
       TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
 
