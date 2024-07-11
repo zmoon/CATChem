@@ -67,7 +67,6 @@ CONTAINS
       ! Error handling
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
-      character(LEN=512) :: filename
 
       !========================================================================
       ! Read_Input_File begins here!
