@@ -235,7 +235,7 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
-      i = 0
+      i = 1
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
             Chemstate%AeroIndex(i) = n
@@ -250,7 +250,7 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
-      i = 0
+      i = 1
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_tracer .eqv. .true.) then
             Chemstate%TracerIndex(i) = n
@@ -280,7 +280,7 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
-      i = 0
+      i = 1
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_dust .eqv. .true.) then
             Chemstate%DustIndex(i) = n
@@ -295,7 +295,7 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
-      i = 0
+      i = 1
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_seasalt .eqv. .true.) then
             Chemstate%SeaSaltIndex(i) = n
