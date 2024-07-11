@@ -221,6 +221,7 @@ CONTAINS
       CHARACTER(LEN=255) :: thisLoc
 
       integer :: n ! looping variable
+      integer :: i ! index variable
 
       ! Initialize
       RC = CC_SUCCESS
@@ -234,9 +235,11 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
+      i = 0
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
-            Chemstate%AeroIndex(n) = n
+            Chemstate%AeroIndex(i) = n
+            i = i + 1
          endif
       enddo
 
@@ -247,9 +250,11 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
+      i = 0
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_tracer .eqv. .true.) then
-            Chemstate%TracerIndex(n) = n
+            Chemstate%TracerIndex(i) = n
+            i = i + 1
          endif
       enddo
 
@@ -260,9 +265,11 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
+      i = 1
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_gas .eqv. .true.) then
-            Chemstate%GasIndex(n) = n
+            Chemstate%GasIndex(i) = n
+            i = i + 1
          endif
       enddo
 
@@ -273,9 +280,11 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
+      i = 0
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_dust .eqv. .true.) then
-            Chemstate%DustIndex(n) = n
+            Chemstate%DustIndex(i) = n
+            i = i + 1
          endif
       enddo
 
@@ -286,9 +295,11 @@ CONTAINS
          call CC_Error(errMsg, RC, thisLoc)
          RETURN
       ENDIF
+      i = 0
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_seasalt .eqv. .true.) then
-            Chemstate%SeaSaltIndex(n) = n
+            Chemstate%SeaSaltIndex(i) = n
+            i = i + 1
          endif
       enddo
 
