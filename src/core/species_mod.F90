@@ -32,7 +32,7 @@ module species_mod
       logical :: is_seasalt           !< if true, species is a seasalt
 
       ! Numerical properties
-      real(kind=fp) :: mw_g                 !< gaseos molecular weight
+      real(kind=fp) :: mw_g                 !< gaseous molecular weight
       real(kind=fp) :: density              !< particle density (kg/m3)
       real(kind=fp) :: radius               !< mean molecular diameter in meters
       real(kind=fp) :: lower_radius         !< lower radius in meters
