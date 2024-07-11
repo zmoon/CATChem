@@ -804,11 +804,11 @@ MODULE QFYAML_Mod
           ENDDO
 
           ALLOCATE(names(0), STAT=RC)
-         !  IF ( RC /= 0 ) THEN
-         !     errMsg = 'Error allocating "names"!'
-         !     CALL Handle_Error( errMsg, RC, thisLoc )
-         !     RETURN
-         !  ENDIF
+          IF ( RC /= QFYAML_Success ) THEN
+             errMsg = 'Error allocating "names"!'
+             CALL Handle_Error( errMsg, RC, thisLoc )
+             RETURN
+          ENDIF
           current = ""
           i = 0
           do n = 1, yml%num_vars
