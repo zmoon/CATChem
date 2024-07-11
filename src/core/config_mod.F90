@@ -170,7 +170,7 @@ CONTAINS
    !!
    !!!>
    SUBROUTINE Config_Chem_State( filename, GridState, ChemState, RC )
-      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Indices_of_Species
+      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Index_of_Species
       use Config_Opt_Mod, ONLY : ConfigType
       use QFYAML_Mod, ONLY : QFYAML_t, QFYAML_Species_Init, QFYAML_CleanUp, QFYAML_NamLen
       USE Error_Mod
@@ -510,9 +510,9 @@ CONTAINS
          RETURN
       ENDIF
 
-      CALL Find_Indices_of_Species(ChemState, RC)
+      CALL Find_Index_of_Species(ChemState, RC)
       IF (RC /= CC_SUCCESS) THEN
-         errMsg = 'Error in Find_Number_of_Species'
+         errMsg = 'Error in Find_Index_of_Species'
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
