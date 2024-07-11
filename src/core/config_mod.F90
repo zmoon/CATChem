@@ -145,7 +145,7 @@ CONTAINS
          RETURN
       ENDIF
 
-      call Config_Chem_State(config%SpcDatabaseFile, GridState,ChemState, RC)
+      call Config_Chem_State(config%Species_File, GridState,ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -613,7 +613,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%SpcDatabaseFile = TRIM( v_str )
+      Config%Species_File = TRIM( v_str )
 
 
       ! Return success
