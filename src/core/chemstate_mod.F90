@@ -23,8 +23,8 @@ module ChemState_Mod
    PUBLIC :: Find_Number_of_Species
    PUBLIC :: Find_Index_of_Species
    PUBLIC :: FindSpecByName
-   ! PUBLIC :: GetSpecConc
-   ! PUBLIC :: GetSpecConcByName
+   PUBLIC :: GetSpecConc
+   PUBLIC :: GetSpecConcByName
    PUBLIC :: GetSpecConcByIndex
    !
    ! !Private DATA MEMBERS:
@@ -448,6 +448,5 @@ CONTAINS
       concentration = ChemState%ChemSpecies(index)%conc
 
    end subroutine GetSpecConcByName
-
 
 end module ChemState_Mod
