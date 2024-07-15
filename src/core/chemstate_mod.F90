@@ -437,7 +437,7 @@ CONTAINS
       ErrMsg = ''
       thisLoc = ' -> at GetSpecConcByName (in core/chemstate_mod.F90)'
 
-      call find_species_by_name(ChemState, name, index, RC)
+      call FindSpecByName(ChemState, name, index, RC)
 
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in GetSpecConcByName'
