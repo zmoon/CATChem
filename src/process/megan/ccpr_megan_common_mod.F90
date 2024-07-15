@@ -51,24 +51,24 @@ module CCPr_Megan_Common_Mod
    TYPE :: MeganStateType
       ! Generic Variables for Every Process
       Logical                         :: Activate                !< Activate Process (True/False)
-      INTEGER                         :: nMeganSpecies            !< Number of megan processes
-      INTEGER, ALLOCATABLE            :: MeganSpeciesIndex(:)     !< Index of dust species
-      INTEGER, ALLOCATABLE            :: SpcIDs(:)               !< CATChem species IDs
+      integer                         :: nMeganSpecies            !< Number of megan processes
+      integer, allocatable            :: MeganSpeciesIndex(:)     !< Index of dust species
+      integer, allocatable            :: SpcIDs(:)               !< CATChem species IDs
 
       ! Process Specific Parameters
-      REAL(fp), ALLOCATABLE           :: TotalEmission           !< Total emission          [kg/m^2/s]
-      REAL(fp), ALLOCATABLE           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
+      real(fp), allocatable           :: TotalEmission           !< Total emission          [kg/m^2/s]
+      real(fp), allocatable           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
 
       ! Scheme Options
       Logical                         :: CO2Inhib                !< CO2 inhibition for isoprene Option [True/False]
-      REAL(fp)                        :: CO2conc                 !< CO2 concentration [ppmv]
-      REAL(fp)                        :: ISOPscale               !< factors to scale isoprene emissions 
-      REAL(fp)                        :: ISOPtoSOAP              !< isoprene convertion factor to SOAP
-      REAL(fp)                        :: ISOPtoSOAS              !< isoprene convertion factor to SOAS
-      REAL(fp)                        :: MONOtoSOAP              !< monoterpene convertion factor to SOAP
-      REAL(fp)                        :: MONOtoSOAS              !< monoterpene convertion factor to SOAS 
-      REAL(fp)                        :: TERPtoSOAP              !< other terpenes convertion factor to SOAP 
-      REAL(fp)                        :: TERPtoSOAS              !< other terpenes convertion factor to SOAS 
+      real(fp)                        :: CO2conc                 !< CO2 concentration [ppmv]
+      real(fp)                        :: ISOPscale               !< factors to scale isoprene emissions 
+      real(fp)                        :: ISOPtoSOAP              !< isoprene convertion factor to SOAP
+      real(fp)                        :: ISOPtoSOAS              !< isoprene convertion factor to SOAS
+      real(fp)                        :: MONOtoSOAP              !< monoterpene convertion factor to SOAP
+      real(fp)                        :: MONOtoSOAS              !< monoterpene convertion factor to SOAS 
+      real(fp)                        :: TERPtoSOAP              !< other terpenes convertion factor to SOAP 
+      real(fp)                        :: TERPtoSOAS              !< other terpenes convertion factor to SOAS 
 
 
       !=================================================================
@@ -137,7 +137,7 @@ contains
       
       ! Uses
       use precision_mod, only : fp, ZERO
-      Use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE, CC_Error
+      use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE, CC_Error
       IMPLICIT NONE
       ! input Parameters
       character(LEN=*), intent(in) :: CPD       ! Compound name
@@ -452,7 +452,7 @@ contains
    end subroutine GET_GAMMA_PAR_PCEEA
 
    !>
-   !! \brief computes the local solar angle for a given day of year, latitude and longitude (or local time).
+   !! \brief Computes the local solar angle for a given day of year, latitude and longitude (or local time).
    !!
    !! References:
    !! (1 ) Guenther et al, 2006
@@ -493,168 +493,880 @@ contains
    end subroutine SOLAR_ANGLE
 
    !>
-   !! \brief Computes Draxler Hoirizontal Flux
+   !! \brief Computes the temperature activity factor for the light-independent fraction of emissions
    !!
-   !! Draxler, R.R, D.A. Gillette, J.S. Kirkpatrick, and J. Heller (2001),
-   !! Estimating PM10 air concentrations from dust storms in Iraq, Kuwait,
-   !! and Saudi Arabia, Atm. Environ, 35: 4315-4330.
-   !! https://doi.org/10.1016/S1352-2310(01)00159-5
+   !!References: 
+   !! (1 ) Guenther et al, 2006
+   !! (2 ) Guenther et al, MEGAN user mannual 2007-08
+   !!(3 ) Guenther et al., GMD 2012 and MEGANv2.1 source code
    !!
-   !! \param ustar friction velocity
-   !! \param ustar_threshold dry threshold friction velocity
-   !! \param R Drag partition
-   !! \param H Soil Moisture Attenuation Factor
-   !! \param HorizFlux Horizontal Mass Flux
+   !! \param T 
+   !! \param T_Leaf_Int, T_Leaf_Temp
+   !! \param BETA
    !!
-   !!
-   !! \ingroup catchem_dust_process
+   !! \ingroup catchem_megan_process
    !!!>
-   subroutine Draxler_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
+   subroutine GET_GAMMA_T_LI(T, BETA, T_Leaf_Int, T_Leaf_Temp, GAMMA_T_LI)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: ustar            !< friction velocity [m/s]
-      real(fp), intent(in)  :: ustar_threshold  !< dry threshold friction velocity [m/s]
-      real(fp), intent(in)  :: R                !< Drag partition (0-1)
-      real(fp), intent(in)  :: H                !< Soil Moisture Attenuation Factor
-      real(fp), intent(inout) :: HorizFlux      !< Horizontal Mass Flux [kg/m2/s]
+      real(fp), intent(in)  :: T             !< 
+      real(fp), intent(in)  :: BETA          !< Temperature factor per species
+      real(fp), intent(in)  :: T_Leaf_Int    !< 
+      real(fp), intent(in)  :: T_Leaf_Temp   !< Soil Moisture Attenuation Factor
+      real(fp), intent(out) :: GAMMA_T_LI  !< Factor for the light-independent emissions
 
       ! Local Variables
       !----------------
-      real(fp) :: u_ts    !< Modified threshold friction velocity
-
-      ! Initialize
-      !-----------
-      HorizFlux = ZERO
+      real(fp) :: L_T, L_PT_T    !< 
+      real(fp), parameter :: T_STANDARD = 303.0_fp
 
       !--------------------------------------------
-      ! Compute Draxler Horizontal Flux
+      ! GET_GAMMAT_T_LI begins here!
       !--------------------------------------------
-      u_ts = ustar_threshold * H / R
-
-      if (ustar >= ustar_threshold) then
-         HorizFlux = max(0._fp ,(ustar * R) ** 3.0_fp * (1.0_fp - ( u_ts / ustar ) ** 2.0_fp))
-      endif
-
+      L_T = T * T_Leaf_Temp + T_Leaf_Int
+      GAMMA_T_LI = EXP( BETA * ( T - T_STANDARD ) )
 
       return
-   end subroutine Draxler_HorizFlux
+   end subroutine GET_GAMMA_T_LI
 
    !>
-   !! \brief Computes Kawamura Hoirizontal Flux
+   !! \brief Computes the temperature sensitivity for the light-dependent fraction of emissions.
    !!
-   !! Kawamura, R., 1951. Study on sand movement by wind. Report, 5(3), pp.95-112.
+   !!  References:
+   !!  (1 ) Guenther et al, 1995
+   !!  (2 ) Guenther et al, 2006
+   !!  (3 ) Guenther et al, MEGAN v2.1 user mannual 2007-08
+   ! ! (4 ) Guenther et al., GMD 2012 and MEGANv2.1 source code.
    !!
-   !! Webb, N., Chappell, A., LeGrand, S., Ziegler, N., Edwards, B. 2020.
-   !! A note on the use of drag partition in aeolian transport models.
-   !! Aeolian Research. 42:100560. https://doi.org/10.1016/j.aeolia.2019.100560.
+   !! \param T
+   !! \param PT_15, PT_1
+   !! \param CT1, CEO
    !!
-   !! \param ustar friction velocity
-   !! \param ustar_threshold dry threshold friction velocity
-   !! \param R Drag partition
-   !! \param H Soil Moisture Attenuation Factor
-   !! \param HorizFlux Horizontal Mass Flux
-   !!
-   !! \ingroup catchem_dust_process
+   !! \ingroup catchem_megan_process
    !!!>
-   subroutine Kawamura_HorizFlux(ustar, ustar_threshold, R, H, HorizFlux)
+   subroutine GET_GAMMA_T_LD(T, PT_15, PT_1, CT1, CEO, GAMMA_T_LD)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: ustar           !< friction velocity [m/s]
-      real(fp), intent(in)  :: ustar_threshold !< dry threshold friction velocity [m/s]
-      real(fp), intent(in)  :: R               !< Drag partition (0-1)
-      real(fp), intent(in)  :: H               !< Soil Moisture Attenuation Factor
-      real(fp), intent(inout) :: HorizFlux     !<
+      real(fp), intent(in)  :: T             !< Current leaf temperature [K]
+      real(fp), intent(in)  :: PT_15         !< Average leaf temperature over the past 15 days
+      real(fp), intent(in)  :: PT_1          !< Average leaf temperature over the past arbitray day(s). Not used at present
+      real(fp), intent(in)  :: CT1, CEO      !< Compound-specific parameters for light-dependent temperature activity
+      real(fp), intent(out) :: GAMMA_T_LD  !< Temperature activity factor for the light-dependent emissions
 
       ! Local Variables
-      real(fp) :: u_ts !< Modified threshold friction velocity
-
-      ! Initialize
-      HorizFlux = ZERO
+      real(fp) :: C_T, CT2        !< 
+      real(fp) :: E_OPT, T_OPT, X !< 
+      ! Ideal gas constant [J/mol/K] (!!!! Note: the constant module is 8.314)
+      real(fp), parameter :: R   = 8.3144598e-3_fp
 
       !--------------------------------------------
-      ! Compute Kawamura Horizontal Flux
+      ! GET_GAMMA_T_LD begins here!
       !--------------------------------------------
-      u_ts = ustar_threshold * H / R
+      E_OPT = CEO * EXP( 0.08_fp * ( PT_15  - 2.97e2_fp ) )
+      T_OPT = 3.13e2_fp + ( 6.0e-1_fp * ( PT_15 - 2.97e2_fp ) )
+      CT2   = 200.0_fp
 
-      HorizFlux = MAX(0._fp, (ustar ** 3.0_fp * (1.0_fp - (u_ts / ustar) ** 2.0_fp) * (1.0_fp + (u_ts / ustar) ** 2.0_fp ) ) )
+      ! Variable related to temperature
+      X     = ( 1.0_fp/T_OPT - 1.0_fp/T ) / R
+
+      ! C_T: Effect of temperature on leaf BVOC emission, including
+      ! effect of average temperature over previous 15 days, based on
+      ! Eq 5a, 5b, 5c from Guenther et al, 1999.
+      C_T   = E_OPT * CT2 * EXP( CT1 * X ) / &
+               ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
+
+      ! Hourly emission activity = C_T
+      ! Prevent negative values
+      GAMMA_T_LD = MAX( C_T, 0.0_fp )
 
       return
-   end subroutine Kawamura_HorizFlux
+   end subroutine GET_GAMMA_T_LD
 
    !>
-   !! \brief Computes the Drag Partition from MB95
+   !! \brief Computes the gamma exchange activity factor which is sensitive to leaf area.
    !!
-   !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
-   !! 1. Design of a soil-derived dust emission scheme,
-   !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995
+   !!  References:
+   !!  (1 ) Guenther et al, 2006
+   !!  (2 ) Guenther et al, MEGAN user mannual 2007-08
+   !!  (3 ) Guenther et al., GMD 2012 and MEGANv2.1 source code.
    !!
-   !! \param z0 roughness length
-   !! \param R Drag partition
+   !! \param CMLAI 
+   !! \param BIDIREXCH
    !!
-   !! \ingroup catchem_dust_process
+   !! \ingroup catchem_megan_process
    !!!>
-   subroutine MB95_DragPartition(z0, R)
+   subroutine GET_GAMMA_LAI(CMLAI, BIDIREXCH, GAMMA_LAI)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: z0   !< roughness length [m]
-      real(fp), intent(out) :: R    !< Drag partition (0-1)
+      real(fp), intent(in)  :: CMLAI       !< Current month's LAI [cm2/cm2]
+      real(fp), intent(in)  :: BIDIREXCH   !< Logical flag for bidirectional exchange
+      real(fp), intent(out) :: GAMMA_LAI   !< LAI factor 
 
       ! Local Variables
       real(fp), parameter :: z0s = 0.0008467 !< ideal roughness length of soil
 
-      ! Initialize
-      R = ZERO
+      !--------------------------------------------
+      ! GET_GAMMA_LAI begins here!
+      !--------------------------------------------
 
-      !--------------------------------------------
-      ! MB95 Drag Partition
-      !--------------------------------------------
-      R = 1.0_fp - (log(z0 / z0s ) / log(0.7_fp * (0.1_fp / z0s) ** 0.8_fp))
+      ! Formulation for birectional compounds is as described for
+      ! ALD2 in Millet et al., ACP 2010
+      IF ( BIDIREXCH ) THEN
+
+         IF ( CMLAI <= 6.0_fp) THEN
+
+            ! if lai less than 2:
+            IF ( CMLAI <= 2.0_fp ) THEN
+               GAMMA_LAI = 0.5_fp * CMLAI
+
+            ! if between 2 and 6:
+            ELSE
+               GAMMA_LAI = 1.0_fp - 0.0625_fp * ( CMLAI - 2.0_fp )
+            END IF
+
+         ELSE
+            ! keep at 0.75 for LAI > 6
+            GAMMA_LAI = 0.75_fp
+         END IF
+
+      ! For all other compounds use the standard gamma_lai formulation
+      ELSE
+         !GAMMA_LAI = 0.49_fp * CMLAI / SQRT( 1.0_fp + 0.2_fp * CMLAI*CMLAI)
+         GAMMA_LAI = 1.0_fp   !canopy add
+      ENDIF
+
       return
 
-   end subroutine MB95_DragPartition
+   end subroutine GET_GAMMA_LAI
 
    !>
-   !! \brief Computes the Threshold Friction Velocity from MB97
+   !! \brief Computes the temperature sensitivity for the light-dependent 
+   !! fraction of emissions using the updated Canopy Model (Sam Silva's paper).
    !!
-   !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
-   !! 1. Design of a soil-derived dust emission scheme,
-   !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995 | TODO fix with correct reference
+   !! References: 
+   !! 
    !!
-   !! \param soil_density soil density
-   !! \param air_density air density
-   !! \param radius particle radius
-   !! \param ustar_threshold threshold friction velocity
+   !! \param T
+   !! \param PT_15, PT_24
+   !! \param CT1, CEO
+   !! \param T_Leaf_Int, T_Leaf_Temp
    !!
-   !! \ingroup catchem_dust_process
+   !! \ingroup catchem_megan_process
    !!!>
-   subroutine MB97_threshold_velocity(soil_density, air_density, radius, ustar_threshold)
-      ! USES
-      USE constants, ONLY: g0
+   subroutine GET_GAMMA_T_LD_C(T, PT_15, PT_24, CT1, CEO, T_Leaf_Int, T_Leaf_Temp, GAMMA_T_LD_C )
+      
       IMPLICIT NONE
 
       ! Input Parameters
       !-----------------
-      real(fp), intent(in) :: radius       !< particle radius
-      real(fp), intent(in) :: soil_density !< soil density
-      real(fp), intent(in) :: air_density  !< air density
+      real(fp), intent(in) :: T             !< 
+      real(fp), intent(in) :: T_leaf_Int    !< 
+      real(fp), intent(in) :: T_Leaf_Temp   !< 
+      real(fp), intent(in) :: PT_15         !< Average leaf temperature over the past 15 days. Not used at present
+      real(fp), intent(in) :: PT_24         !< Average leaf temperature over the past day
+      real(fp), intent(in) :: CT1, CEO      !< Compound-specific parameters
 
       ! Output Parameters
       !------------------
-      real(fp), intent(out) :: ustar_threshold !< threshold friction velocity
+      real(fp), intent(out) :: GAMMA_T_LD_C !< threshold friction velocity
 
 
       ! Local Variables
       !-----------------
-      real(fp) :: diameter !< diameter of particle [m]
+      real(fp) :: C_T, CT2         !< 
+      real(fp) :: E_OPT, T_OPT, X  !< 
+      real(fp) :: L_T, L_PT_T      !< 
+      ! Ideal gas constant [J/mol/K] (!!!! Note: the constant module is 8.314)
+      real(fp), parameter :: R   = 8.3144598e-3_fp
 
-      diameter = 2.0_fp * radius
-      ustar_threshold = 0.13_fp * sqrt(soil_density*g0*diameter/air_density) &
-         * sqrt(1.0_fp + 6.e-7_fp/(soil_density*g0*diameter**2.5_fp)) &
-         / sqrt(1.928_fp*(1331.0_fp*(100._fp*diameter)**1.56_fp+0.38_fp)**0.092_fp - 1.0_fp)
+      !=================================================================
+      ! GET_GAMMA_T_LD begins here!
+      !=================================================================
+
+      L_T = T * T_Leaf_Temp + T_Leaf_Int
+      L_PT_T = PT_24 * T_Leaf_Temp + T_Leaf_Int
+
+      E_OPT = CEO * EXP( 0.1_fp * ( L_PT_T  - 2.97e2_fp ) )
+      T_OPT = 3.125e2_fp + ( 6.0e-1_fp * ( L_PT_T - 2.97e2_fp ) )
+      CT2   = 230.0_fp
+
+      ! Variable related to temperature
+      X     = ( 1.0_fp/T_OPT - 1.0_fp/L_T ) / R
+
+      ! C_T: Effect of temperature on leaf BVOC emission, including
+      ! effect of average temperature over previous 15 days, based on
+      ! Eq 5a, 5b, 5c from Guenther et al, 1999.
+      C_T   = E_OPT * CT2 * EXP( CT1 * X ) /       &
+              ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
+
+      ! Hourly emission activity = C_T
+      ! Prevent negative values
+      IF (T < 260) THEN
+        GAMMA_T_LD_C = 0.0_fp
+      ELSE
+        GAMMA_T_LD_C = MAX( C_T, 0.0_fp )
+      ENDIF
 
       return
 
-   end subroutine MB97_threshold_velocity
+   end subroutine GET_GAMMA_T_LD_C
 
 
-end module CCPr_Dust_Common_Mod
+   !>
+   !! \brief Computes the PCEEA gamma activity factor with sensitivity to light.
+   !!
+   !!  References:
+   !!  (1 ) Guenther et al, 2006
+   !!  (2 ) Guenther et al, 2007,   MEGAN v2.1 user guide
+   !!
+   !! \param Q_DIR_2,Q_DIFF_2
+   !! \param PARDR_AVG_SIM, PARDF_AVG_SIM
+   !! \param P_Leaf_LAI, P_Leaf_Int, LAI, PSTD
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine GET_GAMMA_PAR_C(Q_DIR_2, Q_DIFF_2, PARDR_AVG_SIM, PARDF_AVG_SIM, &
+                              P_Leaf_LAI, P_Leaf_Int, LAI, PSTD, GAMMA_P_C)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)  :: Q_DIR_2          !< Direct PAR [umol/m2/s]
+      real(fp), intent(in)  :: Q_DIFF_2         !< Diffuse PAR [umol/m2/s]
+      real(fp), intent(in)  :: PARDR_AVG_SIM    !< Avg direct PAR [W/m2]
+      real(fp), intent(in)  :: PARDF_AVG_SIM    !< Avg diffuse PAR [W/m2]
+      real(fp), intent(in)  :: P_Leaf_LAI       !<
+      real(fp), intent(in)  :: P_Leaf_Int       !< 
+      real(fp), intent(in)  :: LAI              !< 
+      real(fp), intent(in)  :: PSTD             !< 
+      real(fp), intent(out) :: GAMMA_P_C        !< GAMMA factor for light
+
+      ! Local Variables
+      real(fp) :: mmPARDR_DAILY    !< 
+      real(fp) :: mmPARDF_DAILY    !< 
+      real(fp) :: PAC_DAILY        !< 
+      real(fp) :: PAC_INSTANT      !<
+      real(fp) :: C_PPFD           !< 
+      real(fp) :: PTOA             !<
+      !real(fp) :: PHI              !< 
+      !real(fp) :: BETA,   SINbeta  !< 
+      real(fp) :: C1               !< 
+      real(fp) :: Alpha            !< 
+
+      !--------------------------------------------
+      ! GET_GAMMA_PAR_C begins here!
+      !--------------------------------------------
+      ! Initialize
+      C_PPFD   = 0.0_fp
+      PTOA     = 0.0_fp
+
+      ! Convert past light conditions to micromol/m2/s
+      mmPARDR_DAILY   = PARDR_AVG_SIM
+      mmPARDF_DAILY   = PARDF_AVG_SIM
+
+      ! Work out the light at the top of the canopy.
+      PAC_DAILY    = mmPARDR_DAILY + mmPARDF_DAILY
+      PAC_INSTANT  = Q_DIR_2       +  Q_DIFF_2
+
+      PAC_DAILY = PAC_DAILY * exp(P_Leaf_Int + P_Leaf_LAI * LAI)
+      PAC_INSTANT = PAC_INSTANT * exp(P_Leaf_Int + P_Leaf_LAI * LAI)
+
+      IF ( PAC_DAILY < 0.01_fp ) THEN
+
+         GAMMA_P_C = 0.0_fp
+
+      ELSE
+        Alpha  = 0.004
+        Alpha  = 0.004 - 0.0005*LOG(PAC_DAILY)
+        C1 = 1.03
+        C1 = 0.0468 * EXP(0.0005 * (PAC_DAILY - PSTD)) *     &
+                       (PAC_DAILY **  0.6)
+        GAMMA_P_C = (Alpha * C1 * PAC_INSTANT) /             &
+                         ((1 + Alpha**2. * PAC_INSTANT**2.)**0.5)
+      ENDIF
+      ! Prevent negative values
+      GAMMA_P_C = MAX( GAMMA_P_C , 0.0_fp )      
+
+      return
+   end subroutine GET_GAMMA_PAR_C
+
+
+   !>
+   !! \brief Computes the 
+   !!
+   !!References: 
+   !! (1 ) Probably from Sam Silva paper !!!Note
+   !!
+   !! \param CMLAI
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine GET_CDEA(CMLAI, CDEA)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)  :: CMLAI         !< Current month's LAI [cm2/cm2]
+      real(fp), intent(out) :: CDEA(5)       !< 
+
+      ! Local Variables
+      !----------------
+      real(fp) :: LAIdepth    !< 
+      integer  :: K
+      real(fp), parameter :: CCD1 = -0.2_fp
+      real(fp), parameter :: CCD2 = -0.2_fp
+
+      !--------------------------------------------
+      ! GET_CDEA begins here!
+      !--------------------------------------------
+      Cdepth (1)   = 0.0469101
+      Cdepth (2)   = 0.2307534
+      Cdepth (3)   = 0.5
+      Cdepth (4)   = 0.7692465
+      Cdepth (5)   = 0.9530899
+      DO K = 1, 5
+        LAIdepth = CMLAI * Cdepth(K)
+        IF ( LAIdepth .GT. 3 ) THEN
+           LAIdepth = 3.0
+        ENDIF
+        CDEA(K) = CCD1 * LAIdepth + CCD2
+      ENDDO
+
+      return
+   end subroutine GET_CDEA
+
+   !>
+   !! \brief Computes the gamma exchange activity factor which is sensitive to leaf age
+   !!
+   !!References: 
+   !! (1 ) Guenther et al, 2006
+   !! (2 ) Guenther et al, MEGAN user mannual 2007-08
+   !! (3 ) Guenther et al., GMD 2012 and MEGANv2.1 source code
+   !!
+   !! \param CMLAI, PMLAI 
+   !! \param DBTWN, TT
+   !! \param AN, AG, AM, AO
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine GET_GAMMA_AGE(CMLAI, PMLAI, DBTWN, TT, AN, AG, AM, AO, GAMMA_AGE)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)  :: CMLAI      !< Current month's LAI [cm2/cm2]
+      real(fp), intent(in)  :: PMLAI      !< Previous months LAI [cm2/cm2]
+      real(fp), intent(in)  :: DBTWN      !< Number of days between
+      real(fp), intent(in)  :: TT         !< Daily average temperature [K]
+      real(fp), intent(in)  :: AN         !< Relative emiss factor (new leaves)
+      real(fp), intent(in)  :: AG         !< Relative emiss factor (growing leaves)
+      real(fp), intent(in)  :: AM         !< Relative emiss factor (mature leaves)
+      real(fp), intent(in)  :: AO         !< Relative emiss factor (old leaves)
+      real(fp), intent(out) :: GAMMA_AGE  !< leaf age activity factor
+
+      ! Local Variables
+      !----------------
+      real(fp) :: FNEW  !< Fraction of new leaves in canopy
+      real(fp) :: FGRO  !< Fraction of growing leaves
+      real(fp) :: FMAT  !< Fraction of mature leaves
+      real(fp) :: FOLD  !< Fraction of old leaves
+      real(fp) :: TI    !< number of days after budbreak required to induce emissions
+      real(fp) :: TM    !< number of days after budbreak required to reach peak emissions
+      
+      !--------------------------------------------
+      ! GET_GAMMAT_AGE begins here!
+      !--------------------------------------------
+      
+      !-----------------------
+      ! Compute TI and TM
+      ! (mpb,2009)
+      !-----------------------
+
+      IF ( TT <= 303.0_fp ) THEN
+         TI = 5.0_fp + 0.7_fp * ( 300.0_fp - TT )
+      ELSEIF ( TT >  303.0_fp ) THEN
+         TI = 2.9_fp
+      ENDIF
+      TM = 2.3_fp * TI
+
+      !-----------------------
+      ! Compute GAMMA_AGE
+      !-----------------------
+
+      IF ( CMLAI == PMLAI ) THEN !(i.e. LAI stays the same)
+
+         FNEW = 0.0_fp
+         FGRO = 0.1_fp
+         FMAT = 0.8_fp
+         FOLD = 0.1_fp
+
+      ELSE IF ( CMLAI > PMLAI ) THEN !(i.e. LAI has INcreased)
+
+         ! Calculate Fnew
+         IF ( DBTWN > TI ) THEN
+            FNEW = ( TI / DBTWN ) * ( 1.0_fp -  PMLAI / CMLAI )
+         ELSE
+            FNEW = 1.0_fp - ( PMLAI / CMLAI )
+         ENDIF
+
+         ! Calculate FMAT
+         IF ( DBTWN > TM ) THEN
+            FMAT = ( PMLAI / CMLAI ) + &
+                  (( DBTWN - TM ) / DBTWN )*( 1.0_fp -  PMLAI / CMLAI )
+         ELSE
+            FMAT = ( PMLAI / CMLAI )
+         ENDIF
+
+         ! Calculate Fgro and Fold
+         FGRO = 1.0_fp - FNEW - FMAT
+         FOLD = 0.0_fp
+
+      ELSE ! This is the case if  PMLAI > CMLAI (i.e. LAI has DEcreased)
+
+         FNEW = 0.0_fp
+         FGRO = 0.0_fp
+         FOLD = ( PMLAI - CMLAI ) / PMLAI
+         FMAT = 1.0_fp - FOLD
+
+      ENDIF
+
+      ! Age factor
+      GAMMA_AGE = FNEW * AN + FGRO * AG + FMAT * AM + FOLD * AO
+
+      ! Prevent negative values
+      GAMMA_AGE = MAX( GAMMA_AGE , 0.0_fp )
+
+      return
+   end subroutine GET_GAMMA_AGE
+
+
+   !>
+   !! \brief Computes ctivity factor for soil moisture
+   !!
+   !!References: 
+   !! (1 ) Guenther et al, 2006
+   !! (2 ) Guenther et al., GMD 2012 and MEGANv2.1 source code
+   !!
+   !! \param GWETROOT 
+   !! \param CMPD
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine GET_GAMMA_SM(GWETROOT, CMPD, GAMMA_SM)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)            :: GWETROOT   !< Relative root zone wetness (unitless)  
+      character(len=256), intent(in)  :: CMPD       !< Compound name
+      real(fp), intent(out)           :: GAMMA_SM   !< Activity factor
+
+      ! Local Variables
+      !----------------
+      real(fp) :: GWETROOT2    !< 
+
+      !--------------------------------------------
+      ! GET_GAMMAT_SM begins here!
+      !--------------------------------------------
+      ! By default gamma_sm is 1.0
+      GAMMA_SM = 1.0_fp
+
+      ! Error trap: GWETROOT must be between 0.0 and 1.0 (ckeller, 4/16/15)
+      !GWETROOT = MIN(MAX(ExtState%GWETROOT%Arr%Val(I,J),0.0_fp),1.0_fp)
+      GWETROOT2 = MIN(MAX(GWETROOT,0.0_fp),1.0_fp)
+  
+      IF ( TRIM( CMPD ) == 'ALD2' .OR. TRIM ( CMPD ) == 'EOH' ) THEN
+  
+         ! GWETROOT = degree of saturation or wetness in the root-zone
+         ! (top meter of soil). This is defined as the ratio of the volumetric
+         ! soil moisture to the porosity. We use a soil moisture activity factor
+         ! for ALD2 to account for stimulation of emission by flooding.
+         ! (Millet et al., ACP 2010)
+         ! Constant value of 1.0 for GWETROOT = 0-0.9, increasing linearly to
+         ! 3.0 at GWETROOT =1.
+         GAMMA_SM = MAX( 20.0_fp * GWETROOT - 17.0_fp, 1.0_fp)
+  
+      ENDIF
+
+      return
+   end subroutine GET_GAMMA_SM
+
+   !>
+   !! \brief Computes the CO2 activity factor associated with CO2 inhibition of isoprene emission.
+   !!
+   !!References: 
+   !! (1 ) Heald, C. L., Wilkinson, M. J., Monson, R. K., Alo, C. A.,
+   !!      Wang, G. L., and Guenther, A.: Response of isoprene emission
+   !!      to ambient co(2) changes and implications for global budgets,
+   !!      Global Change Biology, 15, 1127-1140, 2009.
+   !! (2 ) Wilkinson, M. J., Monson, R. K., Trahan, N., Lee, S., Brown, E.,
+   !!      Jackson, R. B., Polley, H. W., Fay, P. A., and Fall, R.: Leaf
+   !!      isoprene emission rate as a function of atmospheric CO2
+   !!      concentration, Global Change Biology, 15, 1189-1200, 2009.
+   !!(3 )  Possell, M., and Hewitt, C. N.: Isoprene emissions from plants
+   !!      are mediated by atmospheric co2 concentrations, Global Change
+   !!      Biology, 17, 1595-1610, 2011.
+   !!
+   !! \param CO2a
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine GET_GAMMA_CO2(CO2a, GAMMA_CO2)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)  :: CO2a         !< Atmospheric CO2 conc [ppmv]
+      real(fp), intent(out)  :: GAMMA_CO2   !< CO2 activity factor [unitless]
+
+      ! Local Variables
+      !----------------
+      real(fp) :: CO2i        !< Intercellular CO2 conc [ppmv]  
+      real(fp) :: ISMAXi      !< Asymptote for intercellular CO2 
+      real(fp) :: HEXPi       !< Exponent for intercellular CO2  
+      real(fp) :: CSTARi      !< Scaling coef for intercellular CO2  
+      real(fp) :: ISMAXa      !< Asymptote for atmospheric CO2  
+      real(fp) :: HEXPa       !< Exponent for atmospheric CO2  
+      real(fp) :: CSTARa      !< Scaling coef for atmospheric CO2  
+      logical  :: LPOSSELL    !< Use Possell & Hewitt (2011)?
+      logical  :: LWILKINSON  !< Use Wilkinson et al. (2009)?
+
+      !--------------------------------------------
+      ! GET_GAMMAT_CO2 begins here!
+      !--------------------------------------------
+    
+      !----------------------------------------------------------
+      ! Choose between two alternative CO2 inhibition schemes
+      !----------------------------------------------------------
+
+      ! Empirical relationship of Possell & Hewitt (2011) based on nine
+      ! experimental studies including Wilkinson et al. (2009). This is
+      ! especially recommended for sub-ambient CO2 concentrations:
+      LPOSSELL    = .TRUE.   ! Default option
+
+      ! Semi-process-based parameterization of Wilkinson et al. (2009),
+      ! taking into account of sensitivity to intercellular CO2
+      ! fluctuation, which is here set as a constant fraction of
+      ! atmospheric CO2:
+      LWILKINSON  = .FALSE.   ! Set .TRUE. only if LPOSSELL = .FALSE.
+  
+      !-----------------------
+      ! Compute GAMMA_CO2
+      !-----------------------
+  
+      IF ( LPOSSELL ) THEN
+  
+         ! Use empirical relationship of Possell & Hewitt (2011):
+         GAMMA_CO2 = 8.9406_fp / ( 1.0_fp + 8.9406_fp * 0.0024_fp * CO2a )
+  
+      ELSEIF ( LWILKINSON ) THEN
+  
+         ! Use parameterization of Wilkinson et al. (2009):
+  
+         ! Parameters for intercellular CO2 using linear interpolation:
+         IF ( CO2a <= 600.0_fp ) THEN
+            ISMAXi = 1.036_fp  - (1.036_fp - 1.072_fp) / &
+                     (600.0_fp - 400.0_fp) * (600.0_fp - CO2a)
+            HEXPi  = 2.0125_fp - (2.0125_fp - 1.7000_fp) / &
+                     (600.0_fp - 400.0_fp) * (600.0_fp - CO2a)
+            CSTARi = 1150.0_fp - (1150.0_fp - 1218.0_fp) / &
+                     (600.0_fp - 400.0_fp) * (600.0_fp - CO2a)
+         ELSEIF ( CO2a > 600.0_fp .AND. CO2a < 800.0_fp ) THEN
+            ISMAXi = 1.046_fp  - (1.046_fp - 1.036_fp) / &
+                     (800.0_fp - 600.0_fp) * (800.0_fp - CO2a)
+            HEXPi  = 1.5380_fp - (1.5380_fp - 2.0125_fp) / &
+                     (800.0_fp - 600.0_fp) * (800.0_fp - CO2a)
+            CSTARi = 2025.0_fp - (2025.0_fp - 1150.0_fp) / &
+                     (800.0_fp - 600.0_fp) * (800.0_fp - CO2a)
+         ELSE
+            ISMAXi = 1.014_fp - (1.014_fp - 1.046_fp) / &
+                     (1200.0_fp - 800.0_fp) * (1200.0_fp - CO2a)
+            HEXPi  = 2.8610_fp - (2.8610_fp - 1.5380_fp) / &
+                     (1200.0_fp - 800.0_fp) * (1200.0_fp - CO2a)
+            CSTARi = 1525.0_fp - (1525.0_fp - 2025.0_fp) / &
+                     (1200.0_fp - 800.0_fp) * (1200.0_fp - CO2a)
+         ENDIF
+  
+         ! Parameters for atmospheric CO2:
+         ISMAXa    = 1.344_fp
+         HEXPa     = 1.4614_fp
+         CSTARa    = 585.0_fp
+  
+         ! For now, set CO2_Ci = 0.7d0 * CO2_Ca as recommended by Heald
+         ! et al. (2009):
+         CO2i      = 0.7_fp * CO2a
+  
+         ! Compute GAMMA_CO2:
+         GAMMA_CO2 = ( ISMAXi -  ISMAXi * CO2i**HEXPi / &
+                     ( CSTARi**HEXPi + CO2i**HEXPi ) )  &
+                     * ( ISMAXa - ISMAXa * ( 0.7_fp * CO2a )**HEXPa / &
+                     ( CSTARa**HEXPa + ( 0.7_fp * CO2a )**HEXPa ) )
+  
+      ELSE
+  
+         ! No CO2 inhibition scheme is used; GAMMA_CO2 set to unity:
+         GAMMA_CO2 = 1.0_fp
+  
+      ENDIF
+
+      return
+   end subroutine GET_GAMMA_CO2
+
+   !>
+   !! \brief Computes the normalization factor needed to compute emissions
+   !!
+   !!References: 
+   !!(1 ) Guenther et al., GMD 2012 and MEGANv2.1 source code
+   !!(2 ) Created by dbm 11/2012. We calculate only 1 normalization factor for all
+   !!     compounds based on the isoprene gamma values. Formally there should be a
+   !!     different normalization factor for each compound, but we are following
+   !!     Alex Guenther's approach here and the MEGAN source code.
+   !!
+   !! \param D2RAD_FAC 
+   !! \param NORM_FAC
+   !! \param RC
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine CALC_NORM_FAC(D2RAD_FAC, NORM_FAC, RC)
+      use Error_Mod,     Only : CC_SUCCESS !, CC_FAILURE, CC_Error
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)    :: D2RAD_FAC   !< 
+      real(fp), intent(in)    :: NORM_FAC    !<
+      integer,  intent(inout) :: RC          !< 
+
+      ! Local Variables
+      !----------------
+      real(fp) :: PAC_DAILY, PHI, BBB, AAA, GAMMA_P_STANDARD
+      real(fp) :: GAMMA_T_LI_STANDARD
+      real(fp) :: GAMMA_SM_STANDARD
+      real(fp) :: CMLAI, GAMMA_LAI_STANDARD
+      real(fp) :: GAMMA_AGE_STANDARD
+      real(fp) :: PT_15, T, R, CEO, CT1, E_OPT, T_OPT, CT2, X
+      real(fp) :: GAMMA_T_LD_STANDARD
+      real(fp) :: LDF, GAMMA_STANDARD
+      !canopy add by Sam Silva
+      real(fp) ::  SunF, GAMMA_TP_STANDARD
+      real(fp) :: T_Leaf_Int_Sun(5)
+      real(fp) :: T_Leaf_Int_Shade(5)
+      real(fp) :: T_Leaf_Temp_Sun(5)
+      real(fp) :: T_Leaf_Temp_Shade(5)
+      real(fp) :: T_Leaf_Wind_Sun(5)
+      real(fp) :: T_Leaf_Wind_Shade(5)
+      real(fp) :: P_Leaf_Int_Sun(5)
+      real(fp) :: P_Leaf_Int_Shade(5)
+      real(fp) :: P_Leaf_LAI_Sun(5)
+      real(fp) :: P_Leaf_LAI_Shade(5)
+      real(fp) :: Distgauss(5), CDEA(5), VPGWT(5)
+      real(fp) :: EA2L, EA1L, GAMMA_T_LD_SUN, GAMMA_T_LD_SHADE
+      real(fp) :: L_PT_T, L_T, C1, LAI, GAMMA_PAR_SUN
+      real(fp) :: GAMMA_PAR_SHADE, ALPHA, PAC_INSTANT
+      integer  :: Q
+
+      !--------------------------------------------
+      ! CALC_NORM_FAC begins here!
+      !--------------------------------------------
+
+      ! -----------------
+      ! GAMMA_P for standard conditions
+      ! -----------------
+      ! Based on Eq. 11b from Guenther et al., 2006
+      ! Using standard conditions of phi = 0.6, solar angle of 60 deg,
+      ! and P_daily = 400
+      ! Note corrigendum for Eq. 11b in that paper, should be a
+      ! minus sign before the 0.9. canopy add
+      !PAC_DAILY = 400.0_fp
+      !PHI       = 0.6_fp
+      !BBB       = 1.0_fp + 0.0005_fp *( PAC_DAILY - 400.0_fp )
+      !AAA       = ( 2.46_fp * BBB * PHI ) - ( 0.9_fp * PHI**2 )
+      ! sin(60) = 0.866
+      !GAMMA_P_STANDARD = 0.866_fp * AAA
+
+      ! -----------------
+      ! GAMMA_T_LI for standard conditions
+      ! -----------------
+      ! gamma_t_li = EXP( Beta * ( T - T_Standard ) )
+      ! This is 1.0 for T = T_Standard
+         GAMMA_T_LI_STANDARD = 1.0_fp
+
+         ! -----------------
+         ! GAMMA_SM for standard conditions
+         ! -----------------
+         ! Standard condition is soil moisture = 0.3 m^3/m^3
+         ! GAMMA_SM = 1.0 for all compounds under this condition
+         GAMMA_SM_STANDARD = 1.0_fp
+      ! -----------------
+      ! GAMMA_TP for standard conditions canopy add
+      ! -----------------
+      ! gamma_t_li = EXP( Beta * ( T - T_Standard ) )
+      ! This is 1.0 for T = T_Standard
+
+         CDEA = GET_CDEA( 5.0_fp )
+         Distgauss = (/0.0469101, 0.2307534, 0.5, 0.7692465,               &
+                          0.9530899/)
+         VPGWT = (/0.1184635, 0.2393144, 0.284444444,                      &
+                      0.2393144, 0.1184635/)
+         P_Leaf_Int_Sun  = (/1.0831_fp, 1.0964_fp, 1.1036_fp,              &
+                                   1.0985_fp, 1.0901_fp/)
+         P_Leaf_Int_Shade = (/0.8706_fp, 0.8895_fp, 0.9160_fp,             &
+                                    0.9407_fp, 0.9564_fp/)
+   
+         P_Leaf_LAI_Sun = (/0.0018_fp, -0.1281_fp, -0.2977_fp,             &
+                                 -0.4448_fp, -0.5352_fp/)
+         P_Leaf_LAI_Shade = (/0.0148_fp, -0.1414_fp, -0.3681_fp,           &
+                                   -0.5918_fp, -0.7425_fp/)
+   
+         T_Leaf_Int_Sun  = (/-13.891_fp, -12.322_fp, -1.032_fp,            &
+                                   -5.172_fp, -5.589_fp/)
+         T_Leaf_Int_Shade = (/-12.846_fp, -11.343_fp, -1.068_fp,           &
+                                    -5.551_fp, -5.955_fp/)
+   
+         T_Leaf_Temp_Sun = (/1.064_fp, 1.057_fp, 1.031_fp,                 &
+                                   1.050_fp, 1.051_fp/)
+         T_Leaf_Temp_Shade = (/1.060_fp, 1.053_fp, 1.031_fp,               &
+                                     1.051_fp, 1.052_fp/)
+   
+         GAMMA_TP_STANDARD = 0.0_fp
+         LDF = 1.0_fp
+         LAI = 5.0_fp
+         DO Q = 1, 5
+
+            PAC_INSTANT  = 1500.0_fp/4.766_fp
+            PAC_DAILY = 740.0_fp/4.766_fp
+    
+            PAC_INSTANT = PAC_INSTANT * exp(P_Leaf_Int_Sun(Q) +            &
+                                   P_Leaf_LAI_Sun(Q) * LAI)
+            PAC_DAILY = PAC_DAILY * exp(P_Leaf_Int_Sun(Q) +                &
+                                   P_Leaf_LAI_Sun(Q) * LAI)
+            Alpha  = 0.004 - 0.0005*LOG(PAC_DAILY)
+            C1 = 0.0468 * EXP(0.0005 * (PAC_DAILY - 200.0_fp)) *           &
+                           (PAC_DAILY **  0.6)
+            GAMMA_PAR_Sun = (Alpha * C1 * PAC_INSTANT) /                   &
+                           ((1 + Alpha**2. * PAC_INSTANT**2.)**0.5)
+    
+            PAC_INSTANT  = 1500.0_fp/4.766_fp
+            PAC_DAILY = 740.0_fp/4.766_fp
+            PAC_DAILY = PAC_DAILY * exp(P_Leaf_Int_Shade(Q) +              &
+                                   P_Leaf_LAI_Shade(Q) * LAI)
+            PAC_INSTANT = PAC_INSTANT * exp(P_Leaf_Int_Shade(Q) +          &
+                                   P_Leaf_LAI_Shade(Q) * LAI)
+            Alpha  = 0.004 - 0.0005*LOG(PAC_DAILY)
+            C1 = 0.0468 * EXP(0.0005 * (PAC_DAILY - 50.0_fp)) *            &
+                           (PAC_DAILY **  0.6)
+            GAMMA_PAR_Shade = (Alpha * C1 * PAC_INSTANT) /                 &
+                           ((1 + Alpha**2. * PAC_INSTANT**2.)**0.5)
+    
+            PT_15 = 298.5_fp
+            T     = 303.0_fp
+            R     = 8.3144598e-3_fp
+            CEO = 2.0_fp
+            CT1 = 95.0_fp
+            CT2   = 230.0_fp
+    
+            L_T = T * T_Leaf_Temp_Sun(Q) + T_Leaf_Int_Sun(Q)
+            L_PT_T = PT_15 * T_Leaf_Temp_Sun(Q) + T_Leaf_Int_Sun(Q)
+            E_OPT = CEO * EXP( 0.1_fp * ( L_PT_T  - 2.97e2_fp ) )
+            T_OPT = 3.125e2_fp + ( 6.0e-1_fp * ( L_PT_T - 2.97e2_fp ) )
+            X     = ( 1.0_fp/T_OPT - 1.0_fp/L_T ) / R
+            GAMMA_T_LD_Sun   = E_OPT * CT2 * EXP( CT1 * X ) /              &
+                  ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
+    
+            L_T = T * T_Leaf_Temp_Shade(Q) + T_Leaf_Int_Shade(Q)
+            L_PT_T = PT_15 * T_Leaf_Temp_Shade(Q) + T_Leaf_Int_Shade(Q)
+            E_OPT = CEO * EXP( 0.08_fp * ( L_PT_T  - 2.97e2_fp ) )
+            T_OPT = 3.125e2_fp + ( 6.0e-1_fp * ( L_PT_T - 2.97e2_fp ) )
+            X     = ( 1.0_fp/T_OPT - 1.0_fp/L_T ) / R
+            GAMMA_T_LD_Shade   = E_OPT * CT2 * EXP( CT1 * X ) /            &
+                  ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
+    
+            SunF = Calc_Sun_Frac(5.0_fp,SIN(60.0_fp*D2RAD_FAC),            &
+                                 Distgauss(Q))
+            Ea1L  =  CDEA(Q) * GAMMA_PAR_Sun * GAMMA_T_LD_Sun * SunF +     &
+                            GAMMA_PAR_Shade * GAMMA_T_LD_Shade * (1-SunF)
+    
+            !   write(*,*) ' '
+            !   write(*,*) '--- GET_MEGAN_NormFrac --- '
+            !   write(*,*) 'GAMMA_TP_STANDARD      : ', GAMMA_TP_STANDARD
+            !   write(*,*) 'Ea1L      : ', Ea1L
+            !   write(*,*) 'SunF      : ', SunF
+            !   write(*,*) 'CDEA      : ', CDEA(Q)
+            !   write(*,*) 'VPGWT      : ', VPGWT(Q)
+            !   write(*,*) 'Q      : ', Q
+            !   write(*,*) 'Q      : ', Q
+            !   write(*,*) 'GAMMA_PAR_Sun      : ', GAMMA_PAR_Sun
+            !   write(*,*) 'GAMMA_PAR_Shade      : ', GAMMA_PAR_Shade
+            !   write(*,*) 'GAMMA_T_LD_Sun      : ', GAMMA_T_LD_Sun
+            !   write(*,*) 'GAMMA_T_LD_Shade      : ', GAMMA_T_LD_Shade
+    
+            GAMMA_TP_STANDARD  = GAMMA_TP_STANDARD +                       &
+                            (Ea1L*LDF)* VPGWT(Q)
+          ENDDO
+
+            !  write(*,*) ' '
+            !   write(*,*) '--- GET_MEGAN_NormFrac --- '
+            !   write(*,*) 'GAMMA_TP_STANDARD      : ', GAMMA_TP_STANDARD
+            !   write(*,*) 'Ea1L      : ', Ea1L
+            !   write(*,*) 'SunF      : ', SunF
+            !   write(*,*) 'CDEA      : ', CDEA(Q)
+            !   write(*,*) 'VPGWT      : ', VPGWT(Q)
+            !   write(*,*) 'Q      : ', Q
+      
+      ! -----------------
+      ! GAMMA_LAI for standard conditions
+      ! -----------------
+      ! Standard condition is LAI = 5
+      CMLAI = 5.0_fp
+      !canopy add
+      !GAMMA_LAI_STANDARD = 0.49_fp * CMLAI / SQRT( 1.0_fp + 0.2_fp * CMLAI*CMLAI )
+      GAMMA_LAI_STANDARD = CMLAI
+      ! -----------------
+      ! GAMMA_AGE for standard conditions
+      ! -----------------
+      ! Standard condition is 0% new, 10% growing, 80% mature, 10% old foliage
+      ! Isoprene uses A_NEW = 0.05d0, A_GRO = 0.6d0, A_MAT = 1.d0, A_OLD = 0.9d0
+      GAMMA_AGE_STANDARD = 0.1_fp*0.6_fp + 0.8_fp*1.0_fp + 0.1_fp*0.9_fp
+
+      ! -----------------
+      ! GAMMA_T_LD for standard conditions
+      ! -----------------
+      ! Standard condition is
+      ! PT_15 = average leaf temp over past 24-240 hours = 297K
+      ! T = air temperature = 303K
+      !PT_15 = 297.0_fp
+      !T     = 303.0_fp
+      !R     = 8.3144598e-3_fp
+      ! parameters for isoprene
+      !CEO = 2.0_fp
+      !CT1 = 95.0_fp
+
+      !E_OPT = CEO * EXP( 0.08_fp * ( PT_15  - 2.97e2_fp ) )
+      !T_OPT = 3.13e2_fp + ( 6.0e-1_fp * ( PT_15 - 2.97e2_fp ) )
+      !CT2   = 200.0_fp
+
+      ! Variable related to temperature
+      !X     = ( 1.0_fp/T_OPT - 1.0_fp/T ) / R
+
+      !GAMMA_T_LD_STANDARD = E_OPT * CT2 * EXP( CT1 * X ) / &
+      !                      ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
+
+      ! -----------------
+      ! Overall GAMMA_STANDARD
+      ! -----------------
+      ! LDF = 1d0 for isoprene
+      !LDF = 1.0_fp
+      !GAMMA_STANDARD = &
+      !     GAMMA_AGE_STANDARD * GAMMA_SM_STANDARD * GAMMA_LAI_STANDARD &
+      !     * ((1.0_fp - LDF) * GAMMA_T_LI_STANDARD &
+      !     + (LDF * GAMMA_P_STANDARD * GAMMA_T_LD_STANDARD))
+      ! This ends up being 1.0101081.
+      !canopy add
+      GAMMA_STANDARD = GAMMA_AGE_STANDARD * GAMMA_SM_STANDARD *   &
+            GAMMA_TP_STANDARD * GAMMA_LAI_STANDARD
+
+      NORM_FAC = 1.0_fp / GAMMA_STANDARD
+
+      !write(*,*) ' '
+      !write(*,*) '--- GET_MEGAN_NormFrac --- '
+      !write(*,*) 'GAMMA_STANDARD      : ', GAMMA_STANDARD
+      !write(*,*) 'GAMMA_AGE_STANDARD      : ', GAMMA_AGE_STANDARD
+      !write(*,*) 'GAMMA_SM_STANDARD      : ', GAMMA_SM_STANDARD
+      !write(*,*) 'GAMMA_TP_STANDARD      : ', GAMMA_TP_STANDARD
+      !write(*,*) 'GAMMA_LAI_STANDARD      : ', GAMMA_LAI_STANDARD
+
+      RC = CC_SUCCESS
+      return
+   end subroutine CALC_NORM_FAC
+
+
+end module CCPr_Megan_Common_Mod
