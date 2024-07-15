@@ -22,6 +22,10 @@ module ChemState_Mod
    PUBLIC :: Chem_Allocate
    PUBLIC :: Find_Number_of_Species
    PUBLIC :: Find_Index_of_Species
+   PUBLIC :: FindSpecByName
+   PUBLIC :: GetSpecConc
+   PUBLIC :: GetSpecConcByName
+   PUBLIC :: GetSpecConcByIndex
    !
    ! !Private DATA MEMBERS:
    !
@@ -369,6 +373,15 @@ CONTAINS
 
    end subroutine GetSpecConc
 
+   !> \brief Get the concentration of a species by index
+   !!
+   !! \param ChemState The ChemState object
+   !! \param concentration The concentration of the species
+   !! \param RC The return code
+   !! \param index The index of the species
+   !!
+   !! \ingroup core_modules
+   !!!>
    subroutine GetSpecConcByIndex(ChemState, concentration, index, RC)
 
       type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object
@@ -396,6 +409,15 @@ CONTAINS
 
    end subroutine GetSpecConcByIndex
 
+   !> \brief Get the concentration of a species by name
+   !!
+   !! \param ChemState The ChemState object
+   !! \param concentration The concentration of the species
+   !! \param RC The return code
+   !! \param name The name of the species
+   !!
+   !! \ingroup core_modules
+   !!!>
    subroutine GetSpecConcByName(ChemState, concentration, name, RC)
 
       type(ChemStateType),  INTENT(INOUT) :: ChemState     ! chem State object

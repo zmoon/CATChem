@@ -8,6 +8,10 @@
 module CATChem
    !
    use ChemState_Mod, only: ChemStateType
+   use ChemState_Mod, only: cc_find_species_by_name => FindSpecByName
+   use ChemState_Mod, only: cc_get_species_conc => GetSpecConc
+   use ChemState_Mod, only: cc_get_species_conc_by_name => GetSpecConcByName
+   use ChemState_Mod, only: cc_get_species_conc_by_index => GetSpecConcByIndex
    !
    use Config_Opt_Mod, only: ConfigType
    !
