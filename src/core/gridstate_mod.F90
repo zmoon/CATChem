@@ -16,16 +16,19 @@ module GridState_Mod
 
    PUBLIC :: Grid_Init_State
    type, public :: GridStateType
-      CHARACTER(LEN=4) :: State = 'Grid'  !< Name of this state
 
       ! Integers
-      integer :: nx = 1
-      integer :: ny = 1
+      integer :: nx
+      integer :: ny
       integer :: number_of_levels  !< The number of vertical levels
 
       ! Reals
       real(fp) :: area  !< Grid cell horizontal area [m^2]
 
+      !-------------------------------------------------------------------------
+      ! Name of variables containing grid information
+      !-------------------------------------------------------------------------
+      CHARACTER(LEN=4)             :: State     = 'Grid'    ! Name of this state
    end type GridStateType
 
 contains
@@ -53,8 +56,8 @@ contains
       CHARACTER(LEN=512) :: errMsg
       CHARACTER(LEN=255) :: thisLoc
 
-      ! Set error handling defaults
-      RC = CC_SUCCESS
+      ! set error handling defaults
+      RC = 0
       errMsg = ''
       thisLoc = 'Grid_Init_State() -> at initializing GridState'
 

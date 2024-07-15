@@ -80,7 +80,7 @@ CONTAINS
       ! Assume success
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/config_mod.F90)'
 
       !========================================================================
       ! Read the YAML file into the Config object
@@ -140,7 +140,19 @@ CONTAINS
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       ENDIF
-
+      
+      call Config_Process_DryDep(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_DryDep"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+      
+      ! !========================================================================
+      ! ! Config ChemState
+      ! !========================================================================
       call Config_Chem_State(config%Species_File, GridState,ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
@@ -149,6 +161,7 @@ CONTAINS
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       endif
+
 
       !========================================================================
       ! Further error-checking and initialization
@@ -586,7 +599,7 @@ CONTAINS
       RC      = CC_SUCCESS
       errMsg  = ''
       thisLoc = &
-         ' -> at Config_Simulation (in module CATChem/src/core/input_mod.F90)'
+         ' -> at Config_Simulation (in module CATChem/src/core/config_mod.F90)'
 
       !------------------------------------------------------------------------
       ! Simulation type
@@ -698,7 +711,7 @@ CONTAINS
       ! Initialize
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Config_Grid (in CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Config_Grid (in CATChem/src/core/config_mod.F90)'
 
       !------------------------------------------------------------------------
       ! Level range

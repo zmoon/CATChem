@@ -90,6 +90,9 @@ MODULE Config_Opt_Mod
       INTEGER                     :: seasalt_scheme
       real(fp)                    :: seasalt_scalefactor
 
+      ! DryDeposition Process
+      LOGICAL                     :: DryDep_activate
+      INTEGER                     :: DryDepGOCARTOPT
 
 
    END TYPE ConfigType
@@ -163,6 +166,9 @@ CONTAINS
       Config%seasalt_activate = .FALSE.
       Config%seasalt_scheme = 1
 
+      ! Dry Dep Process
+      Config%DryDep_activate = .FALSE.
+      Config%DryDepGOCARTOpt = 1
 
 
    END SUBROUTINE Set_Config
