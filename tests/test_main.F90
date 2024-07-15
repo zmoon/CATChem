@@ -5,6 +5,7 @@
 program test_main
    use CATChem
    use state_mod  ! FIXME: declare states here or move to a driver
+   use testing_mod, only: assert
 
    IMPLICIT NONE
 
@@ -78,16 +79,22 @@ program test_main
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
-   if (ChemState%ChemSpecies(2)%is_seasalt) then
+   if (ChemState%ChemSpecies(1)%is_seasalt) then
       errMsg = 'Error: dust2 is categorized as seasalt'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
-   if (ChemState%ChemSpecies(2)%is_gas) then
+   if (ChemState%ChemSpecies(1)%is_gas) then
       errMsg = 'Error: dust2 is categorized as gas'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
+
+   ! Check numerical values of dust1
+   call assert(ChemState%ChemSpecies(1)%lower_radius == 0.1_fp, "dust1 lower radius")
+   call assert(ChemState%ChemSpecies(1)%upper_radius == 1.0_fp, "dust1 upper radius")
+   call assert(ChemState%ChemSpecies(1)%radius == 0.8_fp, "dust1 radius")
+   call assert(ChemState%ChemSpecies(1)%density == 2500.0_fp, "dust1 density")
 
    ! write grid info
    write(*,*) 'Grid info:'
