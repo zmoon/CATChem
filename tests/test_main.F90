@@ -11,6 +11,11 @@ program test_main
    ! Integers
    INTEGER:: rc          ! Success or failure
 
+   ! Local variables
+   integer :: index
+   CHARACTER(len=50), PARAMETER :: DUST1 = 'dust1'
+   CHARACTER(len=50), PARAMETER :: DUST2 = 'dust2'
+
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
@@ -36,7 +41,53 @@ program test_main
       stop 1
    endif
 
-   ! call cc_read_species(Config, rc)
+   ! Check Species names and idnex numbers for consistency
+   call cc_find_species_by_name(ChemState, DUST1, index, RC)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error finding species index: ' // TRIM( DUST1 )
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+   if (index /= 1) then
+      errMsg = 'Error: index for ' // TRIM( DUST1 ) // ' is not 1'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+
+   ! Check Species names and idnex numbers for consistency
+   call cc_find_species_by_name(ChemState, DUST2, index, RC)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error finding species index: ' // TRIM( DUST1 )
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+   if (index /= 2) then
+      errMsg = 'Error: index for ' // TRIM( DUST2 ) // ' is not 2'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+
+   ! Ensure dust1 is an aerosol and is_dust
+   if (.not. ChemState%ChemSpecies(1)%is_aerosol) then
+      errMsg = 'Error: dust1 is not an aerosol'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+   if (.not. ChemState%ChemSpecies(1)%is_dust) then
+      errMsg = 'Error: dust1 is not a dust'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+   if (ChemState%ChemSpecies(2)%is_seasalt) then
+      errMsg = 'Error: dust2 is categorized as seasalt'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
+   if (ChemState%ChemSpecies(2)%is_gas) then
+      errMsg = 'Error: dust2 is categorized as gas'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
 
    ! write grid info
    write(*,*) 'Grid info:'
