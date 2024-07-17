@@ -51,24 +51,25 @@ module CCPr_Megan_Common_Mod
    TYPE :: MeganStateType
       ! Generic Variables for Every Process
       Logical                         :: Activate                !< Activate Process (True/False)
-      integer                         :: nMeganSpecies            !< Number of megan processes
-      integer, allocatable            :: MeganSpeciesIndex(:)     !< Index of dust species
+      integer                         :: nMeganSpecies           !< Number of megan processes
+      integer, allocatable            :: MeganSpeciesIndex(:)    !< Index of megan species
+      character(len=31), allocatable  :: MeganSpeciesName(:)     !< name of megan species
       integer, allocatable            :: SpcIDs(:)               !< CATChem species IDs
 
       ! Process Specific Parameters
       real(fp), allocatable           :: TotalEmission           !< Total emission          [kg/m^2/s]
       real(fp), allocatable           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
 
-      ! Scheme Options
+      ! Scheme Options (ISOP scaling is turned off at the moment)
       Logical                         :: CO2Inhib                !< CO2 inhibition for isoprene Option [True/False]
       real(fp)                        :: CO2conc                 !< CO2 concentration [ppmv]
-      real(fp)                        :: ISOPscale               !< factors to scale isoprene emissions 
-      real(fp)                        :: ISOPtoSOAP              !< isoprene convertion factor to SOAP
-      real(fp)                        :: ISOPtoSOAS              !< isoprene convertion factor to SOAS
-      real(fp)                        :: MONOtoSOAP              !< monoterpene convertion factor to SOAP
-      real(fp)                        :: MONOtoSOAS              !< monoterpene convertion factor to SOAS 
-      real(fp)                        :: TERPtoSOAP              !< other terpenes convertion factor to SOAP 
-      real(fp)                        :: TERPtoSOAS              !< other terpenes convertion factor to SOAS 
+      !real(fp)                        :: ISOPscale               !< factors to scale isoprene emissions 
+      !real(fp)                        :: ISOPtoSOAP              !< isoprene convertion factor to SOAP
+      !real(fp)                        :: ISOPtoSOAS              !< isoprene convertion factor to SOAS
+      !real(fp)                        :: MONOtoSOAP              !< monoterpene convertion factor to SOAP
+      !real(fp)                        :: MONOtoSOAS              !< monoterpene convertion factor to SOAS 
+      !real(fp)                        :: TERPtoSOAP              !< other terpenes convertion factor to SOAP 
+      !real(fp)                        :: TERPtoSOAS              !< other terpenes convertion factor to SOAS 
 
 
       !=================================================================
@@ -1367,6 +1368,309 @@ contains
       RC = CC_SUCCESS
       return
    end subroutine CALC_NORM_FAC
+
+   !>
+   !! \brief Computes Emission Factors for all biogenic VOC species
+   !!  Note; I seperate the reading AE into the main GET_MEGAN_EMIS function
+   !!        Here only the species need to be calculaed are included 
+   !!References: 
+   !! (1 ) Guenther et al, 2004
+   !!
+   !! \param PFT_16
+   !! \param CMPD
+   !! \param AE, RC
+   !!
+   !! \ingroup catchem_megan_process
+   !!!>
+   subroutine CALC_AEF(PFT_16, CMPD ,AE, RC)
+      IMPLICIT NONE
+      ! Parameters
+      real(fp), intent(in)            :: PFT_16(16)  !< 16 PFT array (TODO:read from MetState??)
+      character(len=256), intent(in)  :: CMPD        !< compound name
+      real(fp), intent(out)           :: AE          !< annual emission factor for the compound
+      integer,  intent(out)    :: RC                 !< Success or Failure
+
+      ! Local Variables
+      !----------------
+      integer                 :: P, ARR_IND
+      real(fp)                :: FACTOR
+      character(len=255)       :: MSG, thisLoc
+      REAL(fp)                :: PFT_EF_OMON(15), PFT_EF_MOH(15)
+      REAL(fp)                :: PFT_EF_ACET(15), PFT_EF_BIDR(15)
+      REAL(fp)                :: PFT_EF_STRS(15), PFT_EF_OTHR(15)
+      ! --->
+      ! dbm, compute EF maps for a-pinene and myrcene as well since there seems to
+      ! be an issue with the EF maps for these species provided on the MEGAN
+      ! data portal
+      REAL(fp)                :: PFT_EF_APIN(15), PFT_EF_MYRC(15)
+      ! <---
+      REAL(fp)                :: PFT_EF_FARN(15), PFT_EF_BCAR(15)
+      REAL(fp)                :: PFT_EF_OSQT(15)
+      REAL(fp)                :: EM_FRAC_ALD2(15), EM_FRAC_EOH(15)
+      REAL(fp)                :: EM_FRAC_FAXX(15), EM_FRAC_AAXX(15)
+      REAL(fp)                :: EM_FRAC_CH2O(15)
+      !-----------------------------------------------------------------
+      ! Point to PFT fractions (the array needs to be in that order)
+      !-----------------------------------------------------------------
+      ! CLM4 PFT coverage (unitless)
+      ! From Table 3 in Guenther et al., 2012
+      ! PFT_BARE                : Bare
+      ! PFT_NDLF_EVGN_TMPT_TREE : Needleleaf evergreen temperate tree
+      ! PFT_NDLF_EVGN_BORL_TREE : Needleleaf evergreen boreal tree
+      ! PFT_NDLF_DECD_BORL_TREE : Needleleaf deciduous boreal tree
+      ! PFT_BDLF_EVGN_TROP_TREE : Broadleaf evergreen tropical tree
+      ! PFT_BDLF_EVGN_TMPT_TREE : Broadleaf evergreen temperate tree
+      ! PFT_BDLF_DECD_TROP_TREE : Broadleaf deciduous tropical tree
+      ! PFT_BDLF_DECD_TMPT_TREE : Broadleaf deciduous temperate tree
+      ! PFT_BDLF_DECD_BORL_TREE : Broadleaf deciduous boreal tree
+      ! PFT_BDLF_EVGN_SHRB      : Broadleaf evergreen temperate shrub
+      ! PFT_BDLF_DECD_TMPT_SHRB : Broadleaf deciduous temperate shrub
+      ! PFT_BDLF_DECD_BORL_SHRB : Broadleaf deciduous boreal shrub
+      ! PFT_C3_ARCT_GRSS        : Arctic C3 grass
+      ! PFT_C3_NARC_GRSS        : Cool C3 grass
+      ! PFT_C4_GRSS             : Warm C4 grass
+      ! PFT_CROP                : Crop
+
+      ! --------------------------------------------------------------------------------
+      ! PFT-specific EFs from Table 2 in Guenther et al., 2012
+      ! in ug compound/m2/h
+      ! PFTs 1-15 in the table correspond to #2-16
+      ! (i.e., excluding bare ground #1) in the above array.
+      ! --------------------------------------------------------------------------------
+      ! Compound Class EF1 EF2 EF3 EF4 EF5 EF6 EF7 EF8 EF9 EF10 EF11 EF12 EF13 EF14 EF15
+      ! --------------------------------------------------------------------------------
+      ! Other Monoterp 180 180 170 150 150 150 150 150 110 200  110  5    5    5    5
+      ! Methanol       900 900 900 500 900 500 900 900 900 900  900  500  500  500  900
+      ! Acetone        240 240 240 240 240 240 240 240 240 240  240  80   80   80   80
+      ! Bidirect VOC   500 500 500 500 500 500 500 500 500 500  500  80   80   80   80
+      ! Stress VOC     300 300 300 300 300 300 300 300 300 300  300  300  300  300  300
+      ! Other VOC      140 140 140 140 140 140 140 140 140 140  140  140  140  140  140
+      ! a-Pinene       500 500 510 600 400 600 400 400 200 300  200    2    2    2    2
+      ! Myrcene         70  70  60  80  30  80  30  30  30  50   30  0.3  0.3  0.3  0.3
+      ! a-Farnesene     40  40  40  60  40  60  40  40  40  40   40    3    3    3    4
+      ! b-Carophyllene  80  80  80  60  40  60  40  40  50  50   50    1    1    1    4
+      ! Other sesqt.   120 120 120 120 100 120 100 100 100 100  100    2    2    2    2
+      ! --------------------------------------------------------------------------------
+
+      ! One thing to note is these are net emissions to the canopy atmosphere
+      ! but not net emissions to the above canopy atmosphere since they don't
+      !  account for within-canopy deposition. Only an issue for OVOCs.
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_OMON = (/180.0_fp, 180.0_fp, 170.0_fp, 150.0_fp, 150.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     150.0_fp, 150.0_fp, 150.0_fp, 110.0_fp, 200.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     110.0_fp, 5.0_fp  , 5.0_fp  , 5.0_fp  , 5.0_fp/)
+      
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_MOH  = (/900.0_fp, 900.0_fp, 900.0_fp, 500.0_fp, 900.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     500.0_fp, 900.0_fp, 900.0_fp, 900.0_fp, 900.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     900.0_fp, 500.0_fp, 500.0_fp, 500.0_fp, 900.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_ACET = (/240.0_fp, 240.0_fp, 240.0_fp, 240.0_fp, 240.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     240.0_fp, 240.0_fp, 240.0_fp, 240.0_fp, 240.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     240.0_fp, 80.0_fp , 80.0_fp , 80.0_fp , 80.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_BIDR = (/500.0_fp, 500.0_fp, 500.0_fp, 500.0_fp, 500.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     500.0_fp, 500.0_fp, 500.0_fp, 500.0_fp, 500.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     500.0_fp, 80.0_fp , 80.0_fp , 80.0_fp , 80.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_STRS = (/300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp, 300.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_OTHR = (/140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp, 140.0_fp/)
+
+      ! ---> Now compute EFs for a-pinene and myrcene as well (dbm, 12/2012)
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_APIN = (/500.0_fp, 500.0_fp, 510.0_fp, 600.0_fp, 400.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     600.0_fp, 400.0_fp, 400.0_fp, 200.0_fp, 300.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     200.0_fp, 2.0_fp,   2.0_fp,   2.0_fp,   2.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_MYRC = (/70.0_fp,  70.0_fp,  60.0_fp,  80.0_fp,  30.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     80.0_fp,  30.0_fp,  30.0_fp,  30.0_fp,  50.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     30.0_fp,  0.3_fp,   0.3_fp,   0.3_fp,   0.3_fp/)
+      ! <---
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_FARN = (/40.0_fp,  40.0_fp,  40.0_fp,  60.0_fp,  40.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     60.0_fp,  40.0_fp,  40.0_fp,  40.0_fp,  40.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     40.0_fp,  3.0_fp,   3.0_fp,   3.0_fp,   4.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_BCAR = (/80.0_fp,  80.0_fp,  80.0_fp,  60.0_fp,  40.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     60.0_fp,  40.0_fp,  40.0_fp,  50.0_fp,  50.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     50.0_fp,  1.0_fp,   1.0_fp,   1.0_fp,   4.0_fp/)
+
+      !               EF1       EF2       EF3       EF4       EF5
+      PFT_EF_OSQT = (/120.0_fp, 120.0_fp, 120.0_fp, 120.0_fp, 100.0_fp, &
+      !               EF6       EF7       EF8       EF9       EF10
+                     120.0_fp, 100.0_fp, 100.0_fp, 100.0_fp, 100.0_fp, &
+      !               EF11      EF12      EF13      EF14      EF15
+                     100.0_fp, 2.0_fp,   2.0_fp,   2.0_fp,   2.0_fp/)
+      
+      ! Other monoterpenes, methanol, acetone, MBO are each 100% of thier
+      ! respective categories. The VOCs within the stress category each
+      ! account for a specific fraction of emissions across all PFTs
+      ! (ethene 58%, toluene 3%, HCN 1.5%). The VOCs within the
+      ! other category also account for a given fraction of emissions
+      ! across all PFTs (propene 48%, butene 24%, other alkenes 0.2%). But
+      ! VOCs in the bidirectional category account for a different amount of
+      ! the total flux for the different PFTs. So in this case we define a
+      ! vector containing these fractions.
+
+      ! Acetaldehyde: 40% of bidirectional category flux, except 25%
+      ! for grasses and crops
+      !                 EF1      EF2       EF3       EF4    EF5
+      EM_FRAC_ALD2 = (/0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, &
+      !                 EF6      EF7       EF8       EF9    EF10
+                       0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, &
+      !                 EF11     EF12      EF13     EF14    EF15
+                       0.40_fp, 0.25_fp, 0.25_fp, 0.25_fp, 0.25_fp/)
+
+      ! Ethanol: 40% of bidirectional category flux, except 25%
+      ! for grasses and crops
+      !                 EF1      EF2       EF3       EF4    EF5
+      EM_FRAC_EOH  = (/0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, &
+      !                 EF6      EF7       EF8       EF9    EF10
+                       0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, 0.40_fp, &
+      !                 EF11     EF12      EF13     EF14    EF15
+                       0.40_fp, 0.25_fp, 0.25_fp, 0.25_fp, 0.25_fp/)
+
+      ! Formic acid: 6% of bidirectional category flux, except 15%
+      ! for grasses and crops
+      !                 EF1      EF2       EF3       EF4    EF5
+      EM_FRAC_FAXX = (/0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, &
+      !                 EF6      EF7       EF8       EF9    EF10
+                       0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, &
+      !                 EF11     EF12      EF13     EF14    EF15
+                       0.06_fp, 0.15_fp, 0.15_fp, 0.15_fp, 0.15_fp/)
+
+      ! Acetic acid: 6% of bidirectional category flux, except 15%
+      ! for grasses and crops
+      !                 EF1      EF2       EF3       EF4    EF5
+      EM_FRAC_AAXX = (/0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, &
+      !                 EF6      EF7       EF8       EF9    EF10
+                       0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, 0.06_fp, &
+      !                 EF11     EF12      EF13     EF14    EF15
+                       0.06_fp, 0.15_fp, 0.15_fp, 0.15_fp, 0.15_fp/)
+
+      ! Formaldehyde: 8% of bidirectional category flux, except 20%
+      ! for grasses and crops
+      !                 EF1      EF2       EF3       EF4    EF5
+      EM_FRAC_CH2O = (/0.08_fp, 0.08_fp, 0.08_fp, 0.08_fp, 0.08_fp, &
+      !                 EF6      EF7       EF8       EF9    EF10
+                       0.08_fp, 0.08_fp, 0.08_fp, 0.08_fp, 0.08_fp, &
+      !                 EF11     EF12      EF13     EF14    EF15
+                       0.08_fp, 0.20_fp, 0.20_fp, 0.20_fp, 0.20_fp/)
+
+      !--------------------------------------------
+      ! GET_GAMMAT_T_LI begins here!
+      !--------------------------------------------
+      AE = 0.0_fp
+      ! Loop through plant types
+      do P = 1, 15
+         ! Add 1 to PFT_16 index to skip bare ground
+         ARR_IND = P + 1
+         ! Don't need to divide PFT_16 by 100 since it is already fraction
+         select case ( TRIM(CMPD) )
+            ! ---> Now compute EFs for a-pinene and myrcene as well 
+            ! a-pinene: 100% of category
+            case ('APIN')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_APIN(P)
+            ! Myrcene: 100% of category
+            case ('MYRC')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_MYRC(P)
+            ! Other monoterpenes: 100% of category
+            case ('OMON')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_OMON(P)
+            ! a-Farnesene: 100% of category
+            case ('FARN')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_FARN(P)
+            ! b-Caryophyllene: 100% of category
+            case ('BCAR')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_BCAR(P)
+            ! Other sesquiterpenes: 100% of category
+            case ('OSQT')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_OSQT(P)
+            ! Methanol: 100% of category
+            case ('MOH')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_MOH(P)
+            ! Acetone: 100% of category
+            case ('ACET')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_ACET(P)
+            ! Ethanol: variable fraction of category
+            case ('EOH')
+               AE = AE + PFT_16(ARR_IND) * EM_FRAC_EOH(P) * PFT_EF_BIDR(P)
+            ! Formaldehyde: variable fraction of category
+            case ('CH2O')
+               AE = AE + PFT_16(ARR_IND) * EM_FRAC_CH2O(P) * PFT_EF_BIDR(P)
+            ! Acetaldehyde: variable fraction of category
+            case ('ALD2')
+               AE = AE + PFT_16(ARR_IND) * EM_FRAC_ALD2(P) * PFT_EF_BIDR(P)
+            ! Formic acid: variable fraction of category
+            case ('FAXX')
+               AE = AE + PFT_16(ARR_IND) * EM_FRAC_FAXX(P) * PFT_EF_BIDR(P)
+            ! Acetic acid: variable fraction of category
+            case ('AAXX')
+               AE = AE + PFT_16(ARR_IND) * EM_FRAC_AAXX(P) * PFT_EF_BIDR(P)
+            ! Ethene: 58% of "stress" category for all PFTs
+            case ('C2H4')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_STRS(P) * 0.58_fp
+            ! Toluene: 3% of "stress" category for all PFTs
+            case ('TOLU')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_STRS(P) * 0.03_fp
+            ! HCN: 1.5% of "stress" category for all PFTs
+            case ('HCNX')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_STRS(P) * 0.015_fp
+            ! Propene: 48% of "other" category for all PFTs
+            ! Butene:  24% of "other" category for all PFTs
+            ! Larger alkenes: 0.2% of "other" category for all PFTs
+            ! Total: 72.2%
+            case ('PRPE')
+               AE = AE + PFT_16(ARR_IND) * PFT_EF_OTHR(P) * 0.722_fp    
+            case default
+               RC = CC_FAILURE
+               MSG = 'Invalid compound name'
+               thisLoc = ' -> at CCPr_Megan_Common (in process/megan/ccpr_megan_common_mod.F90)'
+               call CC_Error( MSG, RC , thisLoc)
+               return
+         end select
+      enddo
+
+      ! Convert AEF arrays from [ug/m2/hr] to [kg/m2/s]
+      FACTOR = 1.0e-9_fp / 3600.0_fp
+      AE = AE * Factor
+      ! Return w/ success
+      RC = HCO_SUCCESS
+      return
+   end subroutine CALC_AEF
 
 
 end module CCPr_Megan_Common_Mod

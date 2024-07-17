@@ -8,55 +8,22 @@
 !! \author Barry baker
 !! \date 05/2024
 !!!>
-MODULE CCPR_<PROCESS>_mod
+MODULE CCPR_Megan_mod
    USE Precision_mod
    USE Error_Mod
    USE DiagState_Mod, Only : DiagStateType
    USE MetState_Mod,  Only : MetStateType
    USE ChemState_Mod, Only : ChemStateType
    USE Config_Mod,    Only : ConfigType
+   USE CCPr_Megan_Common_Mod, Only : MeganStateType
 
    IMPLICIT NONE
 
    PRIVATE
 
-   PUBLIC :: CCPR_<PROCESS>_Init
-   PUBLIC :: CCPR_<PROCESS>_Run
-   PUBLIC :: CCPR_<PROCESS>_Final
-
-
-   !> \brief <PROCESS>StateType
-   !!
-   !! <PROCESS>StateType is the process-specific derived type. It should hold all module
-   !! variables and arrays that are required to compute the emissions.
-   !! For instance, if the process relies on an input field read through the
-   !! CATChem configuration file (e.g. MY_INPUT_FIELD), the data array pointer
-   !! to that field should be listed within the instance and NOT outside of it.
-   !! This ensures that the same process can be invoked in various instances,
-   !! all of them potentially pointing to different data fields.
-   !!
-   !! \param Activate Activate Process (True/False)
-   !! \param SchemeOpt Scheme Option
-   !! \param <Process>SpeciesIndex Effected Chemical Species from <Process>
-   !! \param nSpc # of species
-   !! \param SpcIDs CATChem species IDs
-   !! \param ScaleFactor Scale Factor
-   !!!>
-   TYPE :: <PROCESS>StateType
-      LOGICAL                         :: Activate              ! Activate Process (True/False)
-      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
-      INTEGER                         :: <Process>SpeciesIndex ! Effected Chemical Species from <Process>
-      INTEGER                         :: nSpc                  ! # of species
-      INTEGER,  ALLOCATABLE           :: SpcIDs(:)             ! CATChem species IDs
-
-      ! Namelist parameters for specific <PROCESS> goes here as well
-      !=================================================================
-      ! Module specific variables/arrays/data pointers come below
-      !=================================================================
-      integer                         :: <Process><Scheme>Opt  ! Scheme Option
-      real(fp)                        :: ScaleFactor           ! Scale Factor
-   END TYPE <PROCESS>StateType
-
+   PUBLIC :: CCPR_Megan_Init
+   PUBLIC :: CCPR_Megan_Run
+   PUBLIC :: CCPR_Megan_Final
 
 CONTAINS
 
@@ -69,19 +36,19 @@ CONTAINS
    !! \param RC               Error return code
    !!
    !!!>
-   SUBROUTINE CCPR_<yourname>_Init( Config, ChemState, <Process>State, RC )
+   SUBROUTINE CCPR_Megan_Init( Config, ChemState, MeganState, RC )
       ! USE
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(ConfigOptType), POINTER       :: Config    ! Module options
-      TYPE(ChemStateType), POINTER       :: ChemState ! Chemical state
+      TYPE(ConfigOptType), POINTER    :: Config    ! Module options
+      TYPE(ChemStateType), POINTER    :: ChemState ! Chemical state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(<PROCESS>StateType), POINTER :: <Process>State ! <PROCESS> state
-      INTEGER,         INTENT(INOUT)    :: RC         ! Success or failure
+      TYPE(MeganStateType), POINTER   :: MeganState ! <PROCESS> state
+      INTEGER,         INTENT(INOUT)  :: RC         ! Success or failure
 
       ! Error handling
       !---------------
@@ -94,38 +61,75 @@ CONTAINS
       ! Put any local variables here
 
       !=================================================================
-      ! CCPR_<yourname>_Init begins here!
+      ! CCPR_Megan_Init begins here!
       !=================================================================
-      ThisLoc = ' -> at CCPR_<PROCESS>_INIT (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
+      RC = CC_SUCCESS
+      ThisLoc = ' -> at CCPR_Megan_INIT (in process/megan/ccpr_megan_mod.F90)'
 
       ! First check if process is activated in config | if not don't allocate arrays or pointers
-      if (Config%<process>activate) then
+      if (Config%megan_activate) then
 
          ! Activate Process
          !------------------
-         <Process>State%Activate = .true.
+         MeganState%Activate = .true.
 
          ! Set number of species
          !----------------------
-         <Process>State%nSpc = 1
+         MeganState%nMeganSpecies = 21
 
-         ! Set scheme option
+         ! CO2 inhibition option
          !------------------
-         <Process>State%SchemeOpt = config%<process><Scheme>Opt
+         MeganState%CO2Inhib = config%CO2_Inhib_Opt
+
+         ! Set CO2 concentration (ppm)
+         !----------------------------
+         if (Config%CO2_conc < 0) then ! not listed in config
+            MeganState%CO2conc = 390.0_fp
+         else
+            MeganState%CO2conc = Config%CO2_conc_ppm
+         endif
+
+         ! Check GLOBCO2 if CO2 inhibition is turned on (LISOPCO2 = .TRUE.)
+         ! GLOBCO2 should be between 150-1250 ppmv. Isoprene response to
+         ! CO2 outside this range has no empirical basis.
+         if ( MeganState%CO2Inhib ) then
+            if ( MeganState%CO2conc <  150.0_fp .or. &
+               MeganState%CO2conc > 1250.0_fp     ) then
+               RC = CC_FAILURE
+               ErrMsg = 'Global CO2 outside valid range of 150-1250 ppmv!'
+               call CC_Error( errMsg, RC, thisLoc )
+               return
+            endif
+         endif
 
          ! Allocate any arrays here for scheme to run
-         ALLOCATE(<Process>State%SpcIDs(<Process>State%nSpc))
-         CALL CC_CheckVar(<Process>State%SpcIDs(<Process>State%nSpc), 0, RC)  ! Assumed here that the length of SpcIDs is equal to <Process>State%nSpc
+         ALLOCATE( MeganState%MeganSpeciesIndex(MeganState%nMeganSpecies) )
+         CALL CC_CheckVar('MeganState%MeganSpeciesIndex', 0, RC)  
          IF (RC /= CC_SUCCESS) RETURN
-         <Process>State%SpcIDs(<Process>State%nSpc) = 1
+         
+         ! Allocate any arrays here for scheme to run
+         ALLOCATE( MeganState%MeganSpeciesName(MeganState%nMeganSpecies) )
+         CALL CC_CheckVar('MeganState%MeganSpeciesName', 0, RC)  
+         IF (RC /= CC_SUCCESS) RETURN
+
+         ! Allocate any arrays here for scheme to run
+         ALLOCATE( MeganState%EmissionPerSpecies(MeganState%nMeganSpecies) )
+         CALL CC_CheckVar('MeganState%EmissionPerSpecies', 0, RC)  
+         IF (RC /= CC_SUCCESS) RETURN
+
+         !TODO: emission species name and ID should read from a namelist. Give them values for now
+         MeganState%MeganSpeciesIndex = (/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21/)
+         MeganState%MeganSpeciesName(/'ISOP','APIN','BPIN','LIMO','SAIB','MYRC','CARE',
+                                      'OCIM','OMON','ALD2','MOH', 'EOH', 'MBOX','FAXX',
+                                      'AAXX','ACET','PRPE','C2H4','FARN','BCAR','OSQT' /)
 
       else
 
-         <Process>State%Activate = .false.
+         MeganState%Activate = .false.
 
       endif
 
-   end subroutine CCPR_<yourname>_Init
+   end subroutine CCPR_Megan_Init
 
    !>
    !! \brief Run the <Process>
@@ -215,4 +219,4 @@ CONTAINS
 
    end subroutine CCPr_<PROCESS>_Final
 
-END MODULE CCPR_<yourname>_Mod
+END MODULE CCPR_Megan_Mod
