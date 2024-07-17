@@ -11,13 +11,13 @@
 !! \author Barry baker
 !! \date 05/2024
 !!!>
-module CCPr_Scheme_SCHEME_Mod
+module CCPr_Scheme_Megan_Mod
 
    implicit none
 
    private
 
-   public :: CCPr_Scheme_SCHEME
+   public :: CCPr_Scheme_Megan
 
 contains
 
@@ -30,7 +30,7 @@ contains
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
-   subroutine CCPr_Scheme_SCHEME(MetState, DiagState, RC)
+   subroutine CCPr_Scheme_Megan(MetState, DiagState, MeganState, RC)
 
       ! Uses
       USE Constants,     Only : g0 ! Example to pull in a constant from the CONSTANTS MODULE < Modify as needed >
@@ -38,14 +38,14 @@ contains
       Use MetState_Mod,  Only : MetStateType  ! Needed to access Meteorological Variables
       Use DiagState_Mod, Only : DiagStateType ! Diagnostic Variables are added through DiagState below
       Use Error_Mod,     Only : CC_SUCCESS    ! Error Check Success
-      Use CCPr_PROCESS_mod, Only : PROCESSStateType  ! Overall PROCESS State Type - Controlling PROCESS
+      Use CCPr_Megan_Common_mod, Only : MeganStateType  ! Overall PROCESS State Type - Controlling PROCESS
 
       IMPLICIT NONE
 
       ! Arguments
       type(MetStateType),  intent(in) :: MetState     ! Meteorological Variables
-      type(DiagStateType), intent(in) :: DiagState    ! Diagnostic Variables
-      type(PROCESSStateType), intent(in) :: PROCESSState  ! PROCESS Variables
+      type(DiagStateType), intent(inout) :: DiagState    ! Diagnostic Variables
+      type(MeganStateType), intent(inout) :: MeganState  ! PROCESS Variables
 
       integer, intent(out) :: RC                      ! Success or Failure
 
