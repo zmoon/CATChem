@@ -59,6 +59,7 @@ module CCPr_Megan_Common_Mod
       ! Process Specific Parameters
       real(fp), allocatable           :: TotalEmission           !< Total emission          [kg/m^2/s]
       real(fp), allocatable           :: EmissionPerSpecies(:)   !< Emission per species    [kg/m^2/s]
+      real(fp), allocatable           :: EmisNormFactor(:)       !< Emission normalized factor (onle one used for all now)
 
       ! Scheme Options (ISOP scaling is turned off at the moment)
       Logical                         :: CO2Inhib                !< CO2 inhibition for isoprene Option [True/False]
@@ -141,7 +142,7 @@ contains
       use Error_Mod,     Only : CC_SUCCESS, CC_FAILURE, CC_Error
       IMPLICIT NONE
       ! input Parameters
-      character(LEN=*), intent(in) :: CPD       ! Compound name
+      character(LEN=256), intent(in) :: CPD       ! Compound name
       ! input/output Parameters
       real(fp), intent(inout)  :: BTA      !< Beta coefficient for temperature activity factor for light-independent fraction
                                                           
@@ -1124,8 +1125,8 @@ contains
       IMPLICIT NONE
       ! Parameters
       real(fp), intent(in)    :: D2RAD_FAC   !< 
-      real(fp), intent(in)    :: NORM_FAC    !<
-      integer,  intent(inout) :: RC          !< 
+      real(fp), intent(out)    :: NORM_FAC    !<
+      integer,  intent(out) :: RC          !< 
 
       ! Local Variables
       !----------------
@@ -1158,7 +1159,7 @@ contains
       !--------------------------------------------
       ! CALC_NORM_FAC begins here!
       !--------------------------------------------
-
+      
       ! -----------------
       ! GAMMA_P for standard conditions
       ! -----------------
@@ -1271,8 +1272,8 @@ contains
             GAMMA_T_LD_Shade   = E_OPT * CT2 * EXP( CT1 * X ) /            &
                   ( CT2 - CT1 * ( 1.0_fp - EXP( CT2 * X ) ) )
     
-            SunF = Calc_Sun_Frac(5.0_fp,SIN(60.0_fp*D2RAD_FAC),            &
-                                 Distgauss(Q))
+            call Calc_Sun_Frac(5.0_fp,SIN(60.0_fp*D2RAD_FAC),            &
+                                 Distgauss(Q), SunF)
             Ea1L  =  CDEA(Q) * GAMMA_PAR_Sun * GAMMA_T_LD_Sun * SunF +     &
                             GAMMA_PAR_Shade * GAMMA_T_LD_Shade * (1-SunF)
     
@@ -1668,7 +1669,7 @@ contains
       FACTOR = 1.0e-9_fp / 3600.0_fp
       AE = AE * Factor
       ! Return w/ success
-      RC = HCO_SUCCESS
+      RC = CC_SUCCESS
       return
    end subroutine CALC_AEF
 

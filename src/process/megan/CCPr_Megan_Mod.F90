@@ -1,12 +1,10 @@
-!> \brief Template for a new process driver
+!> \brief Driver for the CATCHem Process: Megan
 !!
-!! To use:
-!! - replace <PROCESS> by an identifier for the process group (e.g. 'Dust')
 !!
-!! More in-depth description here
+!! \defgroup catchem_megan_process
 !!
-!! \author Barry baker
-!! \date 05/2024
+!! \author Wei Li
+!! \date 07/2024
 !!!>
 MODULE CCPR_Megan_mod
    USE Precision_mod
@@ -28,10 +26,10 @@ MODULE CCPR_Megan_mod
 CONTAINS
 
    !>
-   !! \brief Initialize the CATChem <PROCESS> module
+   !! \brief Initialize the CATChem Megan module
    !!
    !! \param Config_Opt       CATCHem configuration options
-   !! \param <PROCESS>State   CATCHem PROCESS state
+   !! \param MeganState       CATCHem Megan state
    !! \param ChmState         CATCHem chemical state
    !! \param RC               Error return code
    !!
@@ -78,8 +76,9 @@ CONTAINS
          MeganState%nMeganSpecies = 21
 
          ! CO2 inhibition option
+         !TODO: what if it is not given in the configuration file properly
          !------------------
-         MeganState%CO2Inhib = config%CO2_Inhib_Opt
+         MeganState%CO2Inhib = Config%CO2_Inhib_Opt
 
          ! Set CO2 concentration (ppm)
          !----------------------------
@@ -102,24 +101,35 @@ CONTAINS
             endif
          endif
 
-         ! Allocate any arrays here for scheme to run
+         ! Allocate emission species index
          ALLOCATE( MeganState%MeganSpeciesIndex(MeganState%nMeganSpecies) )
          CALL CC_CheckVar('MeganState%MeganSpeciesIndex', 0, RC)  
          IF (RC /= CC_SUCCESS) RETURN
          
-         ! Allocate any arrays here for scheme to run
+         ! Allocate emission speceis names
          ALLOCATE( MeganState%MeganSpeciesName(MeganState%nMeganSpecies) )
          CALL CC_CheckVar('MeganState%MeganSpeciesName', 0, RC)  
          IF (RC /= CC_SUCCESS) RETURN
 
-         ! Allocate any arrays here for scheme to run
+         ! Allocate emission flux
          ALLOCATE( MeganState%EmissionPerSpecies(MeganState%nMeganSpecies) )
          CALL CC_CheckVar('MeganState%EmissionPerSpecies', 0, RC)  
          IF (RC /= CC_SUCCESS) RETURN
 
+         ! Allocate normalized factor
+         ! There should be a different normalization factor for each compound, but
+         ! we calculate only 1 normalization factor for all compounds
+         ALLOCATE( MeganState%EmisNormFactor(1) )
+         CALL CC_CheckVar('MeganState%EmisNormFactor', 0, RC)  
+         IF (RC /= CC_SUCCESS) RETURN
+
+         !TODO: emission factor from 7 speceis are read from files and put in MetSate by now
+         !      Others are calculated using 'PFT_16', which is also added in MetState
+         !      Some met values (last 15 day T average) may need another function and be saved to restart file.
+
          !TODO: emission species name and ID should read from a namelist. Give them values for now
          MeganState%MeganSpeciesIndex = (/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21/)
-         MeganState%MeganSpeciesName(/'ISOP','APIN','BPIN','LIMO','SAIB','MYRC','CARE',
+         MeganState%MeganSpeciesName(/'ISOP','APIN','BPIN','LIMO','SABI','MYRC','CARE',
                                       'OCIM','OMON','ALD2','MOH', 'EOH', 'MBOX','FAXX',
                                       'AAXX','ACET','PRPE','C2H4','FARN','BCAR','OSQT' /)
 
@@ -132,65 +142,75 @@ CONTAINS
    end subroutine CCPR_Megan_Init
 
    !>
-   !! \brief Run the <Process>
+   !! \brief Run the Megan process
    !!
    !! \param [IN] MetState The MetState object
    !! \param [INOUT] DiagState The DiagState object
-   !! \param [INOUT] DustState The DustState object
+   !! \param [INOUT] MeganState The MeganState object
    !! \param [INOUT] ChemState The ChemState object
    !! \param [OUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_Dust_Run( MetState, DiagState, <PROCESS>State, ChemState, RC )
+   SUBROUTINE CCPr_Megan_Run( MetState, DiagState, MeganState, ChemState, RC )
 
       ! USE
+      USE CCPr_Scheme_Megan_Mod, ONLY: CCPr_Scheme_Megan  ! Megan scheme
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
       TYPE(MetState_type),  INTENT(IN) :: MetState       ! MetState Instance
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(DiagState_type), INTENT(INOUT)      :: DiagState       ! DiagState Instance
-      TYPE(<PROCESS>State_type), INTENT(INOUT) :: <PROCESS>State  ! <PROCESS>State Instance
-      TYPE(ChemState_type),  INTENT(INOUT)     :: ChemState       ! ChemState Instance
+      TYPE(DiagState_type), INTENT(INOUT) :: DiagState   ! DiagState Instance
+      TYPE(MeganStateType), INTENT(INOUT) :: MeganState  ! Megan State Instance
+      TYPE(ChemState_type), INTENT(INOUT) :: ChemState   ! ChemState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT) :: RC                                  ! Return Code
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
+      logical            :: FIRST
 
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_<PROCESS>_Run (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
+      thisLoc = ' -> at CCPr_Megan_Run (in process/megan/ccpr_megan_mod.F90)'
 
-      ! Run the <PROCESS> Scheme
-      !-------------------------
-      if (<PROCESS>State%Activate) then
-         ! Run the <PROCESS> Scheme
+      ! Run the Megan Scheme if activated
+      !----------------------------------
+      if (MeganState%Activate) then
+         
+         FIRST = .TRUE.
+         if (FIRST) then
+            ! Calculate normalization factor
+            ! Not really used now based on Sam's method in which 0.21 is used 
+            CALL CALC_NORM_FAC( MetState%D2RAD, MeganState%EmisNormFactor(1), RC )
+            if (RC /= CC_SUCCESS) then
+               MSG = 'call on CALC_NORM_FAC failed!'
+               call CC_Error( MSG, RC , thisLoc)
+            endif
+         endif
+         FIRST = .FALSE.
+
+         ! Run the megan Scheme
          !-------------------------
-         if (<PROCESS>State%SchemeOpt == 1) then
-            ! Run the <PROCESS> Scheme
-            !-------------------------
-            CCPr_<Process>_Scheme_<SCHEME_NAME>( MetState, DiagState, <PROCESS>State, ChemState, RC)
-
-         elseif (<PROCESS>State%SchemeOpt == 2) then
-            ! Run the <PROCESS> Scheme
-            !-------------------------
-            CCPr_<Process>_Scheme_<2ndSCHEME_NAME>( MetState, DiagState, <PROCESS>State, ChemState, RC)
+         call CCPr_Scheme_Megan( MetState, DiagState, MetState, RC)
+         if (RC /= CC_SUCCESS) then
+            errMsg = 'Error in CCPr_Scheme_Fengsha'
+            CALL CC_Error( errMsg, RC, thisLoc )
          endif
 
       endif
 
-   end subroutine CCPr_<PROCESS>_Run
+   end subroutine CCPr_Megan_Run
 
    !>
-   !! \brief Finalize the <Process>
+   !! \brief Finalize Megan
    !!
-   !! \param [INOUT] <Process>State
+   !! \param [INOUT] MeganState
    !! \param [OUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_<PROCESS>_Final( <PROCESS>State, RC )
+   SUBROUTINE CCPr_Megan_Final( MeganState, RC )
 
       ! USE
       !----
@@ -198,7 +218,7 @@ CONTAINS
       IMPLICIT NONE
 
       ! INPUT/OUTPUT PARAMETERS
-      TYPE(<PROCESS>State_type), INTENT(INOUT) :: <PROCESS>State  ! <PROCESS>State Instance
+      TYPE(MeganStateType), INTENT(INOUT) :: MeganState  ! MeganState Instance
 
       ! OUTPUT PARAMETERS
       INTEGER, INTENT(OUT) :: RC                                  ! Return Code
@@ -209,14 +229,39 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_<PROCESS>_Final (in process/<PROCESS>/ccpr_<PROCESS>_mod.F90)'
+      thisLoc = ' -> at CCPr_Megan_Final (in process/megan/ccpr_megan_mod.F90)'
 
       ! Deallocate any arrays here
-      DELLOCATE( <PROCESS>State%SpcIDs, STAT=RC )
-      CALL CC_CheckVar('<PROCESS>State%SpcIDs', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-      <PROCESS>State%SpcIDs => NULL()
+      IF ( ASSOCIATED( MeganState%SpcIDs ) ) THEN
+         DEALLOCATE( MeganState%SpcIDs, STAT=RC )
+         CALL CC_CheckVar('MeganState%SpcIDs', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
 
-   end subroutine CCPr_<PROCESS>_Final
+      IF ( ASSOCIATED( MeganState%MeganSpeciesIndex ) ) THEN
+         DEALLOCATE( MeganState%MeganSpeciesIndex, STAT=RC )
+         CALL CC_CheckVar('MeganState%MeganSpeciesIndex', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+
+      IF ( ASSOCIATED( MeganState%MeganSpeciesName ) ) THEN
+         DEALLOCATE( MeganState%MeganSpeciesName, STAT=RC )
+         CALL CC_CheckVar('MeganState%MeganSpeciesName', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+
+      IF ( ASSOCIATED( MeganState%EmissionPerSpecies ) ) THEN
+         DEALLOCATE( MeganState%EmissionPerSpecies, STAT=RC )
+         CALL CC_CheckVar('MeganState%EmissionPerSpecies', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+
+      IF ( ASSOCIATED( MeganState%EmisNormFactor ) ) THEN
+         DEALLOCATE( MeganState%EmisNormFactor, STAT=RC )
+         CALL CC_CheckVar('MeganState%EmisNormFactor', 0, RC)
+         IF (RC /= CC_SUCCESS) RETURN
+      ENDIF
+
+   end subroutine CCPr_Megan_Final
 
 END MODULE CCPR_Megan_Mod
