@@ -143,20 +143,7 @@ CONTAINS
          RETURN
       ENDIF
 
-      call Config_Process_MEGAN(ConfigInput, Config, RC)
-      if ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error in "Config_Process_MEGAN"!'
-         CALL CC_Error( errMsg, RC, thisLoc  )
-         CALL QFYAML_CleanUp( ConfigInput         )
-         CALL QFYAML_CleanUp( ConfigAnchored )
-         RETURN
-      ENDIF
-
-
-      !========================================================================
-      ! Get species settings from the YAML Config object
-      !========================================================================
-      call Config_Chem_State(config%Species_File, GridState,ChemState, RC)
+      call Config_Chem_State(config%Species_File, GridState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -165,9 +152,6 @@ CONTAINS
          RETURN
       endif
 
-      !========================================================================
-      ! Get emission settings from the YAML Config object
-      !========================================================================
       call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Emis_State"!'
@@ -1159,102 +1143,5 @@ CONTAINS
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_SeaSalt
-
-   !> \brief Process MEGAN configuration
-   !!
-   !! This function processes the MEGAN configuration and performs the necessary actions based on the configuration.
-   !!
-   !! \param[in] ConfigInput The YAML configuration object
-   !! \param[inout] Config The configuration object
-   !! \param[out] RC The return code
-   !!
-   !! \ingroup core_modules
-   !!!>
-   SUBROUTINE Config_Process_MEGAN( ConfigInput, Config, RC )
-      USE CharPak_Mod,    ONLY : StrSplit
-      USE Error_Mod
-      USE Config_Opt_Mod,  ONLY : ConfigType
-
-      TYPE(QFYAML_t),      INTENT(INOUT) ::ConfigInput      ! YAML Config object
-      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
-
-      !
-      ! !OUTPUT PARAMETERS:
-      !
-      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
-      ! !LOCAL VARIABLES:
-      !
-      ! Scalars
-      LOGICAL                      :: v_bool
-      INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
-
-      ! Reals
-      REAL(fp)                     :: v_real
-
-      ! Arrays
-      INTEGER                      :: a_int(4)
-
-      ! Strings
-      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
-      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
-      CHARACTER(LEN=255)           :: thisLoc,  nLev
-      CHARACTER(LEN=512)           :: errMsg
-      CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
-
-      !========================================================================
-      ! Config_Process_MEGAN begins here!
-      !========================================================================
-
-      ! Initialize
-      RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Process_MEGAN (in CATChem/src/core/config_mod.F90)'
-      errMsg = ''
-      ! TODO #105 Fix reading of config file
-      key   = "process%megan%activate"
-      v_bool = MISSING_BOOL
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%megan_activate = v_bool
-
-      key   = "process%megan%CO2_Inhib_Opt"
-      v_int = MISSING_INT
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%megan_CO2_Inhib_opt = v_int
-
-
-      key   = "process%megan%CO2_conc_ppm"
-      v_real = MISSING_INT
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-         RETURN
-      ENDIF
-      Config%megan_CO2_conc_ppm = v_real
-
-      write(*,*) "MEGAN Configuration"
-      write(*,*) '------------------------------------'
-      write(*,*) 'Config%megan_activate = ', Config%megan_activate
-      write(*,*) 'Config%megan_CO2_Inhib_opt = ', Config%megan_CO2_Inhib_opt
-      write(*,*) 'Config%megan_CO2_conc_ppm = ', Config%megan_CO2_conc_ppm
-      write(*,*) '------------------------------------'
-
-   END SUBROUTINE Config_Process_MEGAN
 
 END MODULE config_mod

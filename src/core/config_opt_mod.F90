@@ -76,7 +76,6 @@ MODULE Config_Opt_Mod
       !-----------------------------------------
 
       ! Dust Process
-      !-------------
       LOGICAL                     :: dust_activate
       INTEGER                     :: dust_scheme
       INTEGER                     :: dust_drag_opt  ! Fengsha Option for drag Parameterization (1 MB95; 2 Input Value)
@@ -86,18 +85,11 @@ MODULE Config_Opt_Mod
       real(fp)                    :: dust_beta
 
       ! SeaSalt Process
-      !----------------
       LOGICAL                     :: seasalt_activate
       LOGICAL                     :: seasalt_weibull
       LOGICAL                     :: seasalt_hoppel
       INTEGER                     :: seasalt_scheme
       real(fp)                    :: seasalt_scalefactor
-
-      ! MEGAN Process
-      !--------------
-      LOGICAL                     :: megan_activate
-      INTEGER                     :: megan_CO2_Inhib_opt
-      REAL(fp)                    :: megan_CO2_conc_ppm
 
 
 
