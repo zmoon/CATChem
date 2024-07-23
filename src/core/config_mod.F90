@@ -60,16 +60,12 @@ CONTAINS
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
 !
 ! !LOCAL VARIABLES:
-!
-      ! Strings
-      CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml' ! base configuration file
       ! Objects
       TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
 
       ! Error handling
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
-      character(LEN=512) :: filename
 
       !========================================================================
       ! Read_Input_File begins here!
@@ -147,7 +143,7 @@ CONTAINS
          RETURN
       ENDIF
 
-      call Config_Chem_State(config%SpcDatabaseFile, GridState,ChemState, RC)
+      call Config_Chem_State(config%Species_File, GridState,ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -175,7 +171,7 @@ CONTAINS
    !!
    !!!>
    SUBROUTINE Config_Chem_State( filename, GridState, ChemState, RC )
-      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Indices_of_Species
+      USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Index_of_Species
       use Config_Opt_Mod, ONLY : ConfigType
       USE Error_Mod
       USE GridState_Mod, ONLY : GridStateType
@@ -514,9 +510,9 @@ CONTAINS
          RETURN
       ENDIF
 
-      CALL Find_Indices_of_Species(ChemState, RC)
+      CALL Find_Index_of_Species(ChemState, RC)
       IF (RC /= CC_SUCCESS) THEN
-         errMsg = 'Error in Find_Number_of_Species'
+         errMsg = 'Error in Find_Index_of_Species'
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
@@ -783,7 +779,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%SpcDatabaseFile = TRIM( v_str )
+      Config%Species_File = TRIM( v_str )
 
       key   = "simulation%emission_filename"
       v_str = MISSING_STR
