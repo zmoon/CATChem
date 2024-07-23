@@ -152,7 +152,7 @@ CONTAINS
          RETURN
       endif
 
-      call Config_Emis_State(config%EmissionDatabaseFile, EmisState, ChemState, RC)
+      call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
 
       !========================================================================
       ! Further error-checking and initialization
@@ -789,7 +789,7 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%EmissionDatabaseFile = TRIM( v_str )
+      Config%Emission_File = TRIM( v_str )
 
 
       ! Return success
