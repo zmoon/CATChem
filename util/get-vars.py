@@ -93,7 +93,7 @@ for vn, d in var_info.items():
     if f is not None:
         da *= f
 
-    das.append(da)
+    das.append(da.rename(vn))
 
 # Write to text file
 fmt = ".4e"
