@@ -78,5 +78,5 @@ with open(out_fp, "w") as f:
             data = ",".join(f"{x:{fmt}}" for x in da.values)
         else:
             raise AssertionError
-        line = ",".join([da.name, data])
+        line = ",".join([da.name, str(da.size), data])
         f.write(line + "\n")
