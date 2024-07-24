@@ -10,6 +10,7 @@ RUN = Path("/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control
 
 atm_fp = RUN / "atmf024.nc"
 sfc_fp = RUN / "sfcf024.nc"
+out_fp = Path("col.csv")
 
 # Target column
 lat, lon = 38.9721, -76.9245 + 360  # NCWCP
@@ -66,3 +67,11 @@ for vn, d in var_info.items():
         da *= f
 
     das.append(da)
+
+# Write to text file
+with open(out_fp, "w") as f:
+    for da in das:
+        assert da.ndim == 1
+        data = ",".join(f"{x:.4e}" for x in da.values)
+        line = ",".join([da.name, data])
+        f.write(line + "\n")
