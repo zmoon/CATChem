@@ -3,6 +3,7 @@ Extract a column of input data from various sources.
 """
 from pathlib import Path
 
+import numpy as np
 import xarray as xr
 import yaml
 
@@ -34,11 +35,27 @@ if "atm" in unique_src_ids:
         .squeeze()
     )
 
+    # Switch to sfc first
+    p = src["atm"]["pfull"].values
+    assert p[0] < p[-1]
+    p = src["atm"]["phalf"].values
+    assert p[0] < p[-1]
+    src["atm"] = src["atm"].isel(pfull=slice(None, None, -1), phalf=slice(None, None, -1))
+
     # Compute height
     assert "z" not in src["atm"].variables
     assert "zmid" not in src["atm"].variables
-    z = (src["atm"]["hgtsfc"] + src["atm"]["delz"]).cumsum(dim="pfull")  # TODO: result should be phalf dim
-    zmid = (z + z.shift(pfull=1)) / 2
+    zsfc = src["atm"]["hgtsfc"]
+    dz = src["atm"]["delz"]
+    if (dz < 0).all():
+        dz *= -1
+    ztop = (zsfc + dz).cumsum("pfull")
+    z = xr.DataArray(
+        data=np.concatenate(([zsfc.values], ztop.values)),
+        dims="phalf",
+        # coords={"phalf": src["atm"].coords["phalf"]},
+    )
+    zmid = ((z + z.shift(phalf=1)) / 2).isel(phalf=slice(1, None)).swap_dims(phalf="pfull")
     src["atm"] = src["atm"].assign_coords(z=z, zmid=zmid)
 
 src["sfc"] = None
@@ -50,6 +67,7 @@ if "sfc" in unique_src_ids:
         .sel(lat=lat, lon=lon, method="nearest")
         .squeeze()
     )
+    # TODO: switch to sfc first (for 3-d cloud frac)
 
 das = []
 for vn, d in var_info.items():
