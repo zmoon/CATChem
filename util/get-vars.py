@@ -7,11 +7,12 @@ import numpy as np
 import xarray as xr
 import yaml
 
+HERE = Path(__file__).parent
 RUN = Path("/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel")  # Hera
 
 atm_fp = RUN / "atmf024.nc"
 sfc_fp = RUN / "sfcf024.nc"
-out_fp = Path("col.csv")
+out_fp = HERE / "../tests" / "col.csv"
 
 # Target column
 lat, lon = 38.9721, -76.9245 + 360  # NCWCP
@@ -105,5 +106,6 @@ with open(out_fp, "w") as f:
             data = ",".join(f"{x:{fmt}}" for x in da.values)
         else:
             raise AssertionError
-        line = ",".join([da.name, str(da.size), data])
-        f.write(line + "\n")
+        info = ",".join([da.name, str(da.size)])
+        f.write(info + "\n")
+        f.write(data + "\n")
