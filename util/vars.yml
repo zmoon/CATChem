@@ -21,7 +21,7 @@ variables:
 
   # Brigg's (+ Sofiev above)
   zmid:
-    src: atm  # based on z
+    src: atm  # mid points of z
   qv:
     src: atm:spfh
   u:
