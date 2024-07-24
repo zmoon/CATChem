@@ -42,3 +42,14 @@ add_test(
   NAME test_ccpr_seasalt
   COMMAND test_seasalt
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_executable(test_prise test_plumerise.F90)
+target_link_libraries(test_prise PRIVATE CATChem_core)
+target_link_libraries(test_prise PRIVATE CATChem)
+target_link_libraries(test_prise PRIVATE testing)
+set_target_properties(test_prise PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+
+add_test(
+  NAME test_plumerise
+  COMMAND test_prise
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
