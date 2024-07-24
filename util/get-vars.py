@@ -15,6 +15,7 @@ out_fp = Path("col.csv")
 
 # Target column
 lat, lon = 38.9721, -76.9245 + 360  # NCWCP
+nz = 10  # limit the number of levels
 
 # Open vars.yml
 with open("vars.yml") as f:
@@ -36,10 +37,8 @@ if "atm" in unique_src_ids:
     )
 
     # Switch to sfc first
-    p = src["atm"]["pfull"].values
-    assert p[0] < p[-1]
-    p = src["atm"]["phalf"].values
-    assert p[0] < p[-1]
+    pmid, p = src["atm"]["pfull"].values, src["atm"]["phalf"].values
+    assert pmid[0] < pmid[-1] and p[0] < p[-1]
     src["atm"] = src["atm"].isel(pfull=slice(None, None, -1), phalf=slice(None, None, -1))
 
     # Compute height
@@ -58,6 +57,9 @@ if "atm" in unique_src_ids:
     zmid = ((z + z.shift(phalf=1)) / 2).isel(phalf=slice(1, None)).swap_dims(phalf="pfull")
     src["atm"] = src["atm"].assign_coords(z=z, zmid=zmid)
 
+    # Select levels
+    src["atm"] = src["atm"].isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
+
 src["sfc"] = None
 if "sfc" in unique_src_ids:
     src["sfc"] = (
@@ -67,7 +69,14 @@ if "sfc" in unique_src_ids:
         .sel(lat=lat, lon=lon, method="nearest")
         .squeeze()
     )
-    # TODO: switch to sfc first (for 3-d cloud frac)
+
+    # Switch to sfc first
+    pmid, p = src["sfc"]["pfull"].values, src["sfc"]["phalf"].values
+    assert pmid[0] < pmid[-1] and p[0] < p[-1]
+    src["sfc"] = src["sfc"].isel(pfull=slice(None, None, -1), phalf=slice(None, None, -1))
+
+    # Select levels
+    src["sfc"] = src["sfc"].isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
 
 das = []
 for vn, d in var_info.items():
