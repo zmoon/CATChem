@@ -69,9 +69,14 @@ for vn, d in var_info.items():
     das.append(da)
 
 # Write to text file
+fmt = ".4e"
 with open(out_fp, "w") as f:
     for da in das:
-        assert da.ndim == 1
-        data = ",".join(f"{x:.4e}" for x in da.values)
+        if da.ndim == 0:
+            data = f"{da.item():{fmt}}"
+        elif da.ndim == 1:
+            data = ",".join(f"{x:{fmt}}" for x in da.values)
+        else:
+            raise AssertionError
         line = ",".join([da.name, data])
         f.write(line + "\n")
