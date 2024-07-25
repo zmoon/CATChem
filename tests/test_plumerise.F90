@@ -76,5 +76,17 @@ program test_plumerise
       end if
       i = i + 1
    end do
+   print *, MetState%HFLUX
+   print *, MetState%PBLH
+   print *, MetState%PMID
+   print *, MetState%PS
+   print *, MetState%QV
+   print *, MetState%T
+   print *, MetState%T2M
+   print *, MetState%U
+   print *, MetState%USTAR
+   print *, MetState%V
+   print *, MetState%Z
+   print *, MetState%ZMID
 
 end program test_plumerise
