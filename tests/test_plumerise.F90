@@ -5,10 +5,12 @@ program test_plumerise
 
    implicit none
 
-   integer, parameter :: u = 99
+   integer, parameter :: u = 99  !< Unit number for loading column data
 
-   integer :: i, ios, n
-   character(len=255) :: vn
+   integer :: i
+   integer :: ios  !< File I/O status
+   integer :: n  !< Size of data to load
+   character(len=255) :: vn  !< Variable name
 
    i = 0
    vn = ""
@@ -19,7 +21,7 @@ program test_plumerise
    if (ios /= 0) error stop
    do
       if (mod(i, 2) == 0) then
-         ! Var info
+         ! Variable info
          read(u, *, iostat=ios) vn, n
          if (ios /= 0) exit
       else
