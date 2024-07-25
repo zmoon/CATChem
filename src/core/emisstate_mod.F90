@@ -50,8 +50,6 @@ module EmisState_Mod
       real(fp), ALLOCATABLE :: Scale(:)        !< Scale factor
       real(fp), ALLOCATABLE :: Flux(:)         !< Emission flux
       real(fp)              :: EmisHeight      !< Emission Height [m] - Simple emission height or -1 for PBLH
-      real(fp), ALLOCATABLE :: Scale(:)    !< Scale factor
-      real(fp), ALLOCATABLE :: Flux(:)     !< Total Emission flux [kg/m2/s]
       real(fp), ALLOCATABLE :: PlmSrcFlx(:)    !< Plumerise source emission flux [kg/m2/s]
       real(fp), ALLOCATABLE :: FRP(:)          !< Fire Radiative Power (W/m^2)
       real(fp), ALLOCATABLE :: STKDM(:)        !< Briggs stack diameter [m] (array of all point sources in grid cell)
@@ -110,9 +108,6 @@ module EmisState_Mod
       integer :: nCats         !< Number of emission categories
       integer :: nEmisTotal              !< Total number of emitted species
       integer :: nEmisTotalPlumerise     !< Total number of plume rise categories
-
-      character(len=10), ALLOCATABLE :: TotEmisNames(:)
-      type(EmisSpeciesType), ALLOCATABLE  :: TotSpecies(:) !< Total Emitted species container
 
       ! Types
       type(EmisSpeciesType), ALLOCATABLE :: TotSpecies(:) !< Emitted species container
