@@ -1092,7 +1092,7 @@ MODULE QFYAML_Mod
             EmisState%nCats = i ! number of total emission categories (level 0)
             ALLOCATE(EmisState%Cats(i), STAT=RC)
             IF ( RC /= 0 ) THEN
-               errMsg = 'Error allocating "EmisState%Cats"!'
+               errMsg = 'Error allocating "Cats"!'
                CALL Handle_Error( errMsg, RC, thisLoc )
                RETURN
             ENDIF
@@ -1130,6 +1130,7 @@ MODULE QFYAML_Mod
 
                   ! Set species names in the emission state
                   EmisState%Cats(i)%nSpecies = j ! number of species in this category
+                  ! write(*,*) '   Number of species in category ' // TRIM(current) // ': ', EmisState%Cats(i)%nSpecies
                   ALLOCATE(EmisState%Cats(i)%Species(j), STAT=RC) ! Allocate the number of species in each category
                   IF ( RC /= 0 ) THEN
                      errMsg = 'Error allocating "Species"!'
@@ -1139,6 +1140,8 @@ MODULE QFYAML_Mod
 
                   do s = 1, EmisState%Cats(i)%nSpecies
                      EmisState%Cats(i)%Species(s)%name = TRIM(names(s))
+                     ! write(*,*) '      Category: ' // TRIM(EmisState%Cats(i)%name) // ' Species: ' //  &
+                     !             TRIM(EmisState%Cats(i)%Species(s)%name)
                   enddo
 
                   ! Reset the current emis category Species names
@@ -1178,6 +1181,7 @@ MODULE QFYAML_Mod
             enddo
 
      END SUBROUTINE QFYAML_Read_Emis_File
+
      !>
      !!  Parses a single line of a YAML file and adds the relevant
      !!  variables to the yml configuration object.

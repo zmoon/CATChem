@@ -29,7 +29,7 @@ module EmisState_Mod
    !! \param units Units of the species
    !! \param nEmisMap Number of Emission mappings per emitted species
    !! \param EmisMapIndex Emission mapping to concentration index
-   !! \param EmisScale Scale factor
+   !! \param Scale Scale factor
    !! \param Flux Emission flux
    !!
    !!!>
@@ -50,6 +50,8 @@ module EmisState_Mod
       real(fp), ALLOCATABLE :: Scale(:)        !< Scale factor
       real(fp), ALLOCATABLE :: Flux(:)         !< Emission flux
       real(fp)              :: EmisHeight      !< Emission Height [m] - Simple emission height or -1 for PBLH
+      real(fp), ALLOCATABLE :: Scale(:)    !< Scale factor
+      real(fp), ALLOCATABLE :: Flux(:)     !< Total Emission flux [kg/m2/s]
       real(fp), ALLOCATABLE :: PlmSrcFlx(:)    !< Plumerise source emission flux [kg/m2/s]
       real(fp), ALLOCATABLE :: FRP(:)          !< Fire Radiative Power (W/m^2)
       real(fp), ALLOCATABLE :: STKDM(:)        !< Briggs stack diameter [m] (array of all point sources in grid cell)
@@ -106,8 +108,11 @@ module EmisState_Mod
 
       ! Integers
       integer :: nCats         !< Number of emission categories
-      integer :: nEmisTotal
-      integer :: nEmisCats
+      integer :: nEmisTotal              !< Total number of emitted species
+      integer :: nEmisTotalPlumerise     !< Total number of plume rise categories
+
+      character(len=10), ALLOCATABLE :: TotEmisNames(:)
+      type(EmisSpeciesType), ALLOCATABLE  :: TotSpecies(:) !< Total Emitted species container
 
       ! Types
       type(EmisSpeciesType), ALLOCATABLE :: TotSpecies(:) !< Emitted species container
@@ -251,6 +256,7 @@ CONTAINS
             ! Fill Total Species fluxes and properties
             EmisState%TotSpecies(t)%name = EmisState%TotEmisNames(s)
             EmisState%TotSpecies(t)%Flux = 0. ! set all fluxes to zero
+            EmisState%TotSpecies(t)%Flux = 0. ! set all fluxes to zero
             currName = EmisState%TotEmisNames(s)
             do c = 1, EmisState%nCats
                do s = 1, EmisState%Cats(c)%nSpecies
@@ -312,6 +318,7 @@ CONTAINS
                   return
                endif
                EmisState%Cats(c)%Species(s)%EmisMapIndex(n) = index
+               EmisState%Cats(c)%Species(s)%EmisMapIndex(n) = index
             enddo
          enddo
       enddo
@@ -355,6 +362,14 @@ CONTAINS
 
    end subroutine Apply_Emis_to_Chem
 
+   !> \brief Clean up the emission state
+   !!
+   !! \ingroup core_modules
+   !!
+   !! \param EmisState Emission State
+   !! \param RC Return code
+   !!
+   !!!>
    subroutine EmisState_CleanUp(EmisState, RC)
 
       TYPE(EmisStateType), INTENT(INOUT) :: EmisState
@@ -377,6 +392,7 @@ CONTAINS
       if (allocated(EmisState%TotEmisNames)) deallocate(EmisState%TotEmisNames)
       do c = 1, EmisState%nEmisTotal
          if (allocated(EmisState%TotSpecies(c)%Flux)) deallocate(EmisState%TotSpecies(c)%Flux)
+         if (allocated(EmisState%TotSpecies(c)%Flux)) deallocate(EmisState%TotSpecies(c)%Flux)
       end do
 
       ! Deallocate emission variables in each category
@@ -388,6 +404,7 @@ CONTAINS
                deallocate(EmisState%Cats(c)%Species(s)%EmisMapIndex)
          end do
       end do
+      if (allocated(EmisState%Cats)) deallocate(EmisState%Cats)
       if (allocated(EmisState%Cats)) deallocate(EmisState%Cats)
 
    end subroutine EmisState_CleanUp
