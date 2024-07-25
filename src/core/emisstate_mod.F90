@@ -377,5 +377,3 @@ CONTAINS
    end subroutine EmisState_CleanUp
 
 END MODULE EmisState_Mod
-
-
