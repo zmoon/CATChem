@@ -1,4 +1,12 @@
-
+!>
+!! \file emisstate_mod.F90
+!! \brief Emission Species State
+!!
+!! \details The Emission Species States contain information about the emitted species and
+!!          the emitted fluxes, scale factors, and speciation to concentration mappings.
+!!
+!! \ingroup core_modules
+!!!>
 module EmisState_Mod
 
    ! Uses
@@ -35,10 +43,19 @@ module EmisState_Mod
       ! Integers
       integer              :: nEmisMap         !< Number of Emission mappings per emitted species
       integer, ALLOCATABLE :: EmisMapIndex(:)  !< Emission mapping to concentration index
+      integer              :: plumerise        !< Plumerise option (default = 0 for no plumerise) sofiev = 1 briggs = 2 simple linear weighted thickness = 3
+      integer              :: EmisLayer        !< Emission layer
 
       ! Real
-      real(fp), ALLOCATABLE :: Scale(:)    !< Scale factor
-      real(fp), ALLOCATABLE :: Flux(:)     !< Emission flux
+      real(fp), ALLOCATABLE :: Scale(:)        !< Scale factor
+      real(fp), ALLOCATABLE :: Flux(:)         !< Emission flux
+      real(fp)              :: EmisHeight      !< Emission Height [m] - Simple emission height or -1 for PBLH
+      real(fp), ALLOCATABLE :: PlmSrcFlx(:)    !< Plumerise source emission flux [kg/m2/s]
+      real(fp), ALLOCATABLE :: FRP(:)          !< Fire Radiative Power (W/m^2)
+      real(fp), ALLOCATABLE :: STKDM(:)        !< Briggs stack diameter [m] (array of all point sources in grid cell)
+      real(fp), ALLOCATABLE :: STKHT(:)        !< Briggs stack thickness [m] (array of all point sources in grid cell)
+      real(fp), ALLOCATABLE :: STKTK(:)        !< Briggs stack thickness [m] (array of all point sources in grid cell)
+      real(fp), ALLOCATABLE :: STKVE(:)        !< Briggs stack velocity [m/s] (array of all point sources in grid cell)
 
    END TYPE EmisSpeciesType
 
@@ -61,6 +78,9 @@ module EmisState_Mod
 
       ! Integers
       integer              :: nSpecies                 !< Number of emitted species per process
+      integer              :: nPlumerise               !< Number of Species undergoing a Plumerise
+      
+      ! Types
       type(EmisSpeciesType), ALLOCATABLE :: Species(:) !< Emitted species container
 
    END TYPE EmisCategoryType
@@ -213,10 +233,6 @@ CONTAINS
          do c = 1, EmisState%nCats
             do s = 1, EmisState%Cats(c)%nSpecies
                currName = EmisState%Cats(c)%Species(s)%name
-               ! IsIn = .false.
-               ! do n = 1, EmisState%nEmisTotal
-               !    if (EmisState%TotEmisNames(n) == TRIM(currName)) IsIn = .True.
-               ! end do
                if ( ANY( EmisState%TotEmisNames == TRIM(currName) ) .eqv. .False. ) THEN
                   EmisState%nEmisTotal = EmisState%nEmisTotal + 1
                   EmisState%TotEmisNames = [EmisState%TotEmisNames, TRIM(currName)]
