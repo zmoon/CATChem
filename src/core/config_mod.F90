@@ -552,7 +552,7 @@ CONTAINS
 
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
-      character(len=QFYAML_NamLen), allocatable :: EmisCats(:)
+      character(len=QFYAML_NamLen), allocatable :: Cats(:)
       integer :: n, s, j
       CHARACTER(LEN=QFYAML_NamLen) :: key
       CHARACTER(LEN=QFYAML_NamLen) :: base
@@ -589,20 +589,20 @@ CONTAINS
 
       EmisState%nEmisTotal = 0
       EmisState%nEmisTotalPlumerise = 0
-      do n = 1, EmisState%nEmisCategories
-         EmisState%EmisCats(n)%nPlumerise = 0
-         EmisState%nEmisTotal = EmisState%nEmisTotal + EmisState%EmisCats(n)%nSpecies ! find total number of species emitted
-         do s = 1, EmisState%EmisCats(n)%nSpecies
-            base = TRIM(EmisState%EmisCats(n)%name) // '%' // TRIM(EmisState%EmisCats(n)%Species(s)%name)
+      do n = 1, EmisState%nCats
+         EmisState%Cats(n)%nPlumerise = 0
+         EmisState%nEmisTotal = EmisState%nEmisTotal + EmisState%Cats(n)%nSpecies ! find total number of species emitted
+         do s = 1, EmisState%Cats(n)%nSpecies
+            base = TRIM(EmisState%Cats(n)%name) // '%' // TRIM(EmisState%Cats(n)%Species(s)%name)
 
             ! get long_name of emission species in the category
             key =  TRIM(base) // '%long_name'
             v_str = MISSING_STR
             CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
             IF ( RC /= CC_SUCCESS ) THEN
-               v_str = EmisState%EmisCats(n)%Species(s)%name
+               v_str = EmisState%Cats(n)%Species(s)%name
             ENDIF
-            EmisState%EmisCats(n)%Species(s)%long_name = TRIM( v_str )
+            EmisState%Cats(n)%Species(s)%long_name = TRIM( v_str )
 
             ! get units of emission species in the category
             key =  TRIM(base) // '%units'
@@ -613,7 +613,7 @@ CONTAINS
             else if (v_str == MISSING_STR) then
                v_str = "kg m-2 s-1"
             endif
-            EmisState%EmisCats(n)%Species(s)%units = TRIM( v_str )
+            EmisState%Cats(n)%Species(s)%units = TRIM( v_str )
 
             ! Get the mapping of the emission species to the mechanism species
             key = TRIM(base) // '%map'
@@ -627,8 +627,8 @@ CONTAINS
                RETURN
             endif
             call QFYAML_String_to_String_Arr(v_str,                 &
-               EmisState%EmisCats(n)%Species(s)%EmisMapName,    &
-               EmisState%EmisCats(n)%Species(s)%nEmisMap,     &
+               EmisState%Cats(n)%Species(s)%EmisMapName,    &
+               EmisState%Cats(n)%Species(s)%nEmisMap,     &
                RC)
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in QFYAML_String_to_Real_Arr'
@@ -637,7 +637,7 @@ CONTAINS
                call QFYAML_CleanUp(ConfigAnchored)
                RETURN
             endif
-            j = EmisState%EmisCats(n)%Species(s)%nEmisMap ! temporary
+            j = EmisState%Cats(n)%Species(s)%nEmisMap ! temporary
 
             ! Get the scaling of the emissions to mapped species
             key = TRIM(base) // '%scale'
@@ -651,19 +651,19 @@ CONTAINS
                RETURN
             endif
             if (v_str == MISSING_STR) then
-               Allocate(EmisState%EmisCats(n)%Species(s)%EmisScale(j), STAT=RC)
+               Allocate(EmisState%Cats(n)%Species(s)%Scale(j), STAT=RC)
                if (RC /= CC_SUCCESS) then
-                  errMsg = 'Error allocating EmisState%EmisCats(n)%Species(s)%EmisScale'
+                  errMsg = 'Error allocating EmisState%Cats(n)%Species(s)%Scale'
                   call CC_Error(errMsg, RC, thisLoc)
                   call QFYAML_CleanUp(ConfigInput)
                   call QFYAML_CleanUp(ConfigAnchored)
                   RETURN
                endif
-               EmisState%EmisCats(n)%Species(s)%EmisScale = 1.0_fp
+               EmisState%Cats(n)%Species(s)%Scale = 1.0_fp
             else
                call QFYAML_String_to_Real_Arr(v_str,                 &
-                  EmisState%EmisCats(n)%Species(s)%EmisScale,    &
-                  EmisState%EmisCats(n)%Species(s)%nEmisMap,     &
+                  EmisState%Cats(n)%Species(s)%Scale,    &
+                  EmisState%Cats(n)%Species(s)%nEmisMap,     &
                   RC)
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in QFYAML_String_to_Real_Arr'
@@ -682,34 +682,34 @@ CONTAINS
             IF ( RC /= CC_SUCCESS .or. v_int < 0 ) THEN
                v_int = 0 ! default is no plumerise
             ENDIF
-            EmisState%EmisCats(n)%Species(s)%plumerise = v_int
+            EmisState%Cats(n)%Species(s)%plumerise = v_int
             if (v_int > 0 .and. v_int < 4) then
                EmisState%nEmisTotalPlumerise = EmisState%nEmisTotalPlumerise + 1
-               EmisState%EmisCats(n)%nPlumerise = EmisState%EmisCats(n)%nPlumerise + 1
+               EmisState%Cats(n)%nPlumerise = EmisState%Cats(n)%nPlumerise + 1
             endif
 
 
             ! get emission_layer of emission species in the category
-            if (EmisState%EmisCats(n)%Species(s)%plumerise == 0) then
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
                key =  TRIM(base) // '%emission_layer'
                v_int = MISSING_INT
                CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
                IF ( RC /= CC_SUCCESS .or. v_int < 0 ) THEN
                   v_int = 1
                ENDIF
-               EmisState%EmisCats(n)%Species(s)%EmisLayer = v_int
+               EmisState%Cats(n)%Species(s)%EmisLayer = v_int
             endif
 
             ! get emission_height of emission species in the category
-            if (EmisState%EmisCats(n)%Species(s)%plumerise == 0 .or. &
-               EmisState%EmisCats(n)%Species(s)%plumerise == 3) then
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0 .or. &
+               EmisState%Cats(n)%Species(s)%plumerise == 3) then
                key =  TRIM(base) // '%emission_height'
                v_real = MISSING_REAL
                CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
                IF ( RC /= CC_SUCCESS .or. v_real < 0._fp) THEN
                   v_real = 0._fp ! emitted at surface
                ENDIF
-               EmisState%EmisCats(n)%Species(s)%EmisHeight = v_real
+               EmisState%Cats(n)%Species(s)%EmisHeight = v_real
             endif
          enddo
       enddo
@@ -723,56 +723,56 @@ CONTAINS
       write(*,*) '==================================================='
       write(*,*) '| nEmisTotal:          ', EmisState%nEmisTotal
       write(*,*) '| nEmisTotalPlumerise: ', EmisState%nEmisTotalPlumerise
-      write(*,*) '| nEmisCategories:     ', EmisState%nEmisCategories
+      write(*,*) '| nCats:     ', EmisState%nCats
 
-      do n = 1, EmisState%nEmisCategories
-         write(*,*) '| Category: ', TRIM(EmisState%EmisCats(n)%name)
-         do s = 1, EmisState%EmisCats(n)%nSpecies
-            write(*,*) '|   Species:     ' // TRIM(EmisState%EmisCats(n)%Species(s)%name)
-            write(*,*) '|     long_name: ' // TRIM(EmisState%EmisCats(n)%Species(s)%long_name)
-            write(*,*) '|     units:     ' // TRIM(EmisState%EmisCats(n)%Species(s)%units)
-            write(*,*) '|     nEmisMap:  ', EmisState%EmisCats(n)%Species(s)%nEmisMap
-            do j = 1, EmisState%EmisCats(n)%Species(s)%nEmisMap
-               write(*,*) '|       Emission Mapping:  ' // TRIM(EmisState%EmisCats(n)%Species(s)%EmisMapName(j)) &
-                  // ' -> ', EmisState%EmisCats(n)%Species(s)%EmisScale(j)
+      do n = 1, EmisState%nCats
+         write(*,*) '| Category: ', TRIM(EmisState%Cats(n)%name)
+         do s = 1, EmisState%Cats(n)%nSpecies
+            write(*,*) '|   Species:     ' // TRIM(EmisState%Cats(n)%Species(s)%name)
+            write(*,*) '|     long_name: ' // TRIM(EmisState%Cats(n)%Species(s)%long_name)
+            write(*,*) '|     units:     ' // TRIM(EmisState%Cats(n)%Species(s)%units)
+            write(*,*) '|     nEmisMap:  ', EmisState%Cats(n)%Species(s)%nEmisMap
+            do j = 1, EmisState%Cats(n)%Species(s)%nEmisMap
+               write(*,*) '|       Emission Mapping:  ' // TRIM(EmisState%Cats(n)%Species(s)%EmisMapName(j)) &
+                  // ' -> ', EmisState%Cats(n)%Species(s)%Scale(j)
             enddo
 
-            if (EmisState%EmisCats(n)%Species(s)%plumerise == 3) then
-               if (EmisState%EmisCats(n)%Species(s)%EmisLayer == 0 .and. &
-                  EmisState%EmisCats(n)%Species(s)%EmisHeight == 0._fp) then
-                  EmisState%EmisCats(n)%Species(s)%plumerise = 0
+            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  EmisState%Cats(n)%Species(s)%plumerise = 0
                   write(*,*) '|     plumerise:  No plumerise EmisLayer or EmisHeight provided -> Set plumerise = 0'
                endif
             else
-               write(*,*) '|     plumerise:  ', EmisState%EmisCats(n)%Species(s)%plumerise
+               write(*,*) '|     plumerise:  ', EmisState%Cats(n)%Species(s)%plumerise
             endif
 
-            if (EmisState%EmisCats(n)%Species(s)%plumerise == 0) then
-               if (EmisState%EmisCats(n)%Species(s)%EmisLayer > 0 .and. &
-                  EmisState%EmisCats(n)%Species(s)%EmisHeight > 0._fp) then
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
                   write(*,*) '|     EmisLayer:  Both emission_layer and emission_height are set -> Use EmisHeight'
-                  write(*,*) '|     EmisHeight: ', EmisState%EmisCats(n)%Species(s)%EmisHeight
-               else if (EmisState%EmisCats(n)%Species(s)%EmisLayer == 0 .and. &
-                  EmisState%EmisCats(n)%Species(s)%EmisHeight > 0._fp) then
-                  write(*,*) '|     EmisHeight: ', EmisState%EmisCats(n)%Species(s)%EmisHeight
-               else if (EmisState%EmisCats(n)%Species(s)%EmisLayer > 0 .and. &
-                  EmisState%EmisCats(n)%Species(s)%EmisHeight == 0._fp) then
-                  write(*,*) '|     EmisLayer:  ', EmisState%EmisCats(n)%Species(s)%EmisLayer
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
+               else if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
+               else if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                else
                   write(*,*) '|     EmisLayer:  1'
                   write(*,*) '|     EmisHeight: Surface'
                endif
             endif
 
-            if (EmisState%EmisCats(n)%Species(s)%plumerise == 3) then
-               if (EmisState%EmisCats(n)%Species(s)%EmisLayer == 0) then
-                  write(*,*) '|     EmisHeight: ', EmisState%EmisCats(n)%Species(s)%EmisHeight
+            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0) then
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
                else
-                  write(*,*) '|     EmisLayer:  ', EmisState%EmisCats(n)%Species(s)%EmisLayer
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                endif
 
-               if (EmisState%EmisCats(n)%Species(s)%EmisHeight == 0._fp) then
-                  write(*,*) '|     EmisLayer:  ', EmisState%EmisCats(n)%Species(s)%EmisLayer
+               if (EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                endif
             endif
          enddo

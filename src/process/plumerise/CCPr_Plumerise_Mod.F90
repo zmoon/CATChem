@@ -136,20 +136,20 @@ CONTAINS
 
          if (EmisState%nEmisTotalPlumerise == 0) RETURN  ! no plumerise species listed in CATCHem_emission.yml
 
-         do c = 1, EmisState%nEmisCategories
+         do c = 1, EmisState%nCats
 
-            ! EmisState%EmisCats(c) plumerise options activated
-            if (EmisState%EmisCats(c)%nPlumerise /= 0) then  ! in EmisState%EmisCats(c) plumerise options activated
-               do s = 1, EmisState%EmisCats(c)%nSpecies ! loop over emitted species
-                  do p = 1, size(EmisState%EmisCats(c)%Species(s)%frp) ! loop over plume sources
-                     if (EmisState%EmisCats(c)%Species(s)%plumerise == 1) then ! Sofiev Plumerise
+            ! EmisState%Cats(c) plumerise options activated
+            if (EmisState%Cats(c)%nPlumerise /= 0) then  ! in EmisState%Cats(c) plumerise options activated
+               do s = 1, EmisState%Cats(c)%nSpecies ! loop over emitted species
+                  do p = 1, size(EmisState%Cats(c)%Species(s)%frp) ! loop over plume sources
+                     if (EmisState%Cats(c)%Species(s)%plumerise == 1) then ! Sofiev Plumerise
 
                         call CCPr_Sofiev_PlmriseHgt(MetState%Z,      &
                            MetState%T,                               &
                            MetState%PMID,                            &
                            MetState%PBLH,                            &
                            MetState%PS,                              &
-                           EmisState%EmisCats(c)%Species(s)%frp(p),  &
+                           EmisState%Cats(c)%Species(s)%frp(p),  &
                            plmHGT,                                   &
                            EFRAC)
                         if (RC /= CC_SUCCESS) then
@@ -160,10 +160,10 @@ CONTAINS
                         ! Add emission to ColEmis for total Emission in grid cell due to plumerise
                         ! Will Speciate out afterwards to concentration at end
                         do z = 1, GridState%number_of_levels
-                           ColEmis(z) = ColEmis(z) + EmisState%EmisCats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
+                           ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
                         enddo
 
-                     else if (EmisState%EmisCats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
+                     else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
                            MetState%ZMID,                               &
                            MetState%T,                                  &
@@ -177,10 +177,10 @@ CONTAINS
                            MetState%T2M,                                &
                            MetState%PS,                                 &
                            SIZE(MetState%T),                            &
-                           EmisState%EmisCats(c)%Species(s)%STKDM(p),   &
-                           EmisState%EmisCats(c)%Species(s)%STKHT(p),   &
-                           EmisState%EmisCats(c)%Species(s)%STKTK(p),   &
-                           EmisState%EmisCats(c)%Species(s)%STKVE(p),   &
+                           EmisState%Cats(c)%Species(s)%STKDM(p),   &
+                           EmisState%Cats(c)%Species(s)%STKHT(p),   &
+                           EmisState%Cats(c)%Species(s)%STKTK(p),   &
+                           EmisState%Cats(c)%Species(s)%STKVE(p),   &
                            plmHGT,                                      &
                            EFRAC)
                         if (RC /= CC_SUCCESS) then
@@ -189,17 +189,17 @@ CONTAINS
                         endif
 
                         do z = 1, GridState%number_of_levels
-                           ColEmis(z) = ColEmis(z) + EmisState%EmisCats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
+                           ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
                         enddo
 
                      end if ! plume source loop
                   end do ! p - Plumerise Source Loop
 
                   ! Add emission to ColEmis to Species total flux in grid cell
-                  EmisState%EmisCats(c)%Species(s)%EmisFlux = ColEmis
+                  EmisState%Cats(c)%Species(s)%Flux = ColEmis
 
                enddo ! s - Species List Loop
-            end if ! End Plumerise Condition within EmisState%EmisCats(c)
+            end if ! End Plumerise Condition within EmisState%Cats(c)
          enddo ! c - Category List Loop
 
       endif ! Activate
