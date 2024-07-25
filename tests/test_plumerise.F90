@@ -1,4 +1,4 @@
-program test_dust
+program test_plumerise
    use CATChem, fp => cc_rk
    use testing_mod, only: assert
    use state_mod
