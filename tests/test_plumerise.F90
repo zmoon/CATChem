@@ -10,6 +10,7 @@ program test_plumerise
    integer :: i, ios, n
    character(len=255) :: vn
 
+   i = 0
    vn = ""
    n = 0
 
@@ -73,6 +74,7 @@ program test_plumerise
             error stop
          end select
       end if
+      i = i + 1
    end do
 
 end program test_plumerise
