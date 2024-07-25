@@ -76,17 +76,17 @@ program test_plumerise
       end if
       i = i + 1
    end do
-   print *, MetState%HFLUX
-   print *, MetState%PBLH
-   print *, MetState%PMID
-   print *, MetState%PS
-   print *, MetState%QV
-   print *, MetState%T
-   print *, MetState%T2M
-   print *, MetState%U
-   print *, MetState%USTAR
-   print *, MetState%V
-   print *, MetState%Z
-   print *, MetState%ZMID
+   print *, "HFLUX:", MetState%HFLUX
+   print *, "PBLH:", MetState%PBLH
+   print *, "PMID:", MetState%PMID
+   print *, "PS:", MetState%PS
+   print *, "QV:", MetState%QV
+   print *, "T:", MetState%T
+   print *, "T2M:", MetState%T2M
+   print *, "U:", MetState%U
+   print *, "USTAR:", MetState%USTAR
+   print *, "V:", MetState%V
+   print *, "Z:", MetState%Z
+   print *, "ZMID:", MetState%ZMID
 
 end program test_plumerise
