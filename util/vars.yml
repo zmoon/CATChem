@@ -1,0 +1,36 @@
+# Get variables from GFS-Aerosols run
+#
+# atm: `atmf???.nc` outputs
+# sfc: `sfcf???.nc` outputs
+
+variables:
+  # MetState variables
+
+  # Sofiev
+  z:
+    src: atm  # combine hgtsfc (geopotential height at sfc) and delz (layer thickness; m)
+  t:
+    src: atm:tmp
+  pmid:
+    src: atm:pfull  # phalf are the interfaces
+  pblh:
+    src: sfc:hpbl
+  ps:
+    src: sfc:pressfc
+    f: 100  # Pa -> hPa
+
+  # Brigg's (+ Sofiev above)
+  zmid:
+    src: atm  # mid points of z
+  qv:
+    src: atm:spfh
+  u:
+    src: atm:ugrd
+  v:
+    src: atm:vgrd
+  hflux:
+    src: sfc:shtfl_ave
+  ustar:
+    src: sfc:fricv  # note the model output has units "XXX"
+  t2m:
+    src: sfc:tmp2m
