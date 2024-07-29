@@ -28,6 +28,12 @@ program test_plumerise
          ! Data
          print *, "Reading: " // trim(vn)
          select case (vn)
+          case ("gwetroot")
+            read(u, *, iostat=ios) MetState%GWETROOT
+            if (ios /= 0) exit
+          case ("gwettop")
+            read(u, *, iostat=ios) MetState%GWETTOP
+            if (ios /= 0) exit
           case ("hflux")
             read(u, *, iostat=ios) MetState%HFLUX
             if (ios /= 0) exit
@@ -45,6 +51,9 @@ program test_plumerise
             allocate(MetState%QV(n))
             read(u, *, iostat=ios) MetState%QV
             if (ios /= 0) exit
+          case ("swgdn")
+            read(u, *, iostat=ios) MetState%SWGDN
+            if (ios /= 0) exit
           case ("t")
             allocate(MetState%T(n))
             read(u, *, iostat=ios) MetState%T
@@ -56,12 +65,18 @@ program test_plumerise
             allocate(MetState%U(n))
             read(u, *, iostat=ios) MetState%U
             if (ios /= 0) exit
+          case ("u10m")
+            read(u, *, iostat=ios) MetState%U10M
+            if (ios /= 0) exit
           case ("ustar")
             read(u, *, iostat=ios) MetState%USTAR
             if (ios /= 0) exit
           case ("v")
             allocate(MetState%V(n))
             read(u, *, iostat=ios) MetState%V
+            if (ios /= 0) exit
+          case ("v10m")
+            read(u, *, iostat=ios) MetState%V10M
             if (ios /= 0) exit
           case ("z")
             allocate(MetState%Z(n))
@@ -78,16 +93,21 @@ program test_plumerise
       end if
       i = i + 1
    end do
+   print *, "GWETROOT:", MetState%GWETROOT
+   print *, "GWETTOP:", MetState%GWETTOP
    print *, "HFLUX:", MetState%HFLUX
    print *, "PBLH:", MetState%PBLH
    print *, "PMID:", MetState%PMID
    print *, "PS:", MetState%PS
    print *, "QV:", MetState%QV
+   print *, "SWGDN:", MetState%SWGDN
    print *, "T:", MetState%T
    print *, "T2M:", MetState%T2M
    print *, "U:", MetState%U
+   print *, "U10M:", MetState%U10M
    print *, "USTAR:", MetState%USTAR
    print *, "V:", MetState%V
+   print *, "V10M:", MetState%V10M
    print *, "Z:", MetState%Z
    print *, "ZMID:", MetState%ZMID
 
