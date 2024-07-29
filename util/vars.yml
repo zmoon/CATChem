@@ -40,3 +40,9 @@ variables:
     src: sfc
   gwetroot:
     src: sfc
+
+  # 10-m wind
+  u10m:
+    src: sfc:ugrd10m
+  v10m:
+    src: sfc:vgrd10m
