@@ -46,3 +46,9 @@ variables:
     src: sfc:ugrd10m
   v10m:
     src: sfc:vgrd10m
+
+  # Radiation
+  swgdn:
+    src: sfc:dswrf_ave
+  # lwgdn:
+  #   src: sfc:dlwrf_ave
