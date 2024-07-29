@@ -28,7 +28,7 @@ program test_dust
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
    write(*,*) ''
-   write(*,*) ''
+   write(*,*) '  SEA SALT TEST'
 
    !----------------------------
    ! Test 1
