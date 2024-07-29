@@ -79,11 +79,28 @@ if "sfc" in unique_src_ids:
     # Select levels
     src["sfc"] = src["sfc"].isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
 
+    # Compute soil moisture variables
+    #
+    # soilw{1..4}: volumetric (fraction) soil moisture at 10, 30, 60, 100 cm
+    # Noah predicts values at layer midpoints:
+    # - [0, 10)    5
+    # - [10, 40)   25
+    # - [40, 100)  70
+    # - [100, 200) 150
+    #
+    # GWETTOP: 0--5 cm avg?
+    # GWETROOT: 10--100 cm avg?
+    src["sfc"]["gwettop"] = src["sfc"]["soilw1"]  # FIXME: this is value at 5 cm, not 0--5 cm avg
+    src["sfc"]["gwetroot"] = (src["sfc"]["soilw2"] * 30 + src["sfc"]["soilw3"] * 60) / 90
+
 das = []
 for vn, d in var_info.items():
     if vn in {"z", "zmid"}:
-        assert d["src"] == "atm"  # diagnosed
+        assert d["src"] == "atm", "diagnosed"
         src_id, src_vn = "atm", vn
+    elif vn in {"gwettop", "gwetroot"}:
+        assert d["src"] == "sfc", "diagnosed"
+        src_id, src_vn = "sfc", vn
     else:
         src_id, src_vn = d["src"].split(":")
 

@@ -34,3 +34,9 @@ variables:
     src: sfc:fricv  # note the model output has units "XXX"
   t2m:
     src: sfc:tmp2m
+
+  # Soil moisture
+  gwettop:
+    src: sfc
+  gwetroot:
+    src: sfc
