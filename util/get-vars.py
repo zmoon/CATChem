@@ -19,7 +19,7 @@ lat, lon = 38.9721, -76.9245 + 360  # NCWCP
 nz = 30  # limit the number of levels (set to ``None`` for all levels)
 
 # Open vars.yml
-with open("vars.yml") as f:
+with open(HERE / "vars.yml") as f:
     var_info = yaml.safe_load(f)["variables"]
 
 unique_src_ids = {d["src"].split(":")[0] for d in var_info.values()}
