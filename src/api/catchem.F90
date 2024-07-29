@@ -25,7 +25,7 @@ module CATChem
    use ChemState_Mod, only: cc_get_species_conc => GetSpecConc
    use ChemState_Mod, only: cc_get_species_conc_by_name => GetSpecConcByName
    use ChemState_Mod, only: cc_get_species_conc_by_index => GetSpecConcByIndex
-   use ChemState_Mod, only: cc_allocate_chemstate => Allocate_ChemState
+   use ChemState_Mod, only: cc_allocate_chemstate => Chem_Allocate
 
    !-------------------
    ! Configuration Read
