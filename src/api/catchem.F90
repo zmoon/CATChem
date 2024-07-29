@@ -21,11 +21,16 @@ module CATChem
    !----------------
    ! Core routines
    !----------------
+   ! chemstate
    use ChemState_Mod, only: cc_find_species_by_name => FindSpecByName
    use ChemState_Mod, only: cc_get_species_conc => GetSpecConc
    use ChemState_Mod, only: cc_get_species_conc_by_name => GetSpecConcByName
    use ChemState_Mod, only: cc_get_species_conc_by_index => GetSpecConcByIndex
-   use ChemState_Mod, only: cc_allocate_chemstate => Allocate_ChemState
+   use ChemState_Mod, only: cc_allocate_chemstate => Chem_Allocate
+   ! metstate
+   use MetState_Mod, only: cc_allocate_metstate => Met_Allocate
+   ! diagstate
+   use DiagState_Mod, only: cc_allocate_diagstate => Diag_Allocate
 
    !-------------------
    ! Configuration Read
@@ -63,9 +68,9 @@ module CATChem
    use CCPr_SeaSalt_mod, only: cc_seasalt_run => CCPr_SeaSalt_Run               !< SeaSalt Process Run Routine
    use CCPr_SeaSalt_mod, only: cc_seasalt_finalize => CCPr_SeaSalt_Finalize     !< SeaSalt Process Finalization Routine
    ! Plumerise
-   use CCPr_Plumerise_mod, only : PlumeriseStateType                          !< Plumerise State
-   use CCPr_Plumerise_mod, only: cc_plumerise_init => CCPr_Plumerise_Init       !< Plumerise Process Initialization Routine
-   use CCPr_Plumerise_mod, only: cc_plumerise_run => CCPr_Plumerise_Run         !< Plumerise Process Run Routine
+   use CCPr_Plumerise_mod, only : PlumeRiseStateType                              !< Plumerise State
+   use CCPr_Plumerise_mod, only: cc_plumerise_init => CCPr_Plumerise_Init         !< Plumerise Process Initialization Routine
+   use CCPr_Plumerise_mod, only: cc_plumerise_run => CCPr_Plumerise_Run           !< Plumerise Process Run Routine
    use CCPr_Plumerise_mod, only: cc_plumerise_finalize => CCPr_Plumerise_Finalize !< Plumerise Process Finalization Routine
 
    implicit none
