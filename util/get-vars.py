@@ -16,7 +16,7 @@ out_fp = HERE / "../tests" / "col.csv"
 
 # Target column
 lat, lon = 38.9721, -76.9245 + 360  # NCWCP
-nz = 10  # limit the number of levels
+nz = 30  # limit the number of levels (set to ``None`` for all levels)
 
 # Open vars.yml
 with open("vars.yml") as f:
