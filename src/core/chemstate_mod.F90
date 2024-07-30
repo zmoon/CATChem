@@ -1,4 +1,4 @@
-!> \file chemstate_mod.F90
+!>
 !! \brief Contains the `ChemStateType` data type and related subroutines and functions.
 !!
 !!
