@@ -90,10 +90,66 @@ contains
             ! Data
             ! print *, "Reading: " // trim(vn)
             select case (vn)
+             case ("bxheight")
+               read(unum, *, iostat=ios) MetState%BXHEIGHT
+               if (ios /= 0) then
+                  print *, "Error reading BXHEIGHT: ", ios
+                  return
+               end if
+             case ("cldf")
+               read(unum, *, iostat=ios) MetState%CLDF
+               if (ios /= 0) then
+                  print *, "Error reading CLDF: ", ios
+                  return
+               end if
+             case ("delp")
+               read(unum, *, iostat=ios) MetState%DELP
+               if (ios /= 0) then
+                  print *, "Error reading DELP: ", ios
+                  return
+               end if
+             case ("dsoiltype")
+               read(unum, *, iostat=ios) tmpReal
+               MetState%DSOILTYPE = int(tmpReal)
+               if (ios /= 0) then
+                  print *, "Error reading DSOILTYPE: ", ios
+                  return
+               end if
+             case ("eflux")
+               read(unum, *, iostat=ios) MetState%EFLUX ! [W/m^2]
+               if (ios /= 0) then
+                  print *, "Error reading EFLUX: ", ios
+                  return
+               end if
+             case ("frsno")
+               read(unum, *, iostat=ios) MetState%FRSNO
+               if (ios /= 0) then
+                  print *, "Error reading FRSNO: ", ios
+                  return
+               end if
+             case ("frveg")
+               read(unum, *, iostat=ios) MetState%FRVEG
+               if (ios /= 0) then
+                  print *, "Error reading FRVEG: ", ios
+                  return
+               end if
+             case ("gvf")
+               read(unum, *, iostat=ios) MetState%GVF
+               if (ios /= 0) then
+                  print *, "Error reading GVF: ", ios
+                  return
+               end if
              case ("hflux")
                read(unum, *, iostat=ios) MetState%HFLUX
                if (ios /= 0) then
                   print *, "Error reading HFLUX: ", ios
+                  return
+               end if
+             case ("lwi")
+               read(unum, *, iostat=ios) tmpReal
+               MetState%LWI = int(tmpReal)
+               if (ios /= 0) then
+                  print *, "Error reading LWI: ", ios
                   return
                end if
              case ("pblh")
@@ -120,6 +176,32 @@ contains
                   print *, "Error reading QV: ", ios
                   return
                end if
+             case ("snodp")
+               read(unum, iostat=ios) tmpStr
+               write(*,*) tmpReal
+               MetState%SNODP = tmpReal
+               if (ios /= 0) then
+                  print *, "Error reading SNODP: ", ios
+                  return
+               end if
+             case ("snomas")
+               read(unum, *, iostat=ios) MetState%SNOMAS
+               if (ios /= 0) then
+                  print *, "Error reading SNOMAS: ", ios
+                  return
+               end if
+             case ("soilm")
+               read(unum, *, iostat=ios) MetState%SOILM
+               if (ios /= 0) then
+                  print *, "Error reading SOILM: ", ios
+                  return
+               end if
+             case ("sphu")
+               read(unum, *, iostat=ios) MetState%SPHU
+               if (ios /= 0) then
+                  print *, "Error reading SPHU: ", ios
+                  return
+               end if
              case ("t")
                read(unum, *, iostat=ios) MetState%T
                if (ios /= 0) then
@@ -132,10 +214,22 @@ contains
                   print *, "Error reading T2M: ", ios
                   return
                end if
+             case ("ts")
+               read(unum, *, iostat=ios) MetState%TS
+               if (ios /= 0) then
+                  print *, "Error reading TS: ", ios
+                  return
+               end if
              case ("u")
                read(unum, *, iostat=ios) MetState%U
                if (ios /= 0) then
                   print *, "Error reading U: ", ios
+                  return
+               end if
+             case ("u10m")
+               read(unum, *, iostat=ios) MetState%U10M
+               if (ios /= 0) then
+                  print *, "Error reading U10M: ", ios
                   return
                end if
              case ("ustar")
@@ -150,16 +244,10 @@ contains
                   print *, "Error reading V: ", ios
                   return
                end if
-             case ("z")
-               read(unum, *, iostat=ios) MetState%Z
+             case ("v10m")
+               read(unum, *, iostat=ios) MetState%V10M
                if (ios /= 0) then
-                  print *, "Error reading Z: ", ios
-                  return
-               end if
-             case ("zmid")
-               read(unum, *, iostat=ios) MetState%ZMID
-               if (ios /= 0) then
-                  print *, "Error reading ZMID: ", ios
+                  print *, "Error reading V10M: ", ios
                   return
                end if
              case ("wilt")
@@ -168,48 +256,10 @@ contains
                   print *, "Error reading WILT: ", ios
                   return
                end if
-             case ("weasd")
-               read(unum, *, iostat=ios) MetState%SNOMAS
+             case ("z")
+               read(unum, *, iostat=ios) MetState%Z
                if (ios /= 0) then
-                  print *, "Error reading SNOMAS: ", ios
-                  return
-               end if
-             case ("lwi")
-               read(unum, *, iostat=ios) tmpReal
-               MetState%LWI = int(tmpReal)
-               if (ios /= 0) then
-                  print *, "Error reading DLUSE: ", ios
-                  return
-               end if
-             case ("vtype")
-               read(unum, *, iostat=ios) tmpReal
-               MetState%DLUSE = int(tmpReal)
-               if (ios /= 0) then
-                  print *, "Error reading DLUSE: ", ios
-                  return
-               end if
-             case ("vfrac")
-               read(unum, *, iostat=ios) MetState%GVF
-               if (ios /= 0) then
-                  print *, "Error reading GVF: ", ios
-                  return
-               end if
-             case ("v10m")
-               read(unum, *, iostat=ios) MetState%V10M
-               if (ios /= 0) then
-                  print *, "Error reading V10M: ", ios
-                  return
-               end if
-             case ("u10m")
-               read(unum, *, iostat=ios) MetState%U10M
-               if (ios /= 0) then
-                  print *, "Error reading U10M: ", ios
-                  return
-               end if
-             case ("lhtfl")
-               read(unum, *, iostat=ios) MetState%EFLUX ! [W/m^2]
-               if (ios /= 0) then
-                  print *, "Error reading EFLUX: ", ios
+                  print *, "Error reading Z: ", ios
                   return
                end if
              case ("z0")
@@ -218,85 +268,10 @@ contains
                   print *, "Error reading Z0: ", ios
                   return
                end if
-             case ("soilw4")
-               read(unum, *, iostat=ios) MetState%SOILM(4)
+             case ("zmid")
+               read(unum, *, iostat=ios) MetState%ZMID
                if (ios /= 0) then
-                  print *, "Error reading SOILM: ", ios
-                  return
-               end if
-             case ("soilw3")
-               read(unum, *, iostat=ios) MetState%SOILM(3)
-               if (ios /= 0) then
-                  print *, "Error reading SOILM: ", ios
-                  return
-               end if
-             case ("soilw2")
-               read(unum, *, iostat=ios) MetState%SOILM(2)
-               if (ios /= 0) then
-                  print *, "Error reading SOILM: ", ios
-                  return
-               end if
-             case ("soilw1")
-               read(unum, *, iostat=ios) MetState%SOILM(1)
-               if (ios /= 0) then
-                  print *, "Error reading SOILM: ", ios
-                  return
-               end if
-             case ("cldfra")
-               read(unum, *, iostat=ios) MetState%CLDFRC
-               if (ios /= 0) then
-                  print *, "Error reading CLDFRC: ", ios
-                  return
-               end if
-             case ("tmpsfc")
-               read(unum, *, iostat=ios) MetState%TS
-               if (ios /= 0) then
-                  print *, "Error reading TS: ", ios
-                  return
-               end if
-             case ("sotyp")
-               read(unum, *, iostat=ios) tmpReal
-               MetState%DSOILTYPE = int(tmpReal)
-               if (ios /= 0) then
-                  print *, "Error reading DSOILTYPE: ", ios
-                  return
-               end if
-             case ("snowc")
-               read(unum, *, iostat=ios) MetState%FRSNO
-               if (ios /= 0) then
-                  print *, "Error reading FRSNO: ", ios
-                  return
-               end if
-             case ("pwat")
-               read(unum, *, iostat=ios) MetState%PRECTOT
-               if (ios /= 0) then
-                  print *, "Error reading PRECTOT: ", ios
-                  return
-               end if
-             case ("sphu")
-               read(unum, *, iostat=ios) MetState%SPHU
-               if (ios /= 0) then
-                  print *, "Error reading SPHU: ", ios
-                  return
-               end if
-             case ("delp")
-               read(unum, *, iostat=ios) MetState%DELP
-               if (ios /= 0) then
-                  print *, "Error reading DELP: ", ios
-                  return
-               end if
-             case ("delz")
-               read(unum, *, iostat=ios) MetState%BXHEIGHT
-               if (ios /= 0) then
-                  print *, "Error reading BXHEIGHT: ", ios
-                  return
-               end if
-             case ("snowd")
-               read(unum, iostat=ios) tmpStr
-               write(*,*) tmpReal
-               MetState%SNODP = tmpReal
-               if (ios /= 0) then
-                  print *, "Error reading SNODP: ", ios
+                  print *, "Error reading ZMID: ", ios
                   return
                end if
              case default

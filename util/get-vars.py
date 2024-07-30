@@ -93,12 +93,15 @@ if "sfc" in unique_src_ids:
     src["sfc"]["gwettop"] = src["sfc"]["soilw1"]  # FIXME: this is value at 5 cm, not 0--5 cm avg
     src["sfc"]["gwetroot"] = (src["sfc"]["soilw2"] * 30 + src["sfc"]["soilw3"] * 60) / 90
 
+    # Combine soil moisture into one array
+    src["sfc"]["soilm"] = xr.concat([src["sfc"][f"soilw{i}"] for i in range(1, 5)], dim="soil")
+
 das = []
 for vn, d in var_info.items():
     if vn in {"z", "zmid"}:
         assert d["src"] == "atm", "diagnosed"
         src_id, src_vn = "atm", vn
-    elif vn in {"gwettop", "gwetroot"}:
+    elif vn in {"gwettop", "gwetroot", "soilm"}:
         assert d["src"] == "sfc", "diagnosed"
         src_id, src_vn = "sfc", vn
     else:
@@ -116,7 +119,7 @@ for vn, d in var_info.items():
 # Write to text file
 # TODO: if the number of levels is too large it currently writes multiple lines (truncation to next line) in the output
 #       Needs to be on a single line
-fmt = ".4e"
+fmt = ".4e"  # TODO: only for floats
 with open(out_fp, "w") as f:
     for da in das:
         if da.ndim == 0:

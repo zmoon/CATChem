@@ -64,7 +64,8 @@ MODULE MetState_Mod
       INTEGER               :: LWI             !< Land water ice mask (0-sea, 1-land, 2-ice)
       REAL(fp)              :: CLAYFRAC        !< Fraction of clay [1]
       INTEGER               :: DSOILTYPE       !< Dominant soil type
-      INTEGER               :: DLUSE           !< Fraction of veg [1]
+      INTEGER               :: DLUSE           !< Dominant land-use type
+      INTEGER               :: FRVEG           !< Fraction of veg [1]
       REAL(fp)              :: FRLAKE          !< Fraction of lake [1]
       REAL(fp)              :: FRLAND          !< Fraction of land [1]
       REAL(fp)              :: FRLANDIC        !< Fraction of land ice [1]
