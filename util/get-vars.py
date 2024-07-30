@@ -177,7 +177,7 @@ print_var_tpl = """\
 print *, "{upper_vn}:", MetState%{upper_vn}
 """
 print_var_arr_tpl = """\
-print *, "{upper_vn} (size={size}):", MetState%{upper_vn}
+print *, "{upper_vn}:", size(MetState%{upper_vn}), MetState%{upper_vn}
 """
 print_var_indent = 3 * 3
 print_var_title = "print column data"
