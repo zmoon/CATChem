@@ -194,13 +194,13 @@ contains
                   print *, "Error reading GVF: ", ios
                   return
                end if
-             case ("vgrd10m")
+             case ("v10m")
                read(unum, *, iostat=ios) MetState%V10M
                if (ios /= 0) then
                   print *, "Error reading V10M: ", ios
                   return
                end if
-             case ("ugrd10m")
+             case ("u10m")
                read(unum, *, iostat=ios) MetState%U10M
                if (ios /= 0) then
                   print *, "Error reading U10M: ", ios

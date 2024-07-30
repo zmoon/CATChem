@@ -76,10 +76,6 @@ variables:
     src: sfc:vtype
   vfrac:  # vegetation fraction
     src: sfc:veg
-  vgrd10m:  # 10m wind speed
-    src: sfc:vgrd10m
-  ugrd10m:  # 10m wind speed
-    src: sfc:ugrd10m
   tmpsfc:  # surface temperature
     src: sfc:tmpsfc
   sotyp:  # soil type
