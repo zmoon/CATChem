@@ -276,7 +276,11 @@ contains
                end if
              case default
                print *, "Variable from file not used: " // trim(vn)
-               ! error stop
+               read(unum, *, iostat=ios)
+               if (ios /= 0) then
+                  print *, "Error advancing: ", ios
+                  return
+               end if
             end select
          end if
          i = i + 1
