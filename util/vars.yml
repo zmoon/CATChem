@@ -41,24 +41,14 @@ variables:
     src: sfc:fricv  # note the model output has units "XXX"
   t2m:
     src: sfc:tmp2m
-
-  snrw:  # snow mixing ratio
-    src: atm:snmr
   spfh: # specific humidity
     src: atm:spfh
-  rwmr:  # water mixing ratio
-    src: atm:rwmr
-  grle:  # graupel mixing ratio
-    src: atm:grle
-  icmr:  # ice mixing ratio
-    src: atm:icmr
   delp:  # pressure thickness
     src: atm:dpres
   delz:  # layer thickness
     src: atm:delz
   clwmr:  # liquid water mixing ratio
     src: atm:clwmr
-
   wilt:  # wilting point
     src: sfc:wiltpnt
   weasd:  # water equivalent of snow
@@ -75,10 +65,6 @@ variables:
     src: sfc:dswrf
   dlwrf:  # Surface Downward longwave Solar Flux - instantaneous
     src: sfc:dlwrf
-  uswrf: # Surface Upward shortwave Solar Flux - instantaneous
-    src: sfc:uswrf
-  ulwrf: # Surface Upward longwave Solar Flux - instantaneous
-    src: sfc:ulwrf
   tmpsfc:  # surface temperature
     src: sfc:tmpsfc
   sotyp:  # soil type
@@ -91,14 +77,10 @@ variables:
     src: sfc:soilw2
   soilw1:  # 1-layer soil moisture
     src: sfc:soilw1
-  snowd:  # snow depth
-    src: sfc:snod
   snowc:  # snow cover
     src: sfc:snowc_ave
   shtfl:  # surface sensible heat flux
     src: sfc:shtfl
-  snoalb: # snow albedo
-    src: sfc:snoalb
   z0:  # roughness length
     src: sfc:sfcr
   pwat:
