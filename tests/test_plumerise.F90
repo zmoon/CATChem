@@ -17,14 +17,6 @@ program test_plumerise
    CHARACTER(LEN=255) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
 
-   real, ALLOCATABLE :: PMID(:)
-   real, ALLOCATABLE :: QV(:)
-   real, ALLOCATABLE :: T(:)
-   real, ALLOCATABLE :: U(:)
-   real, ALLOCATABLE :: V(:)
-   real, ALLOCATABLE :: Z(:)
-   real, ALLOCATABLE :: ZMID(:)
-
    thisLoc = 'test_plumerise -> at read CATChem_Config.yml'
    errMsg = ''
    rc = CC_SUCCESS
