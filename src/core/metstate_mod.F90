@@ -65,7 +65,7 @@ MODULE MetState_Mod
       REAL(fp)              :: CLAYFRAC        !< Fraction of clay [1]
       INTEGER               :: DSOILTYPE       !< Dominant soil type
       INTEGER               :: DLUSE           !< Dominant land-use type
-      INTEGER               :: FRVEG           !< Fraction of veg [1]
+      REAL(fp)              :: FRVEG           !< Fraction of veg [1]
       REAL(fp)              :: FRLAKE          !< Fraction of lake [1]
       REAL(fp)              :: FRLAND          !< Fraction of land [1]
       REAL(fp)              :: FRLANDIC        !< Fraction of land ice [1]
