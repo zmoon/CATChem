@@ -2,6 +2,7 @@
 Extract a column of input data from various sources.
 """
 from pathlib import Path
+from textwrap import indent
 
 import numpy as np
 import pandas as pd
@@ -153,3 +154,51 @@ for d in ctl["cases"]:
             info = ",".join([da.name, str(da.size)])
             f.write(info + "\n")
             f.write(data + "\n")
+
+# Modify testing module
+
+fp = HERE / "../tests/testin_mod.f90"
+with open(fp) as f:
+    lines = f.readlines()
+
+read_var_tpl = """\
+case ("{vn}")
+  read(unum, *, iostat=ios) MetState%{upper_vn}
+  if (ios /= 0) then
+     print *, "Error reading {upper_vn}:", ios
+     rc = 1
+     return
+  end if
+"""
+read_var_indent = 3 * 4 + 1
+read_var_title = "read column data"
+
+print_var_tpl = """\
+print *, "{upper_vn}:", MetState%{upper_vn}
+"""
+print_var_indent = 3 * 3
+print_var_title = "print column data"
+
+read_var_blocks = []
+print_var_lines = []
+for da in das:
+    vn = da.name
+    upper_vn = vn.upper()
+    read_var_blocks.append(read_var_tpl.format(vn=vn, upper_vn=upper_vn))
+    print_var_lines.append(print_var_tpl.format(upper_vn=upper_vn))
+
+read_var_str = "\n".join(indent(block, " " * read_var_indent) for block in read_var_blocks)
+print_var_str = "\n".join(indent(line, " " * print_var_indent) for line in print_var_lines)
+
+lines_strip = [line.strip() for line in lines]
+a = lines_strip.index(f"! <<< {read_var_title} <<<")
+b = lines_strip.index(f"! >>> {read_var_title} >>>")
+lines = lines[:a + 1] + [read_var_str] + lines[b:]
+
+lines_strip = [line.strip() for line in lines]
+a = lines_strip.index(f"! <<< {print_var_title} <<<")
+b = lines_strip.index(f"! >>> {print_var_title} >>>")
+lines = lines[:a + 1] + [print_var_str] + lines[b:]
+
+with open(fp, "w") as f:
+    f.writelines(lines)

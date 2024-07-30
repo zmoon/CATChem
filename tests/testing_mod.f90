@@ -1,5 +1,6 @@
 module testing_mod
    use iso_fortran_env, only: rk => real32
+
    implicit none
 
    private
@@ -48,18 +49,16 @@ contains
       end if
    end subroutine assert_close
 
-   subroutine load_column_data(filename, MetState, rc)
+   subroutine load_column_data(filename, MetState, rc, verbose)
       use MetState_Mod, only: MetStateType
 
-      implicit none
-
-      type(MetStateType), intent(inout) :: MetState
-
       character(len=*), intent(in) :: filename
-
+      type(MetStateType), intent(inout) :: MetState
       integer, intent(inout) :: rc
+      logical, intent(in), optional :: verbose  !< Print info (defaults to false)
 
       ! Local Variables
+      logical :: verbose_
       integer, parameter :: unum = 99  !< Unit number for loading column data
       integer :: i
       integer :: ios  !< File I/O status
@@ -70,11 +69,17 @@ contains
       character(len=255) :: vn  !< Variable name
       character(len=8) :: fmt ! format descriptor
       character(len=3) :: tmp
-      fmt = '(I3.3)'
+
+      if (.not. present(verbose)) then
+         verbose_ = .false.
+      else
+         verbose_ = verbose
+      end if
 
       i = 0
       vn = ""
       n = 0
+      fmt = '(I3.3)'
 
       ! Load the data
       open(unit=unum, file=TRIM(filename), iostat=ios)
@@ -87,8 +92,8 @@ contains
             print*, "Reading: " // trim(vn) // " | size: " // trim(tmp)
             if (ios /= 0) return
          else
-            ! Data
-            ! print *, "Reading: " // trim(vn)
+            ! >>> read column data >>>
+            if (verbose_) print *, "Reading: " // trim(vn)
             select case (vn)
              case ("bxheight")
                read(unum, *, iostat=ios) MetState%BXHEIGHT
@@ -272,49 +277,23 @@ contains
                   print *, "Error reading ZMID: ", ios
                   return
                end if
+               ! <<< read column data <<<
              case default
                print *, "Variable from file not used: " // trim(vn)
                read(unum, *, iostat=ios)
                if (ios /= 0) then
-                  print *, "Error advancing: ", ios
+                  print *, "Error advancing to next line in file:", ios
+                  rc = 1
                   return
                end if
             end select
          end if
          i = i + 1
       end do
-      ! print *, '==================================================='
-      ! print *, "Column data loaded"
-      ! print *, "==================================================="
-      ! print *, "HFLUX:", MetState%HFLUX
-      ! print *, "PBLH:", MetState%PBLH
-      ! print *, "PMID:", MetState%PMID
-      ! print *, "PS:", MetState%PS
-      ! print *, "QV:", MetState%QV
-      ! print *, "T:", MetState%T
-      ! print *, "T2M:", MetState%T2M
-      ! print *, "U:", MetState%U
-      ! print *, "USTAR:", MetState%USTAR
-      ! print *, "V:", MetState%V
-      ! print *, "Z:", MetState%Z
-      ! print *, "ZMID:", MetState%ZMID
-      ! print *, "WILT:", MetState%WILT
-      ! print *, "SNOMAS:", MetState%SNOMAS
-      ! print *, "VTYPE:", MetState%DLUSE
-      ! print *, "VFRAC:", MetState%GVF
-      ! print *, "V10M:", MetState%V10M
-      ! print *, "U10M:", MetState%U10M
-      ! print *, "PARDF:", MetState%PARDF
-      ! print *, "PARDR:", MetState%PARDR
-      ! print *, "EFLUX:", MetState%EFLUX
-      ! print *, "Z0:", MetState%Z0
-      ! print *, "SOILM:", MetState%SOILM
-      ! print *, "CLDFRC:", MetState%CLDFRC
-      ! print *, "TS:", MetState%TS
-      ! print *, "SOILTYP:", MetState%DSOILTYPE
-      ! print *, "FRSNO:", MetState%FRSNO
-      ! print *, "PRECTOT:", MetState%PRECTOT
-      ! print *, "==================================================="
+      if (verbose) then
+         ! >>> print column data >>>
+         ! <<< print column data <<<
+      end if
 
    end subroutine load_column_data
 
