@@ -1,6 +1,4 @@
-set(_srcs CCPr_Plumerise_Mod.F90 ccpr_scheme_briggs_mod.F90 ccpr_scheme_sofiev_mod.F90)
-
-# set(_srcs CCPr_Plumerise_Mod.F90 ccpr_scheme_briggs_mod.F90 ccpr_scheme_sofiev_mod.F90)
+set(_srcs CCPr_Plumerise_Mod.F90 CCPR_Scheme_Briggs_Mod.F90 CCPr_Scheme_Sofiev_Mod.F90)
 
 set(_lib CATChem_process_plumerise)
 
