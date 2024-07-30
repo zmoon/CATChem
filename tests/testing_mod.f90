@@ -50,6 +50,7 @@ contains
    end subroutine assert_close
 
    subroutine load_column_data(filename, MetState, rc, verbose)
+      use, intrinsic :: iso_fortran_env, only: iostat_end
       use MetState_Mod, only: MetStateType
 
       character(len=*), intent(in) :: filename
@@ -62,13 +63,9 @@ contains
       integer, parameter :: unum = 99  !< Unit number for loading column data
       integer :: i
       integer :: ios  !< File I/O status
-      character(len=255) :: isomsg
       integer :: n  !< Size of data to load
-      real :: tmpReal !< Temporary integer
-      character(len=10) :: tmpStr
       character(len=255) :: vn  !< Variable name
-      character(len=8) :: fmt ! format descriptor
-      character(len=3) :: tmp
+      character(len=5) :: tmp
 
       if (.not. present(verbose)) then
          verbose_ = .false.
@@ -79,7 +76,6 @@ contains
       i = 0
       vn = ""
       n = 0
-      fmt = '(I3.3)'
 
       ! Load the data
       open(unit=unum, file=TRIM(filename), iostat=ios)
@@ -88,11 +84,17 @@ contains
          if (mod(i, 2) == 0) then
             ! Variable info
             read(unum, *, iostat=ios) vn, n
-            write(tmp, fmt) n
-            print*, "Reading: " // trim(vn) // " | size: " // trim(tmp)
-            if (ios /= 0) return
+            if (ios == iostat_end) exit
+            if (ios /= 0) then
+               print *, "Error reading header line", i
+               rc = 1
+               return
+            end if
+            if (verbose_) then
+               write(tmp, "(i0)") n
+               print*, "Reading: " // trim(vn) // " | size: " // trim(tmp)
+            end if
          else
-            if (verbose_) print *, "Reading: " // trim(vn)
             select case (vn)
                ! >>> read column data >>>
              case ("bxheight")
@@ -339,7 +341,7 @@ contains
          end if
          i = i + 1
       end do
-      if (verbose) then
+      if (verbose_) then
          ! >>> print column data >>>
          print *, "BXHEIGHT:", MetState%BXHEIGHT
          print *, "CLDF:", MetState%CLDF

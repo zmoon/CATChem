@@ -48,7 +48,7 @@ program test_plumerise
    print*, 'Allocated MetState'
 
    ! Meteorological State
-   call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc)
+   call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc, verbose=.true.)
 
    ! Allocate EmisState with FRP
    do c = 1, EmisState%nCats
