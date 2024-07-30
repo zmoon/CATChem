@@ -273,7 +273,7 @@ contains
                   print *, "Error reading PRECTOT: ", ios
                   return
                end if
-             case ("spfh")
+             case ("sphu")
                read(unum, *, iostat=ios) MetState%SPHU
                if (ios /= 0) then
                   print *, "Error reading SPHU: ", ios

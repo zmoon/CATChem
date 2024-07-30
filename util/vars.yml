@@ -29,7 +29,7 @@ variables:
   # Brigg's (+ Sofiev above)
   zmid:
     src: atm  # mid points of z
-  qv:
+  qv:  # specific humidity (kg/kg)
     src: atm:spfh
   u:
     src: atm:ugrd
@@ -60,8 +60,10 @@ variables:
   # lwgdn:
   #   src: sfc:dlwrf_ave
 
-  spfh: # specific humidity
+  sphu: # specific humidity
     src: atm:spfh
+    f: 1000  # kg/kg -> g/kg
+
   delp:  # pressure thickness
     src: atm:dpres
   delz:  # layer thickness
