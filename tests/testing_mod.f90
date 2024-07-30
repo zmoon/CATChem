@@ -343,9 +343,9 @@ contains
       end do
       if (verbose_) then
          ! >>> print column data >>>
-         print *, "BXHEIGHT:", MetState%BXHEIGHT
-         print *, "CLDF:", MetState%CLDF
-         print *, "DELP:", MetState%DELP
+         print *, "BXHEIGHT:", size(MetState%BXHEIGHT), MetState%BXHEIGHT
+         print *, "CLDF:", size(MetState%CLDF), MetState%CLDF
+         print *, "DELP:", size(MetState%DELP), MetState%DELP
          print *, "DSOILTYPE:", MetState%DSOILTYPE
          print *, "EFLUX:", MetState%EFLUX
          print *, "FRSNO:", MetState%FRSNO
@@ -355,27 +355,27 @@ contains
          print *, "HFLUX:", MetState%HFLUX
          print *, "LWI:", MetState%LWI
          print *, "PBLH:", MetState%PBLH
-         print *, "PMID:", MetState%PMID
+         print *, "PMID:", size(MetState%PMID), MetState%PMID
          print *, "PS:", MetState%PS
-         print *, "QL:", MetState%QL
-         print *, "QV:", MetState%QV
+         print *, "QL:", size(MetState%QL), MetState%QL
+         print *, "QV:", size(MetState%QV), MetState%QV
          print *, "SNODP:", MetState%SNODP
          print *, "SNOMAS:", MetState%SNOMAS
-         print *, "SOILM:", MetState%SOILM
-         print *, "SPHU:", MetState%SPHU
+         print *, "SOILM:", size(MetState%SOILM), MetState%SOILM
+         print *, "SPHU:", size(MetState%SPHU), MetState%SPHU
          print *, "SWGDN:", MetState%SWGDN
-         print *, "T:", MetState%T
+         print *, "T:", size(MetState%T), MetState%T
          print *, "T2M:", MetState%T2M
          print *, "TS:", MetState%TS
-         print *, "U:", MetState%U
+         print *, "U:", size(MetState%U), MetState%U
          print *, "U10M:", MetState%U10M
          print *, "USTAR:", MetState%USTAR
-         print *, "V:", MetState%V
+         print *, "V:", size(MetState%V), MetState%V
          print *, "V10M:", MetState%V10M
          print *, "WILT:", MetState%WILT
-         print *, "Z:", MetState%Z
+         print *, "Z:", size(MetState%Z), MetState%Z
          print *, "Z0:", MetState%Z0
-         print *, "ZMID:", MetState%ZMID
+         print *, "ZMID:", size(MetState%ZMID), MetState%ZMID
          ! <<< print column data <<<
       end if
 
