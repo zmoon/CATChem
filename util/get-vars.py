@@ -104,6 +104,12 @@ for d in ctl["cases"]:
         # Combine soil moisture into one array
         ds["soilm"] = xr.concat([ds[f"soilw{i}"] for i in range(1, 5)], dim="soil")
 
+        # sotyp, land, vtype are stored as float, maybe to support null mask?
+        # But they seem to be all non-null, though with zeros (land 53.8%, sotyp/vtype 66.3%)
+        for vn in ["sotyp", "land", "vtype"]:
+            if vn in ds.variables:
+                ds[vn] = ds[vn].astype(int)
+
         # Store
         src["sfc"] = ds
 
