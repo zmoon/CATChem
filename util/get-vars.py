@@ -176,6 +176,9 @@ read_var_title = "read column data"
 print_var_tpl = """\
 print *, "{upper_vn}:", MetState%{upper_vn}
 """
+print_var_arr_tpl = """\
+print *, "{upper_vn} (size={size}):", MetState%{upper_vn}
+"""
 print_var_indent = 3 * 3
 print_var_title = "print column data"
 
@@ -187,8 +190,16 @@ for da in sorted(das, key=lambda x: x.name.lower()):
     skip = var_info[vn].get("skip", False)
     if skip:  # not in MetState yet
         continue
+
     read_var_blocks.append(read_var_tpl.format(vn=vn, upper_vn=upper_vn))
-    print_var_lines.append(print_var_tpl.format(upper_vn=upper_vn))
+
+    if da.ndim == 0:
+        line = print_var_tpl.format(upper_vn=upper_vn)
+    elif da.ndim == 1:
+        line = print_var_arr_tpl.format(upper_vn=upper_vn, size=da.size)
+    else:
+        raise AssertionError
+    print_var_lines.append(line)
 
 read_var_str = "".join(indent(block, " " * read_var_indent) for block in read_var_blocks)
 print_var_str = "".join(indent(line, " " * print_var_indent) for line in print_var_lines)
