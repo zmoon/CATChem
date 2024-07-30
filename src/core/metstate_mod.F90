@@ -37,9 +37,10 @@ MODULE MetState_Mod
    TYPE, PUBLIC :: MetStateType
 
       CHARACTER(LEN=3)             :: State     = 'MET'    ! Name of this state
-      !----------------------------------------------------------------------
-      ! Surface fields
-      !----------------------------------------------------------------------
+
+      ! NLEVS
+      !------
+      INTEGER               :: NLEVS             !< Number of vertical levels
 
       ! TIMESTEP
       !---------
@@ -60,8 +61,10 @@ MODULE MetState_Mod
       ! Land Specific Fields
       !---------------------
       REAL(fp)              :: AREA_M2         !< Grid box surface area [m2]
+      INTEGER               :: LWI             !< Land water ice mask (0-sea, 1-land, 2-ice)
       REAL(fp)              :: CLAYFRAC        !< Fraction of clay [1]
       INTEGER               :: DSOILTYPE       !< Dominant soil type
+      INTEGER               :: DLUSE           !< Fraction of veg [1]
       REAL(fp)              :: FRLAKE          !< Fraction of lake [1]
       REAL(fp)              :: FRLAND          !< Fraction of land [1]
       REAL(fp)              :: FRLANDIC        !< Fraction of land ice [1]
@@ -69,6 +72,7 @@ MODULE MetState_Mod
       REAL(fp)              :: FRSEAICE        !< Sfc sea ice fraction
       REAL(fp)              :: FRSNO           !< Sfc snow fraction
       REAL(fp)              :: LAI             !< Leaf area index [m2/m2] (online) Dominant
+      REAL(fp)              :: GVF             !< Green Vegetative Fraction
       REAL(fp)              :: RDRAG           !< Drag Partition [1]
       REAL(fp)              :: SANDFRAC        !< Fraction of sand [1]
       REAL(fp)              :: SEAICE00        !< Sea ice coverage 00-10%
@@ -86,7 +90,11 @@ MODULE MetState_Mod
       REAL(fp)              :: SSM             !< Sediment Supply Map [1]
       REAL(fp)              :: USTAR_THRESHOLD !< Threshold friction velocity [m/s]
       INTEGER,  ALLOCATABLE :: nLNDTYPE        !< # of landtypes in box (I,J)
+      REAL(fp)              :: GWETTOP         !< Top soil moisture [1]
+      REAL(fp)              :: GWETROOT        !< Root Zone soil moisture [1]
+      REAL(fp)              :: WILT            !< Wilt point [1]
       INTEGER,  ALLOCATABLE :: nSOIL           !< # number of soil layers
+      REAL(fp), ALLOCATABLE :: SOILM(:)        !< Volumetric Soil moisture [m3/m3]
       REAL(fp), ALLOCATABLE :: FRLANDUSE(:)    !< Fractional Land Use
       REAL(fp), ALLOCATABLE :: FRLAI(:)        !< LAI in each Fractional Land use type [m2/m2]
 
@@ -103,22 +111,19 @@ MODULE MetState_Mod
       REAL(fp)              :: SZAFACT        !< Diurnal scale factor for HEMCO OH diurnal variability (computed) [1]
       REAL(fp)              :: SWGDN          !< Incident radiation @ ground [W/m2]
 
-      ! Soil Related Fields
-      !--------------------
-      REAL(fp)              :: GWETTOP        !< Top soil moisture [1]
-      REAL(fp)              :: GWETROOT       !< Root Zone soil moisture [1]
+
 
       ! Flux Related Fields
       !--------------------
-      REAL(fp)              :: EFLUX          !< Latent heat flux [W/m2]
-      REAL(fp)              :: HFLUX          !< Sensible heat flux [W/m2]
-      REAL(fp)              :: U10M           !< E/W wind speed @ 10m ht [m/s]
-      REAL(fp)              :: USTAR          !< Friction velocity [m/s]
-      REAL(fp)              :: V10M           !< N/S wind speed @ 10m ht [m/s]
-      REAL(fp)              :: Z0             !< Surface roughness height [m]
-      REAL(fp), ALLOCATABLE :: FRZ0           !< Aerodynamic Roughness Length per FRLANDUSE
-      REAL(fp)              :: PBLH           !< PBL height [m]
-      REAL(fp), ALLOCATABLE :: F_OF_PBL      (:) !< Fraction of box within PBL [1]
+      REAL(fp)              :: EFLUX             !< Latent heat flux [W/m2]
+      REAL(fp)              :: HFLUX             !< Sensible heat flux [W/m2]
+      REAL(fp)              :: U10M              !< E/W wind speed @ 10m ht [m/s]
+      REAL(fp)              :: USTAR             !< Friction velocity [m/s]
+      REAL(fp)              :: V10M              !< N/S wind speed @ 10m ht [m/s]
+      REAL(fp)              :: Z0                !< Surface roughness height [m]
+      REAL(fp), ALLOCATABLE :: FRZ0(:)           !< Aerodynamic Roughness Length per FRLANDUSE
+      REAL(fp)              :: PBLH              !< PBL height [m]
+      REAL(fp), ALLOCATABLE :: F_OF_PBL(:)       !< Fraction of box within PBL [1]
       REAL(fp), ALLOCATABLE :: F_UNDER_PBLTOP(:) !< Fraction of box under PBL top
 
       ! Cloud & Precipitation Related Fields
@@ -250,6 +255,8 @@ CONTAINS
       !--------------------------------------------------
       ! Initialize fields
       !--------------------------------------------------
+      MetState%nSOIL = GridState%number_of_soil_layers
+      print*, 'MetState%nSOIL = ', MetState%nSOIL
 
       ! Visible Surface Albedo
       !-----------------------
@@ -299,6 +306,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -307,6 +315,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InPbl'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -315,6 +324,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratMeso'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -323,6 +333,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InTroposphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -332,6 +343,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%F_OF_PBL'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -340,9 +352,9 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%F_UNDER_PBLTOP'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
-
 
       ! Cloud / Precipitation
       if (.not. allocated(MetState%CLDF)) then
@@ -350,6 +362,8 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%CLDF'
             call CC_Error(errMsg, RC, thisLoc)
+            return
+            return
          endif
       end if
 
@@ -358,6 +372,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%CMFMC'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -366,6 +381,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%DQRCU'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -374,6 +390,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%DQRLSAN'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -382,6 +399,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%DTRAIN'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -390,6 +408,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%QI'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -398,6 +417,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%QL'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -406,6 +426,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%PFICU'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -414,6 +435,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%PFILSAN'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -422,6 +444,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%PFLCU'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -430,6 +453,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%PFLLSAN'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -438,6 +462,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%TAUCLI'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -446,6 +471,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%TAUCLW'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -455,6 +481,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%Z'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -463,6 +490,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%ZMID'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -471,6 +499,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%BXHEIGHT'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -479,6 +508,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -487,6 +517,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%T'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -495,6 +526,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%THETA'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -503,6 +535,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%TV'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -511,6 +544,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -519,6 +553,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -527,6 +562,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%OMEGA'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -535,6 +571,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -543,6 +580,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -551,6 +589,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -559,6 +598,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -567,6 +607,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -575,6 +616,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -583,6 +625,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -591,6 +634,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -599,6 +643,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -607,6 +652,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -615,6 +661,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -623,6 +670,7 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
@@ -631,6 +679,16 @@ CONTAINS
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)
+            return
+         endif
+      end if
+
+      if (.not. allocated(MetState%SOILM)) then
+         allocate(MetState%SOILM(MetState%nSOIL), stat=RC)
+         if (RC /= CC_SUCCESS) then
+            errMsg = 'Error allocating MetState%InStratosphere'
+            call CC_Error(errMsg, RC, thisLoc)
+            return
          endif
       end if
 
