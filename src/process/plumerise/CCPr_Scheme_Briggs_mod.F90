@@ -140,8 +140,8 @@ contains
       REAL,    INTENT( IN )  :: TA   ( : )      ! temperature [deg K]
       REAL,    INTENT( IN )  :: UW  ( : )       ! x-direction winds
       REAL,    INTENT( IN )  :: VW  ( : )       ! y-direction winds
-      REAL,    INTENT( IN )  :: PRESS( 0: )      ! PRESS at full layer hts (mod by YOJ)
-      REAL,    INTENT( IN )  :: ZF ( 0:  )      ! layer surface height [m]
+      REAL,    INTENT( IN )  :: PRESS( : )      ! PRESS at full layer hts (mod by YOJ)
+      REAL,    INTENT( IN )  :: ZF ( :  )      ! layer surface height [m]
       REAL,    INTENT( IN )  :: ZH   ( : )      ! layer center height [m]
       REAL,    INTENT( OUT ) :: ZPLM            ! temporarily, plume top height
       REAL,    INTENT( OUT ) :: TFRAC( : )      ! Plume Fractions
