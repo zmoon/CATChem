@@ -2,14 +2,20 @@
 #
 # atm: `atmf???.nc` outputs
 # sfc: `sfcf???.nc` outputs
-control:
-  lat: 22.0
-  lon: 18.0
-  nz: 127
-  outname: '../tests/col.csv'
-  atmFile: 'atmf012.nc'
-  sfcFile: 'sfcf012.nc'
-  srcLoc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel"
+cases:
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf024.nc"
+    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf024.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf012.nc"
+    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA.csv"
 
 variables:
   # keys: MetState variables in lowercase
