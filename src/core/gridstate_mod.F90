@@ -22,6 +22,7 @@ module GridState_Mod
       integer :: nx = 1
       integer :: ny = 1
       integer :: number_of_levels  !< The number of vertical levels
+      integer :: number_of_soil_layers  !< The number of soil layers
 
       ! Reals
       real(fp) :: area  !< Grid cell horizontal area [m^2]
