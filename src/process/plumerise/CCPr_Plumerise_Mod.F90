@@ -17,9 +17,8 @@ MODULE CCPr_Plumerise_mod
    PUBLIC :: CCPR_Plumerise_Run
    PUBLIC :: CCPR_Plumerise_Init
    PUBLIC :: CCPR_Plumerise_Finalize
-   PUBLIC :: PlumeRiseStateType
 
-   TYPE :: PlumeRiseStateType
+   TYPE, PUBLIC :: PlumeRiseStateType
       Logical :: activate      !< Activate Plume Rise
    END TYPE PlumeRiseStateType
 
@@ -30,20 +29,19 @@ CONTAINS
    !!
    !! \param Config_Opt  CATCHem configuration options
    !! \param PlumeriseState   CATCHem Plumerise state
-   !! \param ChmState    CATCHem chemical state
+   !! \param ChemState    CATCHem chemical state
    !! \param RC          Error return code
    !!
    !! \ingroup catchem_plumerise_process
    !!!>
-   SUBROUTINE CCPR_Plumerise_Init( Config, PlumeriseState, RC)
+   SUBROUTINE CCPR_Plumerise_Init(PlumeriseState, RC)
       ! USES
 
       IMPLICIT NONE
 
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(ConfigType),    intent(in)    :: Config     ! Config options
-      TYPE(PlumeriseStateType), intent(inout) :: PlumeriseState  ! Nullify Plumerise State During INIT
+      TYPE(PlumeriseStateType), intent(inout) :: PlumeriseState  !< Nullify Plumerise State During INIT
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
@@ -91,7 +89,7 @@ CONTAINS
    !!
    !! \ingroup catchem_plumerise_process
    !!!>
-   SUBROUTINE CCPr_Plumerise_Run( MetState, GridState, PlumeriseState, ChemState, RC )
+   SUBROUTINE CCPr_Plumerise_Run(PlumeriseState, RC, verbose_opt )
 
       ! USE
       USE ccpr_scheme_sofiev_mod, ONLY : CCPr_Sofiev_Plmrise
@@ -101,17 +99,20 @@ CONTAINS
 
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
-      TYPE(GridStateType), INTENT(IN) :: GridState      ! GridState Instance
+      ! TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
+      ! TYPE(GridStateType), INTENT(IN) :: GridState      ! GridState Instance
+      ! TYPE(EmisStateType), INTENT(IN) :: EmisState      ! EmisState Instance
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
       TYPE(PlumeriseStateType), INTENT(INOUT) :: PlumeriseState   ! PlumeriseState Instance
-      TYPE(ChemStateType), INTENT(INOUT) :: ChemState  ! ChemState Instance
+      ! TYPE(ChemStateType), INTENT(INOUT) :: ChemState  ! ChemState Instance
 
       ! OUTPUT PARAMETERS
       !------------------
       INTEGER, INTENT(OUT) :: RC                         ! Return Code
+
+      LOGICAL, OPTIONAL, INTENT(IN) :: verbose_opt
 
       ! LOCAL VARIABLES
       !----------------
@@ -120,7 +121,7 @@ CONTAINS
       Integer :: s ! Emitted Species
       Integer :: p ! Plumerise source length counter
       Integer :: z ! Vertical counter
-
+      Logical :: verbose
 
       REAL(fp) :: plmHGT                              ! Plumerise Height [m]
       REAL(fp) :: EFRAC(GridState%number_of_levels)   ! Emission fraction
@@ -132,28 +133,35 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_Plumerise_Run (in process/Plumerise/ccpr_Plumerise_mod.F90)'
 
+      if (present(verbose_opt) .eqv. .true.) then
+         if (verbose_opt .eqv. .true.) then
+            verbose=.TRUE.
+         else
+            verbose=.FALSE.
+         endif
+      else
+         verbose=.FALSE.
+      endif
+
       if (PlumeriseState%Activate) then
-
          if (EmisState%nEmisTotalPlumerise == 0) RETURN  ! no plumerise species listed in CATCHem_emission.yml
-
          do c = 1, EmisState%nCats
-
-            ! EmisState%Cats(c) plumerise options activated
             if (EmisState%Cats(c)%nPlumerise /= 0) then  ! in EmisState%Cats(c) plumerise options activated
                do s = 1, EmisState%Cats(c)%nSpecies ! loop over emitted species
-                  do p = 1, size(EmisState%Cats(c)%Species(s)%frp) ! loop over plume sources
+                  do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc ! loop over plume sources
                      if (EmisState%Cats(c)%Species(s)%plumerise == 1) then ! Sofiev Plumerise
 
-                        call CCPr_Sofiev_PlmriseHgt(MetState%Z,      &
-                           MetState%T,                               &
-                           MetState%PMID,                            &
-                           MetState%PBLH,                            &
-                           MetState%PS,                              &
+                        call CCPr_Sofiev_Plmrise(MetState%Z,     &
+                           MetState%T,                           &
+                           MetState%PMID,                        &
+                           MetState%PBLH,                        &
+                           MetState%PS,                          &
                            EmisState%Cats(c)%Species(s)%frp(p),  &
-                           plmHGT,                                   &
-                           EFRAC)
+                           plmHGT,                               &
+                           EFRAC,                                &
+                           RC)
                         if (RC /= CC_SUCCESS) then
-                           errMsg = 'Error in CCPr_Sofiev_PlmriseHgt'
+                           errMsg = 'Error in CCPr_Sofiev_Plmrise'
                            CALL CC_Error( errMsg, RC, thisLoc )
                         endif
 
@@ -193,6 +201,24 @@ CONTAINS
                         enddo
 
                      end if ! plume source loop
+
+                     if (verbose .eqv. .true.) then
+                        write(*,*) '------------ PLUMERISE ---------------'
+                        write(*,*) 'Category: ', EmisState%Cats(c)%Name
+                        write(*,*) 'Species: ', EmisState%Cats(c)%Species(s)%Name
+                        write(*,*) 'PlmHGT: ', plmHGT
+                        write(*,*) 'PlmSrcFlx: ', EmisState%Cats(c)%Species(s)%PlmSrcFlx(p)
+                        if (EmisState%Cats(c)%Species(s)%plumerise == 2) then
+                           write(*,*) 'PlumriseOpt: BRIGGS'
+                           write(*,*) '  STKDM: ', EmisState%Cats(c)%Species(s)%STKDM(p)
+                           write(*,*) '  STKHT: ', EmisState%Cats(c)%Species(s)%STKHT(p)
+                           write(*,*) '  STKTK: ', EmisState%Cats(c)%Species(s)%STKTK(p)
+                           write(*,*) '  STKVE: ', EmisState%Cats(c)%Species(s)%STKVE(p)
+                        else if (EmisState%Cats(c)%Species(s)%plumerise == 1) then
+                           write(*,*) 'PlumriseOpt: SOFIEV'
+                           write(*,*) '  FRP: ', EmisState%Cats(c)%Species(s)%frp(p)
+                        endif
+                     endif
                   end do ! p - Plumerise Source Loop
 
                   ! Add emission to ColEmis to Species total flux in grid cell

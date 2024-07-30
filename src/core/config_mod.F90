@@ -38,7 +38,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Read_Input_File( Config , GridState, EmisState, ChemState, RC )
+   SUBROUTINE Read_Input_File( Config , GridState, EmisState, ChemState, RC, ConfigFilename )
 !
 ! !USES:
 !
@@ -47,6 +47,9 @@ CONTAINS
       USE GridState_Mod, ONLY : GridStateType
       use ChemState_Mod, only : ChemStateType
       use EmisState_Mod, only : EmisStateType
+
+      ! !INPUT PARAMETERS:
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: ConfigFilename
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
@@ -63,6 +66,9 @@ CONTAINS
       ! Objects
       TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
 
+      ! Local variables
+      CHARACTER(LEN=255) :: cFile
+
       ! Error handling
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
@@ -71,11 +77,17 @@ CONTAINS
       ! Read_Input_File begins here!
       !========================================================================
 
+      if (present(ConfigFilename)) then
+         cFile = TRIM(ConfigFilename)
+      else
+         cFile = TRIM(configFile)
+      endif
+
       ! Echo output
       IF ( Config %amIRoot ) THEN
          WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
          WRITE( 6, '(a,/)' ) 'CATChem Initialization'
-         WRITE( 6, 100   ) TRIM( configFile )
+         WRITE( 6, 100   ) TRIM( cFile )
 100      FORMAT( 'READ_INPUT_FILE: Opening ', a )
       ENDIF
 
@@ -87,9 +99,9 @@ CONTAINS
       !========================================================================
       ! Read the YAML file into the Config object
       !========================================================================
-      CALL QFYAML_Init( configFile, ConfigInput, ConfigAnchored, RC )
+      CALL QFYAML_Init( cFile, ConfigInput, ConfigAnchored, RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error reading configuration file: ' // TRIM( configFile )
+         errMsg = 'Error reading configuration file: ' // TRIM( cFile )
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
@@ -143,6 +155,18 @@ CONTAINS
          RETURN
       ENDIF
 
+      call Config_Process_Plumerise(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_Plumerise"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
+      !========================================================================
+      ! Config ChemState
+      !========================================================================
       call Config_Chem_State(config%Species_File, GridState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
@@ -152,6 +176,9 @@ CONTAINS
          RETURN
       endif
 
+      !========================================================================
+      ! Config EmisState
+      !========================================================================
       call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Emis_State"!'
@@ -964,6 +991,19 @@ CONTAINS
       GridState%number_of_levels = v_int
 
       !------------------------------------------------------------------------
+      ! number of soil layers range
+      !------------------------------------------------------------------------
+      key   = "grid%number_of_soil_layers"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      GridState%number_of_soil_layers = v_int
+
+      !------------------------------------------------------------------------
       ! number of x and y dimensions (nx and ny)
       !------------------------------------------------------------------------
       key   = "grid%nx"
@@ -1227,5 +1267,67 @@ CONTAINS
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_SeaSalt
+
+   !> \brief Process plumerise configuration
+   !!
+   !! This function processes the plumerise configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   SUBROUTINE Config_Process_Plumerise( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
+
+      TYPE(QFYAML_t),      INTENT(INOUT) ::ConfigInput      ! YAML Config object
+      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+
+      !
+      ! !OUTPUT PARAMETERS:
+      !
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+      ! !LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      INTEGER                      :: nSubStrs
+
+      ! Reals
+      REAL(fp)                     :: v_real
+
+      ! Strings
+      CHARACTER(LEN=255)           :: thisLoc
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+
+      !========================================================================
+      ! Config_Process_SeaSalt begins here!
+      !========================================================================
+
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
+
+      key   = "process%plumerise%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%plumerise_activate = v_bool
+
+      write(*,*) "Plumerise Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%plumerise_activate = ', Config%seasalt_activate
+      write(*,*) '------------------------------------'
+
+   END SUBROUTINE Config_Process_Plumerise
 
 END MODULE config_mod

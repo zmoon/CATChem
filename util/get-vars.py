@@ -16,7 +16,7 @@ out_fp = HERE / "../tests" / "col.csv"
 
 # Target column
 lat, lon = 38.9721, -76.9245 + 360  # NCWCP
-nz = 50  # limit the number of levels (set to ``None`` for all levels)
+nz = 64  # limit the number of levels (set to ``None`` for all levels)
 
 # Open vars.yml
 with open(HERE / "vars.yml") as f:
@@ -114,6 +114,8 @@ for vn, d in var_info.items():
     das.append(da.rename(vn))
 
 # Write to text file
+# TODO: if the number of levels is too large it currently writes multiple lines (truncation to next line) in the output
+#       Needs to be on a single line
 fmt = ".4e"
 with open(out_fp, "w") as f:
     for da in das:

@@ -50,6 +50,7 @@ module EmisState_Mod
       real(fp), ALLOCATABLE :: Scale(:)        !< Scale factor
       real(fp), ALLOCATABLE :: Flux(:)         !< Emission flux
       real(fp)              :: EmisHeight      !< Emission Height [m] - Simple emission height or -1 for PBLH
+      real(fp)              :: nPlmSrc         !< Plumerise number of sources
       real(fp), ALLOCATABLE :: PlmSrcFlx(:)    !< Plumerise source emission flux [kg/m2/s]
       real(fp), ALLOCATABLE :: FRP(:)          !< Fire Radiative Power (W/m^2)
       real(fp), ALLOCATABLE :: STKDM(:)        !< Briggs stack diameter [m] (array of all point sources in grid cell)

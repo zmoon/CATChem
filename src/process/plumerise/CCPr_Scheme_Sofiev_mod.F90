@@ -5,6 +5,8 @@ module ccpr_scheme_sofiev_mod
 
    implicit none
 
+   PUBLIC :: CCPr_Sofiev_Plmrise
+
 contains
 
    subroutine find_height_index(GEOHGT, hgt, index)
@@ -209,7 +211,7 @@ contains
 
       !find the index of 2x the pbl
       call find_height_index(z, pblh * 2, pblx2_index)
-
+      pblx2_index = MAX(pblx2_index, 2)
       ! now get the plume height
       PT1 = T(pblx2_index - 1) * (psfc / p(pblx2_index - 1))**(2./7.)
       PT2 = T(pblx2_index) * (psfc / p(pblx2_index))**(2./7.)
@@ -218,7 +220,7 @@ contains
       call plumeRiseSofiev(PT1, PT2, LayerDepth, frp, PBLH, plmHGT)
 
       call CCPr_Sofiev_Distribute(Z, plmHGT, EmisFrac, RC)
-      if (RC /= 1) then
+      if (RC /= 0) then
          write(*,*) 'Error in CCPr_Sofiev_PlmriseHgt'
          stop
       endif
