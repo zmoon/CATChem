@@ -1,6 +1,7 @@
 """
 Extract a column of input data from various sources.
 """
+import re
 from pathlib import Path
 from textwrap import indent
 
@@ -103,7 +104,17 @@ for d in ctl["cases"]:
         ds["gwetroot"] = (ds["soilw2"] * 30 + ds["soilw3"] * 60) / 90
 
         # Combine soil moisture into one array
-        ds["soilm"] = xr.concat([ds[f"soilw{i}"] for i in range(1, 5)], dim="soil")
+        soilws = []
+        for vn in ds.data_vars:
+            m = re.fullmatch(r"soilw([0-9]+)", vn)
+            if m is not None:
+                lev = int(m.group(1))
+                soilws.append((vn, lev))
+        if soilws:
+            soilws.sort(key=lambda x: x[1])
+            ds["soilm"] = xr.concat([ds[vn] for vn, _ in soilws], dim="soil")
+        else:
+            print("warning: soilw variables not identified")
 
         # sotyp, land, vtype are stored as float, maybe to support null mask?
         # But they seem to be all non-null, though with zeros (land 53.8%, sotyp/vtype 66.3%)
