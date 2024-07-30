@@ -62,7 +62,8 @@ for d in ctl["cases"]:
         ds = ds.assign_coords(z=z, zmid=zmid)
 
         # Select levels
-        ds = ds.isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
+        if nz is not None:
+            ds = ds.isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
 
         # Store
         src["atm"] = ds
@@ -82,8 +83,9 @@ for d in ctl["cases"]:
         assert pmid[0] < pmid[-1] and p[0] < p[-1]
         ds = ds.isel(pfull=slice(None, None, -1), phalf=slice(None, None, -1))
 
-        # Select levels
-        ds = ds.isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
+        # Select levels (for cloud fraction)
+        if nz is not None:
+            ds = ds.isel(pfull=slice(None, nz), phalf=slice(None, nz + 1))
 
         # Compute soil moisture variables
         #
