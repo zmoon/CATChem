@@ -82,7 +82,7 @@ variables:
   v10m:
     src: sfc:vgrd10m
   wilt:  # wilting point
-    src: sfc:wiltpnt
+    src: sfc:wilt
   z0:  # roughness length
     src: sfc:sfcr
   # X:
