@@ -206,18 +206,6 @@ contains
                   print *, "Error reading U10M: ", ios
                   return
                end if
-             case ("dswrf")
-               read(unum, *, iostat=ios) MetState%PARDF ! [W/m^2]
-               if (ios /= 0) then
-                  print *, "Error reading PARDF: ", ios
-                  return
-               end if
-             case ("dlwrf")
-               read(unum, *, iostat=ios) MetState%PARDR ! [W/m^2]
-               if (ios /= 0) then
-                  print *, "Error reading PARDR: ", ios
-                  return
-               end if
              case ("lhtfl")
                read(unum, *, iostat=ios) MetState%EFLUX ! [W/m^2]
                if (ios /= 0) then

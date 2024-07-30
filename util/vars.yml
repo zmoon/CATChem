@@ -80,10 +80,6 @@ variables:
     src: sfc:vgrd10m
   ugrd10m:  # 10m wind speed
     src: sfc:ugrd10m
-  dswrf:  # Surface Downward shortwave Solar Flux - instantaneous
-    src: sfc:dswrf
-  dlwrf:  # Surface Downward longwave Solar Flux - instantaneous
-    src: sfc:dlwrf
   tmpsfc:  # surface temperature
     src: sfc:tmpsfc
   sotyp:  # soil type
