@@ -60,6 +60,7 @@ variables:
     src: sfc:shtfl_ave
   lwgdn:  # downward longwave at surface
     src: sfc:dlwrf_ave
+    skip: true
   pblh:  # PBL height
     src: sfc:hpbl
   ps:  # surface pressure
@@ -109,3 +110,4 @@ variables:
     src: sfc:land
   vtype:
     src: sfc:vtype  # vegetation type (int)
+    skip: true

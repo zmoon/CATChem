@@ -184,6 +184,9 @@ print_var_lines = []
 for da in das:
     vn = da.name
     upper_vn = vn.upper()
+    skip = var_info[vn].get("skip", False)
+    if skip:  # not in MetState yet
+        continue
     read_var_blocks.append(read_var_tpl.format(vn=vn, upper_vn=upper_vn))
     print_var_lines.append(print_var_tpl.format(upper_vn=upper_vn))
 
