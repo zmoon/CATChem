@@ -177,9 +177,7 @@ contains
                   return
                end if
              case ("snodp")
-               read(unum, iostat=ios) tmpStr
-               write(*,*) tmpReal
-               MetState%SNODP = tmpReal
+               read(unum, *, iostat=ios) MetState%SNODP
                if (ios /= 0) then
                   print *, "Error reading SNODP: ", ios
                   return
