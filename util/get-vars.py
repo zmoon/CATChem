@@ -157,7 +157,7 @@ for d in ctl["cases"]:
 
 # Modify testing module
 
-fp = HERE / "../tests/testin_mod.f90"
+fp = HERE / "../tests/testing_mod.f90"
 with open(fp) as f:
     lines = f.readlines()
 
@@ -181,7 +181,7 @@ print_var_title = "print column data"
 
 read_var_blocks = []
 print_var_lines = []
-for da in das:
+for da in sorted(das, key=lambda x: x.name.lower()):
     vn = da.name
     upper_vn = vn.upper()
     skip = var_info[vn].get("skip", False)
@@ -190,17 +190,19 @@ for da in das:
     read_var_blocks.append(read_var_tpl.format(vn=vn, upper_vn=upper_vn))
     print_var_lines.append(print_var_tpl.format(upper_vn=upper_vn))
 
-read_var_str = "\n".join(indent(block, " " * read_var_indent) for block in read_var_blocks)
-print_var_str = "\n".join(indent(line, " " * print_var_indent) for line in print_var_lines)
+read_var_str = "".join(indent(block, " " * read_var_indent) for block in read_var_blocks)
+print_var_str = "".join(indent(line, " " * print_var_indent) for line in print_var_lines)
 
 lines_strip = [line.strip() for line in lines]
-a = lines_strip.index(f"! <<< {read_var_title} <<<")
-b = lines_strip.index(f"! >>> {read_var_title} >>>")
+a = lines_strip.index(f"! >>> {read_var_title} >>>")
+b = lines_strip.index(f"! <<< {read_var_title} <<<")
+assert b > a
 lines = lines[:a + 1] + [read_var_str] + lines[b:]
 
 lines_strip = [line.strip() for line in lines]
-a = lines_strip.index(f"! <<< {print_var_title} <<<")
-b = lines_strip.index(f"! >>> {print_var_title} >>>")
+a = lines_strip.index(f"! >>> {print_var_title} >>>")
+b = lines_strip.index(f"! <<< {print_var_title} <<<")
+assert b > a
 lines = lines[:a + 1] + [print_var_str] + lines[b:]
 
 with open(fp, "w") as f:
