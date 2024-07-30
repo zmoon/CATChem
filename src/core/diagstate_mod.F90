@@ -22,14 +22,6 @@ module DiagState_Mod
    !!
    !! \ingroup core_modules
    !!
-   !! \param dust_total_flux      Total flux of dust particles [kg m-2 s-1]
-   !! \param sea_salt_total_flux  Total flux of sea salt particles [kg m-2 s-1]
-   !! \param AOD550               Total AOD at 550nm [1]
-   !! \param AOD380               Total AOD at 380nm [1]
-   !! \param TOMSAI               TOMS Aerosol Index [1]
-   !! \param briggs_plumerise_height Effective plume rise height from Briggs algorithm [m]
-   !! \param sofiev_plumerise_height Effective plume rise height from Sofiev algorithm [m]
-   !!
    !!!>
    type, public :: DiagStateType
 
