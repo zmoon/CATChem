@@ -277,8 +277,6 @@ CONTAINS
       MetState%PARDR = ZERO
       MetState%PARDF = ZERO
       MetState%PBLH = ZERO
-      ! MetState%PBL_TOP_hPa = ZERO
-      ! MetState%PBL_TOP_L = ZERO
       MetState%PS = ZERO
       MetState%QV2M = ZERO
       MetState%T2M = ZERO
