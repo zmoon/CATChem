@@ -146,8 +146,6 @@ for d in ctl["cases"]:
         das.append(da.rename(vn))
 
     # Write to text file
-    # TODO: if the number of levels is too large it currently writes multiple lines (truncation to next line) in the output
-    #       Needs to be on a single line
     with open(out_fp, "w") as f:
         for da in das:
             if pd.api.types.is_float_dtype(da.dtype):
