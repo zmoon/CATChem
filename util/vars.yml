@@ -2,92 +2,112 @@
 #
 # atm: `atmf???.nc` outputs
 # sfc: `sfcf???.nc` outputs
-control:
-  lat: 22.0
-  lon: 18.0
-  nz: 127
-  outname: '../tests/col.csv'
-  atmFile: 'atmf012.nc'
-  sfcFile: 'sfcf012.nc'
-  srcLoc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel"
-variables:
-  # MetState variables
+cases:
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf024.nc"
+    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf024.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP.csv"
 
-  # Sofiev
-  z:
-    src: atm  # combine hgtsfc (geopotential height at sfc) and delz (layer thickness; m)
-  t:
-    src: atm:tmp
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf012.nc"
+    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA.csv"
+
+variables:
+  # keys: MetState variables in lowercase
+
+  # Column coordinates
+  bxheight:  # layer thickness (m)
+    src: atm:delz
+  delp:  # pressure thickness (hPa)
+    src: atm:dpres
+    f: 100  # Pa -> hPa
   pmid:
     src: atm:pfull  # phalf are the interfaces
-  pblh:
-    src: sfc:hpbl
-  ps:
-    src: sfc:pressfc
-    f: 100  # Pa -> hPa
-
-  # Brigg's (+ Sofiev above)
+  z:
+    src: atm  # combine hgtsfc (geopotential height at sfc) and delz (layer thickness; m)
   zmid:
     src: atm  # mid points of z
-  qv:
+
+  # Column State
+  cldf:  # cloud fraction
+    src: sfc:cldfra
+  ql:  # cloud liquid water mass fraction, but specifies units kg / kg dry air
+    src: atm:clwmr  # cloud liquid water mixing ratio
+  qv:  # specific humidity (kg/kg)
     src: atm:spfh
+  sphu: # specific humidity (g/kg)
+    src: atm:spfh
+    f: 1000  # kg/kg -> g/kg
+  t:
+    src: atm:tmp
   u:
     src: atm:ugrd
   v:
     src: atm:vgrd
-  hflux:
+
+  # Surface state
+  eflux:  # surface latent heat flux
+    src: sfc:lhtfl_ave
+  frsno:  # surface snow cover fraction
+    src: sfc:snowc_ave
+    f: 0.01  # % -> fraction
+  hflux:  # surface sensible heat flux
     src: sfc:shtfl_ave
-  ustar:
-    src: sfc:fricv  # note the model output has units "XXX"
+  lwgdn:  # downward longwave at surface
+    src: sfc:dlwrf_ave
+    skip: true
+  pblh:  # PBL height
+    src: sfc:hpbl
+  ps:  # surface pressure
+    src: sfc:pressfc
+    f: 100  # Pa -> hPa
+  snodp:  # surface snow depth (m)
+    src: sfc:snod
+  snomas:  # snow mass (kg/m2)
+    src: sfc:weasd  # surface snow water equivalent (kg/m2)
+  swgdn:  # downward shortwave at surface
+    src: sfc:dswrf_ave
   t2m:
     src: sfc:tmp2m
-  spfh: # specific humidity
-    src: atm:spfh
-  delp:  # pressure thickness
-    src: atm:dpres
-  delz:  # layer thickness
-    src: atm:delz
-  clwmr:  # liquid water mixing ratio
-    src: atm:clwmr
-  wilt:  # wilting point
-    src: sfc:wiltpnt
-  weasd:  # water equivalent of snow
-    src: sfc:weasd
-  vtype:  # vegetation type
-    src: sfc:vtype
-  vfrac:  # vegetation fraction
-    src: sfc:veg
-  vgrd10m:  # 10m wind speed
-    src: sfc:vgrd10m
-  ugrd10m:  # 10m wind speed
-    src: sfc:ugrd10m
-  dswrf:  # Surface Downward shortwave Solar Flux - instantaneous
-    src: sfc:dswrf
-  dlwrf:  # Surface Downward longwave Solar Flux - instantaneous
-    src: sfc:dlwrf
-  tmpsfc:  # surface temperature
+  ts:  # surface temperature
     src: sfc:tmpsfc
-  sotyp:  # soil type
-    src: sfc:sotyp
-  soilw4:  # 4-layer soil moisture
-    src: sfc:soilw4
-  soilw3:  # 3-layer soil moisture
-    src: sfc:soilw3
-  soilw2:  # 2-layer soil moisture
-    src: sfc:soilw2
-  soilw1:  # 1-layer soil moisture
-    src: sfc:soilw1
-  snowc:  # snow cover
-    src: sfc:snowc_ave
-  shtfl:  # surface sensible heat flux
-    src: sfc:shtfl
+  u10m:
+    src: sfc:ugrd10m
+  ustar:
+    src: sfc:fricv  # note the model output has units "XXX"
+  v10m:
+    src: sfc:vgrd10m
+  wilt:  # wilting point
+    src: sfc:wilt
   z0:  # roughness length
     src: sfc:sfcr
-  pwat:
-    src: sfc:pwat
-  lhtfl:  # surface latent heat flux
-    src: sfc:lhtfl
+  # X:
+  #   src: sfc:pwat  # column precipitable water (kg/m2)
+
+  # Soil
+  gwetroot:  # volumetric soil moisture in root zone
+    src: sfc
+  gwettop:  # volumetric soil moisture near top
+    src: sfc
+  soilm:  # layered volumetric soil moisture
+    src: sfc
+
+  # Surface type
+  # dluse:  # dominant land-use type
+  #   src:
+  frveg:  # fraction of vegetation (not just green)
+    src: sfc:veg  # vegetation fraction
+  dsoiltype:  # dominant soil type (int)
+    src: sfc:sotyp
+  # gvf: # green vegetation fraction
+  #   src: sfc  # mean of shdmin and shdmax (max/min fractional coverage of green vegetation)?
   lwi:  # sea-land-ice mask (0-sea, 1-land, 2-ice)
     src: sfc:land
-  cldfra:  # cloud fraction
-    src: sfc:cldfra
+  vtype:
+    src: sfc:vtype  # vegetation type (int)
+    skip: true

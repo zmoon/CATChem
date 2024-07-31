@@ -3,7 +3,6 @@ program test_plumerise
    use testing_mod, only: assert, load_column_data
    use state_mod
 
-
    implicit none
 
    type(PlumeriseStateType) :: PlumeriseState
@@ -49,7 +48,7 @@ program test_plumerise
    print*, 'Allocated MetState'
 
    ! Meteorological State
-   call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc)
+   call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc, verbose=.true.)
 
    ! Allocate EmisState with FRP
    do c = 1, EmisState%nCats
@@ -131,7 +130,5 @@ program test_plumerise
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
-
-
 
 end program test_plumerise

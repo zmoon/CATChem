@@ -68,7 +68,7 @@ module CATChem
    use CCPr_SeaSalt_mod, only: cc_seasalt_run => CCPr_SeaSalt_Run               !< SeaSalt Process Run Routine
    use CCPr_SeaSalt_mod, only: cc_seasalt_finalize => CCPr_SeaSalt_Finalize     !< SeaSalt Process Finalization Routine
    ! Plumerise
-   use CCPr_Plumerise_mod, only : PlumeRiseStateType                              !< Plumerise State
+   use CCPr_Plumerise_mod, only: PlumeRiseStateType                               !< Plumerise State
    use CCPr_Plumerise_mod, only: cc_plumerise_init => CCPr_Plumerise_Init         !< Plumerise Process Initialization Routine
    use CCPr_Plumerise_mod, only: cc_plumerise_run => CCPr_Plumerise_Run           !< Plumerise Process Run Routine
    use CCPr_Plumerise_mod, only: cc_plumerise_finalize => CCPr_Plumerise_Finalize !< Plumerise Process Finalization Routine
