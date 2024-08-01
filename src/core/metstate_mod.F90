@@ -103,6 +103,7 @@ MODULE MetState_Mod
       REAL(fp)           :: USTAR          !< Friction velocity [m/s]
       REAL(fp)           :: V10M           !< N/S wind speed @ 10m ht [m/s]
       REAL(fp)           :: Z0             !< Surface roughness height [m]
+      REAL(fp)           :: Z0H            !< Surface roughness height for heat (thermal roughness length) [m]
 
       ! Cloud Related Fields
       !---------------------
@@ -121,7 +122,6 @@ MODULE MetState_Mod
       REAL(fp)           :: PBL_TOP_m      !< PBL top [m]
       REAL(fp)           :: PBL_THICK      !< PBL thickness [hPa]
       REAL(fp)           :: PHIS           !< Surface geopotential height [m2/s2]
-      REAL(fp)           :: PHIT           !< Surface top-of-layer geopotential height [m2/s2]
       REAL(fp)           :: PRECANV        !< Anvil previp @ ground [kg/m2/s] -> [mm/day]
       REAL(fp)           :: PRECCON        !< Conv  precip @ ground [kg/m2/s] -> [mm/day]
       REAL(fp)           :: PRECLSC        !< Large-scale precip @ ground kg/m2/s] -> [mm/day]
@@ -193,6 +193,7 @@ MODULE MetState_Mod
       REAL(fp), POINTER :: AIRNUMDEN     (:) !< Dry air density [molec/cm3]
       REAL(fp), POINTER :: AVGW          (:) !< Water vapor volume mixing ratio [vol H2O/vol dry air]
       REAL(fp), POINTER :: BXHEIGHT      (:) !< Grid box height [m] (dry air)
+      REAL(fp), POINTER :: PHIT          (:) !< Surface top-of-layer geopotential height [m2/s2]
       REAL(fp), POINTER :: DELP          (:) !< Delta-P (wet) across box [hPa]
       REAL(fp), POINTER :: DELP_DRY      (:) !< Delta-P (dry) across box [hPa]
       REAL(fp), POINTER :: DAIRMASS      (:) !< Dry air mass [kg] in grid box
@@ -211,6 +212,7 @@ MODULE MetState_Mod
       !----------------------------------------------------------------------
       INTEGER,  POINTER :: IREG           !< # of landtypes in box (I,J)
       INTEGER,  POINTER :: ILAND         (:) !< Land type at (I,J); 1..IREG(I,J)
+      INTEGER,  POINTER :: LWI               !< Land, Ice, Ocean mask
       INTEGER,  POINTER :: IUSE          (:) !< Fraction (per mil) of box (I,J) occupied by each land
       REAL(fp), POINTER :: MODISLAI       !< Daily LAI computed from monthly offline MODIS [m2/m2]
       REAL(fp), POINTER :: XLAI          (:) !< MODIS LAI per land type, for this month

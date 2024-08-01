@@ -1,4 +1,4 @@
-set(_srcs CCPr_DryDep_Mod.F90 ccpr_scheme_GOCART_DryDep_mod.F90 )
+set(_srcs CCPr_DryDep_Mod.F90 ccpr_scheme_GOCART_DryDep_mod.F90)
 
 set(_lib CATChem_process_drydep)
 

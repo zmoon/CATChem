@@ -1,10 +1,9 @@
-!> \brief Template for a new process driver
+!> \brief CCPR drydep state types
 !!
 !!
-!! More in-depth description here
 !!
-!! \author Barry baker
-!! \date 05/2024
+!! \author Lacey Holland
+!! \date 07/2024
 !!!>
 MODULE CCPR_DryDep_mod
    USE Precision_mod
@@ -12,7 +11,7 @@ MODULE CCPR_DryDep_mod
    USE DiagState_Mod, Only : DiagStateType
    USE MetState_Mod,  Only : MetStateType
    USE ChemState_Mod, Only : ChemStateType
-   USE Config_Mod,    Only : ConfigType
+   USE Config_Opt_Mod, Only : ConfigType
 
    IMPLICIT NONE
 
@@ -20,7 +19,7 @@ MODULE CCPR_DryDep_mod
 
    PUBLIC :: CCPR_DryDep_Init
    PUBLIC :: CCPR_DryDep_Run
-   PUBLIC :: CCPR_DryDep_Final
+   PUBLIC :: CCPR_DryDep_Finalize
 
 
    !> \brief DryDepStateType
@@ -42,8 +41,15 @@ MODULE CCPR_DryDep_mod
    !!!>
    TYPE :: DryDepStateType
       LOGICAL                         :: Activate              ! Activate Process (True/False)
+      LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
-
+      INTEGER                         :: Number_of_levels      ! number of vertical levels
+      REAL                            :: ParticleRadius
+      REAL                            :: ParticleDensity
+      REAL                            :: U10M
+      REAL                            :: V10M
+      REAL                            :: FRACLAKE
+      REAL                            :: GWETTOP
 
       ! Process Specific Parameters
 
@@ -51,7 +57,7 @@ MODULE CCPR_DryDep_mod
       !=================================================================
       ! Module specific variables/arrays/data pointers come below
       !=================================================================
-      integer                         :: DryDepGOCARTOpt       ! Scheme Option
+
 
 
    END TYPE DryDepStateType
@@ -64,13 +70,14 @@ CONTAINS
    !!
    !! \param Config       CATCHem configuration options
    !! \param DryDepState   CATCHem PROCESS state
-   !! \param ChmState         CATCHem chemical state
+   !! \param ChemState         CATCHem chemical state
    !! \param RC               Error return code
    !!
    !!!>
 
-   SUBROUTINE CCPR_DryDep_Init( Config, ChemState, DryDepState, RC )
+   SUBROUTINE CCPR_DryDep_Init( Config, DryDepState, ChemState, RC )
       ! USE
+      
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -80,8 +87,8 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(DryDepStateType), POINTER :: DryDepState ! DryDep state
-      INTEGER,         INTENT(INOUT)    :: RC         ! Success or failure
+      TYPE(DryDepStateType), POINTER  :: DryDepState ! DryDep state
+      INTEGER,         INTENT(INOUT)    :: RC       ! Success or failure
 
       ! Error handling
       !---------------
@@ -110,18 +117,24 @@ CONTAINS
 
          ! Set scheme option
          !------------------
-         DryDepState%SchemeOpt = config%DryDepGOCARTOpt
+         DryDepState%SchemeOpt = config%DryDep_Scheme
 
-         ! Set particle radius, density,
-         ! and other terms for a resuspension term
-         !------------------
-         DryDepState%particleradius = config%DryDepParticleRadius
-         DryDepState%particledensity = config%DryDepParticleDensity
-         DryDepState%u10m = config%DryDepu10m
-         DryDepState%v10m = config%DryDepv10m
-         DryDepState%fraclake = config%DryDepfraclake
-         DryDepState%gwettop = config%DryDepgwettop
 
+         if (Config%DryDep_Resuspension) then
+
+            ! Set particle radius, density,
+            ! and other terms for a resuspension term
+            !------------------
+
+            !DryDepState%particleradius = config%DryDep_ParticleRadius
+            !DryDepState%particledensity = config%DryDep_ParticleDensity
+            DryDepState%u10m = config%DryDep_u10m
+            DryDepState%v10m = config%DryDep_v10m
+            DryDepState%fraclake = config%DryDep_fraclake
+            DryDepState%gwettop = config%DryDep_gwettop
+            DryDepState%number_of_levels = config%number_of_levels
+
+         endif
 
       else
 
@@ -143,13 +156,15 @@ CONTAINS
    SUBROUTINE CCPr_DryDep_Run( MetState, DiagState, DryDepState, ChemState, RC )
 
       ! USE
-      USE DryDeposition
       USE GridState_Mod
+      USE MetState_Mod
       USE constants
+      USE precision_MOD
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
       TYPE(MetStateType),  INTENT(IN) :: MetState       ! MetState Instance
+      !TYPE(GridStateType), INTENT(IN) :: GridState      ! Grid state
 
       ! INPUT/OUTPUT PARAMETERS
       TYPE(DiagStateType), INTENT(INOUT)      :: DiagState       ! DiagState Instance
@@ -157,29 +172,45 @@ CONTAINS
       TYPE(ChemStateType),  INTENT(INOUT)     :: ChemState       ! ChemState Instance
 
       ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+      INTEGER, INTENT(OUT) :: RC                                 ! Return Code
 
       ! LOCAL VARIABLES
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
-      INTEGER :: km = Gridstate%number_of_levels          ! Number of levels in the model
-      REAL, DIMENSION(1,1,km) :: tmpu = reshape(metstate%T, (/1, 1, km/))         ! temperature [K]
-      REAL, DIMENSION(1,1,km) :: rhoa   = reshape(metstate%mairden, (/1, 1, km/)) ! air density [kg/m^3]
-      REAL, DIMENSION(1,1,km) :: hghte  = reshape(metstate%phit, (/1, 1, km/))     ! top of layer geopotential height [m]
-      REAL, DIMENSION(1,1) :: oro    = metstate%LandTypeFrac       ! orography flag; see
-      ! https://wiki.seas.harvard.edu/geos-chem/index.php/Olson_land_map
-      REAL, DIMENSION(1,1) :: ustar  = metstate%ustar     ! friction speed [m/sec]
-      REAL, DIMENSION(1,1) :: pblh   = metstate%pblh      ! PBL height [m]
-      REAL, DIMENSION(1,1) :: shflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
-      REAL, DIMENSION(1,1) :: z0h    = metstate%z0        ! rough height, sens. heat [m]
+      INTEGER :: km
       REAL, DIMENSION(1,1) :: drydepf                     ! Deposition frequency [1/sec]
+      REAL, allocatable, DIMENSION(:,:,:) :: tmpu 
+      REAL, allocatable, DIMENSION(:,:,:) :: rhoa   
+      REAL, allocatable, DIMENSION(:,:,:) :: hghte  
+      REAL :: radius    ! particle radius [m]
+      REAL :: rhop      ! particle density [kg/m^3]
+      INTEGER :: oro       ! orography flag; Land, ocean, ice mask
+      REAL :: ustar     ! friction speed [m/sec]
+      REAL :: pblh      ! PBL height [m]
+      REAL :: shflux    ! sfc. sens. heat flux [W m-2]
+      REAL :: z0h       ! rough height, sens. heat [m] 
+      REAL, DIMENSION(1,1) :: u10m       ! 10-m u-wind component [m/sec]
+      REAL, DIMENSION(1,1) :: v10m       ! 10-m v-wind component [m/sec]
+      REAL, DIMENSION(1,1) :: fraclake   ! fraction covered by water [1]
+      REAL, DIMENSION(1,1) :: gwettop    ! fraction soil moisture [1]
+     
+
+!      z0h    = call(metstate%z0h)       ! rough height, sens. heat [m]
+
+      ! FIXME: These are pointers (next 3)
+      km  = DryDepstate%number_of_levels          ! Number of levels in the model - this should go somewhere else later
+      allocate(tmpu(1,1, km), rhoa(1,1,km), hghte(1,1,km))
+      tmpu = reshape(metstate%T, (/1, 1, km/))         ! temperature [K]
+      rhoa = reshape(metstate%mairden, (/1, 1, km/)) ! air density [kg/m^3]
+      hghte = reshape(metstate%phit, (/1, 1, km/))    ! top of layer geopotential height [m]
+      oro    = metstate%LWI       ! orography flag; Land, ocean, ice mask
+      ustar  = metstate%ustar     ! friction speed [m/sec]
+      pblh   = metstate%pblh      ! PBL height [m]
+      shflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
+      z0h    = metstate%z0h       ! rough height, sens. heat [m]
 
 
-      REAL :: radius = DryDepState%particleradius   ! particle radius [m]
-      REAL :: rhop   = DryDepState%particledensity  ! particle density [kg/m^3]
-      REAL, DIMENSION(1,1) :: u10m   = reshape(DryDepState%U10m, (/1, 1/))   ! 10-m u-wind component [m/sec]
-      REAL, DIMENSION(1,1) :: v10m   = reshape(DryDepState%V10m, (/1, 1/))   ! 10-m v-wind component [m/sec]
-      REAL, DIMENSION(1,1) :: fraclake=reshape(metstate%FRLAKE, (/1, 1/))    ! fraction covered by water [1]
-      REAL, DIMENSION(1,1) :: gwettop= reshape(metstate%GWETTOP, (/1, 1/))   ! fraction soil moisture [1]
+      radius = DryDepState%particleradius   ! particle radius [m]
+      rhop   = DryDepState%particledensity  ! particle density [kg/m^3]
 
 
       ! Initialize
@@ -196,13 +227,25 @@ CONTAINS
             ! Run the DryDep Scheme
             !-------------------------
 
-            DryDeposition ( km, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, &
+            if (DryDepState%resuspension) then
+              u10m(1,1)   = metstate%U10m     ! 10-m u-wind component [m/sec]
+              v10m(1,1)   = metstate%V10m     ! 10-m v-wind component [m/sec]
+              fraclake(1,1)=metstate%FRLAKE   ! fraction covered by water [1]
+              gwettop(1,1)= metstate%GWETTOP  ! fraction soil moisture [1]
+            endif
+
+            call DryDeposition( km, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, &
                von_karman, cp, g0, z0h, drydepf, rc, &
                radius, rhop, u10m, v10m, fraclake, gwettop )
 
          endif
 
+         ! TO DO:  apply dry dep velocities/freq to chem species
+         write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
+
       endif
+
+
 
    end subroutine CCPr_DryDep_Run
 
@@ -212,7 +255,7 @@ CONTAINS
    !! \param [INOUT] DryDepState
    !! \param [OUT] RC Return code
    !!!>
-   SUBROUTINE CCPr_DryDep_Final( DryDepState, RC )
+   SUBROUTINE CCPr_DryDep_Finalize( DryDepState, RC )
 
       ! USE
       !----
@@ -231,11 +274,10 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_DryDep_Final (in process/drydep/ccpr_DryDep_mod.F90)'
+      thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
 
 
-
-   end subroutine CCPr_DryDep_Final
+   end subroutine CCPr_DryDep_Finalize
 
 
 END MODULE CCPR_DryDep_Mod

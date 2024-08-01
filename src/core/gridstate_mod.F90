@@ -20,6 +20,7 @@ module GridState_Mod
       ! Integers
       integer :: nx
       integer :: ny
+      integer :: model_timestep  
       integer :: number_of_levels  !< The number of vertical levels
 
       ! Reals
@@ -64,8 +65,9 @@ contains
       ! initialize GridState
       GridState%nx=1
       GridState%ny=1
-      GridState%number_of_levels=1  ! FIXME: use Config?
       GridState%area = 1._fp
+      GridState%model_timestep=60  ! in seconds
+      GridState%number_of_levels=1  
 
    end subroutine Grid_Init_State
 
