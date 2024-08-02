@@ -72,7 +72,6 @@ MODULE Config_Opt_Mod
       LOGICAL                     :: VerboseRequested
       CHARACTER(LEN=10)           :: VerboseOnCores
       LOGICAL                     :: Verbose
-      INTEGER                     :: Number_of_levels
 
       !-----------------------------------------
       ! PROCESSING MENU fields
@@ -96,14 +95,14 @@ MODULE Config_Opt_Mod
 
       ! DryDeposition Process
       LOGICAL                     :: DryDep_activate
-      INTEGER                     :: DryDep_scheme
-      LOGICAL                     :: DryDep_resuspension  ! Turn on resuspension
-      REAL                        :: DryDep_particleradius
-      REAL                        :: DryDep_particledensity
-      REAL                        :: DryDep_u10m
-      REAL                        :: DryDep_v10m
-      REAL                        :: DryDep_fraclake
-      REAL                        :: DryDep_gwettop
+      INTEGER                     :: DryDep_scheme_opt
+      LOGICAL                     :: DryDep_resuspension_opt  ! Turn on resuspension
+      ! REAL                        :: DryDep_particleradius
+      ! REAL                        :: DryDep_particledensity
+      ! REAL                        :: DryDep_u10m
+      ! REAL                        :: DryDep_v10m
+      ! REAL                        :: DryDep_fraclake
+      ! REAL                        :: DryDep_gwettop
 
 
    END TYPE ConfigType
@@ -162,7 +161,6 @@ CONTAINS
       ! Dry run info (print out file names)
       !----------------------------------------
       Config%DryRun                 = .FALSE.
-      Config%number_of_levels       = 28
 
       !-----------------------------------------
       ! PROCESSING MENU fields
@@ -180,14 +178,14 @@ CONTAINS
 
       ! Dry Dep Process
       Config%DryDep_activate = .FALSE.
-      Config%DryDep_scheme = 1
-      Config%DryDep_resuspension = .FALSE.
-      Config%DryDep_particleradius = 1.0
-      Config%DryDep_particledensity = 1.0
-      Config%DryDep_u10m = 1.0
-      Config%DryDep_v10m = 1.0
-      Config%DryDep_fraclake = 1.0
-      Config%DryDep_gwettop = 1.0
+      Config%DryDep_scheme_opt = 1
+      Config%DryDep_resuspension_opt = .FALSE.
+      ! Config%DryDep_particleradius = 1.0
+      ! Config%DryDep_particledensity = 1.0
+      ! Config%DryDep_u10m = 1.0
+      ! Config%DryDep_v10m = 1.0
+      ! Config%DryDep_fraclake = 1.0
+      ! Config%DryDep_gwettop = 1.0
 
 
    END SUBROUTINE Set_Config
