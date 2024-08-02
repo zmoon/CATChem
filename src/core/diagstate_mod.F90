@@ -23,8 +23,9 @@ module DiagState_Mod
       REAL(fp) :: dust_total_flux      !< Total flux of dust particles [kg m-2 s-1]
       REAL(fp) :: sea_salt_total_flux  !< Total flux of sea salt particles [kg m-2 s-1]
 
-      ! Vertically-resolved variables
-      ! real(fp), pointer :: x(:)
+      ! Dry Deposition
+      REAL(fp), allocatable :: drydep_frequency(:)     !< Dry deposition frequency [1/s]
+      REAL(fp), allocatable :: drydep_vel(:)           !< Dry deposition velocity [m s-1]
 
    end type DiagStateType
 
@@ -40,15 +41,17 @@ CONTAINS
    !! \param RC The return code
    !! \ingroup core_modules
    !!!>
-   subroutine Diag_Allocate(Config, GridState, DiagState, RC)
+   subroutine Diag_Allocate(Config, GridState, DiagState, ChemState, RC)
       ! USES
       USE GridState_Mod, ONLY : GridStateType
       USE Config_Opt_Mod, ONLY : ConfigType
+      USE ChemState_Mod, ONLY : ChemStateType
 
       ! Arguments
       type(ConfigType),    INTENT(IN)    :: Config
       type(GridStateType), INTENT(IN)    :: GridState ! Grid State object
       type(DiagStateType), INTENT(INOUT) :: DiagState ! Diag State object
+      type(ChemStateType), INTENT(IN)    :: ChemState ! Chem State object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC        ! Success or failure
 
@@ -73,6 +76,27 @@ CONTAINS
       ! If sea salt process is activated then allocate sea salt related diagnostics
       if (Config%seasalt_activate) then
          DiagState%sea_salt_total_flux = ZERO
+      endif
+
+      ! If drydep process is activated then allocate drydep related diagnostics
+      if (Config%drydep_activate) then
+         if (.not. allocated(DiagState%drydep_frequency)) then
+            allocate(DiagState%drydep_frequency(ChemState%nSpecies), stat=RC)
+            if (RC /= CC_SUCCESS) then
+               ErrMsg = 'Could not allocate DiagState%drydep_frequency'
+               call Error_Stop(Errmsg, thisLoc)
+            endif
+         endif
+         DiagState%drydep_frequency = ZERO
+
+         if (.not. allocated(DiagState%drydep_vel)) then
+            allocate(DiagState%drydep_vel(ChemState%nSpecies), stat=RC)
+            if (RC /= CC_SUCCESS) then
+               ErrMsg = 'Could not allocate DiagState%drydep_vel'
+               call Error_Stop(Errmsg, thisLoc)
+            endif
+         endif
+         DiagState%drydep_vel = ZERO
       endif
 
    end subroutine Diag_Allocate
