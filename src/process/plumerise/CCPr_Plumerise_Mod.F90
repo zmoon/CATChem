@@ -145,10 +145,10 @@ CONTAINS
 
       if (PlumeriseState%Activate) then
          if (EmisState%nEmisTotalPlumerise == 0) RETURN  ! no plumerise species listed in CATCHem_emission.yml
-         do c = 1, EmisState%nCats
+         cats: do c = 1, EmisState%nCats
             if (EmisState%Cats(c)%nPlumerise /= 0) then  ! in EmisState%Cats(c) plumerise options activated
-               do s = 1, EmisState%Cats(c)%nSpecies ! loop over emitted species
-                  do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc ! loop over plume sources
+               species: do s = 1, EmisState%Cats(c)%nSpecies ! loop over emitted species
+                  plume: do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc ! loop over plume sources
                      if (EmisState%Cats(c)%Species(s)%plumerise == 1) then ! Sofiev Plumerise
 
                         call CCPr_Sofiev_Plmrise(MetState%Z,     &
@@ -167,9 +167,9 @@ CONTAINS
 
                         ! Add emission to ColEmis for total Emission in grid cell due to plumerise
                         ! Will Speciate out afterwards to concentration at end
-                        do z = 1, GridState%number_of_levels
+                        level: do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        enddo
+                        end do level
 
                      else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
@@ -196,9 +196,9 @@ CONTAINS
                            CALL CC_Error( errMsg, RC, thisLoc )
                         endif
 
-                        do z = 1, GridState%number_of_levels
+                        level: do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        enddo
+                        end do level
 
                      end if ! plume source loop
 
@@ -219,14 +219,14 @@ CONTAINS
                            write(*,*) '  FRP: ', EmisState%Cats(c)%Species(s)%frp(p)
                         endif
                      endif
-                  end do ! p - Plumerise Source Loop
+                  end do plume
 
                   ! Add emission to ColEmis to Species total flux in grid cell
                   EmisState%Cats(c)%Species(s)%Flux = ColEmis
 
-               enddo ! s - Species List Loop
+               end do species
             end if ! End Plumerise Condition within EmisState%Cats(c)
-         enddo ! c - Category List Loop
+         end do cats
 
       endif ! Activate
 
