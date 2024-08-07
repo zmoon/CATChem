@@ -678,7 +678,7 @@ CONTAINS
          errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
          RETURN
       ENDIF
-      Config%DryDep_scheme = v_int
+      Config%drydep_scheme_opt = v_int
 
 
       key   = "process%DryDep%resuspension"
@@ -688,13 +688,13 @@ CONTAINS
          errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
          RETURN
       ENDIF
-      Config%DryDep_resuspension = v_bool
+      Config%drydep_resuspension_opt = v_bool
 
       write(*,*) "DryDeposition Configuration"
       write(*,*) '------------------------------------'
       write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
-      write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
-      write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
+      write(*,*) 'Config%DryDep_scheme = ', Config%drydep_scheme_opt
+      write(*,*) 'Config%DryDep_resuspension = ', Config%drydep_resuspension_opt
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_DryDep

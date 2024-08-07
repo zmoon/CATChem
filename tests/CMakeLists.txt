@@ -35,3 +35,7 @@ target_link_libraries(test_seasalt PRIVATE CATChem_process_seasalt)
 target_link_libraries(test_seasalt PRIVATE testing)
 set_target_properties(test_seasalt PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
+add_test(
+  NAME test_ccpr_seasalt
+  COMMAND test_seasalt
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
