@@ -169,7 +169,7 @@ CONTAINS
                         ! Will Speciate out afterwards to concentration at end
                         level: do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        end do level
+                        end do 
 
                      else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
@@ -198,7 +198,7 @@ CONTAINS
 
                         level: do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        end do level
+                        end do 
 
                      end if ! plume source loop
 
@@ -219,14 +219,14 @@ CONTAINS
                            write(*,*) '  FRP: ', EmisState%Cats(c)%Species(s)%frp(p)
                         endif
                      endif
-                  end do plume
+                  end do 
 
                   ! Add emission to ColEmis to Species total flux in grid cell
                   EmisState%Cats(c)%Species(s)%Flux = ColEmis
 
-               end do species
+               end do 
             end if ! End Plumerise Condition within EmisState%Cats(c)
-         end do cats
+         end do 
 
       endif ! Activate
 
