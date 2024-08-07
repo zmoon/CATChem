@@ -260,7 +260,7 @@ CONTAINS
       !-----------
       RC = CC_SUCCESS
       errMsg = ''
-      thisLoc = ' -> at CCPr_Plumerise_Finalize (in process/Plumerise/ccpr_Plumerise.F90)'
+      thisLoc = ' -> at CCPr_Plumerise_Finalize (in process/plumerise/CCPr_Plumerise.F90)'
 
       ! Nothing to do yet
 
