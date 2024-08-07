@@ -89,7 +89,7 @@ CONTAINS
    !!
    !! \ingroup catchem_plumerise_process
    !!!>
-   SUBROUTINE CCPr_Plumerise_Run(PlumeriseState, RC, verbose_opt )
+   SUBROUTINE CCPr_Plumerise_Run(PlumeriseState, RC, verbose )
 
       ! USE
       USE ccpr_scheme_sofiev_mod, ONLY : CCPr_Sofiev_Plmrise
@@ -112,7 +112,7 @@ CONTAINS
       !------------------
       INTEGER, INTENT(OUT) :: RC                         ! Return Code
 
-      LOGICAL, OPTIONAL, INTENT(IN) :: verbose_opt
+      LOGICAL, OPTIONAL, INTENT(IN) :: verbose
 
       ! LOCAL VARIABLES
       !----------------
@@ -121,7 +121,7 @@ CONTAINS
       Integer :: s ! Emitted Species
       Integer :: p ! Plumerise source length counter
       Integer :: z ! Vertical counter
-      Logical :: verbose
+      Logical :: verbose_
 
       REAL(fp) :: plmHGT                              ! Plumerise Height [m]
       REAL(fp) :: EFRAC(GridState%number_of_levels)   ! Emission fraction
@@ -133,14 +133,14 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_Plumerise_Run (in process/Plumerise/ccpr_Plumerise_mod.F90)'
 
-      if (present(verbose_opt) .eqv. .true.) then
-         if (verbose_opt .eqv. .true.) then
-            verbose=.TRUE.
+      if (present(verbose) .eqv. .true.) then
+         if (verbose .eqv. .true.) then
+            verbose_=.TRUE.
          else
-            verbose=.FALSE.
+            verbose_=.FALSE.
          endif
       else
-         verbose=.FALSE.
+         verbose_=.FALSE.
       endif
 
       if (PlumeriseState%Activate) then
@@ -202,7 +202,7 @@ CONTAINS
 
                      end if ! plume source loop
 
-                     if (verbose .eqv. .true.) then
+                     if (verbose_ .eqv. .true.) then
                         write(*,*) '------------ PLUMERISE ---------------'
                         write(*,*) 'Category: ', EmisState%Cats(c)%Name
                         write(*,*) 'Species: ', EmisState%Cats(c)%Species(s)%Name
