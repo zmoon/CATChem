@@ -124,7 +124,7 @@ program test_plumerise
    endif
 
    ! Plumerise run
-   call cc_plumerise_run(PlumeriseState, rc, verbose_opt=.true.)
+   call cc_plumerise_run(PlumeriseState, rc, verbose=.true.)
    if (rc /= CC_success) then
       errMsg = 'Error in "cc_plumerise_run"'
       call cc_emit_error(errMsg, rc, thisLoc)
