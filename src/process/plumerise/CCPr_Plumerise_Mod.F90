@@ -169,7 +169,7 @@ CONTAINS
                         ! Will Speciate out afterwards to concentration at end
                         do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        end do 
+                        end do
 
                      else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
@@ -198,7 +198,7 @@ CONTAINS
 
                         do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
-                        end do 
+                        end do
 
                      end if ! plume source loop
 
