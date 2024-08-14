@@ -184,7 +184,7 @@ CONTAINS
                   call Handle_Error(ErrMsg, RC, ThisLoc)
                   return
                endif
-               
+
                if (EmisState%Cats(c)%Species(s)%nPlmSrc > 0) then ! if there are plume sources
                   nPlumes = EmisState%Cats(c)%Species(s)%nPlmSrc ! temporary variable for number of plumes
                   ALLOCATE(EmisState%Cats(c)%Species(s)%PlmSrcFlx(nPlumes), STAT=RC)
@@ -208,7 +208,7 @@ CONTAINS
                      return
                   endif
 
-                  
+
                endif
             end do
          end do

@@ -121,7 +121,7 @@ CONTAINS
       Integer :: s ! Emitted Species
       Integer :: p ! Plumerise source length counter
       Integer :: z ! Vertical counter
-      integer :: nPlumes ! temporary variable for number of plumes 
+      integer :: nPlumes ! temporary variable for number of plumes
       Logical :: verbose_
 
       REAL(fp) :: plmHGT                              ! Plumerise Height [m]
