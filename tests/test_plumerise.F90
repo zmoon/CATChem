@@ -8,7 +8,7 @@ program test_plumerise
    type(PlumeriseStateType) :: PlumeriseState
 
    integer :: rc          ! Success or failure
-   integer :: c, s, l
+   integer :: c, s, p
 
    CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Plumerise/CATChem_config.yml'
 
@@ -49,6 +49,14 @@ program test_plumerise
 
    ! Meteorological State
    call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc, verbose=.true.)
+
+   ! Allocate EmisState
+   call cc_allocate_emisstate(GridState, EmisState, rc)
+   if (rc /= CC_success) then
+      errMsg = 'Error in "cc_allocate_emisstate"'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
 
    ! Allocate EmisState with FRP
    do c = 1, EmisState%nCats
@@ -130,5 +138,16 @@ program test_plumerise
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    endif
+
+   ! check plumerise output
+   cats2: do c = 1, EmisState%nCats
+      species2: do s = 1, EmisState%Cats(c)%nSpecies
+
+         plume2: do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc
+            call assert(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) > 0.0, "PlmRiseHgt > 0.0")
+            call assert(SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0, "SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0")
+         end do plume2
+      end do species2
+   end do cats2
 
 end program test_plumerise
