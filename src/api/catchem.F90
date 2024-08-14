@@ -31,6 +31,11 @@ module CATChem
    use MetState_Mod, only: cc_allocate_metstate => Met_Allocate
    ! diagstate
    use DiagState_Mod, only: cc_allocate_diagstate => Diag_Allocate
+   ! emisstate
+   use EmisState_Mod, only: cc_allocate_emisstate => Emis_Allocate
+   use EmisState_Mod, only: cc_deallocate_emisstate => EmisState_CleanUp
+   use EmisState_Mod, only: cc_emis_to_chem_map => Emis_Find_Chem_Map_Index
+   use EmisState_Mod, only: cc_apply_emis_to_chem => Apply_Emis_to_Chem
 
    !-------------------
    ! Configuration Read
