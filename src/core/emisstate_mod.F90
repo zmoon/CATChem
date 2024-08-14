@@ -174,14 +174,14 @@ CONTAINS
                ALLOCATE(EmisState%Cats(c)%Species(s)%Flux(GridState%number_of_levels), STAT=RC)
                if (RC /= CC_SUCCESS) then
                   ErrMsg = 'Error allocating "EmisState%Cats%Species%Flux"!'
-                  call Handle_Error(ErrMsg, RC, ThisLoc)
+                  call CC_Error(ErrMsg, RC, ThisLoc)
                   return
                endif
 
                ALLOCATE(EmisState%Cats(c)%Species(s)%EmisMapIndex(EmisState%Cats(c)%Species(s)%nEmisMap), STAT=RC)
                if (RC /= CC_SUCCESS) then
                   ErrMsg = 'Error allocating "EmisState%Cats%Species%EmisMapIndex"!'
-                  call Handle_Error(ErrMsg, RC, ThisLoc)
+                  call CC_Error(ErrMsg, RC, ThisLoc)
                   return
                endif
 
@@ -190,21 +190,21 @@ CONTAINS
                   ALLOCATE(EmisState%Cats(c)%Species(s)%PlmSrcFlx(nPlumes), STAT=RC)
                   if (RC /= CC_SUCCESS) then
                      ErrMsg = 'Error allocating "EmisState%Cats%Species%PlmSrcFlx"!'
-                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     call CC_Error(ErrMsg, RC, ThisLoc)
                      return
                   endif
 
                   ALLOCATE(EmisState%Cats(c)%Species(s)%FRP(nPlumes), STAT=RC)
                   if (RC /= CC_SUCCESS) then
                      ErrMsg = 'Error allocating "EmisState%Cats%Species%FRP"!'
-                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     call CC_Error(ErrMsg, RC, ThisLoc)
                      return
                   endif
 
                   ALLOCATE(EmisState%Cats(c)%Species(s)%PlmRiseHgt(nPlumes), STAT=RC)
                   if (RC /= CC_SUCCESS) then
                      ErrMsg = 'Error allocating "EmisState%Cats%Species%PlmRiseHgt"!'
-                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     call CC_Error(ErrMsg, RC, ThisLoc)
                      return
                   endif
 
@@ -216,7 +216,7 @@ CONTAINS
          call TotEmisSpecies_Allocate(GridState, EmisState, RC)
          IF (RC /= CC_success) THEN
             ErrMsg = 'Error in "TotEmisSpecies_Allocate"'
-            call Handle_Error(ErrMsg, RC, ThisLoc)
+            call CC_Error(ErrMsg, RC, ThisLoc)
             return
          ENDIF
 
@@ -284,7 +284,7 @@ CONTAINS
          ALLOCATE(EmisState%TotSpecies(EmisState%nEmisTotal), STAT=RC)
          IF (RC /= CC_SUCCESS) THEN
             ErrMsg = 'Error allocating "EmisState%TotSpecies"!'
-            call Handle_Error(ErrMsg, RC, ThisLoc)
+            call CC_Error(ErrMsg, RC, ThisLoc)
             return
          ENDIF
 
@@ -350,7 +350,7 @@ CONTAINS
                call FindSpecByName(ChemState, EmisState%Cats(c)%Species(s)%EmisMapName(n), index, RC)
                if (RC /= CC_SUCCESS) then
                   ErrMsg = 'Error in find_species_by_name'
-                  call Handle_Error(ErrMsg, RC, ThisLoc)
+                  call CC_Error(ErrMsg, RC, ThisLoc)
                   return
                endif
                EmisState%Cats(c)%Species(s)%EmisMapIndex(n) = index
