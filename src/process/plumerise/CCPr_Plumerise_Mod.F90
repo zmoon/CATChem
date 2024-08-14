@@ -121,6 +121,7 @@ CONTAINS
       Integer :: s ! Emitted Species
       Integer :: p ! Plumerise source length counter
       Integer :: z ! Vertical counter
+      integer :: nPlumes ! temporary variable for number of plumes 
       Logical :: verbose_
 
       REAL(fp) :: plmHGT                              ! Plumerise Height [m]
@@ -171,6 +172,9 @@ CONTAINS
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
                         end do
 
+                        ! Add Plume Rise height to species
+                        EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) = plmHGT
+
                      else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
                            MetState%ZMID,                               &
@@ -199,6 +203,9 @@ CONTAINS
                         do z = 1, GridState%number_of_levels
                            ColEmis(z) = ColEmis(z) + EmisState%Cats(c)%Species(s)%PlmSrcFlx(p) * EFRAC(z)
                         end do
+
+                        ! Add Plume Rise height to species
+                        EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) = plmHGT
 
                      end if ! plume source loop
 
