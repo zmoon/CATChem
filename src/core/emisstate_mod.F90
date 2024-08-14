@@ -17,6 +17,11 @@ module EmisState_Mod
    IMPLICIT NONE
    PRIVATE
 
+   PUBLIC :: Emis_Allocate
+   PUBLIC :: Emis_Find_Chem_Map_Index
+   PUBLIC :: EmisState_CleanUp
+   PUBLIC :: Apply_Emis_to_Chem
+
    !> \brief Emission Species State
    !!
    !! \details The Emission Species States contain information about the emitted species and
@@ -52,6 +57,7 @@ module EmisState_Mod
       real(fp), ALLOCATABLE :: Flux(:)         !< Emission flux
       real(fp)              :: EmisHeight      !< Emission Height [m] - Simple emission height or -1 for PBLH
       real(fp), ALLOCATABLE :: PlmSrcFlx(:)    !< Plumerise source emission flux [kg/m2/s]
+      real(fp), ALLOCATABLE :: PlmRiseHgt(:)   !< Height of Plume rise [m]
       real(fp), ALLOCATABLE :: FRP(:)          !< Fire Radiative Power (W/m^2)
       real(fp), ALLOCATABLE :: STKDM(:)        !< Briggs stack diameter [m] (array of all point sources in grid cell)
       real(fp), ALLOCATABLE :: STKHT(:)        !< Briggs stack thickness [m] (array of all point sources in grid cell)
@@ -151,6 +157,7 @@ CONTAINS
 
       integer :: c ! Loop counter for emission Cats
       integer :: s ! Loop counter for emitted species
+      integer :: nPlumes ! temporary variable for number of plumes
 
 
       ! Initialize return code
@@ -177,9 +184,42 @@ CONTAINS
                   call Handle_Error(ErrMsg, RC, ThisLoc)
                   return
                endif
+               
+               if (EmisState%Cats(c)%Species(s)%nPlmSrc > 0) then ! if there are plume sources
+                  nPlumes = EmisState%Cats(c)%Species(s)%nPlmSrc ! temporary variable for number of plumes
+                  ALLOCATE(EmisState%Cats(c)%Species(s)%PlmSrcFlx(nPlumes), STAT=RC)
+                  if (RC /= CC_SUCCESS) then
+                     ErrMsg = 'Error allocating "EmisState%Cats%Species%PlmSrcFlx"!'
+                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     return
+                  endif
 
+                  ALLOCATE(EmisState%Cats(c)%Species(s)%FRP(nPlumes), STAT=RC)
+                  if (RC /= CC_SUCCESS) then
+                     ErrMsg = 'Error allocating "EmisState%Cats%Species%FRP"!'
+                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     return
+                  endif
+
+                  ALLOCATE(EmisState%Cats(c)%Species(s)%PlmRiseHgt(nPlumes), STAT=RC)
+                  if (RC /= CC_SUCCESS) then
+                     ErrMsg = 'Error allocating "EmisState%Cats%Species%PlmRiseHgt"!'
+                     call Handle_Error(ErrMsg, RC, ThisLoc)
+                     return
+                  endif
+
+                  
+               endif
             end do
          end do
+
+         call TotEmisSpecies_Allocate(GridState, EmisState, RC)
+         IF (RC /= CC_success) THEN
+            ErrMsg = 'Error in "TotEmisSpecies_Allocate"'
+            call Handle_Error(ErrMsg, RC, ThisLoc)
+            return
+         ENDIF
+
       end if
 
    end subroutine Emis_Allocate
