@@ -38,7 +38,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Read_Input_File( Config , GridState, RC )
+   SUBROUTINE Read_Input_File( Config , GridState, EmisState, ChemState, RC, ConfigFilename )
 !
 ! !USES:
 !
@@ -94,14 +94,14 @@ CONTAINS
       ! Assume success
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/config_mod.F90)'
+      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/input_mod.F90)'
 
       !========================================================================
       ! Read the YAML file into the Config object
       !========================================================================
-      CALL QFYAML_Init( configFile, ConfigInput, ConfigAnchored, RC )
+      CALL QFYAML_Init( cFile, ConfigInput, ConfigAnchored, RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error reading configuration file: ' // TRIM( configFile )
+         errMsg = 'Error reading configuration file: ' // TRIM( cFile )
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
@@ -175,6 +175,7 @@ CONTAINS
 
 
 
+
       !========================================================================
       ! Config ChemState
       !========================================================================
@@ -186,7 +187,6 @@ CONTAINS
          CALL QFYAML_CleanUp( ConfigAnchored )
          RETURN
       endif
-
 
       !========================================================================
       ! Config EmisState
@@ -200,8 +200,6 @@ CONTAINS
          RETURN
       endif
 
-
-
       !========================================================================
       ! Further error-checking and initialization
       !========================================================================
@@ -210,11 +208,14 @@ CONTAINS
 
    END SUBROUTINE Read_Input_File
 
-
-
-
-
-
+   !> Reads the species database
+   !!
+   !! \param   filename The name of the species database
+   !! \param   GridState The grid state object
+   !! \param   ChemState The chemical state object
+   !! \param   RC Return code
+   !!
+   !!!>
    SUBROUTINE Config_Chem_State( filename, GridState, ChemState, RC )
       USE ChemState_Mod, ONLY : ChemStateType, Find_Number_of_Species, Find_Index_of_Species
       use Config_Opt_Mod, ONLY : ConfigType
@@ -574,109 +575,6 @@ CONTAINS
 
    END SUBROUTINE Config_Chem_State
 
-
-
-
-   SUBROUTINE Config_Emis_State( filename, EmisState, ChemState, RC )
-      USE ChemState_Mod, ONLY : ChemStateType
-      USE EmisState_Mod, ONLY : EmisStateType
-      use Config_Opt_Mod, ONLY : ConfigType
-      USE Error_Mod
-      USE GridState_Mod, ONLY : GridStateType
-
-      CHARACTER(LEN=*), INTENT(IN) :: filename
-      TYPE(ChemStateType), INTENT(INOUT) :: ChemState
-      TYPE(EmisStateType), INTENT(INOUT) :: EmisState
-      INTEGER, INTENT(INOUT) :: RC
-
-      TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
-
-      CHARACTER(LEN=255) :: thisLoc ! where am i
-      CHARACTER(LEN=512) :: errMsg  ! error message
-      character(len=QFYAML_NamLen), allocatable :: Cats(:)
-      integer :: n, s, j
-      CHARACTER(LEN=QFYAML_NamLen) :: key
-      CHARACTER(LEN=QFYAML_NamLen) :: base
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-      integer :: v_int
-      real    :: v_real
-      logical :: v_logical
-      real, allocatable :: v_real_arr(:)
-      integer :: arr_size
-      CHARACTER(LEN=QFYAML_NamLen), pointer :: v_str_arr(:)
-
-      Character(len=17) :: tags(5)
-
-      RC = CC_SUCCESS
-
-      thisLoc = ' -> at Config_Emis_State (in module core/config_mod.F90)'
-         IF (RC /= CC_SUCCESS) then
-            if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .false.) then
-               ! assume that if upper_radius isn't in the species.yaml file assume 0.0
-               ChemState%ChemSpecies(n)%upper_radius = MISSING_REAL
-            else
-               ! if is_aerosol upper_radius must be present
-               errMsg = 'upper_radius required for aerosol species ' // TRIM(ChemState%SpeciesNames(n))
-               CALL CC_Error( errMsg, RC, thisLoc )
-               RETURN
-            endif
-         ENDIF
-         ChemState%ChemSpecies(n)%upper_radius = v_real
-         write(*,*) '|  upper_radius: ', ChemState%ChemSpecies(n)%upper_radius
-
-         key = TRIM(ChemState%SpeciesNames(n)) // '%' // 'viscosity'
-         v_real = MISSING_REAL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM(key), v_real, "", RC )
-         IF (RC /= CC_SUCCESS) then
-            if (ChemState%ChemSpecies(n)%is_gas .eqv. .false.) then
-               ! assume that if viscosity isn't in the species.yaml file assume 0.0
-               ChemState%ChemSpecies(n)%viscosity = MISSING_REAL
-            else
-               ! if is_gas viscosity must be present
-               errMsg = 'viscosity required for aerosol species ' // TRIM(ChemState%SpeciesNames(n))
-               CALL CC_Error( errMsg, RC, thisLoc )
-               RETURN
-            endif
-         ENDIF
-         ChemState%ChemSpecies(n)%viscosity = v_real
-         write(*,*) '|  viscosity: ', ChemState%ChemSpecies(n)%viscosity
-
-         !---------------------------------------
-         ! Allocate initial Species Concentration
-         !---------------------------------------
-         ALLOCATE(ChemState%ChemSpecies(n)%conc(GridState%number_of_levels), STAT=RC)
-
-      enddo ! n
-
-      CALL Find_Number_of_Species(ChemState, RC)
-      IF (RC /= CC_SUCCESS) THEN
-         errMsg = 'Error in Find_Number_of_Species'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-
-      CALL Find_Index_of_Species(ChemState, RC)
-      IF (RC /= CC_SUCCESS) THEN
-         errMsg = 'Error in Find_Index_of_Species'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-
-      write(*,*) '========================================================='
-      write(*,*) '| Chemstate SUMMARY'
-      write(*,*) '|  number_of_species:  ', ChemState%nSpecies
-      write(*,*) '|  number_of_aerosols: ', ChemState%nSpeciesAero
-      write(*,*) '|  number_of_gases:    ', ChemState%nSpeciesGas
-      write(*,*) '|  number of tracers:  ', ChemState%nSpeciesTracer
-      write(*,*) '|  number of dust:     ', ChemState%nSpeciesDust
-      write(*,*) '|  number of seasalt:  ', ChemState%nSpeciesSeaSalt
-      write(*,*) '========================================================='
-
-   END SUBROUTINE Config_Chem_State
-
-
-
-
    SUBROUTINE Config_Emis_State( filename, EmisState, ChemState, RC )
       USE ChemState_Mod, ONLY : ChemStateType
       USE EmisState_Mod, ONLY : EmisStateType
@@ -810,7 +708,6 @@ CONTAINS
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in QFYAML_String_to_Real_Arr'
                   call CC_Error(errMsg, RC, thisLoc)
-
                   call QFYAML_CleanUp(ConfigInput)
                   call QFYAML_CleanUp(ConfigAnchored)
                   RETURN
@@ -911,86 +808,6 @@ CONTAINS
                if (EmisState%Cats(n)%Species(s)%EmisLayer == 0) then
                   write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
                else
-
-            ! get emission_layer of emission species in the category
-            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
-               key =  TRIM(base) // '%emission_layer'
-               v_int = MISSING_INT
-               CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-               IF ( RC /= CC_SUCCESS .or. v_int < 0 ) THEN
-                  v_int = 1
-               ENDIF
-               EmisState%Cats(n)%Species(s)%EmisLayer = v_int
-            endif
-
-            ! get emission_height of emission species in the category
-            if (EmisState%Cats(n)%Species(s)%plumerise == 0 .or. &
-               EmisState%Cats(n)%Species(s)%plumerise == 3) then
-               key =  TRIM(base) // '%emission_height'
-               v_real = MISSING_REAL
-               CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
-               IF ( RC /= CC_SUCCESS .or. v_real < 0._fp) THEN
-                  v_real = 0._fp ! emitted at surface
-               ENDIF
-               EmisState%Cats(n)%Species(s)%EmisHeight = v_real
-            endif
-         enddo
-      enddo
-
-
-      !========================================================================
-      ! Print EmisState
-      !========================================================================
-      write(*,*) '==================================================='
-      write(*,*) 'Emission Settings:'
-      write(*,*) '==================================================='
-      write(*,*) '| nEmisTotal:          ', EmisState%nEmisTotal
-      write(*,*) '| nEmisTotalPlumerise: ', EmisState%nEmisTotalPlumerise
-      write(*,*) '| nCats:     ', EmisState%nCats
-
-      do n = 1, EmisState%nCats
-         write(*,*) '| Category: ', TRIM(EmisState%Cats(n)%name)
-         do s = 1, EmisState%Cats(n)%nSpecies
-            write(*,*) '|   Species:     ' // TRIM(EmisState%Cats(n)%Species(s)%name)
-            write(*,*) '|     long_name: ' // TRIM(EmisState%Cats(n)%Species(s)%long_name)
-            write(*,*) '|     units:     ' // TRIM(EmisState%Cats(n)%Species(s)%units)
-            write(*,*) '|     nEmisMap:  ', EmisState%Cats(n)%Species(s)%nEmisMap
-            do j = 1, EmisState%Cats(n)%Species(s)%nEmisMap
-               write(*,*) '|       Emission Mapping:  ' // TRIM(EmisState%Cats(n)%Species(s)%EmisMapName(j)) &
-                  // ' -> ', EmisState%Cats(n)%Species(s)%Scale(j)
-            enddo
-
-            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
-               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
-                  EmisState%Cats(n)%Species(s)%plumerise = 0
-                  write(*,*) '|     plumerise:  No plumerise EmisLayer or EmisHeight provided -> Set plumerise = 0'
-               endif
-            else
-               write(*,*) '|     plumerise:  ', EmisState%Cats(n)%Species(s)%plumerise
-            endif
-
-            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
-               if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
-                  write(*,*) '|     EmisLayer:  Both emission_layer and emission_height are set -> Use EmisHeight'
-                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
-               else if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
-                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
-               else if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
-                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
-               else
-                  write(*,*) '|     EmisLayer:  1'
-                  write(*,*) '|     EmisHeight: Surface'
-               endif
-            endif
-
-            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
-               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0) then
-                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
-               else
                   write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                endif
 
@@ -1007,13 +824,6 @@ CONTAINS
       CALL QFYAML_CleanUp(ConfigAnchored)
 
    END SUBROUTINE Config_Emis_State
-
-
-
-
-
-
-
 
 
    !> \brief Process simulation configuration
@@ -1076,7 +886,7 @@ CONTAINS
       RC      = CC_SUCCESS
       errMsg  = ''
       thisLoc = &
-         ' -> at Config_Simulation (in module CATChem/src/core/config_mod.F90)'
+         ' -> at Config_Simulation (in module CATChem/src/core/input_mod.F90)'
 
       !------------------------------------------------------------------------
       ! Simulation type
@@ -1091,30 +901,29 @@ CONTAINS
       ENDIF
       Config%SimulationName = TRIM( v_str )
 
+      key   = "simulation%species_filename"
+      v_str = MISSING_STR
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%Species_File = TRIM( v_str )
+
+      key   = "simulation%emission_filename"
+      v_str = MISSING_STR
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_str, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%Emission_File = TRIM( v_str )
+
 
       ! Return success
       RC = CC_SUCCESS
-
-      !========================================================================
-      ! Print to screen
-      !========================================================================
-!       IF ( Config%amIRoot ) THEN
-!          WRITE( 6, 90  ) 'SIMULATION SETTINGS'
-!          WRITE( 6, 95  ) '-------------------'
-!          WRITE( 6, 110 ) 'Simulation name             : ',                     &
-!             TRIM( Config%SimulationName )
-!          WRITE( 6, 120 ) 'Turn on verbose output      : ',                     &
-!             Config%Verbose
-!          WRITE( 6, 110 ) 'Verbose output printed on   : ',                     &
-!             TRIM( verboseMsg )
-!       ENDIF
-
-!       ! Format statements
-! 90    FORMAT( /, A              )
-! 95    FORMAT( A                 )
-! 100   FORMAT( A, I8.8, 1X, I6.6 )
-! 110   FORMAT( A, A              )
-! 120   FORMAT( A, L5             )
 
    END SUBROUTINE Config_Simulation
 
@@ -1178,7 +987,7 @@ CONTAINS
       ! Initialize
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Config_Grid (in CATChem/src/core/config_mod.F90)'
+      thisLoc = ' -> at Config_Grid (in CATChem/src/core/input_mod.F90)'
 
       !------------------------------------------------------------------------
       ! Level range
@@ -1192,6 +1001,19 @@ CONTAINS
          RETURN
       ENDIF
       GridState%number_of_levels = v_int
+
+      !------------------------------------------------------------------------
+      ! number of soil layers range
+      !------------------------------------------------------------------------
+      key   = "grid%number_of_soil_layers"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      GridState%number_of_soil_layers = v_int
 
       !------------------------------------------------------------------------
       ! number of x and y dimensions (nx and ny)
@@ -1351,9 +1173,6 @@ CONTAINS
 
    END SUBROUTINE Config_Process_Dust
 
-
-
-
    !> \brief Process seasalt configuration
    !!
    !! This function processes the seasalt configuration and performs the necessary actions based on the configuration.
@@ -1461,9 +1280,6 @@ CONTAINS
 
    END SUBROUTINE Config_Process_SeaSalt
 
-
-
-
    !> \brief Process plumerise configuration
    !!
    !! This function processes the plumerise configuration and performs the necessary actions based on the configuration.
@@ -1527,103 +1343,102 @@ CONTAINS
    END SUBROUTINE Config_Process_Plumerise
 
 
+      !> \brief Process DryDep configuration
+      !!
+      !! This function processes the DryDep configuration and performs the necessary actions based on the configuration.
+      !!
+      !! \param[in] ConfigInput The YAML configuration object
+      !! \param[inout] Config The configuration object
+      !! \param[out] RC The return code
+      !!
+      !! \ingroup core_modules
+      !!!>
+      SUBROUTINE Config_Process_DryDep( ConfigInput, Config, RC )
+         USE CharPak_Mod,    ONLY : StrSplit
+         USE Error_Mod
+         USE Config_Opt_Mod,  ONLY : ConfigType
+
+         TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
+         TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+
+         !
+         ! !OUTPUT PARAMETERS:
+         !
+         INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+         ! !LOCAL VARIABLES:
+         !
+         ! Scalars
+         LOGICAL                      :: v_bool
+         INTEGER                      :: v_int
+         INTEGER                      :: nSubStrs
+         INTEGER                      :: N
+         INTEGER                      :: C
+
+         ! Reals
+         REAL(fp)                     :: v_real
+
+         ! Arrays
+         INTEGER                      :: a_int(4)
+
+         ! Strings
+         CHARACTER(LEN=255)           :: thisLoc
+         CHARACTER(LEN=512)           :: errMsg
+         CHARACTER(LEN=QFYAML_StrLen) :: key
+         CHARACTER(LEN=QFYAML_StrLen) :: v_str
+
+         ! String arrays
+         CHARACTER(LEN=255)           :: subStrs(MAXDIM)
+         CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
+
+         !========================================================================
+         ! Config_Process_DryDep begins here!
+         !========================================================================
+
+         ! Initialize
+         RC      = CC_SUCCESS
+         thisLoc = ' -> at Config_Process_DryDep (in CATChem/src/core/config_mod.F90)'
+         errMsg = ''
+
+         ! TODO #105 Fix reading of config file
+         key   = "process%DryDep%activate"
+         v_bool = MISSING_BOOL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = 'Error parsing ' // TRIM( key ) // '!'
+            CALL CC_Error( errMsg, RC, thisLoc )
+            RETURN
+         ENDIF
+         Config%DryDep_activate = v_bool
 
 
-   !> \brief Process DryDep configuration
-   !!
-   !! This function processes the DryDep configuration and performs the necessary actions based on the configuration.
-   !!
-   !! \param[in] ConfigInput The YAML configuration object
-   !! \param[inout] Config The configuration object
-   !! \param[out] RC The return code
-   !!
-   !! \ingroup core_modules
-   !!!>
-   SUBROUTINE Config_Process_DryDep( ConfigInput, Config, RC )
-      USE CharPak_Mod,    ONLY : StrSplit
-      USE Error_Mod
-      USE Config_Opt_Mod,  ONLY : ConfigType
-
-      TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
-      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
-
-      !
-      ! !OUTPUT PARAMETERS:
-      !
-      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
-      ! !LOCAL VARIABLES:
-      !
-      ! Scalars
-      LOGICAL                      :: v_bool
-      INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
-
-      ! Reals
-      REAL(fp)                     :: v_real
-
-      ! Arrays
-      INTEGER                      :: a_int(4)
-
-      ! Strings
-      CHARACTER(LEN=255)           :: thisLoc
-      CHARACTER(LEN=512)           :: errMsg
-      CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
-
-      !========================================================================
-      ! Config_Process_DryDep begins here!
-      !========================================================================
-
-      ! Initialize
-      RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Process_DryDep (in CATChem/src/core/config_mod.F90)'
-      errMsg = ''
-
-      ! TODO #105 Fix reading of config file
-      key   = "process%DryDep%activate"
-      v_bool = MISSING_BOOL
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error parsing ' // TRIM( key ) // '!'
-         CALL CC_Error( errMsg, RC, thisLoc )
-         RETURN
-      ENDIF
-      Config%DryDep_activate = v_bool
+         key   = "process%DryDep%scheme_opt"
+         v_int = MISSING_INT
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+            RETURN
+         ENDIF
+         Config%DryDep_scheme = v_int
 
 
-      key   = "process%DryDep%scheme_opt"
-      v_int = MISSING_INT
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-         RETURN
-      ENDIF
-      Config%DryDep_scheme = v_int
+         key   = "process%DryDep%resuspension"
+         v_bool = MISSING_BOOL
+         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+         IF ( RC /= CC_SUCCESS ) THEN
+            errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
+            RETURN
+         ENDIF
+         Config%DryDep_resuspension = v_bool
 
+         write(*,*) "DryDeposition Configuration"
+         write(*,*) '------------------------------------'
+         write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
+         write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
+         write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
+         write(*,*) '------------------------------------'
 
-      key   = "process%DryDep%resuspension"
-      v_bool = MISSING_BOOL
-      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-      IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
-         RETURN
-      ENDIF
-      Config%DryDep_resuspension = v_bool
+      END SUBROUTINE Config_Process_DryDep
 
-      write(*,*) "DryDeposition Configuration"
-      write(*,*) '------------------------------------'
-      write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
-      write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
-      write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
-      write(*,*) '------------------------------------'
-
-   END SUBROUTINE Config_Process_DryDep
 
 
 END MODULE config_mod
