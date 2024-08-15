@@ -122,7 +122,6 @@ MODULE MetState_Mod
       REAL(fp)              :: USTAR             !< Friction velocity [m/s]
       REAL(fp)              :: V10M              !< N/S wind speed @ 10m ht [m/s]
       REAL(fp)              :: Z0                !< Surface roughness height [m]
-      REAL(fp)              :: Z0H               !< Surface Sensible Heat roughness [m]
       REAL(fp), ALLOCATABLE :: FRZ0(:)           !< Aerodynamic Roughness Length per FRLANDUSE
       REAL(fp)              :: PBLH              !< PBL height [m]
       REAL(fp), ALLOCATABLE :: F_OF_PBL(:)       !< Fraction of box within PBL [1]
@@ -257,6 +256,8 @@ CONTAINS
       !--------------------------------------------------
       ! Initialize fields
       !--------------------------------------------------
+      MetState%nSOIL = GridState%number_of_soil_layers
+      print*, 'MetState%nSOIL = ', MetState%nSOIL
 
       ! Visible Surface Albedo
       !-----------------------
@@ -676,6 +677,15 @@ CONTAINS
 
       if (.not. allocated(MetState%PEDGE_DRY)) then
          allocate(MetState%PEDGE_DRY(GridState%number_of_levels+1), stat=RC)
+         if (RC /= CC_SUCCESS) then
+            errMsg = 'Error allocating MetState%InStratosphere'
+            call CC_Error(errMsg, RC, thisLoc)
+            return
+         endif
+      end if
+
+      if (.not. allocated(MetState%SOILM)) then
+         allocate(MetState%SOILM(MetState%nSOIL), stat=RC)
          if (RC /= CC_SUCCESS) then
             errMsg = 'Error allocating MetState%InStratosphere'
             call CC_Error(errMsg, RC, thisLoc)

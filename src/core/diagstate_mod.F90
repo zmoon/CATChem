@@ -1,7 +1,8 @@
-!> \file init_mod.F90
+!> \file diagstate_mod.F90
 !! \brief Contains the DiagStateType and Diag_Allocate subroutine
 !!
 !! \ingroup core_modules
+!!
 !! \details This module contains subroutines and functions related to the DiagState instance of CATChem.
 !! It includes subroutines for initializing of the DiagState.
 !!!>
@@ -9,6 +10,7 @@ module DiagState_Mod
    ! Uses
    USE Precision_Mod
    USE Error_Mod
+   USE ChemState_Mod,  only : ChemStateType
 
    IMPLICIT NONE
    private
@@ -17,15 +19,36 @@ module DiagState_Mod
    PUBLIC :: Diag_Allocate
 
    !> \brief Data type for storing diagnostic state variables
+   !!
+   !! \ingroup core_modules
+   !!
+   !! \param dust_total_flux      Total flux of dust particles [kg m-2 s-1]
+   !! \param sea_salt_total_flux  Total flux of sea salt particles [kg m-2 s-1]
+   !! \param AOD550               Total AOD at 550nm [1]
+   !! \param AOD380               Total AOD at 380nm [1]
+   !! \param TOMSAI               TOMS Aerosol Index [1]
+   !! \param briggs_plumerise_height Effective plume rise height from Briggs algorithm [m]
+   !! \param sofiev_plumerise_height Effective plume rise height from Sofiev algorithm [m]
+   !!
+   !!!>
    type, public :: DiagStateType
 
       ! Surface or single-level variables
       REAL(fp) :: dust_total_flux      !< Total flux of dust particles [kg m-2 s-1]
       REAL(fp) :: sea_salt_total_flux  !< Total flux of sea salt particles [kg m-2 s-1]
 
-      ! Dry Deposition
-      REAL(fp), allocatable :: drydep_frequency(:)     !< Dry deposition frequency [1/s]
-      REAL(fp), allocatable :: drydep_vel(:)           !< Dry deposition velocity [m s-1]
+      ! Aerosol properties
+      ! TODO: Add support for multiple aerosol types / wavelengths and more aerosol optical properties
+      real(fp), allocatable :: AOD550(:)  !< Total AOD at 550nm [1]
+      real(fp), allocatable :: AOD380(:)  !< Total AOD at 380nm [1]
+      real(fp), allocatable :: TOMSAI(:)  !< TOMS Aerosol Index [1]
+
+
+      real(fp) :: briggs_plumerise_height !< Effective plume rise height from Briggs algorithm [m]
+      real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m]
+
+      ! Species Specific Variables
+
 
    end type DiagStateType
 
@@ -41,17 +64,15 @@ CONTAINS
    !! \param RC The return code
    !! \ingroup core_modules
    !!!>
-   subroutine Diag_Allocate(Config, GridState, DiagState, ChemState, RC)
+   subroutine Diag_Allocate(Config, GridState, DiagState, RC)
       ! USES
       USE GridState_Mod, ONLY : GridStateType
       USE Config_Opt_Mod, ONLY : ConfigType
-      USE ChemState_Mod, ONLY : ChemStateType
 
       ! Arguments
       type(ConfigType),    INTENT(IN)    :: Config
       type(GridStateType), INTENT(IN)    :: GridState ! Grid State object
       type(DiagStateType), INTENT(INOUT) :: DiagState ! Diag State object
-      type(ChemStateType), INTENT(IN)    :: ChemState ! Chem State object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC        ! Success or failure
 
@@ -76,27 +97,6 @@ CONTAINS
       ! If sea salt process is activated then allocate sea salt related diagnostics
       if (Config%seasalt_activate) then
          DiagState%sea_salt_total_flux = ZERO
-      endif
-
-      ! If drydep process is activated then allocate drydep related diagnostics
-      if (Config%drydep_activate) then
-         if (.not. allocated(DiagState%drydep_frequency)) then
-            allocate(DiagState%drydep_frequency(ChemState%nSpecies), stat=RC)
-            if (RC /= CC_SUCCESS) then
-               ErrMsg = 'Could not allocate DiagState%drydep_frequency'
-               call Error_Stop(Errmsg, thisLoc)
-            endif
-         endif
-         DiagState%drydep_frequency = ZERO
-
-         if (.not. allocated(DiagState%drydep_vel)) then
-            allocate(DiagState%drydep_vel(ChemState%nSpecies), stat=RC)
-            if (RC /= CC_SUCCESS) then
-               ErrMsg = 'Could not allocate DiagState%drydep_vel'
-               call Error_Stop(Errmsg, thisLoc)
-            endif
-         endif
-         DiagState%drydep_vel = ZERO
       endif
 
    end subroutine Diag_Allocate
