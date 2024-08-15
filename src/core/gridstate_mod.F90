@@ -16,20 +16,18 @@ module GridState_Mod
 
    PUBLIC :: Grid_Init_State
    type, public :: GridStateType
+      CHARACTER(LEN=4) :: State = 'Grid'  !< Name of this state
 
       ! Integers
-      integer :: nx
-      integer :: ny
-      integer :: model_timestep  
+      integer :: nx = 1
+      integer :: ny = 1
       integer :: number_of_levels  !< The number of vertical levels
+      integer :: number_of_soil_layers  !< The number of soil layers
+      integer :: model_timestep
 
       ! Reals
       real(fp) :: area  !< Grid cell horizontal area [m^2]
 
-      !-------------------------------------------------------------------------
-      ! Name of variables containing grid information
-      !-------------------------------------------------------------------------
-      CHARACTER(LEN=4)             :: State     = 'Grid'    ! Name of this state
    end type GridStateType
 
 contains
@@ -57,17 +55,16 @@ contains
       CHARACTER(LEN=512) :: errMsg
       CHARACTER(LEN=255) :: thisLoc
 
-      ! set error handling defaults
-      RC = 0
+      ! Set error handling defaults
+      RC = CC_SUCCESS
       errMsg = ''
       thisLoc = 'Grid_Init_State() -> at initializing GridState'
 
       ! initialize GridState
       GridState%nx=1
       GridState%ny=1
+      GridState%number_of_levels=1  ! FIXME: use Config?
       GridState%area = 1._fp
-      GridState%model_timestep=60  ! in seconds
-      GridState%number_of_levels=1  
 
    end subroutine Grid_Init_State
 

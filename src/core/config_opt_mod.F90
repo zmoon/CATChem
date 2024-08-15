@@ -68,11 +68,11 @@ MODULE Config_Opt_Mod
       ! SIMULATION MENU fields
       !----------------------------------------
       CHARACTER(LEN=255)          :: SimulationName
-      CHARACTER(LEN=255)          :: SpcDatabaseFile
+      CHARACTER(LEN=255)          :: Emission_File
+      CHARACTER(LEN=255)          :: Species_File
       LOGICAL                     :: VerboseRequested
       CHARACTER(LEN=10)           :: VerboseOnCores
       LOGICAL                     :: Verbose
-      INTEGER                     :: Number_of_levels
 
       !-----------------------------------------
       ! PROCESSING MENU fields
@@ -162,7 +162,6 @@ CONTAINS
       ! Dry run info (print out file names)
       !----------------------------------------
       Config%DryRun                 = .FALSE.
-      Config%number_of_levels       = 28
 
       !-----------------------------------------
       ! PROCESSING MENU fields
