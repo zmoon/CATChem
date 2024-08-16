@@ -45,7 +45,11 @@ module DiagState_Mod
 
 
       real(fp) :: briggs_plumerise_height !< Effective plume rise height from Briggs algorithm [m]
-      real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m]
+      real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m] 
+
+      real(fp) :: drydep_frequency
+      real(fp) :: drydep_vel
+
 
       ! Species Specific Variables
 
@@ -99,6 +103,17 @@ CONTAINS
          DiagState%sea_salt_total_flux = ZERO
       endif
 
+      ! If dry deposition process is activated then allocate dry dep related diagnostics
+      !if (Config%drydep_activate) then
+      !   DiagState%drydep_frequency= ZERO
+      !endif
+
+
+
    end subroutine Diag_Allocate
 
 end module DiagState_Mod
+
+
+
+

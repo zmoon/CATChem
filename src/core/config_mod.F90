@@ -94,7 +94,7 @@ CONTAINS
       ! Assume success
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/config_mod.F90)'
 
       !========================================================================
       ! Read the YAML file into the Config object
@@ -1411,7 +1411,7 @@ CONTAINS
       Config%DryDep_activate = v_bool
 
 
-      key   = "process%DryDep%scheme_opt"
+      key   = "process%DryDep%scheme"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN

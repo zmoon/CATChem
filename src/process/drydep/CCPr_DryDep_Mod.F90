@@ -23,7 +23,7 @@ MODULE CCPR_DryDep_mod
    !! DryDepStateType is the process-specific derived type.
    !!
    !! \param Activate Activate Process (True/False)
-   !! \param SchemeOpt Scheme Option
+   !! \param Scheme Scheme Option
    !! \param DryDepSpeciesIndex Effected Chemical Species from DryDep
    !! \param nSpc # of species
    !! \param SpcIDs CATChem species IDs
@@ -35,7 +35,7 @@ MODULE CCPR_DryDep_mod
    TYPE :: DryDepStateType
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
-      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
+      INTEGER                         :: Scheme             ! Scheme Option (if there is only one SchemeOpt always = 1)
    END TYPE DryDepStateType
 
 
@@ -95,9 +95,9 @@ CONTAINS
 
          ! Set scheme option
          !------------------
-         DryDepState%SchemeOpt = config%DryDep_scheme_opt
+         DryDepState%Scheme = config%DryDep_scheme
 
-         if (Config%DryDep_resuspension_opt) then
+         if (Config%DryDep_resuspension) then
             ! Activate resuspension
             !------------------
             DryDepState%Resuspension = .true.
@@ -177,7 +177,7 @@ CONTAINS
       if (DryDepState%Activate) then
          ! Run the DryDep Scheme
          !-------------------------
-         if (DryDepState%SchemeOpt == 1) then
+         if (DryDepState%Scheme == 1) then
             ! Run the DryDep Scheme - Only Applicable to AEROSOL species
             !-------------------------
             if (ChemState%nSpeciesAero > 0) then
@@ -241,18 +241,21 @@ CONTAINS
 
                   ! Fill Diagnostic Variables
                   !--------------------------
-                  DiagState%drydep_frequency(ChemState%AeroIndex(i)) = drydepf(1,1)
-                  DiagState%drydep_vel(ChemState%AeroIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
+                  !!!!FIXME: COME BACK TO THIS LATER
+                  !DiagState%drydep_frequency(ChemState%AeroIndex(i)) = drydepf(1,1)
+                  !DiagState%drydep_vel(ChemState%AeroIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
-                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
-                  ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) = ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) - dqa
+                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1)   &
+                          * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
+                  ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) =     &
+                          ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) - dqa
                end do ! do i = 1, ChemState%nSpeciesAero
 
             endif ! if (ChemState%nSpeciesAero > 0)
 
-         endif ! if (DryDepState%SchemeOpt == 1)
+         endif ! if (DryDepState%Scheme == 1)
 
       endif
 
