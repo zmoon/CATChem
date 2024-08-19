@@ -149,8 +149,10 @@ CONTAINS
          cats: do c = 1, EmisState%nCats
             if (EmisState%Cats(c)%nPlumerise /= 0) then  ! in EmisState%Cats(c) plumerise options activated
                species: do s = 1, EmisState%Cats(c)%nSpecies ! loop over emitted species
+                  print*, 'Running Plumerise for ', EmisState%Cats(c)%Species(s)%name
                   plume: do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc ! loop over plume sources
-                     if (EmisState%Cats(c)%Species(s)%plumerise == 1) then ! Sofiev Plumerise
+                     select case (EmisState%Cats(c)%Species(s)%plumerise)
+                      case (1) ! Sofiev Plumerise
 
                         call CCPr_Sofiev_Plmrise(MetState%Z,     &
                            MetState%T,                           &
@@ -175,7 +177,7 @@ CONTAINS
                         ! Add Plume Rise height to species
                         EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) = plmHGT
 
-                     else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then ! Brigg's Plumerise
+                      case (2) ! Brigg's Plumerise
                         call CCPr_Briggs_Plumerise(MetState%Z,          &
                            MetState%ZMID,                               &
                            MetState%T,                                  &
@@ -207,9 +209,11 @@ CONTAINS
                         ! Add Plume Rise height to species
                         EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) = plmHGT
 
-                     end if ! plume source loop
+                      case default
 
-                     if (verbose_ .eqv. .true.) then
+                     end select
+
+                     if ((verbose_ .eqv. .true.) .and. (EmisState%Cats(c)%Species(s)%plumerise > 0)) then
                         write(*,*) '------------ PLUMERISE ---------------'
                         write(*,*) 'Category: ', EmisState%Cats(c)%Name
                         write(*,*) 'Species: ', EmisState%Cats(c)%Species(s)%Name

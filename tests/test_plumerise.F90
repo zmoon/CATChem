@@ -10,6 +10,9 @@ program test_plumerise
    integer :: rc          ! Success or failure
    integer :: c, s, p
 
+   ! test_frp = (/10.0e6, 100.0e6, 500.0e6, 1000.0e6/)
+   ! test_sofieve_emis = (/10.0e6, 100.0e6, 500.0e6, 1000.0e6/)
+
    CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Plumerise/CATChem_config.yml'
 
    ! Error handling
@@ -48,7 +51,12 @@ program test_plumerise
    print*, 'Allocated MetState'
 
    ! Meteorological State
-   call load_column_data("MetProfiles/Profile_NCWCP.csv", MetState, rc, verbose=.true.)
+   call load_column_data("MetProfiles/Profile_SAHARA.csv", MetState, rc, verbose=.True.)
+   if (rc /= CC_success) then
+      errMsg = 'Error in "load_column_data"'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   endif
 
    ! Allocate EmisState
    call cc_allocate_emisstate(GridState, EmisState, rc)
@@ -62,54 +70,70 @@ program test_plumerise
    do c = 1, EmisState%nCats
       if (EmisState%Cats(c)%nPlumerise /= 0) then
          do s = 1, EmisState%Cats(c)%nSpecies
+            print*, '  Species: ', EmisState%Cats(c)%Species(s)%name
+            print*, '    Plumerise opt: ', EmisState%Cats(c)%Species(s)%plumerise
             if (EmisState%Cats(c)%Species(s)%plumerise == 1) then
 
                EmisState%Cats(c)%Species(s)%nPlmSrc = 4
                allocate(EmisState%Cats(c)%Species(s)%PlmSrcFlx(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%PlmSrcFlx'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
                allocate(EmisState%Cats(c)%Species(s)%FRP(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%FRP'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
-               EmisState%Cats(c)%Species(s)%FRP = (/10.0e6, 100.0e6, 500.0e6, 1000.0e6/)
-               EmisState%Cats(c)%Species(s)%PlmSrcFlx = 0.0
+               allocate(EmisState%Cats(c)%Species(s)%PlmRiseHgt(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
+               if (rc /= CC_success) then
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%FRP'
+                  call cc_emit_error(errMsg, rc, thisLoc)
+                  stop 1
+               endif
+               ! do n = 1, EmisState%Cats(c)%Species(s)%nPlmSrc
+
+               EmisState%Cats(c)%Species(s)%FRP = (/10.0e6, 100.0e6, 500.0e7, 1000.0e10/)
+               EmisState%Cats(c)%Species(s)%PlmSrcFlx = (/10., 100., 500., 1000./)
 
             else if (EmisState%Cats(c)%Species(s)%plumerise == 2) then
 
                EmisState%Cats(c)%Species(s)%nPlmSrc = 1
                allocate(EmisState%Cats(c)%Species(s)%PlmSrcFlx(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%PlmSrcFlx'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
                allocate(EmisState%Cats(c)%Species(s)%STKDM(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%STKDM'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
                allocate(EmisState%Cats(c)%Species(s)%STKHT(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%STKHT'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
                allocate(EmisState%Cats(c)%Species(s)%STKTK(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%STKTK'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
                allocate(EmisState%Cats(c)%Species(s)%STKVE(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
                if (rc /= CC_success) then
-                  errMsg = 'Error in "cc_allocate_emisstate"'
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%STKVE'
+                  call cc_emit_error(errMsg, rc, thisLoc)
+                  stop 1
+               endif
+               allocate(EmisState%Cats(c)%Species(s)%PlmRiseHgt(EmisState%Cats(c)%Species(s)%nPlmSrc), stat=rc)
+               if (rc /= CC_success) then
+                  errMsg = 'Error in allocate for EmisState%Cats(c)%Species(s)%FRP'
                   call cc_emit_error(errMsg, rc, thisLoc)
                   stop 1
                endif
@@ -117,6 +141,7 @@ program test_plumerise
                EmisState%Cats(c)%Species(s)%STKHT = (/10.0/)
                EmisState%Cats(c)%Species(s)%STKTK = (/273.0/)
                EmisState%Cats(c)%Species(s)%STKVE = (/10.0/)
+               EmisState%Cats(c)%Species(s)%PlmSrcFlx = (/10./)
 
             endif
          enddo
@@ -144,8 +169,11 @@ program test_plumerise
       species2: do s = 1, EmisState%Cats(c)%nSpecies
 
          plume2: do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc
-            call assert(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) > 0.0, "PlmRiseHgt > 0.0")
-            call assert(SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0, "SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0")
+            if (EmisState%Cats(c)%Species(s)%plumerise > 0) then
+               call assert(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) > 0.0, "PlmRiseHgt > 0.0")
+               call assert(SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0, "SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0")
+            endif
+
          end do plume2
       end do species2
    end do cats2

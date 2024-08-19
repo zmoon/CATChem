@@ -22,3 +22,4 @@ dust:
   DU10:
     long_name: "Dust Species Coarse Mode"
     map: ["dust1", "dust2"]
+    scale: [0.2, 0.8]
