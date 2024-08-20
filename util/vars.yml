@@ -204,7 +204,7 @@ variables:
 
   # Surface type
   dluse:  # dominant land-use type
-    src: sfc:vtype
+    src: sfc:vtype  # Noah-MP extended IGBP, 20 categories, 0 = water
   frveg:  # fraction of vegetation (not just green)
     src: sfc:veg  # vegetation fraction
   dsoiltype:  # dominant soil type (int)
