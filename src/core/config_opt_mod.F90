@@ -130,8 +130,6 @@ CONTAINS
       !
       ! !LOCAL VARIABLES:
       !
-      ! Strings
-      CHARACTER(LEN=30) :: arrayId
 
       !----------------------------------------
       ! Initialize
