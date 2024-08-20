@@ -58,4 +58,16 @@ module precision_mod
    REAL(f4),         PARAMETER, PUBLIC :: ONE_REAL     =  1.0_f4 !< One value (kind=f4)
    REAL(f8),         PARAMETER, PUBLIC :: ONE_DBLE     =  1.0_f8 !< One value (kind=f8)
 
+contains
+
+   !> Real approximately equal: `abs(a - b) < tiny(a)`
+   logical function rae(a, b) result(res)
+      real(fp), intent(in) :: a, b
+      real(fp) :: diff
+
+      diff = abs(a - b)
+      res = diff < tiny(a)
+
+   end function rae
+
 end module precision_mod
