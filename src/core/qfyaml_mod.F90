@@ -48,6 +48,9 @@ MODULE QFYAML_Mod
      PUBLIC :: QFYAML_String_to_Real_Arr
      PUBLIC :: QFYAML_String_to_Integer_Arr
      PUBLIC :: QFYAML_String_to_String_Arr
+     PUBLIC :: QFYAML_Get_Size
+     PUBLIC :: QFYAML_Get_Type
+     PUBLIC :: QFYAML_Split_Category
    !
    ! !REMARKS:
    !  QFYAML -- The Quick Fortran YAML parser!
@@ -929,7 +932,6 @@ MODULE QFYAML_Mod
              INTEGER                      :: line_number
              INTEGER                      :: my_unit
              INTEGER                      :: ix
-             INTEGER                      :: jx
 
              ! Strings
              CHARACTER(LEN=QFYAML_NamLen) :: line_fmt
@@ -1224,7 +1226,6 @@ MODULE QFYAML_Mod
        LOGICAL                            :: append
        INTEGER                            :: ix
        INTEGER                            :: ampsnd_ix
-       INTEGER                            :: anchor_ix
        INTEGER                            :: colon_ix
        INTEGER                            :: star_ix
        INTEGER                            :: trim_len
@@ -1236,7 +1237,6 @@ MODULE QFYAML_Mod
        CHARACTER(LEN=QFYAML_NamLen)       :: var_name
        CHARACTER(LEN=QFYAML_StrLen)       :: errMsg
        CHARACTER(LEN=QFYAML_StrLen)       :: line
-       CHARACTER(LEN=QFYAML_StrLen)       :: line2
        CHARACTER(LEN=QFYAML_StrLen)       :: thisLoc
        CHARACTER(LEN=QFYAML_StrLen)       :: last_cat
 
@@ -2069,7 +2069,7 @@ MODULE QFYAML_Mod
      !! \param[out]   category   Output category
      !! \param[out]   var_name   Output variable name
      !!!>
-     SUBROUTINE Split_Category( variable, category, var_name )
+     SUBROUTINE QFYAML_Split_Category( variable, category, var_name )
    !
    ! !INPUT PARAMETERS:
    !
@@ -2098,7 +2098,7 @@ MODULE QFYAML_Mod
           var_name = variable%var_name(ix+1:)
        ENDIF
 
-     END SUBROUTINE Split_Category
+     END SUBROUTINE QFYAML_Split_Category
      !>
      !! \brief Resize_Storage
      !!
@@ -2429,8 +2429,8 @@ MODULE QFYAML_Mod
        !=======================================================================
 
        ! Strip out brackets from the line
-       DO B = 1, LEN( QFYAML_brackets )
-          bkt = QFYAML_brackets(B:B)
+       DO B = 1, LEN( brackets )
+          bkt = brackets(B:B)
           ix  = INDEX( line, bkt )
           IF ( ix > 0 ) line(ix:ix) = " "
        ENDDO
@@ -4155,6 +4155,7 @@ MODULE QFYAML_Mod
       delimiter = ','
       count = 0
       start = 1
+      temp_string = ''
 
       ! Count the number of commas to determine the size of the array
       do i = 1, len_trim(input_string)
@@ -4215,6 +4216,7 @@ MODULE QFYAML_Mod
       delimiter = ','
       count = 0
       start = 1
+      temp_string = ''
 
       ! Count the number of commas to determine the size of the array
       do i = 1, len_trim(input_string)
@@ -4275,6 +4277,7 @@ MODULE QFYAML_Mod
       delimiter = ','
       count = 0
       start = 1
+      temp_string = ''
 
       ! Count the number of commas to determine the size of the array
       do i = 1, len_trim(input_string)
