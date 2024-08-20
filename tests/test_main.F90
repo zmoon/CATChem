@@ -20,7 +20,7 @@ program test_main
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
-   CHARACTER(LEN=18), PARAMETER :: configFile = 'CATChem_config.yml'
+   CHARACTER(LEN=255), PARAMETER :: configFile = 'Configs/Default/CATChem_config.yml'
    ! set thisLoc
    thisLoc = 'test_main::test_main() -> at read CATChem_Conifg.yml'
    errMsg = ''
@@ -35,7 +35,7 @@ program test_main
    write(*,*) ''
 
    ! Read input file and initialize grid
-   call cc_read_config(Config, GridState, EmisState, ChemState, rc)
+   call cc_read_config(Config, GridState, EmisState, ChemState, rc, configFile)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -43,6 +43,7 @@ program test_main
    endif
 
    ! Check Species names and idnex numbers for consistency
+   print *, 'Checking Species names and idnex numbers for consistency'
    call cc_find_species_by_name(ChemState, DUST1, index, RC)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error finding species index: ' // TRIM( DUST1 )
@@ -56,6 +57,7 @@ program test_main
    endif
 
    ! Check Species names and idnex numbers for consistency
+   print *, 'Checking Species cc_find_species_by_name'
    call cc_find_species_by_name(ChemState, DUST2, index, RC)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error finding species index: ' // TRIM( DUST1 )

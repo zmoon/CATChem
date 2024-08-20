@@ -38,7 +38,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Read_Input_File( Config , GridState, EmisState, ChemState, RC )
+   SUBROUTINE Read_Input_File( Config , GridState, EmisState, ChemState, RC, ConfigFilename )
 !
 ! !USES:
 !
@@ -47,6 +47,9 @@ CONTAINS
       USE GridState_Mod, ONLY : GridStateType
       use ChemState_Mod, only : ChemStateType
       use EmisState_Mod, only : EmisStateType
+
+      ! !INPUT PARAMETERS:
+      CHARACTER(LEN=*), INTENT(IN), OPTIONAL :: ConfigFilename
 !
 ! !INPUT/OUTPUT PARAMETERS:
 !
@@ -63,6 +66,9 @@ CONTAINS
       ! Objects
       TYPE(QFYAML_t)     :: ConfigInput, ConfigAnchored
 
+      ! Local variables
+      CHARACTER(LEN=255) :: cFile
+
       ! Error handling
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
@@ -71,11 +77,17 @@ CONTAINS
       ! Read_Input_File begins here!
       !========================================================================
 
+      if (present(ConfigFilename)) then
+         cFile = TRIM(ConfigFilename)
+      else
+         cFile = TRIM(configFile)
+      endif
+
       ! Echo output
       IF ( Config %amIRoot ) THEN
          WRITE( 6, '(a  )' ) REPEAT( '=', 79 )
          WRITE( 6, '(a,/)' ) 'CATChem Initialization'
-         WRITE( 6, 100   ) TRIM( configFile )
+         WRITE( 6, 100   ) TRIM( cFile )
 100      FORMAT( 'READ_INPUT_FILE: Opening ', a )
       ENDIF
 
@@ -87,9 +99,9 @@ CONTAINS
       !========================================================================
       ! Read the YAML file into the Config object
       !========================================================================
-      CALL QFYAML_Init( configFile, ConfigInput, ConfigAnchored, RC )
+      CALL QFYAML_Init( cFile, ConfigInput, ConfigAnchored, RC )
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error reading configuration file: ' // TRIM( configFile )
+         errMsg = 'Error reading configuration file: ' // TRIM( cFile )
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
@@ -143,6 +155,18 @@ CONTAINS
          RETURN
       ENDIF
 
+      call Config_Process_Plumerise(ConfigInput, Config, RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error in "Config_Process_Plumerise"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput         )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      ENDIF
+
+      !========================================================================
+      ! Config ChemState
+      !========================================================================
       call Config_Chem_State(config%Species_File, GridState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Chem_State"!'
@@ -152,6 +176,9 @@ CONTAINS
          RETURN
       endif
 
+      !========================================================================
+      ! Config EmisState
+      !========================================================================
       call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Emis_State"!'
@@ -589,7 +616,9 @@ CONTAINS
 
 
       EmisState%nEmisTotal = 0
+      EmisState%nEmisTotalPlumerise = 0
       do n = 1, EmisState%nCats
+         EmisState%Cats(n)%nPlumerise = 0
          EmisState%nEmisTotal = EmisState%nEmisTotal + EmisState%Cats(n)%nSpecies ! find total number of species emitted
          do s = 1, EmisState%Cats(n)%nSpecies
             base = TRIM(EmisState%Cats(n)%name) // '%' // TRIM(EmisState%Cats(n)%Species(s)%name)
@@ -625,9 +654,9 @@ CONTAINS
                call QFYAML_CleanUp(ConfigAnchored)
                RETURN
             endif
-            call QFYAML_String_to_String_Arr(v_str,         &
+            call QFYAML_String_to_String_Arr(v_str,                 &
                EmisState%Cats(n)%Species(s)%EmisMapName,    &
-               EmisState%Cats(n)%Species(s)%nEmisMap,       &
+               EmisState%Cats(n)%Species(s)%nEmisMap,     &
                RC)
             if (RC /= CC_SUCCESS) then
                errMsg = 'Error in QFYAML_String_to_Real_Arr'
@@ -672,6 +701,44 @@ CONTAINS
                   RETURN
                endif
             endif
+
+
+            ! get long_name of emission species in the category
+            key =  TRIM(base) // '%plumerise_opt'
+            v_int = MISSING_INT
+            CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+            IF ( RC /= CC_SUCCESS .or. v_int < 0 ) THEN
+               v_int = 0 ! default is no plumerise
+            ENDIF
+            EmisState%Cats(n)%Species(s)%plumerise = v_int
+            if (v_int > 0 .and. v_int < 4) then
+               EmisState%nEmisTotalPlumerise = EmisState%nEmisTotalPlumerise + 1
+               EmisState%Cats(n)%nPlumerise = EmisState%Cats(n)%nPlumerise + 1
+            endif
+
+
+            ! get emission_layer of emission species in the category
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
+               key =  TRIM(base) // '%emission_layer'
+               v_int = MISSING_INT
+               CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+               IF ( RC /= CC_SUCCESS .or. v_int < 0 ) THEN
+                  v_int = 1
+               ENDIF
+               EmisState%Cats(n)%Species(s)%EmisLayer = v_int
+            endif
+
+            ! get emission_height of emission species in the category
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0 .or. &
+               EmisState%Cats(n)%Species(s)%plumerise == 3) then
+               key =  TRIM(base) // '%emission_height'
+               v_real = MISSING_REAL
+               CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_real, "", RC )
+               IF ( RC /= CC_SUCCESS .or. v_real < 0._fp) THEN
+                  v_real = 0._fp ! emitted at surface
+               ENDIF
+               EmisState%Cats(n)%Species(s)%EmisHeight = v_real
+            endif
          enddo
       enddo
 
@@ -683,7 +750,9 @@ CONTAINS
       write(*,*) 'Emission Settings:'
       write(*,*) '==================================================='
       write(*,*) '| nEmisTotal:          ', EmisState%nEmisTotal
-      write(*,*) '| nCats:               ', EmisState%nCats
+      write(*,*) '| nEmisTotalPlumerise: ', EmisState%nEmisTotalPlumerise
+      write(*,*) '| nCats:     ', EmisState%nCats
+
       do n = 1, EmisState%nCats
          write(*,*) '| Category: ', TRIM(EmisState%Cats(n)%name)
          do s = 1, EmisState%Cats(n)%nSpecies
@@ -695,6 +764,45 @@ CONTAINS
                write(*,*) '|       Emission Mapping:  ' // TRIM(EmisState%Cats(n)%Species(s)%EmisMapName(j)) &
                   // ' -> ', EmisState%Cats(n)%Species(s)%Scale(j)
             enddo
+
+            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  EmisState%Cats(n)%Species(s)%plumerise = 0
+                  write(*,*) '|     plumerise:  No plumerise EmisLayer or EmisHeight provided -> Set plumerise = 0'
+               endif
+            else
+               write(*,*) '|     plumerise:  ', EmisState%Cats(n)%Species(s)%plumerise
+            endif
+
+            if (EmisState%Cats(n)%Species(s)%plumerise == 0) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
+                  write(*,*) '|     EmisLayer:  Both emission_layer and emission_height are set -> Use EmisHeight'
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
+               else if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
+               else if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
+                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
+               else
+                  write(*,*) '|     EmisLayer:  1'
+                  write(*,*) '|     EmisHeight: Surface'
+               endif
+            endif
+
+            if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
+               if (EmisState%Cats(n)%Species(s)%EmisLayer == 0) then
+                  write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
+               else
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
+               endif
+
+               if (EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
+               endif
+            endif
          enddo
       enddo
       write(*,*) '==================================================='
@@ -881,6 +989,19 @@ CONTAINS
          RETURN
       ENDIF
       GridState%number_of_levels = v_int
+
+      !------------------------------------------------------------------------
+      ! number of soil layers range
+      !------------------------------------------------------------------------
+      key   = "grid%number_of_soil_layers"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      GridState%number_of_soil_layers = v_int
 
       !------------------------------------------------------------------------
       ! number of x and y dimensions (nx and ny)
@@ -1146,5 +1267,67 @@ CONTAINS
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_SeaSalt
+
+   !> \brief Process plumerise configuration
+   !!
+   !! This function processes the plumerise configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   SUBROUTINE Config_Process_Plumerise( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
+
+      TYPE(QFYAML_t),      INTENT(INOUT) ::ConfigInput      ! YAML Config object
+      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+
+      !
+      ! !OUTPUT PARAMETERS:
+      !
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+      ! !LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      INTEGER                      :: nSubStrs
+
+      ! Reals
+      REAL(fp)                     :: v_real
+
+      ! Strings
+      CHARACTER(LEN=255)           :: thisLoc
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+
+      !========================================================================
+      ! Config_Process_SeaSalt begins here!
+      !========================================================================
+
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
+
+      key   = "process%plumerise%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%plumerise_activate = v_bool
+
+      write(*,*) "Plumerise Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%plumerise_activate = ', Config%seasalt_activate
+      write(*,*) '------------------------------------'
+
+   END SUBROUTINE Config_Process_Plumerise
 
 END MODULE config_mod

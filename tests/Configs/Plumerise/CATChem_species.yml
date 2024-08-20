@@ -1,0 +1,43 @@
+### CATChem_species.yml: CATChem Runtime Species Configuration
+###
+### NOTE: Add quotes around nitrogen oxide ('NO'), because YAML
+### parsers will confuse this with a negative "no" value.
+
+# species:
+dust1:
+  name: dust1
+  description: dust1
+  lower_radius: 0.1
+  upper_radius: 1.0
+  radius: .8
+  density: 2500.
+  is_dust: true
+  is_aerosol: true
+dust2:
+  name: dust2
+  long_name: 'Dust Species Accumulation'
+  description: dust2
+  lower_radius: 0.1
+  upper_radius: 5.0
+  radius: 3.
+  density: 2500.
+  is_dust: true
+  is_aerosol: true
+NO:
+  name: NO
+  long_name: 'Nitrogen Oxide'
+  description: NO
+  mw_g: 30.006
+  is_gas: true
+CO:
+  name: CO
+  long_name: 'Carbon Monoxide'
+  description: CO
+  mw_g: 28.010
+  is_gas: true
+ISOP:
+  name: ISOP
+  long_name: 'Isoprene'
+  description: ISOP
+  mw_g: 44.01
+  is_gas: true
