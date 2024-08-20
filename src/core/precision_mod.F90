@@ -43,9 +43,13 @@ module precision_mod
    !=========================================================================
    ! Parameters for very tiny numbers
    !=========================================================================
-   REAL(fp),         PARAMETER, PUBLIC :: TINY         =  1.0e-16_fp !< Tiny value (kind=fp)
-   REAL(f4),         PARAMETER, PUBLIC :: TINY_REAL    =  1.0e-16_f4 !< Tiny value (kind=f4)
-   REAL(f8),         PARAMETER, PUBLIC :: TINY_DBLE    =  1.0e-31_f8 !< tiny value (kind=f8)
+   REAL(f4),         PARAMETER, PUBLIC :: TINY_REAL    =  1.0e-16_f4 !< A small value (kind=f4)
+   REAL(f8),         PARAMETER, PUBLIC :: TINY_DBLE    =  1.0e-31_f8 !< A small value (kind=f8)
+#ifdef USE_REAL8
+   REAL(fp),         PARAMETER, PUBLIC :: TINY_        = TINY_DBLE
+#else
+   REAL(fp),         PARAMETER, PUBLIC :: TINY_        = TINY_REAL
+#endif
 
    !=========================================================================
    ! Parameters for one

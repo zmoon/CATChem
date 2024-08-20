@@ -137,7 +137,7 @@ CONTAINS
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
-         ChemState%ChemSpecies(i)%conc = TINY
+         ChemState%ChemSpecies(i)%conc = TINY_
       end do
 
    end subroutine Chem_Allocate
