@@ -10,7 +10,7 @@ cases:
     sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
     out: "../tests/MetProfiles/Profile_NCWCP_Aug_18z.csv"
 
-  - lat: 38.9721                
+  - lat: 38.9721
     lon: 283.0755
     nz: ~  # all
     atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
@@ -136,7 +136,7 @@ variables:
     src: atm:dms
   msa:
     src: atm:msa
-  
+
   # Surface state
   eflux:  # surface latent heat flux
     src: sfc:lhtfl_ave
@@ -198,5 +198,3 @@ variables:
   vtype:
     src: sfc:vtype  # vegetation type (int)
     skip: true
-  wilt:
-    src: sfc:wilt
