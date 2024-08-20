@@ -210,24 +210,12 @@ contains
 
 
       !find the index of 2x the pbl
-      print*, 'PBLH = ', PBLH
-      print*, 'psfc = ', psfc / 100.
-      print*, 'frp = ', frp
-      print*, 'P = ', P
-      print*, 'T = ', T
-      print*, 'z = ', z
       call find_height_index(z, pblh * 2, pblx2_index)
       pblx2_index = MAX(pblx2_index, 2)
-      print*, 'pblx2_index = ', pblx2_index
       ! now get the plume height
       PT1 = T(pblx2_index - 1) * (psfc / 100. / p(pblx2_index - 1))**(2./7.)
-      print*, 'PT1 = ', PT1
-      print*, 'T(pblx2_index -1 ) = ', T(pblx2_index-1)
       PT2 = T(pblx2_index) * (psfc / 100. / p(pblx2_index))**(2./7.)
-      print*, 'PT2 = ', PT2
-      print*, 'T(pblx2_index) = ', T(pblx2_index)
       LayerDepth = z(pblx2_index) - z(pblx2_index - 1)
-      print*, 'LayerDepth = ', LayerDepth
 
       call plumeRiseSofiev(PT1, PT2, LayerDepth, frp, PBLH, plmHGT)
 
