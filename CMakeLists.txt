@@ -16,7 +16,6 @@ endif()
 cmake_print_variables(CMAKE_Fortran_COMPILER CMAKE_Fortran_COMPILER_ID CMAKE_BUILD_TYPE)
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95" AND CMAKE_BUILD_TYPE MATCHES "Debug")
   add_compile_options(
-    -g
     -Og
     -Wall
     -Wextra
@@ -27,7 +26,6 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95" AND CMAKE_BUILD_TYPE MATCHES "Deb
     -fmax-errors=0)
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel" AND CMAKE_BUILD_TYPE MATCHES "Debug")
   add_compile_options(
-    -g
     -O0
     -warn
     all
