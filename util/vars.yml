@@ -6,16 +6,65 @@ cases:
   - lat: 38.9721
     lon: 283.0755
     nz: ~  # all
-    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf024.nc"
-    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf024.nc"
-    out: "../tests/MetProfiles/Profile_NCWCP.csv"
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_18z.csv"
+
+  - lat: 38.9721                
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_12z.csv"
+
+  - lat: 38.9721
+    lon: 283.0755
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_NCWCP_Aug_06z.csv"
 
   - lat: 22.0
     lon: 18.0
     nz: ~  # all
-    atm: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/atmf012.nc"
-    sfc: "/scratch1/NCEPDEV/stmp2/Barry.Baker/FV3_RT/rt_980816/atmaero_control_p8_intel/sfcf012.nc"
-    out: "../tests/MetProfiles/Profile_SAHARA.csv"
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_18z.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_12z.csv"
+
+  - lat: 22.0
+    lon: 18.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_SAHARA_Aug_06z.csv"
+
+  - lat: -5.0
+    lon: -65.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf012.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf012.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_12z.csv"
+
+  - lat: -5.0
+    lon: -65
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf018.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf018.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_18z.csv"
+
+  - lat: -5.0
+    lon: -65.0
+    nz: ~  # all
+    atm: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.atmf006.nc"
+    sfc: "/scratch2/NCEPDEV/stmp3/Margaret.R.Marvin/global/COMROOT/Dust_FirstCase/gefs.20180816/00/mem000/model_data/atmos/history/gefs.t00z.sfcf006.nc"
+    out: "../tests/MetProfiles/Profile_AMAZON_Aug_06z.csv"
 
 variables:
   # keys: MetState variables in lowercase
@@ -50,6 +99,44 @@ variables:
   v:
     src: atm:vgrd
 
+  # Aerosol State
+  bc1:
+    src: atm:bc1
+  bc2:
+    src: atm:bc2
+  oc1:
+    src: atm:oc1
+  oc2:
+    src: atm:oc2
+  so4:
+    src: atm:so4
+  so2:
+    src: atm:so2
+  dust1:
+    src: atm:dust1
+  dust2:
+    src: atm:dust2
+  dust3:
+    src: atm:dust3
+  dust4:
+    src: atm:dust4
+  dust5:
+    src: atm:dust5
+  seas1:
+    src: atm:seas1
+  seas2:
+    src: atm:seas2
+  seas3:
+    src: atm:seas3
+  seas4:
+    src: atm:seas4
+  seas5:
+    src: atm:seas5
+  dms:
+    src: atm:dms
+  msa:
+    src: atm:msa
+  
   # Surface state
   eflux:  # surface latent heat flux
     src: sfc:lhtfl_ave
@@ -98,16 +185,18 @@ variables:
     src: sfc
 
   # Surface type
-  # dluse:  # dominant land-use type
-  #   src:
+  dluse:  # dominant land-use type
+    src: sfc:vtype
   frveg:  # fraction of vegetation (not just green)
     src: sfc:veg  # vegetation fraction
   dsoiltype:  # dominant soil type (int)
     src: sfc:sotyp
   # gvf: # green vegetation fraction
-  #   src: sfc  # mean of shdmin and shdmax (max/min fractional coverage of green vegetation)?
+  #   src: sfc:gvf  # mean of shdmin and shdmax (max/min fractional coverage of green vegetation)?
   lwi:  # sea-land-ice mask (0-sea, 1-land, 2-ice)
     src: sfc:land
   vtype:
     src: sfc:vtype  # vegetation type (int)
     skip: true
+  wilt:
+    src: sfc:wilt
