@@ -1,6 +1,6 @@
 program test_plumerise
    use CATChem, fp => cc_rk
-   use testing_mod, only: assert, load_column_data
+   use testing_mod, only: assert_close, load_column_data
    use state_mod
 
    implicit none
@@ -9,6 +9,9 @@ program test_plumerise
 
    integer :: rc          ! Success or failure
    integer :: c, s, p
+   real, parameter,dimension(4) :: CO_PLMRISE = (/ 808.429, 1261.015, 2576.692, 4026.496  /)
+   real, parameter,dimension(1) :: ISOP_PLMRISE = (/ 723.005 /)
+   integer :: index
 
    ! test_frp = (/10.0e6, 100.0e6, 500.0e6, 1000.0e6/)
    ! test_sofieve_emis = (/10.0e6, 100.0e6, 500.0e6, 1000.0e6/)
@@ -165,13 +168,18 @@ program test_plumerise
    endif
 
    ! check plumerise output
+   index = 1
    cats2: do c = 1, EmisState%nCats
       species2: do s = 1, EmisState%Cats(c)%nSpecies
 
          plume2: do p = 1, EmisState%Cats(c)%Species(s)%nPlmSrc
             if (EmisState%Cats(c)%Species(s)%plumerise > 0) then
-               call assert(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p) > 0.0, "PlmRiseHgt > 0.0")
-               call assert(SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0, "SUM(EmisState%Cats(c)%Species(s)%Flux) > 0.0")
+               if (TRIM(EmisState%Cats(c)%Species(s)%name) == 'CO') then
+                  call assert_close(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p), CO_PLMRISE(index), 1.e-3)
+                  index = index + 1
+               else if (TRIM(EmisState%Cats(c)%Species(s)%name) == 'ISOP') then
+                  call assert_close(EmisState%Cats(c)%Species(s)%PlmRiseHgt(p), ISOP_PLMRISE(1), 1.e-3)
+               endif
             endif
 
          end do plume2
