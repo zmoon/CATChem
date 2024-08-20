@@ -102,40 +102,58 @@ variables:
   # Aerosol State
   bc1:
     src: atm:bc1
+    skip: true
   bc2:
     src: atm:bc2
+    skip: true
   oc1:
     src: atm:oc1
+    skip: true
   oc2:
     src: atm:oc2
+    skip: true
   so4:
     src: atm:so4
+    skip: true
   so2:
     src: atm:so2
+    skip: true
   dust1:
     src: atm:dust1
+    skip: true
   dust2:
     src: atm:dust2
+    skip: true
   dust3:
     src: atm:dust3
+    skip: true
   dust4:
     src: atm:dust4
+    skip: true
   dust5:
     src: atm:dust5
+    skip: true
   seas1:
     src: atm:seas1
+    skip: true
   seas2:
     src: atm:seas2
+    skip: true
   seas3:
     src: atm:seas3
+    skip: true
   seas4:
     src: atm:seas4
+    skip: true
   seas5:
     src: atm:seas5
+    skip: true
   dms:
     src: atm:dms
+    skip: true
   msa:
     src: atm:msa
+    skip: true
 
   # Surface state
   eflux:  # surface latent heat flux
