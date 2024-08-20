@@ -51,7 +51,7 @@ program test_plumerise
    print*, 'Allocated MetState'
 
    ! Meteorological State
-   call load_column_data("MetProfiles/Profile_SAHARA.csv", MetState, rc, verbose=.True.)
+   call load_column_data("MetProfiles/Profile_NCWCP_Aug_18z.csv", MetState, rc, verbose=.True.)
    if (rc /= CC_success) then
       errMsg = 'Error in "load_column_data"'
       call cc_emit_error(errMsg, rc, thisLoc)
