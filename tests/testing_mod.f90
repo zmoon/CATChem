@@ -118,6 +118,13 @@ contains
                   rc = 1
                   return
                end if
+             case ("dluse")
+               read(unum, *, iostat=ios) MetState%DLUSE
+               if (ios /= 0) then
+                  print *, "Error reading DLUSE:", ios
+                  rc = 1
+                  return
+               end if
              case ("dsoiltype")
                read(unum, *, iostat=ios) MetState%DSOILTYPE
                if (ios /= 0) then
@@ -346,6 +353,7 @@ contains
          print *, "BXHEIGHT:", size(MetState%BXHEIGHT), MetState%BXHEIGHT
          print *, "CLDF:", size(MetState%CLDF), MetState%CLDF
          print *, "DELP:", size(MetState%DELP), MetState%DELP
+         print *, "DLUSE:", MetState%DLUSE
          print *, "DSOILTYPE:", MetState%DSOILTYPE
          print *, "EFLUX:", MetState%EFLUX
          print *, "FRSNO:", MetState%FRSNO

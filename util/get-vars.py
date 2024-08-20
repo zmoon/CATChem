@@ -119,7 +119,7 @@ for d in ctl["cases"]:
 
         # sotyp, land, vtype are stored as float, maybe to support null mask?
         # But they seem to be all non-null, though with zeros (land 53.8%, sotyp/vtype 66.3%)
-        for vn in ["sotyp", "land", "vtype"]:
+        for vn in ["dluse", "sotyp", "land", "vtype"]:
             if vn in ds.variables:
                 ds[vn] = ds[vn].astype(int)
 
