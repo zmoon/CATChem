@@ -47,8 +47,8 @@ module DiagState_Mod
       real(fp) :: briggs_plumerise_height !< Effective plume rise height from Briggs algorithm [m]
       real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m]
 
-      real(fp) :: drydep_frequency
-      real(fp) :: drydep_vel
+      real(fp), allocatable :: drydep_frequency(:)
+      real(fp), allocatable :: drydep_vel(:)
 
       ! Species Specific Variables
 
@@ -67,7 +67,7 @@ CONTAINS
    !! \param RC The return code
    !! \ingroup core_modules
    !!!>
-   subroutine Diag_Allocate(Config, GridState, DiagState, RC)
+   subroutine Diag_Allocate(Config, GridState, DiagState, ChemState, RC)
       ! USES
       USE GridState_Mod, ONLY : GridStateType
       USE Config_Opt_Mod, ONLY : ConfigType
@@ -76,6 +76,7 @@ CONTAINS
       type(ConfigType),    INTENT(IN)    :: Config
       type(GridStateType), INTENT(IN)    :: GridState ! Grid State object
       type(DiagStateType), INTENT(INOUT) :: DiagState ! Diag State object
+      type(ChemStateType), INTENT(INOUT) :: ChemState ! Chem State object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC        ! Success or failure
 
@@ -103,9 +104,22 @@ CONTAINS
       endif
 
       ! If dry deposition process is activated then allocate dry dep related diagnostics
-      !if (Config%drydep_activate) then
-      !   DiagState%drydep_frequency= ZERO
-      !endif
+      if (Config%drydep_activate) then 
+         Allocate(diagstate%drydep_frequency(ChemState%nSpeciesAero, STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
+            CALL CC_Error( ErrMsg, RC, thisLoc )
+         ENDIF 
+         DiagState%drydep_frequency= ZERO
+         Allocate(diagstate%drydep_vel(ChemState%nSpeciesAero, STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
+            CALL CC_Error( ErrMsg, RC, thisLoc )
+         ENDIF 
+         DiagState%drydep_vel= ZERO
+
+         
+      endif
 
 
 
