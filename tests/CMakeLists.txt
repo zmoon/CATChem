@@ -45,6 +45,3 @@ target_link_libraries(test_drydep PRIVATE CATChem_core)
 target_link_libraries(test_drydep PRIVATE CATChem_process_drydep)
 target_link_libraries(test_drydep PRIVATE testing)
 set_target_properties(test_drydep PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
-
-
-

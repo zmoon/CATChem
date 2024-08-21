@@ -45,7 +45,7 @@ module DiagState_Mod
 
 
       real(fp) :: briggs_plumerise_height !< Effective plume rise height from Briggs algorithm [m]
-      real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m] 
+      real(fp) :: sofiev_plumerise_height !< Effective plume rise height from Sofiev algorithm [m]
 
       real(fp) :: drydep_frequency
       real(fp) :: drydep_vel
@@ -113,7 +113,3 @@ CONTAINS
    end subroutine Diag_Allocate
 
 end module DiagState_Mod
-
-
-
-
