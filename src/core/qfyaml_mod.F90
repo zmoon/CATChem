@@ -1710,7 +1710,8 @@ MODULE QFYAML_Mod
 
        ! Trap potential errors
        IF ( RC /= QFYAML_Success ) THEN
-          errMsg = 'Error encountered at "Prepare_Store_Var"!'
+          errMsg = 'Error encountered at "Prepare_Store_Var"! ' //              &
+            '(key with anchor = "' // trim(var_w_anchor) // '")'
           CALL Handle_Error( errMsg, RC, thisLoc )
           RETURN
        ENDIF
