@@ -131,8 +131,10 @@ contains
       write(*,*) title_
       write(*,*) '======================================='
       write(*,*) '*************'
-      write(*,*) 'Configuration '
+      write(*,*) 'Configuration'
       write(*,*) '*************'
+      write(*,*) 'Config%seasalt_activate = ', Config_%seasalt_activate
+      write(*,*) 'Config%seasalt_scheme = ', Config_%seasalt_scheme
       write(*,*) 'SeaSaltState%activate = ', SeaSaltState_%activate
       write(*,*) 'SeaSaltState%SchemeOpt = ', SeaSaltState_%SchemeOpt
       write(*,*) 'SeaSaltState%SeaSaltScaleFactor = ', SeaSaltState_%SeaSaltScaleFactor
