@@ -40,6 +40,9 @@ module CCPR_Scheme_Briggs_Mod
 
    implicit none
 
+   private
+   public :: CCPr_Briggs_Plumerise
+
 contains
 
    !>
@@ -216,19 +219,6 @@ contains
       INTEGER   :: LTOP            !Layer of Plume top
       INTEGER   :: LBOT            !Layer of Plume bottom
       REAL      :: TFRAC_MV        ! Plume Fraction Minimum Value
-      ! Statement Functions:
-      REAL    B, H, S, U, US  ! arguments
-      REAL    NEUTRL          ! neutral-stability plume rise function
-      REAL    STABLE          ! stable            plume rise function
-      REAL    UNSTBL          ! unstable          plume rise function
-
-      ! TODO: move to separate functions
-      NEUTRL( H, B, U, US ) = &
-         MIN( 10.0 * H,  &
-         1.2 * (           ( B / ( U * US * US ) ) ** 0.6 &    ! pwr 3 * 0.2
-         * ( H + 1.3 * B / ( U * US * US ) ) ** 0.4 ) ) ! pwr 2 * 0.2
-      STABLE( B, U, S ) =  2.6 * ( B / ( U * S ) ) ** D3
-      UNSTBL( B, U )    = 30.0 * ( B / U ) ** 0.6
 
       !-----------------------------------------------------------------------
 
@@ -626,5 +616,26 @@ contains
 
       RETURN
    END SUBROUTINE CCPr_Briggs_Plumerise
+
+   real function NEUTRL(H, B, U, US) result(res)
+      real, intent(in) :: H, B, U, US
+
+      res = MIN( 10.0 * H, &
+         1.2 * ( ( B / ( U * US * US ) ) ** 0.6 &        ! pwr 3 * 0.2
+         * ( H + 1.3 * B / ( U * US * US ) ) ** 0.4 ) )  ! pwr 2 * 0.2
+   end function NEUTRL
+
+   real function STABLE(B, U, S) result(res)
+      real, intent(in) :: B, U, S
+      real, parameter :: D3 = 1.0 / 3.0
+
+      res = 2.6 * ( B / ( U * S ) ) ** D3
+   end function STABLE
+
+   real function UNSTBL(B, U) result(res)
+      real, intent(in) :: B, U
+
+      res = 30.0 * ( B / U ) ** 0.6
+   end function UNSTBL
 
 end module CCPR_Scheme_Briggs_Mod
