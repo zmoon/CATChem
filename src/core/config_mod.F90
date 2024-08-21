@@ -156,7 +156,6 @@ CONTAINS
       ENDIF
 
       call Config_Process_Plumerise(ConfigInput, Config, RC)
-<<<<<<< HEAD
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_Plumerise"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -166,8 +165,6 @@ CONTAINS
       ENDIF
 
       call Config_Process_DryDep(ConfigInput, Config, RC)
-=======
->>>>>>> remotes/origin/feature/catchem_begins
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_Plumerise"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
