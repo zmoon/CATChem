@@ -243,18 +243,18 @@ CONTAINS
                   ! Fill Diagnostic Variables
                   !--------------------------
                   !!!!FIXME: COME BACK TO THIS LATER
-                  !DiagState%drydep_frequency(ChemState%AeroIndex(i)) = drydepf(1,1)
-                  !DiagState%drydep_vel(ChemState%AeroIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
+                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
+                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
-                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1)   &
+                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
                      * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
-                  ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) =     &
-                     ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) - dqa
-               end do ! do i = 1, ChemState%nSpeciesAero
+                  ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
+                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
+               end do ! do i = 1, ChemState%nSpeciesAeroDryDep
 
-            endif ! if (ChemState%nSpeciesAero > 0)
+            endif ! if (ChemState%nSpeciesAeroDryDep > 0)
 
          endif ! if (DryDepState%Scheme == 1)
 
