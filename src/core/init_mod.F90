@@ -86,7 +86,7 @@ contains
       ErrMsg = ''
       thisLoc = ' -> at Init_Diag (in core/init_mod.F90)'
 
-      call Diag_Allocate(Config, GridState, DiagState, RC)
+      call Diag_Allocate(Config, DiagState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error allocating diag state'
          call CC_Error(errMsg, RC , thisLoc)

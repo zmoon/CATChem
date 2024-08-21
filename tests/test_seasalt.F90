@@ -76,7 +76,7 @@ program test_dust
       stop 1
    end if
 
-   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, SeaSaltState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -92,7 +92,7 @@ program test_dust
    title = "SeaSalt Test 2 | Test Gong03"
    SeaSaltState%SchemeOpt = 1
 
-   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, SeaSaltState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -108,7 +108,7 @@ program test_dust
    title = "SeaSalt Test 3 | Test Gong97"
    SeaSaltState%SchemeOpt = 2
 
-   call cc_seasalt_run(MetState, DiagState, SeaSaltState, ChemState, rc)
+   call cc_seasalt_run(MetState, SeaSaltState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_seasalt_run'
       call cc_emit_error(errMsg, rc, thisLoc)
