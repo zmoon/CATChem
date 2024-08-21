@@ -18,7 +18,8 @@ program test_drydep
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
-   CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
+   CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Plumerise/CATChem_config.yml'
+
 
    thisLoc = 'test_drydep -> at read CATChem_Config.yml'
    errMsg = ''
@@ -52,13 +53,13 @@ program test_drydep
    ! Test 2
    !----------------------------
    ! Set number of drydep species to zero for now
-   ChemState%nSpeciesdrydep = 0
+   ChemState%nSpeciesAerodrydep = 0
 
    ! Meteorological State
-   MetState%ORO = 1.0_fp
+   MetState%LWI = 1.0_fp
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
-   MetState%EFLUX = 0.5_fp
+   MetState%HFLUX = 0.5_fp
    MetState%Z0H = 10.0_fp
    allocate(MetState%MAIRDEN(1))
    Metstate%NLEVS = 1
