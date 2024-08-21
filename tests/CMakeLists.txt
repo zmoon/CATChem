@@ -57,10 +57,10 @@ add_test(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(test_drydep test_drydep.F90)
-target_link_libraries(test_prise PRIVATE CATChem_core)
-target_link_libraries(test_prise PRIVATE CATChem)
-target_link_libraries(test_prise PRIVATE testing)
-set_target_properties(test_prise PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(test_drydep PRIVATE CATChem_core)
+target_link_libraries(test_drydep PRIVATE CATChem)
+target_link_libraries(test_drydep PRIVATE testing)
+set_target_properties(test_drydep PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
 add_test(
   NAME test_drydep
