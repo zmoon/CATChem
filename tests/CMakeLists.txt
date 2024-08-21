@@ -56,7 +56,7 @@ add_test(
   COMMAND test_prise
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(test_drydep test_drydep.F90)
+add_executable(test_drydep test_drydep.f90)
 target_link_libraries(test_drydep PRIVATE CATChem_core)
 target_link_libraries(test_drydep PRIVATE CATChem)
 target_link_libraries(test_drydep PRIVATE testing)
