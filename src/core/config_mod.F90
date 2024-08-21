@@ -94,7 +94,7 @@ CONTAINS
       ! Assume success
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/config_mod.F90)'
+      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/input_mod.F90)'
 
       !========================================================================
       ! Read the YAML file into the Config object
@@ -156,6 +156,7 @@ CONTAINS
       ENDIF
 
       call Config_Process_Plumerise(ConfigInput, Config, RC)
+<<<<<<< HEAD
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Process_Plumerise"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -165,8 +166,10 @@ CONTAINS
       ENDIF
 
       call Config_Process_DryDep(ConfigInput, Config, RC)
+=======
+>>>>>>> remotes/origin/feature/catchem_begins
       IF ( RC /= CC_SUCCESS ) THEN
-         errMsg = 'Error in "Config_Process_DryDep"!'
+         errMsg = 'Error in "Config_Process_Plumerise"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
          CALL QFYAML_CleanUp( ConfigInput         )
          CALL QFYAML_CleanUp( ConfigAnchored )
@@ -175,6 +178,30 @@ CONTAINS
 
 
 
+
+      !========================================================================
+      ! Config ChemState
+      !========================================================================
+      call Config_Chem_State(config%Species_File, GridState, ChemState, RC)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Error in "Config_Chem_State"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      endif
+
+      !========================================================================
+      ! Config EmisState
+      !========================================================================
+      call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Error in "Config_Emis_State"!'
+         CALL CC_Error( errMsg, RC, thisLoc  )
+         CALL QFYAML_CleanUp( ConfigInput )
+         CALL QFYAML_CleanUp( ConfigAnchored )
+         RETURN
+      endif
 
       !========================================================================
       ! Config ChemState
@@ -1342,7 +1369,6 @@ CONTAINS
 
    END SUBROUTINE Config_Process_Plumerise
 
-
    !> \brief Process DryDep configuration
    !!
    !! This function processes the DryDep configuration and performs the necessary actions based on the configuration.
@@ -1438,7 +1464,6 @@ CONTAINS
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_DryDep
-
 
 
 END MODULE config_mod

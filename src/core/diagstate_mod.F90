@@ -50,7 +50,6 @@ module DiagState_Mod
       real(fp) :: drydep_frequency
       real(fp) :: drydep_vel
 
-
       ! Species Specific Variables
 
 

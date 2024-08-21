@@ -102,7 +102,6 @@ MODULE Config_Opt_Mod
       INTEGER                     :: DryDep_scheme
       LOGICAL                     :: DryDep_resuspension  ! Turn on resuspension
 
-
    END TYPE ConfigType
 
 CONTAINS
@@ -178,8 +177,6 @@ CONTAINS
       Config%DryDep_activate = .FALSE.
       Config%DryDep_scheme = 1
       Config%DryDep_resuspension = .FALSE.
-
-
 
    END SUBROUTINE Set_Config
    !> \brief Cleanup the Config options
