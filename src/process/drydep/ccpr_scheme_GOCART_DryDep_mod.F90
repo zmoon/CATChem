@@ -76,6 +76,3 @@ contains
    end subroutine CCPr_Scheme_GOCART_DryDep
 
 end module CCPr_Scheme_GOCART_DryDep_Mod
-
-
-
