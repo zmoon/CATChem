@@ -252,7 +252,7 @@ CONTAINS
    !!
    !! \ingroup catchem_plumerise_process
    !!!>
-   SUBROUTINE CCPr_Plumerise_Finalize( PlumeriseState, RC )
+   SUBROUTINE CCPr_Plumerise_Finalize( RC )
 
       ! USE
       !----
@@ -261,7 +261,7 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(PlumeriseStateType), INTENT(INOUT) :: PlumeriseState ! PlumeriseState Instance
+      ! TYPE(PlumeriseStateType), INTENT(INOUT) :: PlumeriseState ! PlumeriseState Instance
       INTEGER, INTENT(OUT) :: RC                       ! Return Code
 
       ! LOCAL VARIABLES

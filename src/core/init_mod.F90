@@ -64,7 +64,7 @@ contains
    !!
    !! \ingroup core_modules
    !!!>
-   subroutine Init_Diag(Config, GridState, DiagState, RC)
+   subroutine Init_Diag(Config, DiagState, RC)
       use DiagState_Mod
       use Config_Opt_Mod, Only : ConfigType
       use GridState_Mod, Only : GridStateType
@@ -74,7 +74,7 @@ contains
 
       ! Arguments
       TYPE(ConfigType),    INTENT(IN)    :: Config
-      TYPE(GridStateType), INTENT(IN)    :: GridState
+      ! TYPE(GridStateType), INTENT(IN)    :: GridState
       TYPE(DiagStateType), INTENT(INOUT) :: DiagState
       INTEGER,         INTENT(OUT) :: RC
 
