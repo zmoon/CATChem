@@ -63,6 +63,7 @@ module ChemState_Mod
       INTEGER              :: nSpecies          !< Total Number of Species
       INTEGER              :: nSpeciesGas       !< Number of Gas Species
       INTEGER              :: nSpeciesAero      !< Number of Aerosol Species
+      INTEGER              :: nSpeciesAeroDryDep !< Number of Aerosol Species for Dry Dep
       INTEGER              :: nSpeciesTracer    !< Number of Tracer Species
       INTEGER              :: nSpeciesDust      !< Number of Dust Species
       INTEGER              :: nSpeciesSeaSalt   !< Number of SeaSalt Species
@@ -72,6 +73,7 @@ module ChemState_Mod
       INTEGER, ALLOCATABLE :: GasIndex(:)       !< Gas Species Index
       INTEGER, ALLOCATABLE :: DustIndex(:)      !< Dust Species Index
       INTEGER, ALLOCATABLE :: SeaSaltIndex(:)   !< SeaSalt Species Index
+      INTEGER, ALLOCATABLE :: DryDepIndex(:)   !< SeaSalt Species Index
       CHARACTER(len=50), ALLOCATABLE :: SpeciesNames(:)  !< Species Names
 
       !---------------------------------------------------------------------
@@ -132,7 +134,7 @@ CONTAINS
       IF ( RC /= CC_SUCCESS ) RETURN
 
       do i=0, ChemState%nSpecies
-         ALLOCATE(ChemState%ChemSpecies(i)%conc(GridState%number_of_levels), STAT=RC)
+         ALLOCATE(ChemState%ChemSpecies(i)%conc(MetState%NLEVS), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
@@ -176,6 +178,7 @@ CONTAINS
 
       ! Initialize to zero before counting species
       ChemState%nSpeciesAero = 0
+      ChemState%nSpeciesAeroDryDep = 0
       ChemState%nSpeciesDust = 0
       ChemState%nSpeciesGas = 0
       ChemState%nSpeciesSeaSalt = 0
@@ -197,6 +200,9 @@ CONTAINS
          endif
          if (ChemState%ChemSpecies(i)%is_tracer .eqv. .true.) then
             ChemState%nSpeciesTracer = ChemState%nSpeciesTracer + 1
+         endif
+         if (ChemState%ChemSpecies(i)%is_drydep .eqv. .true.) then
+            ChemState%nSpeciesAeroDryDep = ChemState%nSpeciesAeroDryDep + 1
          endif
       enddo
 
@@ -231,6 +237,7 @@ CONTAINS
       integer :: dust_index      ! Current Dust Index
       integer :: seasalt_index   ! Current Seas Salt Index
       integer :: tracer_index    ! Current Tracer Index
+      integer :: drydep_index    ! Current DryDep Index
 
 
       ! Initialize
@@ -245,6 +252,7 @@ CONTAINS
       dust_index = 1
       seasalt_index = 1
       tracer_index = 1
+      drydep_index = 1
 
       ! Allocate index arrays
       ALLOCATE(Chemstate%AeroIndex(ChemState%nSpeciesAero), STAT=RC)
@@ -282,6 +290,13 @@ CONTAINS
          RETURN
       ENDIF
 
+      ALLOCATE(Chemstate%DryDepIndex(ChemState%nSpeciesAeroDryDep), STAT=RC)
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error allocating Chemstate%DryDepIndex'
+         call CC_Error(errMsg, RC, thisLoc)
+         RETURN
+      ENDIF
+
       ! Find indices for species groups
       do n = 1, ChemState%nSpecies
          if (ChemState%ChemSpecies(n)%is_aerosol .eqv. .true.) then
@@ -303,6 +318,10 @@ CONTAINS
          if (ChemState%ChemSpecies(n)%is_tracer .eqv. .true.) then
             Chemstate%TracerIndex(tracer_index) = n
             tracer_index = tracer_index + 1
+         endif
+         if (ChemState%ChemSpecies(n)%is_drydep .eqv. .true.) then
+            Chemstate%TracerIndex(tracer_index) = n
+            drydep_index = drydep_index + 1
          endif
       enddo
 
