@@ -108,7 +108,7 @@ CONTAINS
 
       ! INOUT Params
       type(GridStateType), INTENT(in)    :: GridState ! Grid State object
-      type(MetStateType), INTENT(in)    :: MetState   ! Met State object
+      !type(MetStateType), INTENT(in)    :: MetState   ! Met State object
       type(ChemStateType), INTENT(inout) :: ChemState ! chem State object
       type(SpeciesType),   POINTER       :: Species   !Species object
       ! OUTPUT Params
