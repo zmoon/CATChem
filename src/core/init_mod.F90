@@ -77,7 +77,7 @@ contains
       TYPE(ConfigType),    INTENT(IN)    :: Config
       TYPE(GridStateType), INTENT(IN)    :: GridState
       TYPE(DiagStateType), INTENT(INOUT) :: DiagState
-      TYPE(ChemStateType), INTENT(IN)    :: ChemState
+      TYPE(ChemStateType), INTENT(INOUT)    :: ChemState
       INTEGER,         INTENT(OUT) :: RC
 
       ! Local variables
