@@ -1,14 +1,12 @@
 program test_dust
    use CATChem, fp => cc_rk
    use testing_mod, only: assert
+   use state_mod
+
    implicit none
 
-   type(ConfigType) :: Config
-   type(ChemStateType) :: ChemState
-   type(MetStateType) :: MetState
-   type(DiagStateType) :: DiagState
    type(DustStateType) :: DustState
-   type(GridStateType) :: GridState
+
 
    ! Integers
    INTEGER:: rc          ! Success or failure
@@ -18,7 +16,7 @@ program test_dust
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
-   CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
+   CHARACTER(LEN=255), PARAMETER :: configFile = 'Configs/Default/CATChem_config.yml'
 
    thisLoc = 'test_dust -> at read CATChem_Config.yml'
    errMsg = ''
@@ -30,14 +28,14 @@ program test_dust
    write(*,*) '  C        A     A     T     C       H   H  C      E EE    M   M   M'
    write(*,*) '   CCCCC  A       A    T      CCCCC  H   H   CCCC   EEEEE  M       M'
    write(*,*) ''
-   write(*,*) ''
+   write(*,*) '  DUST TEST'
 
    !----------------------------
    ! Test 1
    !----------------------------
 
    ! Read input file and initialize grid
-   call cc_read_config(Config, GridState, rc)
+   call cc_read_config(Config, GridState, EmisState, ChemState, rc, configFile)
    if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call cc_emit_error(errMsg, rc, thisLoc)
