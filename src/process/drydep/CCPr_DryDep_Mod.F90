@@ -249,9 +249,9 @@ CONTAINS
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
                   dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1)   &
-                          * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
+                     * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
                   ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) =     &
-                          ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) - dqa
+                     ChemState%chemSpecies(ChemState%AeroIndex(i))%conc(1) - dqa
                end do ! do i = 1, ChemState%nSpeciesAero
 
             endif ! if (ChemState%nSpeciesAero > 0)
