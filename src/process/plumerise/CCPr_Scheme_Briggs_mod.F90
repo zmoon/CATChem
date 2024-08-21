@@ -156,13 +156,8 @@ contains
       REAL, PARAMETER :: D59319  = 1.0 / 59.319
       REAL, PARAMETER :: TWOTHD  = 2.0 / 3.0
       REAL, PARAMETER :: FIVETHD = 5.0 / 3.0
+
       ! Geometric Constants:
-
-      REAL,      PARAMETER :: PI = 3.14159265
-      REAL( 8 ), PARAMETER :: DPI = 3.14159265358979324D0
-
-      ! pi/180 [ rad/deg ]
-      REAL, PARAMETER :: PI180  = PI / 180.0
 
       ! Geodetic Constants:
 
@@ -201,8 +196,7 @@ contains
       REAL              ::THVK
       REAL, ALLOCATABLE :: TV( : )   ! Virtual temperature
       REAL, ALLOCATABLE :: TF( : )   ! Full-layer height temperatures
-      REAL              :: P, Q, PP, DD, DD2
-      REAL              :: DZZ
+      REAL              :: P, Q, DD, DD2
       REAL              :: DELZ
       INTEGER           :: LSTK            ! first L: ZF(L) > STKHT
       INTEGER           :: LPBL            ! first L: ZF(L) > mixing layer
@@ -228,6 +222,7 @@ contains
       REAL    STABLE          ! stable            plume rise function
       REAL    UNSTBL          ! unstable          plume rise function
 
+      ! TODO: move to separate functions
       NEUTRL( H, B, U, US ) = &
          MIN( 10.0 * H,  &
          1.2 * (           ( B / ( U * US * US ) ) ** 0.6 &    ! pwr 3 * 0.2
@@ -313,6 +308,8 @@ contains
 
       !Rough nearest neighbor interpolation in place of IOAPI POLY Function (needs
       !updating to bi-linear, polynomial, etc...) - P.C. Campbell
+      WSTK = 0
+      TSTK = TA(1)
       DO I = 1, EMLAYS
          K = 1
          DD = abs ( STKHT - ZH(K) )
@@ -359,6 +356,7 @@ contains
 
       ! Compute initial plume rise from stack top to next level surface:
 
+      SX = SMALL
       IF ( HSTAR .GT. HCRIT ) THEN           ! unstable case:
          ZMIX = HMIX - STKHT
 
