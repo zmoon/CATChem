@@ -184,7 +184,7 @@ CONTAINS
             if (ChemState%nSpeciesAero > 0) then
 
                call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
-                  pblh, shflux, z0h, u10m, v10m, fraclake, gwettop, rc)
+                  pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
                ! loop through aerosol species
                do i = 1, ChemState%nSpeciesAero
@@ -226,7 +226,7 @@ CONTAINS
                         lwi,         &
                         ustar,       &
                         pblh,        &
-                        shflux,      &
+                        hflux,      &
                         von_karman,  &
                         cp,          &
                         g0,          &
@@ -314,7 +314,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, z0h, u10m, v10m, fraclake, gwettop, rc)
+   subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
       use MetState_Mod, only: MetStateType
 
       IMPLICIT NONE
