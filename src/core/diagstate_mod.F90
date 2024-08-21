@@ -104,21 +104,21 @@ CONTAINS
       endif
 
       ! If dry deposition process is activated then allocate dry dep related diagnostics
-      if (Config%drydep_activate) then 
+      if (Config%drydep_activate) then
          Allocate(diagstate%drydep_frequency(ChemState%nSpeciesAero, STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
-         ENDIF 
+         ENDIF
          DiagState%drydep_frequency= ZERO
          Allocate(diagstate%drydep_vel(ChemState%nSpeciesAero, STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
-         ENDIF 
+         ENDIF
          DiagState%drydep_vel= ZERO
 
-         
+
       endif
 
 
