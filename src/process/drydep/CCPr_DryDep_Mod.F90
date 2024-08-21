@@ -147,7 +147,7 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       INTEGER :: km
       INTEGER :: i !< counter
-      INTEGER :: oro                                    ! orography flag; Land, ocean, ice mask
+      INTEGER :: lwi                                    ! orography flag; Land, ocean, ice mask
       REAL(fp), DIMENSION(1,1) :: drydepf               ! Deposition frequency [1/sec]
       REAL(fp), allocatable, DIMENSION(:,:,:) :: tmpu   ! Temperature [K]
       REAL(fp), allocatable, DIMENSION(:,:,:) :: rhoa   ! Air density [kg/m^3]
@@ -156,7 +156,7 @@ CONTAINS
       REAL(fp) :: rhop                                  ! particle density [kg/m^3]
       REAL(fp) :: ustar                                 ! friction speed [m/sec]
       REAL(fp) :: pblh                                  ! PBL height [m]
-      REAL(fp) :: shflux                                ! sfc. sens. heat flux [W m-2]
+      REAL(fp) :: hflux                                ! sfc. sens. heat flux [W m-2]
       REAL(fp) :: z0h                                   ! rough height, sens. heat [m]
       REAL :: ddfreq
       REAL(fp), DIMENSION(1,1) :: u10m                   ! 10-m u-wind component [m/sec]
@@ -183,7 +183,7 @@ CONTAINS
             !-------------------------
             if (ChemState%nSpeciesAero > 0) then
 
-               call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, oro, ustar, &
+               call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
                   pblh, shflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
                ! loop through aerosol species
@@ -198,10 +198,10 @@ CONTAINS
                         tmpu,        &
                         rhoa,        &
                         hghte,       &
-                        oro,         &
+                        lwi,         &
                         ustar,       &
                         pblh,        &
-                        shflux,      &
+                        hflux,      &
                         von_karman,  &
                         cp,          &
                         g0,          &
@@ -223,7 +223,7 @@ CONTAINS
                         tmpu,        &
                         rhoa,        &
                         hghte,       &
-                        oro,         &
+                        lwi,         &
                         ustar,       &
                         pblh,        &
                         shflux,      &
@@ -330,10 +330,10 @@ CONTAINS
       REAL, DIMENSION(1,1), intent(inout) :: v10m                  !< 10-m v-wind component [m/sec]
       REAL, DIMENSION(1,1), intent(inout) :: fraclake              !< fraction covered by water [1]
       REAL, DIMENSION(1,1), intent(inout) :: gwettop               !< fraction soil moisture [1]
-      INTEGER, intent(inout) :: oro                                !< orography flag; Land, ocean, ice mask
+      INTEGER, intent(inout) :: lwi                                !< orography flag; Land, ocean, ice mask
       REAL,    intent(inout) :: ustar                              !< friction speed [m/sec]
       REAL,    intent(inout) :: pblh                               !< PBL height [m]
-      REAL,    intent(inout) :: shflux                             !< sfc. sens. heat flux [W m-2]
+      REAL,    intent(inout) :: hflux                             !< sfc. sens. heat flux [W m-2]
       REAL,    intent(inout) :: z0h                                !< rough height, sens. heat [m]
 
       ! OUTPUTS
@@ -381,10 +381,10 @@ CONTAINS
       tmpu = reshape(metstate%T, (/1, 1, km/))         ! temperature [K]
       rhoa = reshape(metstate%AIRDEN, (/1, 1, km/)) ! air density [kg/m^3]
       hghte = reshape(metstate%ZMID, (/1, 1, km/))    ! top of layer geopotential height [m]
-      oro    = metstate%LWI       ! orography flag; Land, ocean, ice mask
+      lwi    = metstate%LWI       ! orography flag; Land, ocean, ice mask
       ustar  = metstate%ustar     ! friction speed [m/sec]
       pblh   = metstate%pblh      ! PBL height [m]
-      shflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
+      hflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
       z0h    = metstate%z0h       ! rough height, sens. heat [m]
 
    end subroutine PrepMetVarsForGOCART
