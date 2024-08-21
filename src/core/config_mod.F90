@@ -173,33 +173,6 @@ CONTAINS
          RETURN
       ENDIF
 
-
-
-
-      !========================================================================
-      ! Config ChemState
-      !========================================================================
-      call Config_Chem_State(config%Species_File, GridState, ChemState, RC)
-      if (RC /= CC_SUCCESS) then
-         errMsg = 'Error in "Config_Chem_State"!'
-         CALL CC_Error( errMsg, RC, thisLoc  )
-         CALL QFYAML_CleanUp( ConfigInput )
-         CALL QFYAML_CleanUp( ConfigAnchored )
-         RETURN
-      endif
-
-      !========================================================================
-      ! Config EmisState
-      !========================================================================
-      call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
-      if (RC /= CC_SUCCESS) then
-         errMsg = 'Error in "Config_Emis_State"!'
-         CALL CC_Error( errMsg, RC, thisLoc  )
-         CALL QFYAML_CleanUp( ConfigInput )
-         CALL QFYAML_CleanUp( ConfigAnchored )
-         RETURN
-      endif
-
       !========================================================================
       ! Config ChemState
       !========================================================================
