@@ -58,16 +58,16 @@ program test_drydep
    MetState%ORO = 1.0_fp
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
-   MetState%SHFLUX = 0.5_fp
+   MetState%EFLUX = 0.5_fp
    MetState%Z0H = 10.0_fp
    allocate(MetState%MAIRDEN(1))
-   Gridstate%number_of_levels = 1
-   Gridstate%model_timestep = 60
+   Metstate%NLEVS = 1
+   Metstate%TSTEP = 60
 
    do i = 1, gridstate%number_of_levels
       metstate%T(i)=273.15_fp          ! K
       MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
-      MetState%PHIT(i) = I*100   ! m
+      MetState%PHIS(i) = I*100   ! m   !this is technically supposed to be PHIT???
    end do
 
 
@@ -100,8 +100,8 @@ program test_drydep
    title = "drydep Test 3 | resuspension is .TRUE. "
    ! Turn on resuspension
    DryDepState%RESUSPENSION = .TRUE.
-   DryDepState%particleradius
-   DryDepState%particledensity
+   DryDepState%particleradius = 0.0001_fp
+   DryDepState%particledensity = 1.00
    MetState%FRLAKE = 0
    MetState%GWETTOP = 0.01_fp
    metstate%U10m = 1.0_fp
