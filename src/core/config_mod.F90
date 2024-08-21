@@ -94,7 +94,7 @@ CONTAINS
       ! Assume success
       RC      = CC_SUCCESS
       errMsg  = ''
-      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/input_mod.F90)'
+      thisLoc = ' -> at Read_Input_File (in module CATChem/src/core/config_mod.F90)'
 
       !========================================================================
       ! Read the YAML file into the Config object
@@ -1343,101 +1343,101 @@ CONTAINS
    END SUBROUTINE Config_Process_Plumerise
 
 
-      !> \brief Process DryDep configuration
-      !!
-      !! This function processes the DryDep configuration and performs the necessary actions based on the configuration.
-      !!
-      !! \param[in] ConfigInput The YAML configuration object
-      !! \param[inout] Config The configuration object
-      !! \param[out] RC The return code
-      !!
-      !! \ingroup core_modules
-      !!!>
-      SUBROUTINE Config_Process_DryDep( ConfigInput, Config, RC )
-         USE CharPak_Mod,    ONLY : StrSplit
-         USE Error_Mod
-         USE Config_Opt_Mod,  ONLY : ConfigType
+   !> \brief Process DryDep configuration
+   !!
+   !! This function processes the DryDep configuration and performs the necessary actions based on the configuration.
+   !!
+   !! \param[in] ConfigInput The YAML configuration object
+   !! \param[inout] Config The configuration object
+   !! \param[out] RC The return code
+   !!
+   !! \ingroup core_modules
+   !!!>
+   SUBROUTINE Config_Process_DryDep( ConfigInput, Config, RC )
+      USE CharPak_Mod,    ONLY : StrSplit
+      USE Error_Mod
+      USE Config_Opt_Mod,  ONLY : ConfigType
 
-         TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
-         TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+      TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
+      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
 
-         !
-         ! !OUTPUT PARAMETERS:
-         !
-         INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
-         ! !LOCAL VARIABLES:
-         !
-         ! Scalars
-         LOGICAL                      :: v_bool
-         INTEGER                      :: v_int
-         INTEGER                      :: nSubStrs
-         INTEGER                      :: N
-         INTEGER                      :: C
+      !
+      ! !OUTPUT PARAMETERS:
+      !
+      INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+      ! !LOCAL VARIABLES:
+      !
+      ! Scalars
+      LOGICAL                      :: v_bool
+      INTEGER                      :: v_int
+      INTEGER                      :: nSubStrs
+      INTEGER                      :: N
+      INTEGER                      :: C
 
-         ! Reals
-         REAL(fp)                     :: v_real
+      ! Reals
+      REAL(fp)                     :: v_real
 
-         ! Arrays
-         INTEGER                      :: a_int(4)
+      ! Arrays
+      INTEGER                      :: a_int(4)
 
-         ! Strings
-         CHARACTER(LEN=255)           :: thisLoc
-         CHARACTER(LEN=512)           :: errMsg
-         CHARACTER(LEN=QFYAML_StrLen) :: key
-         CHARACTER(LEN=QFYAML_StrLen) :: v_str
+      ! Strings
+      CHARACTER(LEN=255)           :: thisLoc
+      CHARACTER(LEN=512)           :: errMsg
+      CHARACTER(LEN=QFYAML_StrLen) :: key
+      CHARACTER(LEN=QFYAML_StrLen) :: v_str
 
-         ! String arrays
-         CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-         CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
+      ! String arrays
+      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
+      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
 
-         !========================================================================
-         ! Config_Process_DryDep begins here!
-         !========================================================================
+      !========================================================================
+      ! Config_Process_DryDep begins here!
+      !========================================================================
 
-         ! Initialize
-         RC      = CC_SUCCESS
-         thisLoc = ' -> at Config_Process_DryDep (in CATChem/src/core/config_mod.F90)'
-         errMsg = ''
+      ! Initialize
+      RC      = CC_SUCCESS
+      thisLoc = ' -> at Config_Process_DryDep (in CATChem/src/core/config_mod.F90)'
+      errMsg = ''
 
-         ! TODO #105 Fix reading of config file
-         key   = "process%DryDep%activate"
-         v_bool = MISSING_BOOL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = 'Error parsing ' // TRIM( key ) // '!'
-            CALL CC_Error( errMsg, RC, thisLoc )
-            RETURN
-         ENDIF
-         Config%DryDep_activate = v_bool
-
-
-         key   = "process%DryDep%scheme_opt"
-         v_int = MISSING_INT
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
-            RETURN
-         ENDIF
-         Config%DryDep_scheme = v_int
+      ! TODO #105 Fix reading of config file
+      key   = "process%DryDep%activate"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = 'Error parsing ' // TRIM( key ) // '!'
+         CALL CC_Error( errMsg, RC, thisLoc )
+         RETURN
+      ENDIF
+      Config%DryDep_activate = v_bool
 
 
-         key   = "process%DryDep%resuspension"
-         v_bool = MISSING_BOOL
-         CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
-         IF ( RC /= CC_SUCCESS ) THEN
-            errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
-            RETURN
-         ENDIF
-         Config%DryDep_resuspension = v_bool
+      key   = "process%DryDep%scheme"
+      v_int = MISSING_INT
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         RETURN
+      ENDIF
+      Config%DryDep_scheme = v_int
 
-         write(*,*) "DryDeposition Configuration"
-         write(*,*) '------------------------------------'
-         write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
-         write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
-         write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
-         write(*,*) '------------------------------------'
 
-      END SUBROUTINE Config_Process_DryDep
+      key   = "process%DryDep%resuspension"
+      v_bool = MISSING_BOOL
+      CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
+         RETURN
+      ENDIF
+      Config%DryDep_resuspension = v_bool
+
+      write(*,*) "DryDeposition Configuration"
+      write(*,*) '------------------------------------'
+      write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
+      write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
+      write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
+      write(*,*) '------------------------------------'
+
+   END SUBROUTINE Config_Process_DryDep
 
 
 
