@@ -1,3 +1,4 @@
 add_subdirectory(dust)
 add_subdirectory(seasalt)
 add_subdirectory(plumerise)
+add_subdirectory(drydep)
