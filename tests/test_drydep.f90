@@ -65,9 +65,9 @@ program test_drydep
    Gridstate%model_timestep = 60
 
    do i = 1, gridstate%number_of_levels
-       metstate%T(i)=273.15_fp          ! K
-       MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
-       MetState%PHIT(i) = I*100   ! m
+      metstate%T(i)=273.15_fp          ! K
+      MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
+      MetState%PHIT(i) = I*100   ! m
    end do
 
 
@@ -144,7 +144,3 @@ contains
    end subroutine print_info
 
 end program test_drydep
-
-
-
-
