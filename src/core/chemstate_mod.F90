@@ -136,7 +136,7 @@ CONTAINS
       IF ( RC /= CC_SUCCESS ) RETURN
 
       do i=0, ChemState%nSpecies
-         ALLOCATE(ChemState%ChemSpecies(i)%conc(MetState%NLEVS), STAT=RC)
+         ALLOCATE(ChemState%ChemSpecies(i)%conc(GridState%number_of_levels), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
