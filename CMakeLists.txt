@@ -42,7 +42,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel" AND CMAKE_BUILD_TYPE MATCHES "D
     -error-limit
     0
     -diag-disable
-    10448)
+    6379,10448)
 endif()
 
 add_subdirectory(src)
