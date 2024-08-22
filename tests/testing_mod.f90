@@ -52,7 +52,7 @@ contains
 
       diff = abs(a - b)
       if (diff > tol_) then
-         print '(a, ": ", g9.4, " != ", g9.4)', msg_, a, b
+         print '(a, ": ", g11.4, " != ", g11.4)', msg_, a, b
          stop 1
       end if
    end subroutine assert_close
