@@ -223,7 +223,6 @@ CONTAINS
       integer :: n
       CHARACTER(LEN=QFYAML_NamLen) :: key
       CHARACTER(LEN=QFYAML_StrLen) :: v_str
-      ! integer :: v_int
       real    :: v_real
       logical :: v_logical
 
@@ -585,10 +584,6 @@ CONTAINS
       CHARACTER(LEN=QFYAML_StrLen) :: v_str
       integer :: v_int
       real    :: v_real
-      ! logical :: v_logical
-      ! real, allocatable :: v_real_arr(:)
-      ! integer :: arr_size
-      ! CHARACTER(LEN=QFYAML_NamLen), pointer :: v_str_arr(:)
 
       Character(len=17) :: tags(5)
 
@@ -847,9 +842,6 @@ CONTAINS
 ! !LOCAL VARIABLES:
 !
       ! Scalars
-      ! LOGICAL                      :: v_bool
-      ! INTEGER                      :: N
-      ! INTEGER                      :: C
       ! REAL(fp)                     :: JulianDateStart,  JulianDateEnd
 
       ! Strings
