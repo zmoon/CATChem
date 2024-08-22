@@ -4262,10 +4262,8 @@ MODULE QFYAML_Mod
       integer, intent(out) :: array_size
       integer, intent(inout) :: RC
 
-      character(len=:), allocatable :: temp_string
       character(len=1) :: delimiter
       integer :: i, start, end, count, ix
-      character(len=QFYAML_NamLen) :: temp_str
 
       CHARACTER(LEN=QFYAML_StrLen)    :: errMsg
       CHARACTER(LEN=QFYAML_StrLen)    :: thisLoc
@@ -4278,7 +4276,6 @@ MODULE QFYAML_Mod
       delimiter = ','
       count = 0
       start = 1
-      temp_string = ''
 
       ! Count the number of commas to determine the size of the array
       do i = 1, len_trim(input_string)
@@ -4296,7 +4293,7 @@ MODULE QFYAML_Mod
       count = 0
       start = 1
 
-      ! Extract each number and convert to integer
+      ! Extract
       do i = 1, len_trim(input_string)
           if (input_string(i:i) == delimiter .or. i == len_trim(input_string)) then
               if (i == len_trim(input_string)) then
@@ -4305,27 +4302,31 @@ MODULE QFYAML_Mod
                   end = i - 1
               end if
 
-              temp_string = input_string(start:end)
-              read(temp_string, *) temp_str
-              str_arr(count + 1) = temp_str
+              str_arr(count + 1) = trim(adjustl(input_string(start:end)))
 
               count = count + 1
               start = i + 1
           end if
       end do
 
-      ! remove leading or trailing quotation marks
+      ! Remove first leading and/or trailing quotation marks
       do i = 1, array_size
-         temp_string = str_arr(i)
-         if (SCAN(str_arr(i), '"') /= 0) then
-            ix = INDEX(str_arr(i), '"')
-            write(*,*) TRIM(str_arr(i)) // ' ix = ', ix
-            if (ix == len_trim(temp_string)) then
-               temp_str = TRIM(temp_string(1:ix-1))
-            else if (ix == 1) then
-               temp_str = TRIM(temp_string(2:ix))
+         ! Leading
+         if (i > 1) then
+            ix = scan(str_arr(i), '"'//"'")
+            !write(*,*) trim(str_arr(i)) // ' ix = ', ix
+            if (ix == 1) then
+               str_arr(i) = str_arr(i)(2:len(str_arr(i)))
             endif
-            str_arr(i) = TRIM(temp_str)
+         endif
+
+         ! Trailing
+         if (i < array_size) then
+            ix = scan(str_arr(i), '"'//"'", back=.true.)
+            !write(*,*) trim(str_arr(i)) // ' ix = ', ix
+            if (ix > 0 .and. ix == len_trim(str_arr(i))) then
+               str_arr(i) = str_arr(i)(1:ix-1)
+            endif
          endif
       enddo
 
