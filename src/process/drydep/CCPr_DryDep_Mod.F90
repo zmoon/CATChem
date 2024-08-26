@@ -207,6 +207,7 @@ CONTAINS
       pblh   = metstate%pblh      ! PBL height [m]
       shflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
       z0h    = metstate%z0h       ! rough height, sens. heat [m]
+      
 
 
       radius = DryDepState%particleradius   ! particle radius [m]
@@ -232,11 +233,18 @@ CONTAINS
                v10m(1,1)   = metstate%V10m     ! 10-m v-wind component [m/sec]
                fraclake(1,1)=metstate%FRLAKE   ! fraction covered by water [1]
                gwettop(1,1)= metstate%GWETTOP  ! fraction soil moisture [1]
-            endif
 
             call DryDeposition( km, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, &
                von_karman, cp, g0, z0h, drydepf, rc, &
                radius, rhop, u10m, v10m, fraclake, gwettop )
+
+            else
+
+            call DryDeposition( km, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, &
+               von_karman, cp, g0, z0h, drydepf, rc)
+
+
+            endif
 
          endif
 
