@@ -58,7 +58,7 @@ program test_drydep
    MetState%ORO = 1.0_fp
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
-   MetState%SHFLUX = 0.5_fp
+   MetState%EFLUX = 0.5_fp
    MetState%Z0H = 10.0_fp
    allocate(MetState%MAIRDEN(1))
    Gridstate%number_of_levels = 1
