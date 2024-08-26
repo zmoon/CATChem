@@ -77,7 +77,7 @@ CONTAINS
 
    SUBROUTINE CCPR_DryDep_Init( Config, DryDepState, ChemState, RC )
       ! USE
-      
+
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -178,21 +178,21 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       INTEGER :: km
       REAL, DIMENSION(1,1) :: drydepf                     ! Deposition frequency [1/sec]
-      REAL, allocatable, DIMENSION(:,:,:) :: tmpu 
-      REAL, allocatable, DIMENSION(:,:,:) :: rhoa   
-      REAL, allocatable, DIMENSION(:,:,:) :: hghte  
+      REAL, allocatable, DIMENSION(:,:,:) :: tmpu
+      REAL, allocatable, DIMENSION(:,:,:) :: rhoa
+      REAL, allocatable, DIMENSION(:,:,:) :: hghte
       REAL :: radius    ! particle radius [m]
       REAL :: rhop      ! particle density [kg/m^3]
       INTEGER :: oro       ! orography flag; Land, ocean, ice mask
       REAL :: ustar     ! friction speed [m/sec]
       REAL :: pblh      ! PBL height [m]
       REAL :: shflux    ! sfc. sens. heat flux [W m-2]
-      REAL :: z0h       ! rough height, sens. heat [m] 
+      REAL :: z0h       ! rough height, sens. heat [m]
       REAL, DIMENSION(1,1) :: u10m       ! 10-m u-wind component [m/sec]
       REAL, DIMENSION(1,1) :: v10m       ! 10-m v-wind component [m/sec]
       REAL, DIMENSION(1,1) :: fraclake   ! fraction covered by water [1]
       REAL, DIMENSION(1,1) :: gwettop    ! fraction soil moisture [1]
-     
+
 
 !      z0h    = call(metstate%z0h)       ! rough height, sens. heat [m]
 
@@ -228,10 +228,10 @@ CONTAINS
             !-------------------------
 
             if (DryDepState%resuspension) then
-              u10m(1,1)   = metstate%U10m     ! 10-m u-wind component [m/sec]
-              v10m(1,1)   = metstate%V10m     ! 10-m v-wind component [m/sec]
-              fraclake(1,1)=metstate%FRLAKE   ! fraction covered by water [1]
-              gwettop(1,1)= metstate%GWETTOP  ! fraction soil moisture [1]
+               u10m(1,1)   = metstate%U10m     ! 10-m u-wind component [m/sec]
+               v10m(1,1)   = metstate%V10m     ! 10-m v-wind component [m/sec]
+               fraclake(1,1)=metstate%FRLAKE   ! fraction covered by water [1]
+               gwettop(1,1)= metstate%GWETTOP  ! fraction soil moisture [1]
             endif
 
             call DryDeposition( km, tmpu, rhoa, hghte, oro, ustar, pblh, shflux, &
