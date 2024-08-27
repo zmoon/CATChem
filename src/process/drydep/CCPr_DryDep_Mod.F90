@@ -203,212 +203,211 @@ CONTAINS
 
          endif
 
-               ! loop through aerosol species
-               do i = 1, ChemState%nSpeciesAero
-                  ! cycle if not a drydep species
-                  if (ChemState%ChemSpecies(ChemState%AeroIndex(i))%is_drydep .eqv. .false.) cycle
+         ! loop through aerosol species
+         do i = 1, ChemState%nSpeciesAero
+            ! cycle if not a drydep species
+            if (ChemState%ChemSpecies(ChemState%AeroIndex(i))%is_drydep .eqv. .false.) cycle
 
-                  radius = ChemState%chemSpecies(ChemState%AeroIndex(i))%radius
-                  rhop = ChemState%chemSpecies(ChemState%AeroIndex(i))%density
-                  if (DryDepState%resuspension) then
-                     call CCPr_Scheme_GOCART_DryDep( km,          &
-                        tmpu,        &
-                        rhoa,        &
-                        hghte,       &
-                        lwi,         &
-                        ustar,       &
-                        pblh,        &
-                        hflux,      &
-                        von_karman,  &
-                        cp,          &
-                        g0,          &
-                        z0h,         &
-                        drydepf,     &
-                        rc,          &
-                        radius,      &
-                        rhop,        &
-                        u10m,        &
-                        v10m,        &
-                        fraclake,    &
-                        gwettop )
-                     if (RC /= CC_SUCCESS) then
-                        errMsg = 'Error in GOCART DryDeposition'
-                        CALL CC_Error( errMsg, RC, thisLoc )
-                     endif
-                  else
-                     call CCPr_Scheme_GOCART_DryDep( km,          &
-                        tmpu,        &
-                        rhoa,        &
-                        hghte,       &
-                        lwi,         &
-                        ustar,       &
-                        pblh,        &
-                        hflux,      &
-                        von_karman,  &
-                        cp,          &
-                        g0,          &
-                        z0h,         &
-                        drydepf,     &
-                        rc)
-                     if (RC /= CC_SUCCESS) then
-                        errMsg = 'Error in GOCART DryDeposition'
-                        CALL CC_Error( errMsg, RC, thisLoc )
-                     endif
+            radius = ChemState%chemSpecies(ChemState%AeroIndex(i))%radius
+            rhop = ChemState%chemSpecies(ChemState%AeroIndex(i))%density
+            if (DryDepState%resuspension) then
+               call CCPr_Scheme_GOCART_DryDep( km,          &
+                  tmpu,        &
+                  rhoa,        &
+                  hghte,       &
+                  lwi,         &
+                  ustar,       &
+                  pblh,        &
+                  hflux,      &
+                  von_karman,  &
+                  cp,          &
+                  g0,          &
+                  z0h,         &
+                  drydepf,     &
+                  rc,          &
+                  radius,      &
+                  rhop,        &
+                  u10m,        &
+                  v10m,        &
+                  fraclake,    &
+                  gwettop )
+               if (RC /= CC_SUCCESS) then
+                  errMsg = 'Error in GOCART DryDeposition'
+                  CALL CC_Error( errMsg, RC, thisLoc )
+               endif
+            else
+               call CCPr_Scheme_GOCART_DryDep( km,          &
+                  tmpu,        &
+                  rhoa,        &
+                  hghte,       &
+                  lwi,         &
+                  ustar,       &
+                  pblh,        &
+                  hflux,      &
+                  von_karman,  &
+                  cp,          &
+                  g0,          &
+                  z0h,         &
+                  drydepf,     &
+                  rc)
+               if (RC /= CC_SUCCESS) then
+                  errMsg = 'Error in GOCART DryDeposition'
+                  CALL CC_Error( errMsg, RC, thisLoc )
+               endif
 
-                  endif
+            endif
 
-                  ! Fill Diagnostic Variables
-                  !--------------------------
-                  !!!!FIXME: COME BACK TO THIS LATER
-                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
-                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
+            ! Fill Diagnostic Variables
+            !--------------------------
+            !!!!FIXME: COME BACK TO THIS LATER
+            !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
+            !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
-                  ! apply drydep velocities/freq to chem species
-                  dqa = 0.
-                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
-                     * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
-                  ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
-                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
-               end do ! do i = 1, ChemState%nSpeciesAeroDryDep
+            ! apply drydep velocities/freq to chem species
+            dqa = 0.
+            dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
+               * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
+            ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
+               ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
+         end do ! do i = 1, ChemState%nSpeciesAeroDryDep
 
-            endif ! if (ChemState%nSpeciesAeroDryDep > 0)
+      endif ! if (ChemState%nSpeciesAeroDryDep > 0)
 
-         endif ! if (DryDepState%Scheme == 1)
+   endif ! if (DryDepState%Scheme == 1)
 
-         ! TO DO:  apply dry dep velocities/freq to chem species
-         write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
+   ! TO DO:  apply dry dep velocities/freq to chem species
+   write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
+endif
+
+
+
+end subroutine CCPr_DryDep_Run
+
+ !>
+ !! \brief Finalize the DryDep
+ !!
+ !! \param [INOUT] DryDepState
+ !! \param [OUT] RC Return code
+ !!!>
+SUBROUTINE CCPr_DryDep_Finalize( DryDepState, RC )
+
+   ! USE
+   !----
+
+   IMPLICIT NONE
+
+   ! INPUT/OUTPUT PARAMETERS
+   TYPE(DryDepStateType), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
+
+   ! OUTPUT PARAMETERS
+   INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+
+   ! LOCAL VARIABLES
+   CHARACTER(LEN=255) :: ErrMsg, thisLoc
+
+   ! Initialize
+   RC = CC_SUCCESS
+   errMsg = ''
+   thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
+
+
+end subroutine CCPr_DryDep_Finalize
+
+ !>
+ !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
+ !!
+ !! \param [INOUT] metstate
+ !! \param [INOUT] tmpu
+ !! \param [INOUT] rhoa
+ !! \param [INOUT] hghte
+ !! \param [INOUT] oro
+ !! \param [INOUT] ustar
+ !! \param [INOUT] pblh
+ !! \param [INOUT] shflux
+ !! \param [INOUT] z0h
+ !! \param [INOUT] u10m
+ !! \param [INOUT] v10m
+ !! \param [INOUT] fraclake
+ !! \param [INOUT] gwettop
+ !! \param [OUT] rc
+ !!
+ !! \ingroup core_modules
+ !!!>
+subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
+   use MetState_Mod, only: MetStateType
+
+   IMPLICIT NONE
+
+   ! INPUTS
+   type(MetStateType), intent(in) :: MetState                   !< Meteorological state
+
+   ! INPUT/OUTPUTS
+   REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: tmpu   !< temperature [K]
+   REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: rhoa   !< air density [kg/m^3]
+   REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: hghte  !< geometric height [m]
+   REAL, DIMENSION(1,1), intent(inout) :: u10m                  !< 10-m u-wind component [m/sec]
+   REAL, DIMENSION(1,1), intent(inout) :: v10m                  !< 10-m v-wind component [m/sec]
+   REAL, DIMENSION(1,1), intent(inout) :: fraclake              !< fraction covered by water [1]
+   REAL, DIMENSION(1,1), intent(inout) :: gwettop               !< fraction soil moisture [1]
+   INTEGER, intent(inout) :: lwi                                !< orography flag; Land, ocean, ice mask
+   REAL,    intent(inout) :: ustar                              !< friction speed [m/sec]
+   REAL,    intent(inout) :: pblh                               !< PBL height [m]
+   REAL,    intent(inout) :: hflux                             !< sfc. sens. heat flux [W m-2]
+   REAL,    intent(inout) :: z0h                                !< rough height, sens. heat [m]
+
+   ! OUTPUTS
+   INTEGER :: rc !< Return code
+
+
+   ! LOCAL VARIABLES
+   INTEGER :: km
+
+   ! Error handling
+   character(len=255) :: errMsg
+   character(len=255) :: thisloc
+
+   ! Initialize
+   rc = CC_SUCCESS
+   errMsg = ''
+   thisloc = ' -> at PrepMetVarsForGOCART (in process/drydep/ccpr_DryDep_mod.F90)'
+
+   km  = MetState%NLEVS
+
+   if (.not. allocated(tmpu)) then
+      allocate(tmpu(1,1, km), stat=rc)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Could not allocate tmpu'
+         CALL CC_Error( errMsg, RC, thisLoc )
       endif
+   endif
 
-
-
-   end subroutine CCPr_DryDep_Run
-
-   !>
-   !! \brief Finalize the DryDep
-   !!
-   !! \param [INOUT] DryDepState
-   !! \param [OUT] RC Return code
-   !!!>
-   SUBROUTINE CCPr_DryDep_Finalize( DryDepState, RC )
-
-      ! USE
-      !----
-
-      IMPLICIT NONE
-
-      ! INPUT/OUTPUT PARAMETERS
-      TYPE(DryDepStateType), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
-
-      ! OUTPUT PARAMETERS
-      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
-
-      ! LOCAL VARIABLES
-      CHARACTER(LEN=255) :: ErrMsg, thisLoc
-
-      ! Initialize
-      RC = CC_SUCCESS
-      errMsg = ''
-      thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
-
-
-   end subroutine CCPr_DryDep_Finalize
-
-   !>
-   !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
-   !!
-   !! \param [INOUT] metstate
-   !! \param [INOUT] tmpu
-   !! \param [INOUT] rhoa
-   !! \param [INOUT] hghte
-   !! \param [INOUT] oro
-   !! \param [INOUT] ustar
-   !! \param [INOUT] pblh
-   !! \param [INOUT] shflux
-   !! \param [INOUT] z0h
-   !! \param [INOUT] u10m
-   !! \param [INOUT] v10m
-   !! \param [INOUT] fraclake
-   !! \param [INOUT] gwettop
-   !! \param [OUT] rc
-   !!
-   !! \ingroup core_modules
-   !!!>
-   subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
-      use MetState_Mod, only: MetStateType
-
-      IMPLICIT NONE
-
-      ! INPUTS
-      type(MetStateType), intent(in) :: MetState                   !< Meteorological state
-
-      ! INPUT/OUTPUTS
-      REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: tmpu   !< temperature [K]
-      REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: rhoa   !< air density [kg/m^3]
-      REAL, intent(inout), allocatable, DIMENSION(:,:,:) :: hghte  !< geometric height [m]
-      REAL, DIMENSION(1,1), intent(inout) :: u10m                  !< 10-m u-wind component [m/sec]
-      REAL, DIMENSION(1,1), intent(inout) :: v10m                  !< 10-m v-wind component [m/sec]
-      REAL, DIMENSION(1,1), intent(inout) :: fraclake              !< fraction covered by water [1]
-      REAL, DIMENSION(1,1), intent(inout) :: gwettop               !< fraction soil moisture [1]
-      INTEGER, intent(inout) :: lwi                                !< orography flag; Land, ocean, ice mask
-      REAL,    intent(inout) :: ustar                              !< friction speed [m/sec]
-      REAL,    intent(inout) :: pblh                               !< PBL height [m]
-      REAL,    intent(inout) :: hflux                             !< sfc. sens. heat flux [W m-2]
-      REAL,    intent(inout) :: z0h                                !< rough height, sens. heat [m]
-
-      ! OUTPUTS
-      INTEGER :: rc !< Return code
-
-
-      ! LOCAL VARIABLES
-      INTEGER :: km
-
-      ! Error handling
-      character(len=255) :: errMsg
-      character(len=255) :: thisloc
-
-      ! Initialize
-      rc = CC_SUCCESS
-      errMsg = ''
-      thisloc = ' -> at PrepMetVarsForGOCART (in process/drydep/ccpr_DryDep_mod.F90)'
-
-      km  = MetState%NLEVS
-
-      if (.not. allocated(tmpu)) then
-         allocate(tmpu(1,1, km), stat=rc)
-         if (RC /= CC_SUCCESS) then
-            errMsg = 'Could not allocate tmpu'
-            CALL CC_Error( errMsg, RC, thisLoc )
-         endif
+   if (.not. allocated(rhoa)) then
+      allocate(rhoa(1,1,km), stat=rc)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Could not allocate rhoa'
+         CALL CC_Error( errMsg, RC, thisLoc )
       endif
+   endif
 
-      if (.not. allocated(rhoa)) then
-         allocate(rhoa(1,1,km), stat=rc)
-         if (RC /= CC_SUCCESS) then
-            errMsg = 'Could not allocate rhoa'
-            CALL CC_Error( errMsg, RC, thisLoc )
-         endif
+   if (.not. allocated(hghte)) then
+      allocate(hghte(1,1,km), stat=rc)
+      if (RC /= CC_SUCCESS) then
+         errMsg = 'Could not allocate hghte'
+         CALL CC_Error( errMsg, RC, thisLoc )
       endif
+   endif
 
-      if (.not. allocated(hghte)) then
-         allocate(hghte(1,1,km), stat=rc)
-         if (RC /= CC_SUCCESS) then
-            errMsg = 'Could not allocate hghte'
-            CALL CC_Error( errMsg, RC, thisLoc )
-         endif
-      endif
+   tmpu = reshape(metstate%T, (/1, 1, km/))         ! temperature [K]
+   rhoa = reshape(metstate%AIRDEN, (/1, 1, km/)) ! air density [kg/m^3]
+   hghte = reshape(metstate%ZMID, (/1, 1, km/))    ! top of layer geopotential height [m]
+   lwi    = metstate%LWI       ! orography flag; Land, ocean, ice mask
+   ustar  = metstate%ustar     ! friction speed [m/sec]
+   pblh   = metstate%pblh      ! PBL height [m]
+   hflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
+   z0h    = metstate%z0h       ! rough height, sens. heat [m]
 
-      tmpu = reshape(metstate%T, (/1, 1, km/))         ! temperature [K]
-      rhoa = reshape(metstate%AIRDEN, (/1, 1, km/)) ! air density [kg/m^3]
-      hghte = reshape(metstate%ZMID, (/1, 1, km/))    ! top of layer geopotential height [m]
-      lwi    = metstate%LWI       ! orography flag; Land, ocean, ice mask
-      ustar  = metstate%ustar     ! friction speed [m/sec]
-      pblh   = metstate%pblh      ! PBL height [m]
-      hflux = metstate%hflux     ! sfc. sens. heat flux [W m-2]
-      z0h    = metstate%z0h       ! rough height, sens. heat [m]
-
-   end subroutine PrepMetVarsForGOCART
+end subroutine PrepMetVarsForGOCART
 
 
 END MODULE CCPR_DryDep_Mod
-
