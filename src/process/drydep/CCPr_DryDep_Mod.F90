@@ -334,7 +334,8 @@ end subroutine CCPr_DryDep_Finalize
  !!
  !! \ingroup core_modules
  !!!>
-subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
+subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, &
+                z0h, u10m, v10m, fraclake, gwettop, rc)
    use MetState_Mod, only: MetStateType
 
    IMPLICIT NONE
