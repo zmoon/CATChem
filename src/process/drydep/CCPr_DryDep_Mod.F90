@@ -190,7 +190,7 @@ CONTAINS
       if (DryDepState%Activate) then
          ! Run the DryDep Scheme
          !-------------------------
-         if (DryDepState%Scheme == 1) then
+         if (DryDepState%SchemeOpt == 1) then
             ! Run the DryDep Scheme - Only Applicable to AEROSOL species
             !-------------------------
             if (ChemState%nSpeciesAero > 0) then
@@ -234,7 +234,7 @@ CONTAINS
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
-               endif
+               endif  !if (RC /= CC_SUCCESS) 
             else
                call CCPr_Scheme_GOCART_DryDep( km,          &
                   tmpu,        &
@@ -253,9 +253,9 @@ CONTAINS
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
-               endif
+               endif  !if (RC /= CC_SUCCESS) 
 
-            endif
+            endif  ! if (DryDepState%resuspension)
 
             ! Fill Diagnostic Variables
             !--------------------------
@@ -273,12 +273,12 @@ CONTAINS
 
       endif ! if (ChemState%nSpeciesAeroDryDep > 0)
 
-   endif ! if (DryDepState%Scheme == 1)
+   endif ! if (DryDepState%SchemeOpt == 1)
 
    ! TO DO:  apply dry dep velocities/freq to chem species
    write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
-endif
+endif   !  if (DryDepState%Activate)
 
 
 
@@ -335,7 +335,7 @@ end subroutine CCPr_DryDep_Finalize
  !! \ingroup core_modules
  !!!>
 subroutine PrepMetVarsForGOCART(metstate, tmpu, rhoa, hghte, lwi, ustar, pblh, hflux, &
-                z0h, u10m, v10m, fraclake, gwettop, rc)
+   z0h, u10m, v10m, fraclake, gwettop, rc)
    use MetState_Mod, only: MetStateType
 
    IMPLICIT NONE
