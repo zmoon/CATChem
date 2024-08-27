@@ -193,15 +193,14 @@ CONTAINS
          if (DryDepState%SchemeOpt == 1) then
             ! Run the DryDep Scheme - Only Applicable to AEROSOL species
             !-------------------------
-            if (ChemState%nSpeciesAero > 0) then
+            if (ChemState%nSpeciesAeroDryDep > 0) then
 
                call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
                   pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
+            endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
 
-            endif
-
-         endif
+         endif  ! if (DryDepState%SchemeOpt == 1)
 
          ! loop through aerosol species
          do i = 1, ChemState%nSpeciesAero
@@ -271,15 +270,10 @@ CONTAINS
                ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
          end do ! do i = 1, ChemState%nSpeciesAeroDryDep
 
-      endif ! if (ChemState%nSpeciesAeroDryDep > 0)
-
-   endif ! if (DryDepState%SchemeOpt == 1)
-
    ! TO DO:  apply dry dep velocities/freq to chem species
    write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
 endif   !  if (DryDepState%Activate)
-
 
 
 end subroutine CCPr_DryDep_Run
