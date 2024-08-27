@@ -18,7 +18,8 @@ program test_drydep
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
-   CHARACTER(LEN=18), PARAMETER :: configFile ='CATChem_config.yml'
+   CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Plumerise/CATChem_config.yml'
+
 
    thisLoc = 'test_drydep -> at read CATChem_Config.yml'
    errMsg = ''
@@ -52,17 +53,17 @@ program test_drydep
    ! Test 2
    !----------------------------
    ! Set number of drydep species to zero for now
-   ChemState%nSpeciesdrydep = 0
+   ChemState%nSpeciesAerodrydep = 0
 
    ! Meteorological State
-   MetState%ORO = 1.0_fp
+   MetState%LWI = 1.0_fp
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
-   MetState%EFLUX = 0.5_fp
+   MetState%HFLUX = 0.5_fp
    MetState%Z0H = 10.0_fp
    allocate(MetState%MAIRDEN(1))
-   Gridstate%number_of_levels = 1
-   Gridstate%model_timestep = 60
+   Metstate%NLEVS = 1
+   Metstate%TSTEP = 60
 
    do i = 1, gridstate%number_of_levels
       metstate%T(i)=273.15_fp          ! K
@@ -100,8 +101,8 @@ program test_drydep
    title = "drydep Test 3 | resuspension is .TRUE. "
    ! Turn on resuspension
    DryDepState%RESUSPENSION = .TRUE.
-   DryDepState%particleradius
-   DryDepState%particledensity
+   DryDepState%particleradius = 0.0001_fp
+   DryDepState%particledensity = 1.00
    MetState%FRLAKE = 0
    MetState%GWETTOP = 0.01_fp
    metstate%U10m = 1.0_fp
