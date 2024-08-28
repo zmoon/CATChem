@@ -207,9 +207,12 @@ CONTAINS
             ! cycle if not a drydep species
             if (ChemState%ChemSpecies(ChemState%AeroIndex(i))%is_drydep .eqv. .false.) cycle
 
-            radius = ChemState%chemSpecies(ChemState%AeroIndex(i))%radius
-            rhop = ChemState%chemSpecies(ChemState%AeroIndex(i))%density
+
             if (DryDepState%resuspension) then
+
+               radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
+               rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
+
                call CCPr_Scheme_GOCART_DryDep( km,          &
                   tmpu,        &
                   rhoa,        &
@@ -235,7 +238,7 @@ CONTAINS
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
             else
-               call CCPr_Scheme_GOCART_DryDep( km,          &
+               call CCPr_Scheme_GOCART_DryDep( km,  &
                   tmpu,        &
                   rhoa,        &
                   hghte,       &
