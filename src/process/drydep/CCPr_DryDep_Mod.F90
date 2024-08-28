@@ -198,15 +198,8 @@ CONTAINS
                call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
                   pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
-            endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
-
-         endif  ! if (DryDepState%SchemeOpt == 1)
-
          ! loop through aerosol species
-         do i = 1, ChemState%nSpeciesAero
-            ! cycle if not a drydep species
-            if (ChemState%ChemSpecies(ChemState%AeroIndex(i))%is_drydep .eqv. .false.) cycle
-
+         do i = 1, ChemState%nSpeciesAeroDryDep
 
             if (DryDepState%resuspension) then
 
@@ -271,7 +264,12 @@ CONTAINS
                * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
             ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
                ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
+
          end do ! do i = 1, ChemState%nSpeciesAeroDryDep
+
+      endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
+
+   endif  ! if (DryDepState%SchemeOpt == 1)
 
    ! TO DO:  apply dry dep velocities/freq to chem species
    write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
