@@ -321,7 +321,7 @@ CONTAINS
             tracer_index = tracer_index + 1
          endif
          if (ChemState%ChemSpecies(n)%is_drydep .eqv. .true.) then
-            Chemstate%TracerIndex(tracer_index) = n
+            Chemstate%DryDepIndex(drydep_index) = n
             drydep_index = drydep_index + 1
          endif
       enddo
