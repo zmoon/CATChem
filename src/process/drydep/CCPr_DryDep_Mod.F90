@@ -37,9 +37,6 @@ MODULE CCPR_DryDep_mod
    !! \ingroup core_modules
    !!!>
    TYPE :: DryDepStateType
-      LOGICAL                         :: Activate              ! Activate Process (True/False)
-      LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
-      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
 
       ! Process Specific Parameters
 
@@ -47,6 +44,10 @@ MODULE CCPR_DryDep_mod
       !=================================================================
       ! Module specific variables/arrays/data pointers come below
       !=================================================================
+
+      LOGICAL                         :: Activate              ! Activate Process (True/False)
+      LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
+      INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
 
 
    END TYPE DryDepStateType
