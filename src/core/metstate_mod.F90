@@ -219,6 +219,8 @@ CONTAINS
       ! Initialize
       RC = CC_SUCCESS
 
+      MetState%USTAR = ZERO
+
    END SUBROUTINE Zero_MetState
 
    !>

@@ -95,7 +95,7 @@ CONTAINS
    !! \param RC Return code
    !!
    !!!>
-   subroutine Chem_Allocate(GridState, Species, ChemState, RC)
+   subroutine Chem_Allocate(GridState, ChemState, RC)
 
       ! USES
       USE GridState_Mod,  ONLY : GridStateType
@@ -106,7 +106,7 @@ CONTAINS
       ! INOUT Params
       type(GridStateType), INTENT(in)    :: GridState ! Grid State object
       type(ChemStateType), INTENT(inout) :: ChemState ! chem State object
-      type(SpeciesType),   POINTER       :: Species   !Species object
+      ! type(SpeciesType),   POINTER       :: Species   ! Species object
       ! OUTPUT Params
       INTEGER,             INTENT(OUT)   :: RC            ! Success or failure
 
@@ -137,7 +137,7 @@ CONTAINS
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
-         ChemState%ChemSpecies(i)%conc = TINY
+         ChemState%ChemSpecies(i)%conc = TINY_
       end do
 
    end subroutine Chem_Allocate

@@ -41,12 +41,12 @@ contains
    !!
    !! \ingroup core_modules
    !!!>
-   subroutine Grid_Init_State(Config, GridState, RC)
+   subroutine Grid_Init_State(GridState, RC)
       use Error_Mod, only : CC_SUCCESS
       use Config_Opt_Mod, Only : ConfigType
       implicit none
 
-      type(ConfigType),    intent(in)    :: Config     !< Input Options object
+      ! type(ConfigType),    intent(in)    :: Config     !< Input Options object
       type(GridStateType), intent(inout) :: GridState  !< Grid State object
       INTEGER,             INTENT(OUT)   :: RC         !< Success or failure
 

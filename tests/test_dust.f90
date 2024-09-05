@@ -1,6 +1,6 @@
 program test_dust
    use CATChem, fp => cc_rk
-   use testing_mod, only: assert
+   use testing_mod, only: assert, assert_close
    use state_mod
 
    implicit none
@@ -74,7 +74,7 @@ program test_dust
       stop 1
    end if
 
-   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -91,7 +91,7 @@ program test_dust
    title = "Dust Test 3 | ustar == ustar_threshold"
    MetState%USTAR = 0.1_fp
 
-   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -99,7 +99,7 @@ program test_dust
    end if
 
    call print_info(Config, DustState, MetState, title)
-   call assert(DiagState%dust_total_flux .eq. 0.0_fp, "Test 2 FENGSHA Dust Scheme (no Dust)")
+   call assert_close(DiagState%dust_total_flux, 0.0_fp, msg="Test 2 FENGSHA Dust Scheme (no Dust)")
 
    !------------------------------------------------------
    ! TEST 4
@@ -112,7 +112,7 @@ program test_dust
    MetState%V10M = 5.0_fp
    DiagState%dust_total_flux = 0.0_fp
 
-   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -149,7 +149,7 @@ program test_dust
       stop 1
    end if
 
-   call cc_dust_run(MetState, DiagState, DustState, ChemState, rc)
+   call cc_dust_run(MetState, DiagState, DustState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_dust_run'
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -173,22 +173,26 @@ contains
       write(*,*) '*************'
       write(*,*) 'Configuration '
       write(*,*) '*************'
-      write(*,*) 'DustState%activate = ', DustState_%activate
-      write(*,*) 'DustState%dust_scheme = ', DustState_%SchemeOpt
-      write(*,*) 'DustState%dust_moist_opt = ', DustState_%DragOpt
-      write(*,*) 'DustState%dust_horizflux_opt = ', DustState_%MoistOpt
+      write(*,*) 'Config%dust_activate = ', Config_%dust_activate
+      write(*,*) 'Config%dust_scheme = ', Config_%dust_scheme
+      write(*,*) 'DustState%Activate = ', DustState_%Activate
+      write(*,*) 'DustState%SchemeOpt = ', DustState_%SchemeOpt
+      write(*,*) 'DustState%nDustSpecies = ', DustState_%nDustSpecies
       write(*,*) 'DustState%AlphaScaleFactor = ', DustState_%AlphaScaleFactor
-      write(*,*) 'ChemState%nSpeciesDust = ', DustState_%HorizFluxOpt
-      write(*,*) 'MetState%DSOILTYPE = ', MetState_%DSOILTYPE
-      write(*,*) 'MetState%SSM = ', MetState_%SSM
-      write(*,*) 'MetState%RDRAG = ', MetState_%RDRAG
-      write(*,*) 'MetState%TSKIN =', MetState_%TSKIN
+      write(*,*) 'DustState%BetaScaleFactor = ', DustState_%BetaScaleFactor
+      write(*,*) 'DustState%DragOpt = ', DustState_%DragOpt
+      write(*,*) 'DustState%MoistOpt = ', DustState_%MoistOpt
+      write(*,*) 'DustState%HorizFluxOpt = ', DustState_%HorizFluxOpt
+      write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
       write(*,*) 'MetState%CLAYFRAC =', MetState_%CLAYFRAC
-      write(*,*) 'MetState%SANDFRAC =', MetState_%SANDFRAC
+      write(*,*) 'MetState%DSOILTYPE = ', MetState_%DSOILTYPE
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
+      write(*,*) 'MetState%RDRAG = ', MetState_%RDRAG
+      write(*,*) 'MetState%SANDFRAC =', MetState_%SANDFRAC
+      write(*,*) 'MetState%SSM = ', MetState_%SSM
+      write(*,*) 'MetState%TSKIN =', MetState_%TSKIN
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%USTAR_THRESHOLD =', MetState_%USTAR_THRESHOLD
-      write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
       write(*,*) 'DustState%TotalEmission = ', DustState_%TotalEmission
 
    end subroutine print_info

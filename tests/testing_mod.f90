@@ -30,11 +30,19 @@ contains
    end subroutine assert
 
    !> Error out if `a` and `b` are not within `tol` of each other.
-   subroutine assert_close(a, b, tol)
+   subroutine assert_close(a, b, tol, msg)
       real(rk), intent(in) :: a, b
       real(rk), intent(in), optional :: tol  !< Absolute tolerance, defaults to TINY
+      character(len=*), intent(in), optional :: msg  !< Brief description of the assertion
 
       real(rk) :: diff, tol_
+      character(len=:), allocatable :: msg_
+
+      if (.not. present(msg)) then
+         msg_ = "Closeness assertion failed"
+      else
+         msg_ = "Closeness assertion '"//trim(adjustl(msg))//"' failed"
+      end if
 
       if (.not. present(tol)) then
          tol_ = tiny(1.0_rk)
@@ -44,7 +52,7 @@ contains
 
       diff = abs(a - b)
       if (diff > tol_) then
-         print '("Closeness assertion failed: ", g9.4, " != ", g9.4)', a, b
+         print '(a, ": ", g11.4, " != ", g11.4)', msg_, a, b
          stop 1
       end if
    end subroutine assert_close
