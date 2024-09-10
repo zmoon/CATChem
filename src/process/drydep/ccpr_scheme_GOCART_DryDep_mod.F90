@@ -71,6 +71,10 @@ contains
       ! GOCART Options comes in from DryDepState
       ! Diagnostic Variables are added through DiagState below
 
+      ! ADD GOCART CODE HERE
+        
+
+
       ! End GOCART Code
 
    end subroutine CCPr_Scheme_GOCART_DryDep
