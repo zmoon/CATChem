@@ -48,7 +48,7 @@ contains
                                         v10,
                                         fraclake,
                                         gwettop,
-                                        ResuspentionOpt,
+                                        ResuspensionOpt,
                                         drydepf,
                                         RC,
                                         )
@@ -79,7 +79,7 @@ contains
       real, intent(in) :: rhop
       real, intent(in) :: cp
       real, intent(in) :: von_karman
-      logical, intent(in) ::  ResuspentionOpt
+      logical, intent(in) ::  ResuspensionOpt
       ! Output
       REAL, intent(out)  :: drydepf
       integer, intent(out) :: RC                      ! Success or Failure
