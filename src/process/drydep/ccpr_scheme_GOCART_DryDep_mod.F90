@@ -48,9 +48,9 @@ contains
                                         v10,        &
                                         fraclake,   &
                                         gwettop,    &
-                                        ResuspensionOpt, &
-                                        drydepf, &
-                                        RC)
+                                        drydepf,    &
+                                        RC,         &
+                                        ResuspensionOpt)
 
       ! Uses
       USE GOCART2G, only: DryDeposition
