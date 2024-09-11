@@ -243,7 +243,7 @@ CONTAINS
                                             Cp,                 &
                                             g0,                 &
                                             MetState%z0h,       &
-                                            0, 0, 0, 0, 0, 0,   &
+                                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   &
                                             drydepf,            &
                                             rc,                 &
                                             DryDepState%Resuspension)
