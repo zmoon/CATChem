@@ -165,17 +165,17 @@ CONTAINS
       REAL(fp), allocatable, DIMENSION(:,:,:) :: tmpu   ! Temperature [K]
       REAL(fp), allocatable, DIMENSION(:,:,:) :: rhoa   ! Air density [kg/m^3]
       REAL(fp), allocatable, DIMENSION(:,:,:) :: hghte  ! Height [m]
-      REAL(fp) :: radius                                ! particle radius [m]
-      REAL(fp) :: rhop                                  ! particle density [kg/m^3]
+      REAL(fp), optional :: radius                                ! particle radius [m]
+      REAL(fp), optional :: rhop                                  ! particle density [kg/m^3]
       REAL(fp) :: ustar                                 ! friction speed [m/sec]
       REAL(fp) :: pblh                                  ! PBL height [m]
       REAL(fp) :: hflux                                ! sfc. sens. heat flux [W m-2]
       REAL(fp) :: z0h                                   ! rough height, sens. heat [m]
       REAL :: ddfreq
-      REAL(fp), DIMENSION(1,1) :: u10m                   ! 10-m u-wind component [m/sec]
-      REAL(fp), DIMENSION(1,1) :: v10m                   ! 10-m v-wind component [m/sec]
-      REAL(fp), DIMENSION(1,1) :: fraclake               ! fraction covered by water [1]
-      REAL(fp), DIMENSION(1,1) :: gwettop                ! fraction soil moisture [1]
+      REAL(fp), DIMENSION(1,1), optional :: u10m                   ! 10-m u-wind component [m/sec]
+      REAL(fp), DIMENSION(1,1), optional :: v10m                   ! 10-m v-wind component [m/sec]
+      REAL(fp), DIMENSION(1,1), optional :: fraclake               ! fraction covered by water [1]
+      REAL(fp), DIMENSION(1,1), optional :: gwettop                ! fraction soil moisture [1]
       REAL(fp) :: dqa                                    ! Change in Species due to drydep
       REAL(fp) :: SpecConc                               ! Temporary Species concentration
 
