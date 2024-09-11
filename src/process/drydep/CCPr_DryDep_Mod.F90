@@ -217,6 +217,7 @@ CONTAINS
                                             Cp,
                                             g0,
                                             radius, 
+                                            rhop
                                             MetState%U10M,
                                             MetSTate%V10M,
                                             MetState%FRACLAKE,
