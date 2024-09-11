@@ -42,15 +42,15 @@ contains
                                         von_karman, &
                                         cp,         &
                                         g0,         &
+                                        drydepf,    &
+                                        rc,         &
+                                        ResuspensionOpt, &
                                         radius,     &
                                         rhop,       &
                                         u10,        &
                                         v10,        &
                                         fraclake,   &
-                                        gwettop,    &
-                                        drydepf,    &
-                                        RC,         &
-                                        ResuspensionOpt)
+                                        gwettop)
 
       ! Uses
       USE GOCART2G, only: DryDeposition
