@@ -204,7 +204,7 @@ CONTAINS
              
             radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
             rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
-
+            if (DryDepState%Resuspension) then
             call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,
                                             MetState%T,
                                             MetState%AIRDEN,
@@ -249,6 +249,7 @@ CONTAINS
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
+         end if
 
             ! Fill Diagnostic Variables
             !--------------------------
