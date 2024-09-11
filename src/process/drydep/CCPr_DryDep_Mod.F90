@@ -196,37 +196,36 @@ CONTAINS
             !-------------------------
             if (ChemState%nSpeciesAeroDryDep > 0) then
 
-               call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
-                  pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
+               ! call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
+               !    pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
          ! loop through aerosol species
          do i = 1, ChemState%nSpeciesAeroDryDep
+             
+            radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
+            rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
 
-            if (DryDepState%resuspension) then
-
-               radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
-               rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
-
-               call CCPr_Scheme_GOCART_DryDep( km,          &
-                  tmpu,        &
-                  rhoa,        &
-                  hghte,       &
-                  lwi,         &
-                  ustar,       &
-                  pblh,        &
-                  hflux,      &
-                  von_karman,  &
-                  cp,          &
-                  g0,          &
-                  z0h,         &
-                  drydepf,     &
-                  rc,          &
-                  radius,      &
-                  rhop,        &
-                  u10m,        &
-                  v10m,        &
-                  fraclake,    &
-                  gwettop )
+            call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,
+                                            MetState%T,
+                                            MetState%AIRDEN,
+                                            MetState%ZMID,
+                                            MetState%LWI,
+                                            MetState%USTAR,
+                                            MetSTate%PBLH,
+                                            MetState%HFLUX,
+                                            VON_KARMAN,
+                                            Cp,
+                                            g0,
+                                            radius, 
+                                            rhop
+                                            MetState%U10M,
+                                            MetSTate%V10M,
+                                            MetState%FRACLAKE,
+                                            MetState%GWETTO
+                                            drydepf,
+                                            RC, 
+                                            DryDepState%Resuspension,
+                                            )
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
