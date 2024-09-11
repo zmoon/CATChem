@@ -225,8 +225,7 @@ CONTAINS
                                             MetState%GWETTOP, &
                                             drydepf,          & 
                                             RC,               &
-                                            DryDepState%Resuspension, &
-                                            )
+                                            DryDepState%Resuspension)
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
