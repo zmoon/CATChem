@@ -216,6 +216,7 @@ CONTAINS
                                             VON_KARMAN,
                                             Cp,
                                             g0,
+                                            MetState%Z0H
                                             radius, 
                                             rhop
                                             MetState%U10M,
@@ -231,20 +232,20 @@ CONTAINS
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
             else
-               call CCPr_Scheme_GOCART_DryDep( km,  &
-                  tmpu,        &
-                  rhoa,        &
-                  hghte,       &
-                  lwi,         &
-                  ustar,       &
-                  pblh,        &
-                  hflux,      &
-                  von_karman,  &
-                  cp,          &
-                  g0,          &
-                  z0h,         &
-                  drydepf,     &
-                  rc)
+               call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,
+                                            MetState%T,
+                                            MetState%AIRDEN,
+                                            MetState%ZMID,
+                                            MetState%LWI,
+                                            MetState%USTAR,
+                                            MetState%PBLH,
+                                            MetState%HFLUX,
+                                            VON_KARMAN,
+                                            Cp,
+                                            g0,
+                                            MetState%z0h,
+                                            drydepf,
+                                            rc)
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
