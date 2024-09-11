@@ -250,8 +250,6 @@ CONTAINS
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
 
-            endif  ! if (DryDepState%resuspension)
-
             ! Fill Diagnostic Variables
             !--------------------------
             !!!!FIXME: COME BACK TO THIS LATER
