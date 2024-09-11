@@ -31,27 +31,26 @@ contains
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
-   subroutine CCPr_Scheme_GOCART_DryDep(km,
-                                        tmpu,
-                                        rhoa,
-                                        hghte,
-                                        lwi,
-                                        ustar,
-                                        pblh,
-                                        hflux,
-                                        von_karman,
-                                        cp,
-                                        g0,
-                                        radius,
-                                        rhop,
-                                        u10,
-                                        v10,
-                                        fraclake,
-                                        gwettop,
-                                        ResuspensionOpt,
-                                        drydepf,
-                                        RC,
-                                        )
+   subroutine CCPr_Scheme_GOCART_DryDep(km,         &
+                                        tmpu,       &
+                                        rhoa,       &
+                                        hghte,      &
+                                        lwi,        &
+                                        ustar,      &
+                                        pblh,       &
+                                        hflux,      &
+                                        von_karman, &
+                                        cp,         &
+                                        g0,         &
+                                        radius,     &
+                                        rhop,       &
+                                        u10,        &
+                                        v10,        &
+                                        fraclake,   &
+                                        gwettop,    &
+                                        ResuspensionOpt, &
+                                        drydepf, &
+                                        RC)
 
       ! Uses
       USE GOCART2G, only: DryDeposition
@@ -108,30 +107,30 @@ contains
 
       ! transform data for GOCART DryDeposition call 
 
-      call PrepMetVarsForGOCART(km,
-                                tmpu,
-                                rhoa,
-                                hghte,
-                                u10,
-                                v10,
-                                fraclake,
-                                gwettop,
-                                lwi,
-                                ustar,
-                                pblh,
-                                hflux,
-                                z0h,
-                                GOCART_tmpu,
-                                GOCART_RHOA,
-                                GOCART_HGHTE,
-                                GOCART_U10
-                                GOCART_V10,
-                                GOCART_FRACLAKE,
-                                GOCART_GWETTOP,
-                                GOCART_LWI,
-                                GOCART_USTAR,
-                                GOCART_PBLH,
-                                GOCART_HFLUX,
+      call PrepMetVarsForGOCART(km,              &
+                                tmpu,            &
+                                rhoa,            &
+                                hghte,           &
+                                u10,             &
+                                v10,             &
+                                fraclake,        &
+                                gwettop,         &
+                                lwi,             &
+                                ustar,           &
+                                pblh,            &
+                                hflux,           &
+                                z0h,             &
+                                GOCART_tmpu,     &
+                                GOCART_RHOA,     &
+                                GOCART_HGHTE,    &
+                                GOCART_U10,      &
+                                GOCART_V10,      &
+                                GOCART_FRACLAKE, &
+                                GOCART_GWETTOP,  &
+                                GOCART_LWI,      &
+                                GOCART_USTAR,    &
+                                GOCART_PBLH,     &
+                                GOCART_HFLUX,    &
                                 GOCART_Z0H)
       !------------------
       ! Begin Scheme Code
@@ -175,30 +174,30 @@ contains
  !!
  !! \ingroup core_modules
  !!!>
-subroutine PrepMetVarsForGOCART(km,
-                                tmpu,
-                                rhoa,
-                                hghte,
-                                u10,
-                                v10,
-                                fraclake,
-                                gwettop,
-                                lwi,
-                                ustar,
-                                pblh,
-                                hflux,
-                                z0h,
-                                GOCART_tmpu,
-                                GOCART_RHOA,
-                                GOCART_HGHTE,
-                                GOCART_U10
-                                GOCART_V10,
-                                GOCART_FRACLAKE,
-                                GOCART_GWETTOP,
-                                GOCART_LWI,
-                                GOCART_USTAR,
-                                GOCART_PBLH,
-                                GOCART_HFLUX,
+subroutine PrepMetVarsForGOCART(km,              &
+                                tmpu,            &
+                                rhoa,            &
+                                hghte,           &
+                                u10,             &
+                                v10,             &
+                                fraclake,        &
+                                gwettop,         &
+                                lwi,             &
+                                ustar,           &
+                                pblh,            &
+                                hflux,           &
+                                z0h,             &
+                                GOCART_tmpu,     &
+                                GOCART_RHOA,     &
+                                GOCART_HGHTE,    &
+                                GOCART_U10,      &
+                                GOCART_V10,      &
+                                GOCART_FRACLAKE, &
+                                GOCART_GWETTOP,  &
+                                GOCART_LWI,      &
+                                GOCART_USTAR,    &
+                                GOCART_PBLH,     &
+                                GOCART_HFLUX,    &
                                 GOCART_Z0)
    
 
