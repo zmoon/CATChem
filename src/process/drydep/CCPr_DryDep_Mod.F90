@@ -220,8 +220,8 @@ CONTAINS
                                             rhop
                                             MetState%U10M,
                                             MetSTate%V10M,
-                                            MetState%FRACLAKE,
-                                            MetState%GWETTO
+                                            MetState%FRLAKE,
+                                            MetState%GWETTOP
                                             drydepf,
                                             RC, 
                                             DryDepState%Resuspension,
