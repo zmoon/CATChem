@@ -249,7 +249,7 @@ CONTAINS
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
-         end if
+         end if  !if (DryDepState%Resuspension)
 
             ! Fill Diagnostic Variables
             !--------------------------
