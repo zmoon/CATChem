@@ -134,7 +134,7 @@ contains
       ! Begin Scheme Code
       !------------------
 
-      if (ResuspentionOpt) then 
+      if (ResuspensionOpt) then 
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, & 
                             GOCART_PBLH, von_karman, cp, g0, GOCART_Z0H, GOCART_DRYDEPF, RC, &
                             radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
