@@ -136,8 +136,6 @@ CONTAINS
       !
       ! !LOCAL VARIABLES:
       !
-      ! Strings
-      CHARACTER(LEN=30) :: arrayId
 
       !----------------------------------------
       ! Initialize
@@ -188,7 +186,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Cleanup_Config( Config, RC )
+   SUBROUTINE Cleanup_Config( RC )
       !
       ! !USES:
       !
@@ -196,7 +194,7 @@ CONTAINS
       !
       ! !INPUT/OUTPUT PARAMETERS:
       !
-      TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
+      ! TYPE(ConfigType), INTENT(INOUT) :: Config   ! Input Options object
       !
       ! !OUTPUT PARAMETERS:
       !

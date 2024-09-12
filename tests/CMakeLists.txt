@@ -1,3 +1,5 @@
+add_compile_options(${_catchem_compiler_options})
+
 add_library(testing testing_mod.f90)
 set_target_properties(testing PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 

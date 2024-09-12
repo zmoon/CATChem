@@ -125,7 +125,7 @@ CONTAINS
       !========================================================================
 
       ! Grid config settings
-      CALL Config_Grid( ConfigInput, Config, GridState, RC )
+      CALL Config_Grid( ConfigInput, GridState, RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = 'Error in "Config_Grid"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -189,7 +189,7 @@ CONTAINS
       !========================================================================
       ! Config EmisState
       !========================================================================
-      call Config_Emis_State(config%Emission_File, EmisState, ChemState, RC)
+      call Config_Emis_State(config%Emission_File, EmisState, RC)
       if (RC /= CC_SUCCESS) then
          errMsg = 'Error in "Config_Emis_State"!'
          CALL CC_Error( errMsg, RC, thisLoc  )
@@ -233,7 +233,6 @@ CONTAINS
       integer :: n
       CHARACTER(LEN=QFYAML_NamLen) :: key
       CHARACTER(LEN=QFYAML_StrLen) :: v_str
-      integer :: v_int
       real    :: v_real
       logical :: v_logical
 
@@ -573,7 +572,7 @@ CONTAINS
 
    END SUBROUTINE Config_Chem_State
 
-   SUBROUTINE Config_Emis_State( filename, EmisState, ChemState, RC )
+   SUBROUTINE Config_Emis_State( filename, EmisState, RC )
       USE ChemState_Mod, ONLY : ChemStateType
       USE EmisState_Mod, ONLY : EmisStateType
       use Config_Opt_Mod, ONLY : ConfigType
@@ -581,7 +580,7 @@ CONTAINS
       USE GridState_Mod, ONLY : GridStateType
 
       CHARACTER(LEN=*), INTENT(IN) :: filename
-      TYPE(ChemStateType), INTENT(INOUT) :: ChemState
+      ! TYPE(ChemStateType), INTENT(INOUT) :: ChemState
       TYPE(EmisStateType), INTENT(INOUT) :: EmisState
       INTEGER, INTENT(INOUT) :: RC
 
@@ -589,17 +588,12 @@ CONTAINS
 
       CHARACTER(LEN=255) :: thisLoc ! where am i
       CHARACTER(LEN=512) :: errMsg  ! error message
-      character(len=QFYAML_NamLen), allocatable :: Cats(:)
       integer :: n, s, j
       CHARACTER(LEN=QFYAML_NamLen) :: key
       CHARACTER(LEN=QFYAML_NamLen) :: base
       CHARACTER(LEN=QFYAML_StrLen) :: v_str
       integer :: v_int
       real    :: v_real
-      logical :: v_logical
-      real, allocatable :: v_real_arr(:)
-      integer :: arr_size
-      CHARACTER(LEN=QFYAML_NamLen), pointer :: v_str_arr(:)
 
       Character(len=17) :: tags(5)
 
@@ -777,7 +771,7 @@ CONTAINS
 
             if (EmisState%Cats(n)%Species(s)%plumerise == 3) then
                if (EmisState%Cats(n)%Species(s)%EmisLayer == 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  rae(EmisState%Cats(n)%Species(s)%EmisHeight, 0._fp)) then
                   EmisState%Cats(n)%Species(s)%plumerise = 0
                   write(*,*) '|     plumerise:  No plumerise EmisLayer or EmisHeight provided -> Set plumerise = 0'
                endif
@@ -794,7 +788,7 @@ CONTAINS
                   EmisState%Cats(n)%Species(s)%EmisHeight > 0._fp) then
                   write(*,*) '|     EmisHeight: ', EmisState%Cats(n)%Species(s)%EmisHeight
                else if (EmisState%Cats(n)%Species(s)%EmisLayer > 0 .and. &
-                  EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+                  rae(EmisState%Cats(n)%Species(s)%EmisHeight, 0._fp)) then
                   write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                else
                   write(*,*) '|     EmisLayer:  1'
@@ -809,7 +803,7 @@ CONTAINS
                   write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                endif
 
-               if (EmisState%Cats(n)%Species(s)%EmisHeight == 0._fp) then
+               if (rae(EmisState%Cats(n)%Species(s)%EmisHeight, 0._fp)) then
                   write(*,*) '|     EmisLayer:  ', EmisState%Cats(n)%Species(s)%EmisLayer
                endif
             endif
@@ -858,19 +852,14 @@ CONTAINS
 ! !LOCAL VARIABLES:
 !
       ! Scalars
-      LOGICAL                      :: v_bool
-      INTEGER                      :: N,                C
-      REAL(fp)                     :: JulianDateStart,  JulianDateEnd
-
-      ! Arrays
-      INTEGER                      :: a_int(2)
+      ! REAL(fp)                     :: JulianDateStart,  JulianDateEnd
 
       ! Strings
-      CHARACTER(LEN=6)             :: timeStr
-      CHARACTER(LEN=8)             :: dateStr
-      CHARACTER(LEN=12)            :: met
-      CHARACTER(LEN=15)            :: verboseMsg
-      CHARACTER(LEN=24)            :: sim
+      ! CHARACTER(LEN=6)             :: timeStr
+      ! CHARACTER(LEN=8)             :: dateStr
+      ! CHARACTER(LEN=12)            :: met
+      ! CHARACTER(LEN=15)            :: verboseMsg
+      ! CHARACTER(LEN=24)            :: sim
       CHARACTER(LEN=255)           :: thisLoc
       CHARACTER(LEN=512)           :: errMsg
       CHARACTER(LEN=QFYAML_NamLen) :: key
@@ -935,7 +924,7 @@ CONTAINS
    !!
    !! \ingroup core_modules
    !!!>
-   SUBROUTINE Config_Grid( ConfigInput, Config, GridState, RC )
+   SUBROUTINE Config_Grid( ConfigInput, GridState, RC )
 !
 ! !USES:
 !
@@ -947,7 +936,7 @@ CONTAINS
 ! !INPUT/OUTPUT PARAMETERS:
 !
       TYPE(QFYAML_t),      INTENT(INOUT) :: ConfigInput      ! YAML Config object
-      TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
+      ! TYPE(ConfigType),     INTENT(INOUT) :: Config   ! Input options
       TYPE(GridStateType), INTENT(INOUT) :: GridState  ! Grid State
 !
 ! !OUTPUT PARAMETERS:
@@ -957,26 +946,13 @@ CONTAINS
 ! !LOCAL VARIABLES:
 !
       ! Scalars
-      LOGICAL                      :: v_bool
+      ! LOGICAL                      :: v_bool
       INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
-
-      ! Arrays
-      INTEGER                      :: a_int(4)
 
       ! Strings
-      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
-      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
-      CHARACTER(LEN=255)           :: thisLoc,  nLev
+      CHARACTER(LEN=255)           :: thisLoc
       CHARACTER(LEN=512)           :: errMsg
       CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
 
       !========================================================================
       ! Config_Grid begins here!
@@ -1068,27 +1044,14 @@ CONTAINS
       ! Scalars
       LOGICAL                      :: v_bool
       INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
 
       ! Reals
       REAL(fp)                     :: v_real
 
-      ! Arrays
-      INTEGER                      :: a_int(4)
-
       ! Strings
-      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
-      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
-      CHARACTER(LEN=255)           :: thisLoc,  nLev
+      CHARACTER(LEN=255)           :: thisLoc
       CHARACTER(LEN=512)           :: errMsg
       CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
 
       !========================================================================
       ! Config_Process_Dust begins here!
@@ -1198,27 +1161,14 @@ CONTAINS
       ! Scalars
       LOGICAL                      :: v_bool
       INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
 
       ! Reals
       REAL(fp)                     :: v_real
 
-      ! Arrays
-      INTEGER                      :: a_int(4)
-
       ! Strings
-      CHARACTER(LEN=10)            :: xMin_Str, xMax_Str
-      CHARACTER(LEN=10)            :: yMin_Str, yMax_Str
-      CHARACTER(LEN=255)           :: thisLoc,  nLev
+      CHARACTER(LEN=255)           :: thisLoc
       CHARACTER(LEN=512)           :: errMsg
       CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
 
       !========================================================================
       ! Config_Process_SeaSalt begins here!
@@ -1304,10 +1254,6 @@ CONTAINS
       !
       ! Scalars
       LOGICAL                      :: v_bool
-      INTEGER                      :: nSubStrs
-
-      ! Reals
-      REAL(fp)                     :: v_real
 
       ! Strings
       CHARACTER(LEN=255)           :: thisLoc

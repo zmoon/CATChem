@@ -50,7 +50,7 @@ CONTAINS
 
       ! LOCAL VARIABLES
       !----------------
-      INTEGER :: k ! Loop Counter
+      ! INTEGER :: k ! Loop Counter
 
       ! Error handling
       !---------------
@@ -59,6 +59,7 @@ CONTAINS
 
       ! Initialize Error handling
       !--------------------------
+      RC = CC_SUCCESS
       ErrMsg = ''
       ThisLoc = ' -> at CCPR_Plumerise_INIT (in process/Plumerise/ccpr_Plumerise_mod.F90)'
 
@@ -122,7 +123,7 @@ CONTAINS
       Integer :: s ! Emitted Species
       Integer :: p ! Plumerise source length counter
       Integer :: z ! Vertical counter
-      integer :: nPlumes ! temporary variable for number of plumes
+      ! integer :: nPlumes ! temporary variable for number of plumes
       Logical :: verbose_
 
       REAL(fp) :: plmHGT                              ! Plumerise Height [m]
@@ -252,7 +253,7 @@ CONTAINS
    !!
    !! \ingroup catchem_plumerise_process
    !!!>
-   SUBROUTINE CCPr_Plumerise_Finalize( PlumeriseState, RC )
+   SUBROUTINE CCPr_Plumerise_Finalize( RC )
 
       ! USE
       !----
@@ -261,7 +262,7 @@ CONTAINS
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(PlumeriseStateType), INTENT(INOUT) :: PlumeriseState ! PlumeriseState Instance
+      ! TYPE(PlumeriseStateType), INTENT(INOUT) :: PlumeriseState ! PlumeriseState Instance
       INTEGER, INTENT(OUT) :: RC                       ! Return Code
 
       ! LOCAL VARIABLES

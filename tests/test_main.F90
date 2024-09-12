@@ -5,8 +5,7 @@
 program test_main
    use CATChem
    use state_mod  ! FIXME: declare states here or move to a driver
-   use emisstate_mod
-   use testing_mod, only: assert
+   use testing_mod, only: assert_close
 
 
    IMPLICIT NONE
@@ -95,10 +94,10 @@ program test_main
    endif
 
    ! Check numerical values of dust1
-   call assert(ChemState%ChemSpecies(1)%lower_radius == 0.1_fp, "dust1 lower radius")
-   call assert(ChemState%ChemSpecies(1)%upper_radius == 1.0_fp, "dust1 upper radius")
-   call assert(ChemState%ChemSpecies(1)%radius == 0.8_fp, "dust1 radius")
-   call assert(ChemState%ChemSpecies(1)%density == 2500.0_fp, "dust1 density")
+   call assert_close(ChemState%ChemSpecies(1)%lower_radius, 0.1_fp, msg="dust1 lower radius")
+   call assert_close(ChemState%ChemSpecies(1)%upper_radius, 1.0_fp, msg="dust1 upper radius")
+   call assert_close(ChemState%ChemSpecies(1)%radius, 0.8_fp, msg="dust1 radius")
+   call assert_close(ChemState%ChemSpecies(1)%density, 2500.0_fp, msg="dust1 density")
 
    ! write grid info
    write(*,*) 'Grid info:'

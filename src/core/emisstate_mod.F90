@@ -157,7 +157,7 @@ CONTAINS
 
       integer :: c ! Loop counter for emission Cats
       integer :: s ! Loop counter for emitted species
-      integer :: nPlumes ! temporary variable for number of plumes
+      ! integer :: nPlumes ! temporary variable for number of plumes
 
       ! Initialize return code
       RC = CC_SUCCESS
@@ -231,87 +231,87 @@ CONTAINS
 
    end subroutine Emis_Allocate
 
-   !> \brief Allocate the total emitted species
-   !!
-   !! \details Allocate the total emitted species
-   !!
-   !! \ingroup core_modules
-   !!
-   !! \param GridState Grid State
-   !! \param EmisState Emission State
-   !! \param RC Return code
-   !!
-   !!!>
-   subroutine TotEmisSpecies_Allocate(GridState, EmisState, RC)
+   ! !> \brief Allocate the total emitted species
+   ! !!
+   ! !! \details Allocate the total emitted species
+   ! !!
+   ! !! \ingroup core_modules
+   ! !!
+   ! !! \param GridState Grid State
+   ! !! \param EmisState Emission State
+   ! !! \param RC Return code
+   ! !!
+   ! !!!>
+   ! subroutine TotEmisSpecies_Allocate(GridState, EmisState, RC)
 
-      USE GridState_Mod, ONLY : GridStateType
+   !    USE GridState_Mod, ONLY : GridStateType
 
-      IMPLICIT NONE
+   !    IMPLICIT NONE
 
-      TYPE(GridStateType), INTENT(IN) :: GridState
+   !    TYPE(GridStateType), INTENT(IN) :: GridState
 
-      TYPE(EmisStateType), INTENT(INOUT) :: EmisState
+   !    TYPE(EmisStateType), INTENT(INOUT) :: EmisState
 
-      INTEGER, INTENT(OUT) :: RC
+   !    INTEGER, INTENT(OUT) :: RC
 
-      integer :: s ! Loop counter for emitted species
-      integer :: c ! Loop counter for emission Cats
-      integer :: t ! loop counter for total emitted species
+   !    integer :: s ! Loop counter for emitted species
+   !    integer :: c ! Loop counter for emission Cats
+   !    integer :: t ! loop counter for total emitted species
 
-      integer :: nT ! total number of emitted species counter
-      integer :: nS ! number of the same emitted species in different categories
+   !    ! integer :: nT ! total number of emitted species counter
+   !    ! integer :: nS ! number of the same emitted species in different categories
 
-      logical :: IsIn
+   !    ! logical :: IsIn
 
-      character(len=255) :: ErrMsg
-      character(len=255) :: ThisLoc
+   !    character(len=255) :: ErrMsg
+   !    character(len=255) :: ThisLoc
 
-      character(len=10) ::currName
+   !    character(len=10) ::currName
 
-      ! Initialize return code
-      RC = CC_SUCCESS
+   !    ! Initialize return code
+   !    RC = CC_SUCCESS
 
-      ! Initialize local variables
-      ErrMsg = ''
-      ThisLoc = ' -> at TotEmisSpecies_Allocate (in core/emisstate_mod.F90)'
+   !    ! Initialize local variables
+   !    ErrMsg = ''
+   !    ThisLoc = ' -> at TotEmisSpecies_Allocate (in core/emisstate_mod.F90)'
 
-      ALLOCATE(EmisState%TotEmisNames(0), STAT=RC)
-      if (EmisState%nCats > 0) then
-         EmisState%nEmisTotal = 0
-         do c = 1, EmisState%nCats
-            do s = 1, EmisState%Cats(c)%nSpecies
-               currName = EmisState%Cats(c)%Species(s)%name
-               if ( ANY( EmisState%TotEmisNames == TRIM(currName) ) .eqv. .False. ) THEN
-                  EmisState%nEmisTotal = EmisState%nEmisTotal + 1
-                  EmisState%TotEmisNames = [EmisState%TotEmisNames, currName]
-               endif
-            end do
-         end do
+   !    ALLOCATE(EmisState%TotEmisNames(0), STAT=RC)
+   !    if (EmisState%nCats > 0) then
+   !       EmisState%nEmisTotal = 0
+   !       do c = 1, EmisState%nCats
+   !          do s = 1, EmisState%Cats(c)%nSpecies
+   !             currName = EmisState%Cats(c)%Species(s)%name
+   !             if ( ANY( EmisState%TotEmisNames == TRIM(currName) ) .eqv. .False. ) THEN
+   !                EmisState%nEmisTotal = EmisState%nEmisTotal + 1
+   !                EmisState%TotEmisNames = [EmisState%TotEmisNames, currName]
+   !             endif
+   !          end do
+   !       end do
 
-         ALLOCATE(EmisState%TotSpecies(EmisState%nEmisTotal), STAT=RC)
-         IF (RC /= CC_SUCCESS) THEN
-            ErrMsg = 'Error allocating "EmisState%TotSpecies"!'
-            call CC_Error(ErrMsg, RC, ThisLoc)
-            return
-         ENDIF
+   !       ALLOCATE(EmisState%TotSpecies(EmisState%nEmisTotal), STAT=RC)
+   !       IF (RC /= CC_SUCCESS) THEN
+   !          ErrMsg = 'Error allocating "EmisState%TotSpecies"!'
+   !          call CC_Error(ErrMsg, RC, ThisLoc)
+   !          return
+   !       ENDIF
 
-         do t = 1, EmisState%nEmisTotal
-            ! Fill Total Species fluxes and properties
-            EmisState%TotSpecies(t)%name = EmisState%TotEmisNames(s)
-            EmisState%TotSpecies(t)%Flux(:) = 0. ! set all fluxes to zero
-            currName = EmisState%TotEmisNames(t)
-            do c = 1, EmisState%nCats
-               do s = 1, EmisState%Cats(c)%nSpecies
-                  if (currName == EmisState%Cats(c)%Species(s)%name) then
-                     EmisState%TotSpecies(t)%units = EmisState%Cats(c)%Species(s)%units
-                     EmisState%TotSpecies(t)%long_name = EmisState%Cats(c)%Species(s)%long_name
-                  endif
-               end do
-            end do
-         end do
-      endif
+   !       do t = 1, EmisState%nEmisTotal
+   !          ! Fill Total Species fluxes and properties
+   !          EmisState%TotSpecies(t)%name = EmisState%TotEmisNames(s)
+   !          EmisState%TotSpecies(t)%Flux(:) = 0. ! set all fluxes to zero
+   !          currName = EmisState%TotEmisNames(t)
+   !          do c = 1, EmisState%nCats
+   !             do s = 1, EmisState%Cats(c)%nSpecies
+   !                if (currName == EmisState%Cats(c)%Species(s)%name) then
+   !                   EmisState%TotSpecies(t)%units = EmisState%Cats(c)%Species(s)%units
+   !                   EmisState%TotSpecies(t)%long_name = EmisState%Cats(c)%Species(s)%long_name
+   !                endif
+   !             end do
+   !          end do
+   !       end do
+   !    endif
 
-   end subroutine TotEmisSpecies_Allocate
+   ! end subroutine TotEmisSpecies_Allocate
 
    !> \brief Find the index of the mapped species
    !!
@@ -387,17 +387,15 @@ CONTAINS
       INTEGER, INTENT(OUT) :: RC
 
       ! Local
-      integer :: c ! Loop counter for emission Cats
-      integer :: s ! Loop counter for emitted species
-      integer :: n ! Loop counter for mapped species
-      integer :: k ! Loop counter for height levels
-      real(kind=fp), pointer :: conc(:)  ! pointer to the concentration of the chemcical species
-      real(kind=fp), pointer :: emis(:)  ! pointer to the emission rate of the emitted species
-      real(kind=fp) :: scale          ! pointer to the scaling factor
-      real(kind=fp) :: index          ! pointer to the index of the mapped chemical species
-      real(kind=fp) :: cdt            ! time step
-      real(kind=fp) :: dqa            ! change in concentration
-      logical :: surface_only         ! flag for surface only
+      integer :: c !< Loop counter for emission Cats
+      integer :: s !< Loop counter for emitted species
+      integer :: n !< Loop counter for mapped species
+      integer :: k !< Loop counter for height levels
+      real(kind=fp) :: scale  !< scaling factor
+      integer :: index        !< index of the mapped chemical species
+      real(kind=fp) :: cdt    !< time step
+      real(kind=fp) :: dqa    !< change in concentration
+      logical :: surface_only !< flag for surface only
 
       ! Error handling
       CHARACTER(LEN=255) :: ErrMsg
@@ -418,19 +416,23 @@ CONTAINS
 
       cats: do c = 1, EmisState%nCats
          species: do s = 1, EmisState%Cats(c)%nSpecies
-            emis = EmisState%Cats(c)%Species(s)%Flux ! current flux of the emitted species
             mapping: do n = 1, EmisState%Cats(c)%Species(s)%nEmisMap
                ! get the emis mapping and scale
                scale = EmisState%Cats(c)%Species(s)%Scale(n)
                index = EmisState%Cats(c)%Species(s)%EmisMapIndex(n)
 
-               ! get pointer to the mapped chemical species
-               conc = ChemState%ChemSpecies(index)%conc
+               associate( &
+               ! current flux of the emitted species
+                  emis => EmisState%Cats(c)%Species(s)%Flux, &
+               ! current concentration of the species at `index`
+                  conc => ChemState%ChemSpecies(index)%conc)
 
-               levs: do k = 1, MetState%NLEVS
-                  dqa = emis(k) * scale * cdt * g0 / MetState%DELP(k)
-                  conc(k) = conc(k) + dqa
-               end do levs
+                  levs: do k = 1, MetState%NLEVS
+                     dqa = emis(k) * scale * cdt * g0 / MetState%DELP(k)
+                     conc(k) = conc(k) + dqa
+                  end do levs
+
+               end associate
 
             enddo mapping
          enddo species
