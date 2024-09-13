@@ -64,9 +64,12 @@ program test_drydep
    MetState%PBLH = 1000.0_fp
    MetState%HFLUX = 0.5_fp
    MetState%Z0H = 10.0_fp
-   allocate(MetState%MAIRDEN(1))
    Metstate%NLEVS = 1
    Metstate%TSTEP = 60
+   allocate(MetState%MAIRDEN(MetState%NLEVS))
+   allocate(MetState%T(MetState%NLEVS))
+   allocate(MetState%ZMID(MetState%NLEVS))
+   gridstate%number_of_levels = MetState%NLEVS
 
    do i = 1, gridstate%number_of_levels
       metstate%T(i)=273.15_fp          ! K
