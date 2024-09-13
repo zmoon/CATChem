@@ -201,9 +201,7 @@ CONTAINS
 
          ! loop through aerosol species
          do i = 1, ChemState%nSpeciesAeroDryDep  
-
-            if (DryDepState%Resuspension) then
-
+ 
             radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
             rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
 
@@ -228,31 +226,11 @@ CONTAINS
                                             MetSTate%V10M,    &
                                             MetState%FRLAKE,  &
                                             MetState%GWETTOP)
+
                if (RC /= CC_SUCCESS) then
                   errMsg = 'Error in GOCART DryDeposition'
                   CALL CC_Error( errMsg, RC, thisLoc )
                endif  !if (RC /= CC_SUCCESS) 
-            else
-               call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,  &
-                                            MetState%T,         &
-                                            MetState%AIRDEN,    &
-                                            MetState%ZMID,      &
-                                            MetState%LWI,       &
-                                            MetState%USTAR,     &
-                                            MetState%PBLH,      &
-                                            MetState%HFLUX,     &
-                                            VON_KARMAN,         &
-                                            Cp,                 &
-                                            g0,                 &
-                                            MetState%z0h,       &
-                                            drydepf,            &
-                                            rc,                 &
-                                            DryDepState%Resuspension)
-               if (RC /= CC_SUCCESS) then
-                  errMsg = 'Error in GOCART DryDeposition'
-                  CALL CC_Error( errMsg, RC, thisLoc )
-               endif  !if (RC /= CC_SUCCESS) 
-         end if  !if (DryDepState%Resuspension)
 
             ! Fill Diagnostic Variables
             !--------------------------
