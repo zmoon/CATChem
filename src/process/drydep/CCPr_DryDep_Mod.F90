@@ -201,7 +201,7 @@ CONTAINS
                      MetState%T,       &
                      MetState%AIRDEN,  &
                      MetState%ZMID,    &
-                     MetState%LWI,     &
+                     real(MetState%LWI), &
                      MetState%USTAR,   &
                      MetSTate%PBLH,    &
                      MetState%HFLUX,   &

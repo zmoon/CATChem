@@ -61,7 +61,7 @@ contains
 
       ! Arguments
       INTEGER, intent(in)                     :: km            ! number of vertical levels
-      real, intent(in)            :: lwi                                    ! orography flag; Land, ocean, ice mask
+      real, intent(in)            :: lwi                       ! orography flag; Land, ocean, ice mask
       REAL, pointer, intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
       REAL, pointer, intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
       REAL, pointer, intent(in), DIMENSION(:) :: hghte  ! Height [m]
