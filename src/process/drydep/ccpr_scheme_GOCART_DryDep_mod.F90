@@ -47,8 +47,8 @@ contains
                                         ResuspensionOpt, &
                                         radius,     &
                                         rhop,       &
-                                        u10,        &
-                                        v10,        &
+                                        u10m,        &
+                                        v10m,        &
                                         fraclake,   &
                                         gwettop)
 
@@ -176,8 +176,8 @@ subroutine PrepMetVarsForGOCART(km,              &
                                 tmpu,            &
                                 rhoa,            &
                                 hghte,           &
-                                u10,             &
-                                v10,             &
+                                u10m,             &
+                                v10m,             &
                                 fraclake,        &
                                 gwettop,         &
                                 lwi,             &
@@ -196,7 +196,7 @@ subroutine PrepMetVarsForGOCART(km,              &
                                 GOCART_USTAR,    &
                                 GOCART_PBLH,     &
                                 GOCART_HFLUX,    &
-                                GOCART_Z0)
+                                GOCART_Z0H)
    
 
    IMPLICIT NONE
@@ -276,8 +276,8 @@ subroutine PrepMetVarsForGOCART(km,              &
    GOCART_PBLH   = pblh      ! PBL height [m]
    GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
    GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
-   GOCART_U10 = u10
-   GOCART_V10 = v10
+   GOCART_U10 = u10m
+   GOCART_V10 = v10m
    GOCART_FRACLAKE = fraclake
    GOCART_GWETTOP = gwettop
 
