@@ -20,6 +20,7 @@ MODULE CCPR_DryDep_mod
    PUBLIC :: CCPR_DryDep_Init
    PUBLIC :: CCPR_DryDep_Run
    PUBLIC :: CCPR_DryDep_Finalize
+   PUBLIC :: DryDepStateType
 
 
    !> \brief DryDepStateType
@@ -48,6 +49,10 @@ MODULE CCPR_DryDep_mod
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
+      real                            :: particleradius
+      real                            :: particledensity
+      real                            :: drydep_frequency
+      real                            :: drydep_vel
 
 
    END TYPE DryDepStateType
@@ -160,22 +165,9 @@ CONTAINS
       CHARACTER(LEN=255) :: ErrMsg, thisLoc
       INTEGER :: km
       INTEGER :: i !< counter
-      INTEGER :: lwi                                    ! orography flag; Land, ocean, ice mask
-      REAL(fp), DIMENSION(1,1) :: drydepf               ! Deposition frequency [1/sec]
-      REAL(fp), allocatable, DIMENSION(:,:,:) :: tmpu   ! Temperature [K]
-      REAL(fp), allocatable, DIMENSION(:,:,:) :: rhoa   ! Air density [kg/m^3]
-      REAL(fp), allocatable, DIMENSION(:,:,:) :: hghte  ! Height [m]
-      REAL(fp) :: radius                                ! particle radius [m]
-      REAL(fp) :: rhop                                  ! particle density [kg/m^3]
-      REAL(fp) :: ustar                                 ! friction speed [m/sec]
-      REAL(fp) :: pblh                                  ! PBL height [m]
-      REAL(fp) :: hflux                                ! sfc. sens. heat flux [W m-2]
-      REAL(fp) :: z0h                                   ! rough height, sens. heat [m]
-      REAL :: ddfreq
-      !REAL(fp), DIMENSION(1,1), optional :: u10m                   ! 10-m u-wind component [m/sec]
-      !REAL(fp), DIMENSION(1,1), optional :: v10m                   ! 10-m v-wind component [m/sec]
-      !REAL(fp), DIMENSION(1,1), optional :: fraclake               ! fraction covered by water [1]
-      !REAL(fp), DIMENSION(1,1), optional :: gwettop                ! fraction soil moisture [1]
+      real :: radius
+      real :: rhop
+      real :: drydepf
       REAL(fp) :: dqa                                    ! Change in Species due to drydep
       REAL(fp) :: SpecConc                               ! Temporary Species concentration
 
@@ -199,95 +191,96 @@ CONTAINS
                ! call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
                !    pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
 
-         ! loop through aerosol species
-         do i = 1, ChemState%nSpeciesAeroDryDep  
- 
-            radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
-            rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
+               ! loop through aerosol species
+               do i = 1, ChemState%nSpeciesAeroDryDep
 
-            call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
-                                            MetState%T,       &
-                                            MetState%AIRDEN,  &
-                                            MetState%ZMID,    &
-                                            MetState%LWI,     &
-                                            MetState%USTAR,   &
-                                            MetSTate%PBLH,    &
-                                            MetState%HFLUX,   &
-                                            VON_KARMAN,       &
-                                            Cp,               &
-                                            g0,               &
-                                            MetState%Z0H,     &
-                                            drydepf,          & 
-                                            RC,               &
-                                            DryDepState%Resuspension, &
-                                            radius,           &
-                                            rhop,             &
-                                            MetState%U10M,    &
-                                            MetSTate%V10M,    &
-                                            MetState%FRLAKE,  &
-                                            MetState%GWETTOP)
+                  radius = ChemState%chemSpecies(ChemState%DryDepIndex(i))%radius
+                  rhop = ChemState%chemSpecies(ChemState%DryDepIndex(i))%density
 
-               if (RC /= CC_SUCCESS) then
-                  errMsg = 'Error in GOCART DryDeposition'
-                  CALL CC_Error( errMsg, RC, thisLoc )
-               endif  !if (RC /= CC_SUCCESS) 
-
-            ! Fill Diagnostic Variables
-            !--------------------------
-            !!!!FIXME: COME BACK TO THIS LATER
-            !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
-            !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
-
-            ! apply drydep velocities/freq to chem species
-            dqa = 0.
-            dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
-               * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
-            ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
-               ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
-
-         end do ! do i = 1, ChemState%nSpeciesAeroDryDep
-
-      endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
-
-   endif  ! if (DryDepState%SchemeOpt == 1)
-
-   ! TO DO:  apply dry dep velocities/freq to chem species
-   write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
-
-endif   !  if (DryDepState%Activate)
+                  call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
+                     MetState%T,       &
+                     MetState%AIRDEN,  &
+                     MetState%ZMID,    &
+                     MetState%LWI,     &
+                     MetState%USTAR,   &
+                     MetSTate%PBLH,    &
+                     MetState%HFLUX,   &
+                     VON_KARMAN,       &
+                     Cp,               &
+                     g0,               &
+                     MetState%Z0H,     &
+                     drydepf,          &
+                     DryDepState%Resuspension, &
+                     radius,           &
+                     rhop,             &
+                     MetState%U10M,    &
+                     MetSTate%V10M,    &
+                     MetState%FRLAKE,  &
+                     MetState%GWETTOP, &
+                     RC)
 
 
-end subroutine CCPr_DryDep_Run
+                  if (RC /= 0) then
+                     errMsg = 'Error in GOCART DryDeposition'
+                     CALL CC_Error( errMsg, RC, thisLoc )
+                  endif  !if (RC /= CC_SUCCESS)
 
- !>
- !! \brief Finalize the DryDep
- !!
- !! \param [INOUT] DryDepState
- !! \param [OUT] RC Return code
- !!!>
-SUBROUTINE CCPr_DryDep_Finalize( DryDepState, RC )
+                  ! Fill Diagnostic Variables
+                  !--------------------------
+                  !!!!FIXME: COME BACK TO THIS LATER
+                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
+                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
-   ! USE
-   !----
+                  ! apply drydep velocities/freq to chem species
+                  dqa = 0.
+                  dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
+                     * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
+                  ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
+                     ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
 
-   IMPLICIT NONE
+               end do ! do i = 1, ChemState%nSpeciesAeroDryDep
 
-   ! INPUT/OUTPUT PARAMETERS
-   TYPE(DryDepStateType), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
+            endif  ! if (ChemState%nSpeciesAeroDryDep > 0)
 
-   ! OUTPUT PARAMETERS
-   INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+         endif  ! if (DryDepState%SchemeOpt == 1)
 
-   ! LOCAL VARIABLES
-   CHARACTER(LEN=255) :: ErrMsg, thisLoc
+         ! TO DO:  apply dry dep velocities/freq to chem species
+         write(*,*) 'TODO: Need to figure out how to add back to the chemical species state '
 
-   ! Initialize
-   RC = CC_SUCCESS
-   errMsg = ''
-   thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
+      endif   !  if (DryDepState%Activate)
 
 
-end subroutine CCPr_DryDep_Finalize
+   end subroutine CCPr_DryDep_Run
+
+   !>
+   !! \brief Finalize the DryDep
+   !!
+   !! \param [INOUT] DryDepState
+   !! \param [OUT] RC Return code
+   !!!>
+   SUBROUTINE CCPr_DryDep_Finalize( DryDepState, RC )
+
+      ! USE
+      !----
+
+      IMPLICIT NONE
+
+      ! INPUT/OUTPUT PARAMETERS
+      TYPE(DryDepStateType), INTENT(INOUT) :: DryDepState  ! DryDepState Instance
+
+      ! OUTPUT PARAMETERS
+      INTEGER, INTENT(OUT) :: RC                                  ! Return Code
+
+      ! LOCAL VARIABLES
+      CHARACTER(LEN=255) :: ErrMsg, thisLoc
+
+      ! Initialize
+      RC = CC_SUCCESS
+      errMsg = ''
+      thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
+
+
+   end subroutine CCPr_DryDep_Finalize
 
 
 END MODULE CCPR_DryDep_Mod
