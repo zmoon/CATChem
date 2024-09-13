@@ -109,8 +109,8 @@ contains
                                 tmpu,            &
                                 rhoa,            &
                                 hghte,           &
-                                u10,             &
-                                v10,             &
+                                u10m,             &
+                                v10m,             &
                                 fraclake,        &
                                 gwettop,         &
                                 lwi,             &
