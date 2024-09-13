@@ -207,8 +207,6 @@ subroutine PrepMetVarsForGOCART(km,              &
    REAL, pointer, intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
    REAL, pointer, intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
    REAL, pointer, intent(in), DIMENSION(:) :: hghte  ! Height [m]
-   REAL, pointer, intent(in)                      :: radius                                ! particle radius [m]
-   REAL, pointer, intent(in)                      :: rhop                                  ! particle density [kg/m^3]
    REAL, pointer, intent(in)                      :: ustar                                 ! friction speed [m/sec]
    REAL, pointer, intent(in)                      :: pblh                                  ! PBL height [m]
    REAL, pointer, intent(in)                      :: hflux                                 ! sfc. sens. heat flux [W m-2]
@@ -269,7 +267,7 @@ subroutine PrepMetVarsForGOCART(km,              &
    endif
 
    GOCART_tmpu = reshape(tmpu, (/1, 1, km/))         ! temperature [K]
-   GOCART_RHOA = reshape(AIRDEN, (/1, 1, km/)) ! air density [kg/m^3]
+   GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
    GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
    GOCART_LWI    = LWI       ! orography flag; Land, ocean, ice mask
    GOCART_USTAR  = ustar     ! friction speed [m/sec]
