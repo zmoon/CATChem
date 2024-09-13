@@ -53,7 +53,7 @@ contains
                                         gwettop)
 
       ! Uses
-      USE GOCART2G, only: DryDeposition
+      USE GOCART2G_PROCESS, only: DryDeposition
 
       IMPLICIT NONE
 
