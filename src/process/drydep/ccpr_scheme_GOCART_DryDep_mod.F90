@@ -31,6 +31,7 @@ contains
    !!
    !! Note that other state types may be required, e.g. one specific to the process group.
    !!!>
+
    subroutine CCPr_Scheme_GOCART_DryDep(km,              &
       tmpu,            &
       rhoa,            &
@@ -131,6 +132,7 @@ contains
          GOCART_PBLH,     &
          GOCART_HFLUX,    &
          GOCART_Z0H)
+
       !------------------
       ! Begin Scheme Code
       !------------------
@@ -151,7 +153,6 @@ contains
 
 
    end subroutine CCPr_Scheme_GOCART_DryDep
-
 
    !>
    !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
@@ -198,6 +199,7 @@ contains
       GOCART_PBLH,     &
       GOCART_HFLUX,    &
       GOCART_Z0H)
+
 
 
       IMPLICIT NONE
