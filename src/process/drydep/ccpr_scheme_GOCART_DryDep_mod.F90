@@ -64,16 +64,16 @@ contains
       REAL, pointer, intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
       REAL, pointer, intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
       REAL, pointer, intent(in), DIMENSION(:) :: hghte  ! Height [m]
-      REAL, pointer, intent(in), optional            :: radius                                ! particle radius [m]
-      REAL, pointer, intent(in), optional            :: rhop                                  ! particle density [kg/m^3]
+      REAL, pointer, intent(in)           :: radius                                ! particle radius [m]
+      REAL, pointer, intent(in)          :: rhop                                  ! particle density [kg/m^3]
       REAL, pointer, intent(in)                      :: ustar                                 ! friction speed [m/sec]
       REAL, pointer, intent(in)                      :: pblh                                  ! PBL height [m]
       REAL, pointer, intent(in)                      :: hflux                                 ! sfc. sens. heat flux [W m-2]
       REAL, pointer, intent(in)                      :: z0h                                   ! rough height, sens. heat [m]
-      REAL, pointer, intent(in), optional :: u10m                   ! 10-m u-wind component [m/sec]
-      REAL, pointer, intent(in), optional :: v10m                   ! 10-m v-wind component [m/sec]
-      REAL, pointer, intent(in), optional :: fraclake               ! fraction covered by water [1]
-      REAL, pointer, intent(in), optional  :: gwettop                ! fraction soil moisture [1]
+      REAL, pointer, intent(in)           :: u10m                   ! 10-m u-wind component [m/sec]
+      REAL, pointer, intent(in)           :: v10m                   ! 10-m v-wind component [m/sec]
+      REAL, pointer, intent(in)           :: fraclake               ! fraction covered by water [1]
+      REAL, pointer, intent(in)           :: gwettop                ! fraction soil moisture [1]
       real, intent(in) :: cp
       real, intent(in) :: von_karman
       logical, intent(in) ::  ResuspensionOpt
