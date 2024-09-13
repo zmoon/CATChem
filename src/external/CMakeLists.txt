@@ -1,7 +1,7 @@
 set(_srcs GOCART/Process_Library/GOCART2G_Process.F90 GOCART/Process_Library/GOCART2G_MieMod.F90)
 set(_lib GOCART2G)
 
-add_library( GOCART2G ${_srcs})
+add_library(${_lib} ${_srcs})
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU|G95")
   target_compile_options(${_lib} PRIVATE -ffree-line-length-none)
 endif()
