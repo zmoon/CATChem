@@ -14,6 +14,7 @@ program test_drydep
    INTEGER:: rc          ! Success or failure
 
    character(len=:), allocatable :: title
+   real :: i ! loop counter
 
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
@@ -38,7 +39,7 @@ program test_drydep
    !----------------------------
 
    ! Read input file and initialize grid
-   call cc_read_config(Config, GridState, rc)
+   call cc_read_config(Config, GridState, EmisState, ChemState, rc, configFile)
    if (rc /= CC_success) then
       errMsg = 'Error reading configuration file: ' // TRIM( configFile )
       call cc_emit_error(errMsg, rc, thisLoc)
@@ -68,7 +69,7 @@ program test_drydep
    do i = 1, gridstate%number_of_levels
       metstate%T(i)=273.15_fp          ! K
       MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
-      MetState%PHIT(i) = I*100   ! m
+      MetState%ZMID(i) = I*100   ! m
    end do
 
 
@@ -92,7 +93,7 @@ program test_drydep
    end if
 
    call print_info(Config, drydepState, MetState, title)
-   call assert(DiagState%drydepf > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
+   call assert(DiagState%drydep_frequency > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
 
 
    !----------------------------
@@ -117,7 +118,7 @@ program test_drydep
    end if
 
    call print_info(Config, drydepState, MetState, title)
-   call assert(DiagState%drydepf .eq. 0.0_fp, "Test 2 GOCART drydep Scheme (resuspension activated)")
+   call assert(DiagState%drydep_frequency .eq. 0.0_fp, "Test 2 GOCART drydep Scheme (resuspension activated)")
 
 
 
@@ -140,7 +141,7 @@ contains
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%MAIRDEN =', MetState_%MAIRDEN
-      write(*,*) 'drydepState%DryDepf = ', drydepState_%drydepf
+      write(*,*) 'drydepState%DryDepf = ', drydepState_%drydep_frequency
 
    end subroutine print_info
 

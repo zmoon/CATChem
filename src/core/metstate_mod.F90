@@ -61,7 +61,7 @@ MODULE MetState_Mod
       ! Land Specific Fields
       !---------------------
       REAL(fp)              :: AREA_M2         !< Grid box surface area [m2]
-      INTEGER               :: LWI             !< Land water ice mask (0-sea, 1-land, 2-ice)
+      REAL               :: LWI             !< Land water ice mask (0-sea, 1-land, 2-ice)
       REAL(fp)              :: CLAYFRAC        !< Fraction of clay [1]
       INTEGER               :: DSOILTYPE       !< Dominant soil type
       INTEGER               :: DLUSE           !< Dominant land-use type
