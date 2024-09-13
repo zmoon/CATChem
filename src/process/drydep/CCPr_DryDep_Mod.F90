@@ -148,6 +148,7 @@ CONTAINS
       use MetState_Mod, only : MetStateType
       use DiagState_Mod, only : DiagStateType
       use ChemState_Mod, only : ChemStateType
+      use CCPr_Scheme_GOCART_DryDep_Mod, only : CCPr_Scheme_GOCART_DryDep
 
       IMPLICIT NONE
       ! INPUT PARAMETERS
@@ -234,7 +235,7 @@ CONTAINS
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
                   dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
-                     * (1.-exp(-drydepf(1,1) * MetState%TSTEP)))
+                     * (1.-exp(-drydepf * MetState%TSTEP)))
                   ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
 
