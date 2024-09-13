@@ -10,7 +10,6 @@ MODULE CCPr_Plumerise_mod
    ! USES:
    USE State_Mod
    USE Error_MOD
-   use emisstate_mod
 
    IMPLICIT NONE
    PRIVATE
