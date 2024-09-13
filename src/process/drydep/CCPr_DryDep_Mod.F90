@@ -81,13 +81,13 @@ CONTAINS
       IMPLICIT NONE
       ! INPUT PARAMETERS
       !-----------------
-      TYPE(ConfigType), POINTER       :: Config    ! Module options
-      TYPE(ChemStateType), POINTER    :: ChemState ! Chemical state
+      TYPE(ConfigType)    :: Config    ! Module options
+      TYPE(ChemStateType) :: ChemState ! Chemical state
 
       ! INPUT/OUTPUT PARAMETERS
       !------------------------
-      TYPE(DryDepStateType), POINTER  :: DryDepState ! DryDep state
-      INTEGER,         INTENT(INOUT)  :: RC       ! Success or failure
+      TYPE(DryDepStateType)          :: DryDepState ! DryDep state
+      INTEGER,         INTENT(INOUT) :: RC       ! Success or failure
 
       ! Error handling
       !---------------

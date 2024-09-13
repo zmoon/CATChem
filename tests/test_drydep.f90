@@ -1,6 +1,7 @@
 program test_drydep
    use CATChem, fp => cc_rk
    use testing_mod, only: assert
+   use precision_mod, only: rae
    implicit none
 
    type(ConfigType) :: Config
@@ -9,12 +10,13 @@ program test_drydep
    type(DiagStateType) :: DiagState
    type(drydepStateType) :: DryDepState
    type(GridStateType) :: GridState
+   type(EmisStateType) :: EmisState
 
    ! Integers
    INTEGER:: rc          ! Success or failure
 
    character(len=:), allocatable :: title
-   real :: i ! loop counter
+   integer :: i ! loop counter
 
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
@@ -93,7 +95,7 @@ program test_drydep
    end if
 
    call print_info(Config, drydepState, MetState, title)
-   call assert(DiagState%drydep_frequency > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
+   call assert(DiagState%drydep_frequency(1) > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
 
 
    !----------------------------
@@ -118,7 +120,7 @@ program test_drydep
    end if
 
    call print_info(Config, drydepState, MetState, title)
-   call assert(DiagState%drydep_frequency .eq. 0.0_fp, "Test 2 GOCART drydep Scheme (resuspension activated)")
+   call assert(rae(DiagState%drydep_frequency(1), 0.0_fp), "Test 2 GOCART drydep Scheme (resuspension activated)")
 
 
 
@@ -136,6 +138,7 @@ contains
       write(*,*) '*************'
       write(*,*) 'Configuration '
       write(*,*) '*************'
+      write(*,*) 'Config%drydep_activate = ', Config_%drydep_activate
       write(*,*) 'drydepState%activate = ', drydepState_%activate
       write(*,*) 'drydepState%drydep_scheme = ', drydepState_%SchemeOpt
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
