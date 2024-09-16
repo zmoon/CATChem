@@ -1344,7 +1344,7 @@ CONTAINS
       errMsg = ''
 
       ! TODO #105 Fix reading of config file
-      key   = "process%DryDep%activate"
+      key   = "process%drydep%activate"
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
@@ -1352,33 +1352,33 @@ CONTAINS
          CALL CC_Error( errMsg, RC, thisLoc )
          RETURN
       ENDIF
-      Config%DryDep_activate = v_bool
+      Config%drydep_activate = v_bool
 
 
-      key   = "process%DryDep%scheme"
+      key   = "process%drydep%scheme"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
          RETURN
       ENDIF
-      Config%DryDep_scheme = v_int
+      Config%drydep_scheme = v_int
 
 
-      key   = "process%DryDep%resuspension"
+      key   = "process%drydep%resuspension"
       v_bool = MISSING_BOOL
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_bool, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = TRIM( key ) // 'Not Found, Setting Default to FALSE'
          RETURN
       ENDIF
-      Config%DryDep_resuspension = v_bool
+      Config%drydep_resuspension = v_bool
 
       write(*,*) "DryDeposition Configuration"
       write(*,*) '------------------------------------'
-      write(*,*) 'Config%DryDep_activate = ', Config%DryDep_activate
-      write(*,*) 'Config%DryDep_scheme = ', Config%DryDep_scheme
-      write(*,*) 'Config%DryDep_resuspension = ', Config%DryDep_resuspension
+      write(*,*) 'Config%drydep_activate = ', Config%drydep_activate
+      write(*,*) 'Config%drydep_scheme = ', Config%drydep_scheme
+      write(*,*) 'Config%drydep_resuspension = ', Config%drydep_resuspension
       write(*,*) '------------------------------------'
 
    END SUBROUTINE Config_Process_DryDep
