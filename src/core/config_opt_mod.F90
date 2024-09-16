@@ -98,9 +98,9 @@ MODULE Config_Opt_Mod
       LOGICAL                     :: plumerise_activate
 
       ! DryDeposition Process
-      LOGICAL                     :: DryDep_activate
-      INTEGER                     :: DryDep_scheme
-      LOGICAL                     :: DryDep_resuspension  ! Turn on resuspension
+      LOGICAL                     :: drydep_activate
+      INTEGER                     :: drydep_scheme
+      LOGICAL                     :: drydep_resuspension  ! Turn on resuspension
 
    END TYPE ConfigType
 
@@ -172,9 +172,9 @@ CONTAINS
       Config%seasalt_scheme = 1
 
       ! Dry Dep Process
-      Config%DryDep_activate = .FALSE.
-      Config%DryDep_scheme = 1
-      Config%DryDep_resuspension = .FALSE.
+      Config%drydep_activate = .FALSE.
+      Config%drydep_scheme = 1
+      Config%drydep_resuspension = .FALSE.
 
    END SUBROUTINE Set_Config
    !> \brief Cleanup the Config options
