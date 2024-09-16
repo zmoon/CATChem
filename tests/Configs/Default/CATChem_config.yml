@@ -46,3 +46,4 @@ process:
   drydep:
     activate: true
     scheme_opt: 1
+    resuspension: false
