@@ -108,8 +108,8 @@ program test_drydep
    ChemState%nSpeciesAerodrydep = 1
    ! Turn on resuspension
    DryDepState%RESUSPENSION = .TRUE.
-   DryDepState%particleradius = 0.0001_fp
-   DryDepState%particledensity = 1.00
+   DryDepState%particleradius = 3.00
+   DryDepState%particledensity = 2500.
    MetState%FRLAKE = 0
    MetState%GWETTOP = 0.01_fp
    metstate%U10m = 1.0_fp
