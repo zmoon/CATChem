@@ -200,7 +200,7 @@ CONTAINS
 
                   call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
                      MetState%T,       &
-                     MetState%AIRDEN,  &
+                     MetState%MAIRDEN,  &
                      MetState%ZMID,    &
                      real(MetState%LWI), &
                      MetState%USTAR,   &
