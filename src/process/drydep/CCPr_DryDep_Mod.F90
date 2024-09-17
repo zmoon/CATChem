@@ -107,7 +107,7 @@ CONTAINS
       ThisLoc = ' -> at CCPR_DryDep_INIT (in process/drydep/ccpr_drydep_mod.F90)'
 
       ! First check if process is activated in config | if not don't allocate arrays or pointers
-      if (Config%DryDep_activate) then
+      if (Config%drydep_activate) then
 
          ! Activate Process
          !------------------
@@ -115,7 +115,11 @@ CONTAINS
 
          ! Set scheme option
          !------------------
-
+         ! For now, the only option is SchemeOpt = 1
+         ! Yes, this is hard-coded for now
+         if (Config%drydep_scheme==1) then
+         DryDepState%SchemeOpt = 1
+         end if
          if (Config%DryDep_resuspension) then
             ! Activate resuspension
             !------------------
@@ -125,7 +129,7 @@ CONTAINS
          end if
       else
          DryDepState%Activate = .false.
-      endif
+      end if
 
    end subroutine CCPR_DryDep_Init
 
