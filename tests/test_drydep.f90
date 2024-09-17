@@ -73,7 +73,7 @@ program test_drydep
 
    do i = 1, MetState%NLEVS
       MetState%T(i)=273.15         ! K
-      MetState%MAIRDEN(i) = 1.2  ! kg/m3
+      MetState%MAIRDEN(i) = 1.2   ! kg/m3
       MetState%ZMID(i) = I*100   ! m
    end do
 
