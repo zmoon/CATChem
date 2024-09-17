@@ -59,11 +59,12 @@ program test_drydep
    ChemState%nSpeciesAerodrydep = 1
 
    ! Meteorological State
-   MetState%LWI = 1
-   MetState%USTAR = 0.5_fp
+   MetState%LWI = 1.0_fp
+   MetState%USTAR = 0.1_fp
    MetState%PBLH = 1000.0_fp
    MetState%HFLUX = 0.5_fp
-   MetState%Z0H = 0.01
+   MetState%Z0H = 0.1_fp
+   allocate(MetState%MAIRDEN(1))
    Metstate%NLEVS = 1
    Metstate%TSTEP = 60
    allocate(MetState%MAIRDEN(MetState%NLEVS))
