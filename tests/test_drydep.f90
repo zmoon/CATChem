@@ -71,11 +71,11 @@ program test_drydep
    allocate(MetState%ZMID(MetState%NLEVS))
    gridstate%number_of_levels = MetState%NLEVS
 
-  ! do i = 1, gridstate%number_of_levels
-  !    metstate%T(i)=273.15_fp          ! K
-  !    MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
-  !    MetState%ZMID(i) = I*100   ! m
-  ! end do
+   do i = 1, MetState%NLEVS
+      MetState%T(i)=273.15_fp          ! K
+      MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
+      MetState%ZMID(i) = I*100   ! m
+   end do
 
 
    ! Turn off resuspension
@@ -83,21 +83,21 @@ program test_drydep
 
    title = "DryDep Test 2 | Test GOCART DryDep defaults"
 
-   call cc_drydep_init(Config, drydepState, ChemState, rc)
+   call cc_drydep_init(Config, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_drydep_init'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call cc_drydep_run(MetState, DiagState, drydepState, ChemState, rc)
+   call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_drydep_run'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call print_info(Config, drydepState, MetState, title)
+   call print_info(Config, DryDepState, MetState, title)
    call assert(DiagState%drydep_frequency(1) > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
    
 
@@ -116,14 +116,14 @@ program test_drydep
    MetState%V10m = 1.0_fp
 
 
-   call cc_drydep_run(MetState, DiagState, drydepState, ChemState, rc)
+   call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_drydep_run'
       call cc_emit_error(errMsg, rc, thisLoc)
       stop 1
    end if
 
-   call print_info(Config, drydepState, MetState, title)
+   call print_info(Config, DryDepState, MetState, title)
    call assert(rae(DiagState%drydep_frequency(1), 0.0_fp), "Test 2 GOCART drydep Scheme (resuspension activated)")
 
 
