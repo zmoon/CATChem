@@ -49,7 +49,7 @@ program test_drydep
    endif
 
    title = 'drydep Test 1 | Read Config'
-    call print_info(Config, drydepState, MetState, title)
+   ! call print_info(Config, drydepState, MetState, title)
 
 
    !----------------------------
