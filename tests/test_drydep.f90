@@ -21,7 +21,7 @@ program test_drydep
    ! Error handling
    CHARACTER(LEN=512) :: errMsg
    CHARACTER(LEN=255) :: thisLoc
-   CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Plumerise/CATChem_config.yml'
+   CHARACTER(LEN=255), PARAMETER :: configFile ='Configs/Default/CATChem_config.yml'
 
 
    thisLoc = 'test_drydep -> at read CATChem_Config.yml'
@@ -55,8 +55,8 @@ program test_drydep
    !----------------------------
    ! Test 2
    !----------------------------
-   ! Set number of drydep species to zero for now
-   ChemState%nSpeciesAerodrydep = 0
+   ! Set number of drydep species to one for now
+   ChemState%nSpeciesAerodrydep = 1
 
    ! Meteorological State
    MetState%LWI = 1.0_fp
@@ -105,6 +105,7 @@ program test_drydep
    ! Test 3
    !----------------------------
    title = "drydep Test 3 | resuspension is .TRUE. "
+   ChemState%nSpeciesAerodrydep = 1
    ! Turn on resuspension
    DryDepState%RESUSPENSION = .TRUE.
    DryDepState%particleradius = 0.0001_fp
