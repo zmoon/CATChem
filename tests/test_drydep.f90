@@ -59,7 +59,7 @@ program test_drydep
    ChemState%nSpeciesAerodrydep = 1
 
    ! Meteorological State
-   MetState%LWI = 0.5
+   MetState%LWI = 1
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
    MetState%HFLUX = 0.5_fp
