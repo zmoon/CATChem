@@ -79,7 +79,7 @@ program test_drydep
 
    DryDepState%SchemeOpt = 1
    ! Turn off resuspension
-   DryDepState%RESUSPENSION = .FALSE.
+   DryDepState%Resuspension = .FALSE.
 
    title = "DryDep Test 2 | Test GOCART DryDep defaults"
 
@@ -107,7 +107,7 @@ program test_drydep
    title = "drydep Test 3 | resuspension is .TRUE. "
    ChemState%nSpeciesAerodrydep = 1
    ! Turn on resuspension
-   DryDepState%RESUSPENSION = .TRUE.
+   DryDepState%Resuspension = .TRUE.
    DryDepState%particleradius = 3.00
    DryDepState%particledensity = 2500.
    MetState%FRLAKE = 0
@@ -143,8 +143,8 @@ contains
       write(*,*) 'Configuration '
       write(*,*) '*************'
       write(*,*) 'Config%drydep_activate = ', Config_%drydep_activate
-      write(*,*) 'drydepState%activate = ', drydepState_%activate
-      write(*,*) 'drydepState%drydep_scheme = ', drydepState_%SchemeOpt
+      write(*,*) 'drydepState%Activate = ', drydepState_%Activate
+      write(*,*) 'drydepState%SchemeOpt = ', drydepState_%SchemeOpt
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%MAIRDEN =', MetState_%MAIRDEN
