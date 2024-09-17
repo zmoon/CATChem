@@ -49,7 +49,7 @@ program test_drydep
    endif
 
    title = 'drydep Test 1 | Read Config'
-   ! call print_info(Config, drydepState, MetState, title)
+    call print_info(Config, drydepState, MetState, title)
 
 
    !----------------------------
@@ -59,11 +59,11 @@ program test_drydep
    ChemState%nSpeciesAerodrydep = 1
 
    ! Meteorological State
-   MetState%LWI = 1.0_fp
+   MetState%LWI = 0.5
    MetState%USTAR = 0.5_fp
    MetState%PBLH = 1000.0_fp
    MetState%HFLUX = 0.5_fp
-   MetState%Z0H = 10.0_fp
+   MetState%Z0H = 0.01
    Metstate%NLEVS = 1
    Metstate%TSTEP = 60
    allocate(MetState%MAIRDEN(MetState%NLEVS))
@@ -72,12 +72,12 @@ program test_drydep
    gridstate%number_of_levels = MetState%NLEVS
 
    do i = 1, MetState%NLEVS
-      MetState%T(i)=273.15_fp          ! K
-      MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
+      MetState%T(i)=273.15         ! K
+      MetState%MAIRDEN(i) = 1.2  ! kg/m3
       MetState%ZMID(i) = I*100   ! m
    end do
 
-
+   DryDepState%SchemeOpt = 1
    ! Turn off resuspension
    DryDepState%RESUSPENSION = .FALSE.
 
