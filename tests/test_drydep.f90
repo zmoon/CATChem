@@ -98,7 +98,7 @@ program test_drydep
    end if
 
    call print_info(Config, drydepState, MetState, title)
-   call assert(DiagState%drydep_frequency(0) > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
+   call assert(DiagState%drydep_frequency(1) > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
    
 
    !----------------------------
@@ -112,8 +112,8 @@ program test_drydep
    DryDepState%particledensity = 2500.
    MetState%FRLAKE = 0
    MetState%GWETTOP = 0.01_fp
-   metstate%U10m = 1.0_fp
-   metstate%V10m = 1.0_fp
+   MetState%U10m = 1.0_fp
+   MetState%V10m = 1.0_fp
 
 
    call cc_drydep_run(MetState, DiagState, drydepState, ChemState, rc)
