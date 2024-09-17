@@ -71,11 +71,11 @@ program test_drydep
    allocate(MetState%ZMID(MetState%NLEVS))
    gridstate%number_of_levels = MetState%NLEVS
 
-   do i = 1, gridstate%number_of_levels
-      metstate%T(i)=273.15_fp          ! K
-      MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
-      MetState%ZMID(i) = I*100   ! m
-   end do
+  ! do i = 1, gridstate%number_of_levels
+  !    metstate%T(i)=273.15_fp          ! K
+  !    MetState%MAIRDEN(i) = 1.2_fp  ! kg/m3
+  !    MetState%ZMID(i) = I*100   ! m
+  ! end do
 
 
    ! Turn off resuspension
@@ -148,7 +148,7 @@ contains
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%MAIRDEN =', MetState_%MAIRDEN
-      write(*,*) 'drydepState%DryDepf = ', drydepState_%drydep_frequency
+      write(*,*) 'drydepState%drydepf = ', drydepState_%drydep_frequency
 
    end subroutine print_info
 
