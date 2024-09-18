@@ -239,10 +239,14 @@ contains
       ! Error handling
       character(len=255) :: errMsg
       character(len=255) :: thisloc
-
-      GOCART_TMPU = reshape(tmpu(1:km), (/1, 1, km/)) ! temperature [K]
-      GOCART_RHOA = reshape(rhoa(1:km), (/1, 1, km/)) ! air density [kg/m^3]
-      GOCART_HGHTE = reshape(hghte(1:km), (/1, 1, km/))    ! top of layer geopotential height [m]
+      !integer :: lb, ub   !lower bound, upper bound
+      !lb = lbound(tmpu)
+      !ub = ubound(tmpu)
+      integer :: sz
+      sz = size(tmpu)   ! should be same as km 
+      GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
+      GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
+      GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
       GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
       GOCART_PBLH(1,1)   = pblh      ! PBL height [m]
