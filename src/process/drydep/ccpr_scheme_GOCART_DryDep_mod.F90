@@ -240,12 +240,12 @@ contains
       character(len=255) :: errMsg
       character(len=255) :: thisloc
 
-       if (.not. allocated(GOCART_tmpu)) then
-          allocate(GOCART_tmpu(1,1, km), stat=rc)
-          if (RC /= 0) then
-             print*, 'Could not allocate tmpu in PrepMetVarsForGOCART'
-          endif
-       endif
+      ! if (.not. allocated(GOCART_tmpu)) then
+      !    allocate(GOCART_tmpu(1,1, km), stat=rc)
+      !    if (RC /= 0) then
+      !       print*, 'Could not allocate tmpu in PrepMetVarsForGOCART'
+      !    endif
+      ! endif
 
       ! if (.not. allocated(GOCART_RHOA)) then
       !    allocate(GOCART_RHOA(1,1,km), stat=rc)
@@ -261,7 +261,7 @@ contains
       !    endif
       ! endif
 
-      GOCART_tmpu(1,1,1:km) = tmpu(1:km)         ! temperature [K]
+      GOCART_tmpu(1,1,1:km) => tmpu(1:km)         ! temperature [K]
       GOCART_RHOA(1,1,1:km) = rhoa(1:km) ! air density [kg/m^3]
       GOCART_HGHTE(1,1,1:km) = hghte(1:km)    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
