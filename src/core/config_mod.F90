@@ -1361,6 +1361,7 @@ CONTAINS
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
          errMsg = TRIM( key ) // 'Not Found, Setting Default to 1'
+         v_int = 1 ! default is one
          RETURN
       ENDIF
       Config%drydep_scheme = v_int
