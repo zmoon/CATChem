@@ -111,9 +111,9 @@ program test_drydep
    DryDepState%particleradius = 3.00
    DryDepState%particledensity = 2500.
    MetState%FRLAKE = 0
-   MetState%GWETTOP = 0.01_fp
-   MetState%U10m = 1.0_fp
-   MetState%V10m = 1.0_fp
+   MetState%GWETTOP = 0.01
+   MetState%U10m = 1.0
+   MetState%V10m = 1.0
 
 
    call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
@@ -123,7 +123,7 @@ program test_drydep
       stop 1
    end if
 
-   call print_info(Config, DryDepState, MetState, title)
+  ! call print_info(Config, DryDepState, MetState, title)
   ! call assert(rae(DiagState%drydep_frequency(1), 0.0_fp), "Test 2 GOCART drydep Scheme (resuspension activated)")
 
 
