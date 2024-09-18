@@ -207,9 +207,9 @@ contains
       ! INPUTS
       INTEGER, intent(in)                     :: km     ! number of vertical levels
       real,  intent(in)                      :: lwi                                    ! orography flag; Land, ocean, ice mask
-      REAL,  intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
-      REAL,  intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
-      REAL,  intent(in), DIMENSION(:) :: hghte  ! Height [m]
+      REAL,  intent(in), DIMENSION(:), target :: tmpu   ! Temperature [K]
+      REAL,  intent(in), DIMENSION(:), target :: rhoa   ! Air density [kg/m^3]
+      REAL,  intent(in), DIMENSION(:), target :: hghte  ! Height [m]
       REAL,  intent(in)                      :: ustar                                 ! friction speed [m/sec]
       REAL,  intent(in)                      :: pblh                                  ! PBL height [m]
       REAL,  intent(in)                      :: hflux                                 ! sfc. sens. heat flux [W m-2]
@@ -240,9 +240,9 @@ contains
       character(len=255) :: errMsg
       character(len=255) :: thisloc
 
-
-      GOCART_RHOA(1,1,1:km) = rhoa(1:km) ! air density [kg/m^3]
-      GOCART_HGHTE(1,1,1:km) = hghte(1:km)    ! top of layer geopotential height [m]
+      GOCART_TMPU(1,1,1:km) => tmpu(1:km) ! air density [kg/m^3]
+      GOCART_RHOA(1,1,1:km) => rhoa(1:km) ! air density [kg/m^3]
+      GOCART_HGHTE(1,1,1:km) => hghte(1:km)    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
       GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
       GOCART_PBLH(1,1)   = pblh      ! PBL height [m]
