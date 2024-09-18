@@ -1267,7 +1267,7 @@ CONTAINS
 
       ! Initialize
       RC      = CC_SUCCESS
-      thisLoc = ' -> at Config_Process_SeaSalt (in CATChem/src/core/config_mod.F90)'
+      thisLoc = ' -> at Config_Process_Plumerise (in CATChem/src/core/config_mod.F90)'
       errMsg = ''
 
       key   = "process%plumerise%activate"
@@ -1356,7 +1356,7 @@ CONTAINS
       Config%drydep_activate = v_bool
 
 
-      key   = "process%drydep%scheme"
+      key   = "process%drydep%scheme_opt"
       v_int = MISSING_INT
       CALL QFYAML_Add_Get( ConfigInput, TRIM( key ), v_int, "", RC )
       IF ( RC /= CC_SUCCESS ) THEN
