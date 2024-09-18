@@ -240,34 +240,6 @@ contains
       character(len=255) :: errMsg
       character(len=255) :: thisloc
 
-      ! if (.not. allocated(GOCART_tmpu)) then
-      !    allocate(GOCART_tmpu(1,1, km), stat=rc)
-      !    if (RC /= 0) then
-      !       print*, 'Could not allocate tmpu in PrepMetVarsForGOCART'
-      !    endif
-      ! endif
-
-      ! if (.not. allocated(GOCART_RHOA)) then
-      !    allocate(GOCART_RHOA(1,1,km), stat=rc)
-      !    if (RC /= 0) then
-      !       print*, 'Could not allocate rhoa in PrepMetVarsForGOCART'
-      !    endif
-      ! endif
-
-      ! if (.not. allocated(GOCART_HGHTE)) then
-      !    allocate(GOCART_HGHTE(1,1,km), stat=rc)
-      !    if (RC /= 0) then
-      !       print*, 'Could not allocate hghte in PrepMetVarsForGOCART'
-      !    endif
-      ! endif
-
-      if (allocated(GOCART_tmpu) .and. (size(shape(GOCART_tmpu))==size(shape(tmpu)))) then 
-         GOCART_tmpu(:) = tmpu ! do not change bounds or shape
-      else
-        if (allocated(GOCART_tmpu)) deallocate(GOCART_tmpu)
-        allocate(GOCART_tmpu(1,1,lbound(tmpu,1):ubound(tmpu,1)),source=tmpu)
-        GOCART_tmpu(1,1,1:km) = tmpu(1:km)         ! temperature [K]
-      endif
 
       GOCART_RHOA(1,1,1:km) = rhoa(1:km) ! air density [kg/m^3]
       GOCART_HGHTE(1,1,1:km) = hghte(1:km)    ! top of layer geopotential height [m]
