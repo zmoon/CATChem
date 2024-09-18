@@ -240,7 +240,7 @@ contains
       character(len=255) :: errMsg
       character(len=255) :: thisloc
 
-      GOCART_TMPU(1,1,1:km) => tmpu(1:km) ! air density [kg/m^3]
+      GOCART_TMPU => reshape(tmpu(1:km), (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_RHOA(1,1,1:km) => rhoa(1:km) ! air density [kg/m^3]
       GOCART_HGHTE(1,1,1:km) => hghte(1:km)    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
