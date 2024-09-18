@@ -564,6 +564,7 @@ CONTAINS
       write(*,*) '| Chemstate SUMMARY'
       write(*,*) '|  number_of_species:  ', ChemState%nSpecies
       write(*,*) '|  number_of_aerosols: ', ChemState%nSpeciesAero
+      write(*,*) '|  number_of_aerosols with dry dep: ', ChemState%nSpeciesAeroDryDep
       write(*,*) '|  number_of_gases:    ', ChemState%nSpeciesGas
       write(*,*) '|  number of tracers:  ', ChemState%nSpeciesTracer
       write(*,*) '|  number of dust:     ', ChemState%nSpeciesDust
