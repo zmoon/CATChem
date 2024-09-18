@@ -240,12 +240,12 @@ contains
       character(len=255) :: errMsg
       character(len=255) :: thisloc
 
-      ! if (.not. allocated(GOCART_tmpu)) then
-      !    allocate(GOCART_tmpu(1,1, km), stat=rc)
-      !    if (RC /= 0) then
-      !       print*, 'Could not allocate tmpu in PrepMetVarsForGOCART'
-      !    endif
-      ! endif
+       if (.not. allocated(GOCART_tmpu)) then
+          allocate(GOCART_tmpu(1,1, km), stat=rc)
+          if (RC /= 0) then
+             print*, 'Could not allocate tmpu in PrepMetVarsForGOCART'
+          endif
+       endif
 
       ! if (.not. allocated(GOCART_RHOA)) then
       !    allocate(GOCART_RHOA(1,1,km), stat=rc)
