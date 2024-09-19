@@ -117,10 +117,13 @@ CONTAINS
          !------------------
          ! For now, the only option is SchemeOpt = 1
          ! Yes, this is hard-coded for now
+
          if (Config%drydep_scheme==1) then
-         DryDepState%SchemeOpt = 1
+           DryDepState%SchemeOpt = 1
+         else
+           DryDepState%SchemeOpt = 1
          end if
-         if (Config%DryDep_resuspension) then
+         if (Config%drydep_resuspension) then
             ! Activate resuspension
             !------------------
             DryDepState%Resuspension = .true.
