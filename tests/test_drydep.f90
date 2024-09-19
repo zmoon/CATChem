@@ -50,6 +50,8 @@ program test_drydep
 
 
    title = 'drydep Test 1 | Read Config'
+   !DryDepState%SchemeOpt = 1
+   DryDepState%Activate = .false.
    call print_info(Config, DryDepState, MetState, title)
 
 
@@ -57,7 +59,8 @@ program test_drydep
    ! Test 2
    !----------------------------
    ! Set number of drydep species to one for now
-   ChemState%nSpeciesAerodrydep = 1
+   ChemState%nSpeciesAerodrydep = 2
+   DryDepState%Activate = .true.
 
    ! Meteorological State
    MetState%LWI = 1.0_fp
