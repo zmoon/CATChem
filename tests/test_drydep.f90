@@ -104,8 +104,13 @@ program test_drydep
       stop 1
    end if
 
+   write (*,*) ' - call print_info for ', title, ' - '
    call print_info(Config, DryDepState, MetState, title)
+   write (*,*) ' - finished print_info for ', title, ' - '
    call assert(DiagState%drydep_frequency(1) > 0.0_fp, "Test GOCART DryDep Scheme (no resuspension)")
+   write (*,*), '-- '
+   write (*,*), 'Completed ', title
+   write (*,*), '--'
    
 
    !----------------------------
