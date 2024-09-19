@@ -132,6 +132,7 @@ program test_drydep
 contains
 
    subroutine print_info(Config_, DryDepState_, MetState_, title_)
+
       type(ConfigType), intent(in) :: Config_
       type(MetStateType), intent(in) :: MetState_
       type(DryDepStateType), intent(in) :: DryDepState_
@@ -144,13 +145,25 @@ contains
       write(*,*) 'Configuration '
       write(*,*) '*************'
       write(*,*) 'Config%drydep_activate = ', Config_%drydep_activate
-      write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
-      write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
-      write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
-      write(*,*) 'MetState%USTAR =', MetState_%USTAR
-      write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
-      write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
+      write(*,*) 'Config%drydep_scheme = ', Config_%drydep_scheme
+      write(*,*) 'Config%drydep_resuspension = ', Config_%drydep_resuspension
+
+      if (Config_%drydep_activate) then
+
+        write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
+        write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
+
+        if (DryDepState_%Resuspension) then
+          write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
+          write(*,*) 'MetState%USTAR =', MetState_%USTAR
+        end if
+
+        write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
+        write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
+
+      end if
 
    end subroutine print_info
+
 
 end program test_drydep
