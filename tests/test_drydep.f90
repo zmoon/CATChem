@@ -8,7 +8,7 @@ program test_drydep
    type(ChemStateType) :: ChemState
    type(MetStateType) :: MetState
    type(DiagStateType) :: DiagState
-   type(drydepStateType) :: DryDepState
+   type(DryDepStateType) :: DryDepState
    type(GridStateType) :: GridState
    type(EmisStateType) :: EmisState
 
@@ -50,7 +50,7 @@ program test_drydep
 
 
    title = 'drydep Test 1 | Read Config'
-   call print_info(Config, drydepState, MetState, title)
+   call print_info(Config, DryDepState, MetState, title)
 
 
    !----------------------------
@@ -131,10 +131,10 @@ program test_drydep
 
 contains
 
-   subroutine print_info(Config_, drydepState_, MetState_, title_)
+   subroutine print_info(Config_, DryDepState_, MetState_, title_)
       type(ConfigType), intent(in) :: Config_
       type(MetStateType), intent(in) :: MetState_
-      type(drydepStateType), intent(in) :: drydepState_
+      type(DryDepStateType), intent(in) :: DryDepState_
       character(len=*), intent(in) :: title_
 
       write(*,*) '======================================='
@@ -144,12 +144,12 @@ contains
       write(*,*) 'Configuration '
       write(*,*) '*************'
       write(*,*) 'Config%drydep_activate = ', Config_%drydep_activate
-      write(*,*) 'drydepState%Activate = ', drydepState_%Activate
-      write(*,*) 'drydepState%SchemeOpt = ', drydepState_%SchemeOpt
+      write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
+      write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
       write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
-      write(*,*) 'drydepState%drydepf = ', drydepState_%drydep_frequency
+      write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
 
    end subroutine print_info
 
