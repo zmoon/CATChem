@@ -48,6 +48,7 @@ program test_drydep
       stop 1
    endif
 
+
    title = 'drydep Test 1 | Read Config'
    call print_info(Config, drydepState, MetState, title)
 
@@ -64,16 +65,16 @@ program test_drydep
    MetState%PBLH = 1000.0_fp
    MetState%HFLUX = 0.5_fp
    MetState%Z0H = 0.1_fp
-   Metstate%NLEVS = 1
+   Metstate%NLEVS = 5
    Metstate%TSTEP = 60
-   allocate(MetState%MAIRDEN(MetState%NLEVS))
+   allocate(MetState%AIRDEN(MetState%NLEVS))
    allocate(MetState%T(MetState%NLEVS))
    allocate(MetState%ZMID(MetState%NLEVS))
    gridstate%number_of_levels = MetState%NLEVS
 
    do i = 1, MetState%NLEVS
       MetState%T(i)=273.15         ! K
-      MetState%MAIRDEN(i) = 1.12   ! kg/m3
+      MetState%AIRDEN(i) = 1.2   ! kg/m3
       MetState%ZMID(i) = I*100   ! m
    end do
 
@@ -147,7 +148,7 @@ contains
       write(*,*) 'drydepState%SchemeOpt = ', drydepState_%SchemeOpt
       write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
       write(*,*) 'MetState%USTAR =', MetState_%USTAR
-      write(*,*) 'MetState%MAIRDEN =', MetState_%MAIRDEN
+      write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
       write(*,*) 'drydepState%drydepf = ', drydepState_%drydep_frequency
 
    end subroutine print_info
