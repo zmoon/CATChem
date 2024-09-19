@@ -53,12 +53,15 @@ program test_drydep
    !DryDepState%SchemeOpt = 1
    DryDepState%Activate = .false.
    call print_info(Config, DryDepState, MetState, title)
-
+   write (*,*), '-- '
+   write (*,*), 'Completed ', title
+   write (*,*), '--'
 
    !----------------------------
    ! Test 2
    !----------------------------
-   ! Set number of drydep species to one for now
+   ! Set number of drydep species
+   
    ChemState%nSpeciesAerodrydep = 2
    DryDepState%Activate = .true.
 
