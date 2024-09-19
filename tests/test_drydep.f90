@@ -49,7 +49,7 @@ program test_drydep
    endif
 
    title = 'drydep Test 1 | Read Config'
-   ! call print_info(Config, drydepState, MetState, title)
+   call print_info(Config, drydepState, MetState, title)
 
 
    !----------------------------
@@ -108,9 +108,9 @@ program test_drydep
    ChemState%nSpeciesAerodrydep = 1
    ! Turn on resuspension
    DryDepState%Resuspension = .TRUE.
-   DryDepState%particleradius = 0.0000001   ! [m]
+   DryDepState%particleradius = 0.000001   ! [m]
    DryDepState%particledensity = 2500.   !  [kg/m3]
-   MetState%FRLAKE = 0
+   MetState%FRLAKE = 0.0
    MetState%GWETTOP = 0.01
    MetState%U10m = 1.0             ! [m/s]
    MetState%V10m = 1.0             ! [m/s]
