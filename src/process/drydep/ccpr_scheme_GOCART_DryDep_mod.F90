@@ -243,12 +243,20 @@ contains
       integer :: sz
       sz = size(tmpu)   ! should be same as km 
       allocate(GOCART_TMPU(1, 1, sz))
-      GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
-      sz = size(rhoa)
       allocate(GOCART_RHOA(1, 1, sz))
-      GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
-      sz = size(hghte)
       allocate(GOCART_HGHTE(1, 1, sz))
+      allocate(GOCART_LWI(1,1))
+      allocate(GOCART_LWI(1,1))
+      allocate(GOCART_USTAR(1,1))
+      allocate(GOCART_PBLH(1,1))
+      allocate(GOCART_HFLUX(1,1))
+      allocate(GOCART_Z0H(1,1))
+      allocate(GOCART_U10(1,1))
+      allocate(GOCART_V10(1,1))
+      allocate(GOCART_FRACLAKE(1,1))
+      allocate(GOCART_GWETTP{(1,1))
+      GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
+      GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
       GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
