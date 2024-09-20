@@ -227,7 +227,7 @@ contains
       REAL, intent(inout) :: GOCART_V10 (:,:)                  !< 10-m v-wind component [m/sec]
       REAL, intent(inout) :: GOCART_FRACLAKE(:,:)               !< fraction covered by water [1]
       REAL, intent(inout) :: GOCART_GWETTOP(:,:)                !< fraction soil moisture [1]
-      real,  intent(inout) :: GOCART_LWI(:,:)                                 !< orography flag; Land, ocean, ice mask
+      real,  intent(inout), pointer :: GOCART_LWI(:,:)                                 !< orography flag; Land, ocean, ice mask
       REAL,     intent(inout) :: GOCART_USTAR(:,:)                               !< friction speed [m/sec]
       REAL,     intent(inout) :: GOCART_PBLH(:,:)                               !< PBL height [m]
       REAL,     intent(inout) :: GOCART_HFLUX(:,:)                               !< sfc. sens. heat flux [W m-2]
@@ -249,7 +249,7 @@ contains
       GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
-      GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
+      GOCART_LWI = reshape(LWI, (/1, 1/))       ! orography flag; Land, ocean, ice mask
       GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
       GOCART_PBLH(1,1)   = pblh      ! PBL height [m]
       GOCART_HFLUX(1,1) = hflux     ! sfc. sens. heat flux [W m-2]
