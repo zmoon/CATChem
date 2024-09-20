@@ -223,15 +223,15 @@ contains
       REAL, intent(inout), pointer :: GOCART_TMPU(:,:,:)   !< temperature [K]
       REAL, intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
       REAL, intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE  !< geometric height [m]
-      REAL, intent(inout) :: GOCART_U10(:,:)                  !< 10-m u-wind component [m/sec]
-      REAL, intent(inout) :: GOCART_V10 (:,:)                  !< 10-m v-wind component [m/sec]
-      REAL, intent(inout) :: GOCART_FRACLAKE(:,:)               !< fraction covered by water [1]
-      REAL, intent(inout) :: GOCART_GWETTOP(:,:)                !< fraction soil moisture [1]
+      REAL, intent(inout), pointer :: GOCART_U10(:,:)                  !< 10-m u-wind component [m/sec]
+      REAL, intent(inout), pointer :: GOCART_V10 (:,:)                  !< 10-m v-wind component [m/sec]
+      REAL, intent(inout), pointer :: GOCART_FRACLAKE(:,:)               !< fraction covered by water [1]
+      REAL, intent(inout), pointer :: GOCART_GWETTOP(:,:)                !< fraction soil moisture [1]
       real,  intent(inout), pointer :: GOCART_LWI(:,:)                                 !< orography flag; Land, ocean, ice mask
-      REAL,     intent(inout) :: GOCART_USTAR(:,:)                               !< friction speed [m/sec]
-      REAL,     intent(inout) :: GOCART_PBLH(:,:)                               !< PBL height [m]
-      REAL,     intent(inout) :: GOCART_HFLUX(:,:)                               !< sfc. sens. heat flux [W m-2]
-      REAL,     intent(inout) :: GOCART_Z0H(:,:)                                 !< rough height, sens. heat [m]
+      REAL,     intent(inout), pointer :: GOCART_USTAR(:,:)                               !< friction speed [m/sec]
+      REAL,     intent(inout), pointer :: GOCART_PBLH(:,:)                               !< PBL height [m]
+      REAL,     intent(inout), pointer :: GOCART_HFLUX(:,:)                               !< sfc. sens. heat flux [W m-2]
+      REAL,     intent(inout), pointer :: GOCART_Z0H(:,:)                                 !< rough height, sens. heat [m]
 
       ! OUTPUTS
       INTEGER :: rc !< Return code
@@ -245,19 +245,29 @@ contains
       allocate(GOCART_TMPU(1, 1, sz))
       allocate(GOCART_RHOA(1, 1, sz))
       allocate(GOCART_HGHTE(1, 1, sz))
+      allocate(GOCART_U10(1, 1, sz))
+      allocate(GOCART_V10(1, 1, sz))
+      allocate(GOCART_FRACLAKE(1, 1, sz))
+      allocate(GOCART_GWETTOP(1, 1, sz))
+      allocate(GOCART_LWI(1, 1))
+      allocate(GOCART_USTAR(1, 1))
+      allocate(GOCART_PBLH(1, 1))
+      allocate(GOCART_HFLUX(1, 1))
+      allocate(GOCART_Z0H(1, 1))
+
 
       GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
-      GOCART_LWI(:,:) = LWI       ! orography flag; Land, ocean, ice mask
-      GOCART_USTAR(:,:)  = ustar     ! friction speed [m/sec]
-      GOCART_PBLH(1,1)   = pblh      ! PBL height [m]
-      GOCART_HFLUX(1,1) = hflux     ! sfc. sens. heat flux [W m-2]
-      GOCART_Z0H(1,1)    = z0h       ! rough height, sens. heat [m]
-      GOCART_U10(1,1) = u10m
-      GOCART_V10(1,1) = v10m
-      GOCART_FRACLAKE(1,1) = fraclake
-      GOCART_GWETTOP(1,1) = gwettop
+      GOCART_LWI = LWI       ! orography flag; Land, ocean, ice mask
+      GOCART_USTAR  = ustar     ! friction speed [m/sec]
+      GOCART_PBLH   = pblh      ! PBL height [m]
+      GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
+      GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
+      GOCART_U10 = u10m
+      GOCART_V10 = v10m
+      GOCART_FRACLAKE = fraclake
+      GOCART_GWETTOP = gwettop
 
    end subroutine PrepMetVarsForGOCART
 
