@@ -239,13 +239,16 @@ contains
       ! Error handling
       character(len=255) :: errMsg
       character(len=255) :: thisloc
-      !integer :: lb, ub   !lower bound, upper bound
-      !lb = lbound(tmpu)
-      !ub = ubound(tmpu)
+
       integer :: sz
       sz = size(tmpu)   ! should be same as km 
+      allocate(GOCART_TMPU(1, 1, sz))
       GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
+      sz = size(rhoa)
+      allocate(GOCART_RHOA(1, 1, sz))
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
+      sz = size(hghte)
+      allocate(GOCART_HGHTE(1, 1, sz))
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
       GOCART_LWI(1,1) = LWI       ! orography flag; Land, ocean, ice mask
       GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
