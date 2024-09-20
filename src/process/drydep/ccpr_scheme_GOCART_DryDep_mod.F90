@@ -250,7 +250,7 @@ contains
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
       GOCART_LWI(:,:) = LWI       ! orography flag; Land, ocean, ice mask
-      GOCART_USTAR(1,1)  = ustar     ! friction speed [m/sec]
+      GOCART_USTAR(:,:)  = ustar     ! friction speed [m/sec]
       GOCART_PBLH(1,1)   = pblh      ! PBL height [m]
       GOCART_HFLUX(1,1) = hflux     ! sfc. sens. heat flux [W m-2]
       GOCART_Z0H(1,1)    = z0h       ! rough height, sens. heat [m]
