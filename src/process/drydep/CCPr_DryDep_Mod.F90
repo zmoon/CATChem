@@ -242,7 +242,7 @@ CONTAINS
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
                   dqa = MAX(0.0_fp, ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)   &
-                     * (1.-exp(-drydepf * MetState%TSTEP)))
+                     * (1.-exp(-1*drydepf * MetState%TSTEP)))
                   ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) =     &
                      ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) - dqa
 
