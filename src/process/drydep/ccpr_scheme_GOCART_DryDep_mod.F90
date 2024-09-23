@@ -255,7 +255,6 @@ contains
       allocate(GOCART_HFLUX(1, 1))
       allocate(GOCART_Z0H(1, 1))
 
-
       GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
@@ -264,10 +263,10 @@ contains
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
       GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
-      GOCART_U10 = u10m
-      GOCART_V10 = v10m
-      GOCART_FRACLAKE = fraclake
-      GOCART_GWETTOP = gwettop
+      GOCART_U10 = u10m         ! meridional winds [m/s]
+      GOCART_V10 = v10m         ! zonal winds [m/s]
+      GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
+      GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
 
    end subroutine PrepMetVarsForGOCART
 
