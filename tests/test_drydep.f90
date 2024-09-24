@@ -73,7 +73,7 @@ program test_drydep
    MetState%Z0H = 0.1_fp
    Metstate%NLEVS = 5
    Metstate%TSTEP = 60
-   Metstate%U10M = -3.0
+   Metstate%U10M = 3.0
    Metstate%V10M = 3.0
    allocate(MetState%AIRDEN(MetState%NLEVS))
    allocate(MetState%T(MetState%NLEVS))
@@ -124,15 +124,6 @@ program test_drydep
    DryDepState%Resuspension = .TRUE.
    DryDepState%particleradius = 0.000001   ! [m]
    DryDepState%particledensity = 2500.   !  [kg/m3]
-   MetState%LWI = 1.0_fp
-   MetState%USTAR = 0.1_fp
-   MetState%PBLH = 1000.0_fp
-   MetState%HFLUX = 0.5_fp
-   MetState%Z0H = 0.1_fp
-   Metstate%NLEVS = 5
-   Metstate%TSTEP = 60
-   Metstate%U10M = -3.0
-   Metstate%V10M = 3.0
 
    call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
