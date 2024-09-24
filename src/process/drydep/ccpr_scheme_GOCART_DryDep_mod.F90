@@ -65,8 +65,8 @@ contains
       REAL, allocatable, intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
       REAL, allocatable, intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
       REAL, allocatable, intent(in), DIMENSION(:) :: hghte  ! Height [m]
-      REAL,  intent(in)               :: radius                                ! particle radius [m]
-      REAL,  intent(in)               :: rhop                                  ! particle density [kg/m^3]
+      REAL,  intent(in), optional     :: radius                                ! particle radius [m]
+      REAL,  intent(in), optional     :: rhop                                  ! particle density [kg/m^3]
       REAL,  intent(in)               :: ustar                                 ! friction speed [m/sec]
       REAL,  intent(in)               :: pblh                                  ! PBL height [m]
       REAL,  intent(in)               :: hflux                                 ! sfc. sens. heat flux [W m-2]
@@ -138,15 +138,17 @@ contains
       !------------------
 
       if (ResuspensionOpt) then
+      !  if (.not.present(radius)) radius=DryDepState%particleradius
+      !  if (.not.present(rhop)) rhop=DryDepState%particledensity
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, GOCART_DRYDEPF, RC, &
             radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
       else
         nullify(GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
-        deallocate(GOCART_U10)
-        deallocate(GOCART_V10)
-        deallocate(GOCART_FRACLAKE)
-        deallocate(GOCART_GWETTOP)
+        if (allocated(GOCART_U10)) deallocate(GOCART_U10)
+        if (allocated(GOCART_V10)) deallocate(GOCART_V10)
+        if (allocated(GOCART_FRACLAKE)) deallocate(GOCART_FRACLAKE)
+        if (allocated(GOCART_GWETTOP)) deallocate(GOCART_GWETTOP)
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, GOCART_DRYDEPF, RC, &
             radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
