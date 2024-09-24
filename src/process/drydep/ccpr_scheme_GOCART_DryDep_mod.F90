@@ -264,8 +264,8 @@ contains
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
       GOCART_Z0H    = z0h       ! rough height, sens. heat [m]
-      GOCART_U10 = u10m         ! meridional winds [m/s]
-      GOCART_V10 = v10m         ! zonal winds [m/s]
+      GOCART_U10 = u10m         ! zonal wind component (E/W) [m/s]
+      GOCART_V10 = v10m         ! meridional wind component (N/S) [m/s]
       GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
       GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
 
