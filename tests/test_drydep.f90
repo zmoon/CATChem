@@ -53,9 +53,9 @@ program test_drydep
    !DryDepState%SchemeOpt = 1
    DryDepState%Activate = .false.
    call print_info(Config, DryDepState, MetState, title)
-   write (*,*), '-- '
-   write (*,*), 'Completed ', title
-   write (*,*), '--'
+   write (*,*) '-- '
+   write (*,*) 'Completed ', title
+   write (*,*) '--'
 
    !----------------------------
    ! Test 2
