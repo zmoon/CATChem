@@ -73,6 +73,8 @@ program test_drydep
    MetState%Z0H = 0.1_fp
    Metstate%NLEVS = 5
    Metstate%TSTEP = 60
+   Metstate%U10M = 3.0
+   Metstate%V10M = -3.0
    allocate(MetState%AIRDEN(MetState%NLEVS))
    allocate(MetState%T(MetState%NLEVS))
    allocate(MetState%ZMID(MetState%NLEVS))
