@@ -208,7 +208,7 @@ CONTAINS
                   call CCPr_Scheme_GOCART_DryDep( MetState%NLEVS,   &
                      MetState%T,       &
                      MetState%AIRDEN,  &
-                     MetState%Z,    &
+                     MetState%ZMID,    &
                      MetState%LWI,     &
                      MetState%USTAR,   &
                      MetSTate%PBLH,    &
@@ -237,7 +237,7 @@ CONTAINS
                   !--------------------------
                   !!!!FIXME: COME BACK TO THIS LATER
                   !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf
-                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%Z(1) * drydepf
+                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
