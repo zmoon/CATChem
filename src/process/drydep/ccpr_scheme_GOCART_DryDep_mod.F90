@@ -84,7 +84,7 @@ contains
       integer, intent(out) :: RC                      ! Success or Failure
 
       ! Local Variables
-      real, pointer :: GOCART_tmpu(:,:,:)
+      real, pointer, intent :: GOCART_tmpu(:,:,:)
       real, pointer :: GOCART_rhoa(:,:,:)
       real, pointer :: GOCART_HGHTE(:,:,:)
       real, pointer :: GOCART_LWI(:,:)
@@ -92,10 +92,10 @@ contains
       real ,pointer :: GOCART_PBLH(:,:)
       real ,pointer :: GOCART_HFLUX(:,:)
       real ,pointer :: GOCART_Z0H(:,:)
-      real ,pointer, optional :: GOCART_U10(:,:)
-      real ,pointer, optional :: GOCART_V10(:,:)
-      real ,pointer, optional :: GOCART_FRACLAKE(:,:)
-      real ,pointer, optional :: GOCART_GWETTOP(:,:)
+      real ,pointer, intent(in), optional :: GOCART_U10(:,:)
+      real ,pointer, intent(in), optional :: GOCART_V10(:,:)
+      real ,pointer, intent(in), optional :: GOCART_FRACLAKE(:,:)
+      real ,pointer, intent(in), optional :: GOCART_GWETTOP(:,:)
       real ,pointer :: GOCART_DRYDEPF(:,:)
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
