@@ -175,7 +175,7 @@ CONTAINS
       INTEGER :: i !< counter
       real :: radius
       real :: rhop
-      real :: drydepf
+      real :: drydepf(1,1)
       REAL(fp) :: dqa                                    ! Change in Species due to drydep
       REAL(fp) :: SpecConc                               ! Temporary Species concentration
 
