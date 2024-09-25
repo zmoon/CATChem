@@ -92,10 +92,10 @@ contains
       real, pointer :: GOCART_PBLH(:,:)
       real, pointer :: GOCART_HFLUX(:,:)
       real, pointer :: GOCART_Z0H(:,:)
-      real, pointer, optional :: GOCART_U10(:,:)
-      real, pointer, optional :: GOCART_V10(:,:)
-      real, pointer, optional :: GOCART_FRACLAKE(:,:)
-      real, pointer, optional :: GOCART_GWETTOP(:,:)
+      real, pointer :: GOCART_U10(:,:)
+      real, pointer :: GOCART_V10(:,:)
+      real, pointer :: GOCART_FRACLAKE(:,:)
+      real, pointer :: GOCART_GWETTOP(:,:)
       real, pointer :: GOCART_DRYDEPF(:,:)
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
