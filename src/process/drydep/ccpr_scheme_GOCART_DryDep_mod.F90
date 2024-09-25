@@ -244,6 +244,11 @@ contains
       character(len=255) :: thisloc
 
       integer :: sz
+
+      print *, "Size of tmpu: ", size(tmpu)
+      print *, "Size of rhoa: ", size(rhoa)
+      print *, "Size of hghte: ", size(hghte)
+
       sz = size(tmpu)   ! should be same as km 
       allocate(GOCART_TMPU(1, 1, sz))
       allocate(GOCART_RHOA(1, 1, sz))
@@ -258,7 +263,7 @@ contains
       allocate(GOCART_HFLUX(1, 1))
       allocate(GOCART_Z0H(1, 1))
 
-      GOCART_TMPU = reshape(tmpu, (/1, 1, sz/)) ! temperature [K]
+      GOCART_TMPU = reshape(tmpu, (/1, 1, km/)) ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
       GOCART_LWI = LWI       ! orography flag; Land, ocean, ice mask
@@ -270,6 +275,12 @@ contains
       GOCART_V10 = v10m         ! meridional wind component (N/S) [m/s]
       GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
       GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
+      if (.not.allocated(GOCART_TMPU)) then
+          print *, "Allocation failed for GOCART_TMPU"
+          RC = 1
+          return
+      endif
+
 
    end subroutine PrepMetVarsForGOCART
 
