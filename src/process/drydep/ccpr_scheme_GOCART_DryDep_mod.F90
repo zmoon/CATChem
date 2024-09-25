@@ -136,22 +136,21 @@ contains
       !------------------
       ! Begin Scheme Code
       !------------------
-      if (.not. allocated(GOCART_DRYDEPF)) allocate(GOCART_DRYDEPF(1,1))
-
+     
       if (ResuspensionOpt) then
         !if (.not.present(radius)) radius=DryDepState%particleradius
         !if (.not.present(rhop)) rhop=DryDepState%particledensity
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
-            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, GOCART_DRYDEPF, RC, &
+            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC, &
             radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
       else
         nullify(GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
-            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, GOCART_DRYDEPF, RC, &
+            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC, &
             radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
       endif
 
-      drydepf = GOCART_DRYDEPF(1,1)
+      GOCART_DRYDEPF(1,1) = drydepf
 
       ! End GOCART Code
 
