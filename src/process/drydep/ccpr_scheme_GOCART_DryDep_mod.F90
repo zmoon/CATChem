@@ -80,7 +80,7 @@ contains
       real, intent(in)                        :: von_karman
       logical, intent(in)                     ::  ResuspensionOpt
       ! Output
-      REAL, intent(out)  :: drydepf(:,:)
+      REAL, intent(out)  :: drydepf(1,1)
       integer, intent(out) :: RC                      ! Success or Failure
 
       ! Local Variables
@@ -136,8 +136,6 @@ contains
       !------------------
       ! Begin Scheme Code
       !------------------
-
-      iF (.NOT. allocated(drydepf)) allocate(drydepf(1,1))
 
       if (ResuspensionOpt) then
         !if (.not.present(radius)) radius=DryDepState%particleradius
