@@ -275,11 +275,7 @@ contains
       GOCART_V10 = v10m         ! meridional wind component (N/S) [m/s]
       GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
       GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
-      if (.not.allocated(GOCART_TMPU)) then
-          print *, "Allocation failed for GOCART_TMPU"
-          RC = 1
-          return
-      endif
+
 
 
    end subroutine PrepMetVarsForGOCART
