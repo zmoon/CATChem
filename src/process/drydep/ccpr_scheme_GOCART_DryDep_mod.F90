@@ -136,6 +136,7 @@ contains
       !------------------
       ! Begin Scheme Code
       !------------------
+      if (.not.allocated(GOCART_DRYDEPF)) allocate(GOCART_DRYDEPF(1,1))
 
       if (ResuspensionOpt) then
         !if (.not.present(radius)) radius=DryDepState%particleradius
