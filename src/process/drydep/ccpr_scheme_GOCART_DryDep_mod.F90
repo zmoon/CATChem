@@ -245,10 +245,10 @@ contains
 
       integer :: sz
 
-      print *, "Size of tmpu: ", size(tmpu)
-      print *, "Size of rhoa: ", size(rhoa)
-      print *, "Size of hghte: ", size(hghte)
-      print *, "km =: ", km
+      !print *, "Size of tmpu: ", size(tmpu)
+      !print *, "Size of rhoa: ", size(rhoa)
+      !print *, "Size of hghte: ", size(hghte)
+      !print *, "km =: ", km
 
 
       sz = size(tmpu)   ! should be same as km 
