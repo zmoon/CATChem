@@ -99,13 +99,13 @@ program test_drydep
       stop 1
    end if
 
-  ! -- commenting out for now
-  ! call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
-  ! if (rc /= CC_SUCCESS) then
-  !    errMsg = 'Error in cc_drydep_run'
-  !    call cc_emit_error(errMsg, rc, thisLoc)
-  !    stop 1
-  ! end if
+  ! commenting out for now
+   call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_drydep_run'
+      call cc_emit_error(errMsg, rc, thisLoc)
+      stop 1
+   end if
 
    !write (*,*) ' - call print_info for ', title, ' - '
    !call print_info(Config, DryDepState, MetState, title)
