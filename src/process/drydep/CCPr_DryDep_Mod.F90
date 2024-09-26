@@ -243,7 +243,7 @@ CONTAINS
                   dqa = 0.
                   SpecConc = ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1)
                   print *, "SpecConc = ", SpecConc
-                  dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*drydepf * float(MetState%TSTEP))))
+                  dqa = MAX(0.0_fp, SpecConc * (1.-exp(-1*drydepf(1,1) * MetState%TSTEP)))
                   ChemState%chemSpecies(ChemState%DryDepIndex(i))%conc(1) = SpecConc - dqa
 
                end do ! do i = 1, ChemState%nSpeciesAeroDryDep
