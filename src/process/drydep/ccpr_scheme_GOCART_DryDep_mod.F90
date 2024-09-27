@@ -96,7 +96,7 @@ contains
       real, pointer :: GOCART_V10(:,:)
       real, pointer :: GOCART_FRACLAKE(:,:)
       real, pointer :: GOCART_GWETTOP(:,:)
-      !real, pointer :: GOCART_DRYDEPF(:,:)
+      real, pointer :: GOCART_DRYDEPF(:,:)
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
 
@@ -149,7 +149,7 @@ contains
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC)
       endif
 
-      !GOCART_DRYDEPF = drydepf
+      GOCART_DRYDEPF = drydepf
 
       ! End GOCART Code
 
