@@ -146,8 +146,7 @@ contains
       else
         nullify(GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
          call DryDeposition(km, GOCART_TMPU, GOCART_RHOA, GOCART_HGHTE, GOCART_LWI, GOCART_USTAR, &
-            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC, &
-            radius, rhop, GOCART_U10, GOCART_V10, GOCART_FRACLAKE, GOCART_GWETTOP)
+            GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC)
       endif
 
       !GOCART_DRYDEPF = drydepf
