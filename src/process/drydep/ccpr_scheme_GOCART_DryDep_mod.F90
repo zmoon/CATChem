@@ -149,8 +149,7 @@ contains
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC)
       endif
 
-      GOCART_DRYDEPF => drydepf
-
+      
       ! End GOCART Code
 
 
