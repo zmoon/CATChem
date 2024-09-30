@@ -111,13 +111,13 @@ CONTAINS
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
-         DiagState%drydep_frequency= ZERO
+         DiagState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)= ZERO
          Allocate(diagstate%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
-         DiagState%drydep_vel= ZERO
+         DiagState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)= ZERO
 
 
       endif
