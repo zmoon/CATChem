@@ -1310,30 +1310,17 @@ CONTAINS
       ! !OUTPUT PARAMETERS:
       !
       INTEGER,        INTENT(OUT)   :: RC          ! Success or failure
+
       ! !LOCAL VARIABLES:
       !
       ! Scalars
       LOGICAL                      :: v_bool
       INTEGER                      :: v_int
-      INTEGER                      :: nSubStrs
-      INTEGER                      :: N
-      INTEGER                      :: C
-
-      ! Reals
-      REAL(fp)                     :: v_real
-
-      ! Arrays
-      INTEGER                      :: a_int(4)
 
       ! Strings
       CHARACTER(LEN=255)           :: thisLoc
       CHARACTER(LEN=512)           :: errMsg
       CHARACTER(LEN=QFYAML_StrLen) :: key
-      CHARACTER(LEN=QFYAML_StrLen) :: v_str
-
-      ! String arrays
-      CHARACTER(LEN=255)           :: subStrs(MAXDIM)
-      CHARACTER(LEN=QFYAML_StrLen) :: a_str(2)
 
       !========================================================================
       ! Config_Process_DryDep begins here!
