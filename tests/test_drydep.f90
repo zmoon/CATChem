@@ -61,7 +61,7 @@ program test_drydep
    ! Test 2
    !----------------------------
    ! Set number of drydep species
-   
+
    ChemState%nSpeciesAerodrydep = 2
    DryDepState%Activate = .true.
 
@@ -99,7 +99,7 @@ program test_drydep
       stop 1
    end if
 
-  ! commenting out for now
+   ! commenting out for now
    call cc_drydep_run(MetState, DiagState, DryDepState, ChemState, rc)
    if (rc /= CC_SUCCESS) then
       errMsg = 'Error in cc_drydep_run'
@@ -114,7 +114,7 @@ program test_drydep
    !write (*,*), '-- '
    !write (*,*), 'Completed ', title
    !write (*,*), '--'
-   
+
 
    !----------------------------
    ! Test 3
@@ -159,16 +159,16 @@ contains
 
       if (DryDepState%Activate) then
 
-        write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
-        write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
+         write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
+         write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
 
-        if (DryDepState_%Resuspension) then
-          write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
-          write(*,*) 'MetState%USTAR =', MetState_%USTAR
-        end if
+         if (DryDepState_%Resuspension) then
+            write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
+            write(*,*) 'MetState%USTAR =', MetState_%USTAR
+         end if
 
-        write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
-        write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
+         write(*,*) 'MetState%AIRDEN =', MetState_%AIRDEN
+         write(*,*) 'DryDepState%drydepf = ', DryDepState_%drydep_frequency
 
       end if
 

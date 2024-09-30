@@ -119,9 +119,9 @@ CONTAINS
          ! Yes, this is hard-coded for now
 
          if (Config%drydep_scheme==1) then
-           DryDepState%SchemeOpt = 1
+            DryDepState%SchemeOpt = 1
          else
-           DryDepState%SchemeOpt = 1
+            DryDepState%SchemeOpt = 1
          end if
          if (Config%drydep_resuspension) then
             ! Activate resuspension

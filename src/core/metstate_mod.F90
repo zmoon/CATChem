@@ -295,7 +295,7 @@ CONTAINS
       MetState%U10M = ZERO
       MetState%V10M = ZERO
       MetState%z0 = ZERO
-      MetState%z0h = ZERO 
+      MetState%z0h = ZERO
       MetState%USTAR_THRESHOLD = ZERO
       MetState%RDRAG = ZERO
       MetState%SSM = ZERO
