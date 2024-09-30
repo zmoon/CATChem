@@ -283,17 +283,11 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
 
-      DEALLOCATE( DryDepState%Activate, STAT=RC )
-      CALL CC_CheckVar('DryDepState%Activate', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
+      ! FIXME:  Do we need to include Dry Dep Freq/Vel as a member of DryDepState???
+      !DEALLOCATE( DryDepState%Activate, STAT=RC )
+      !CALL CC_CheckVar('DryDepState%Activate', 0, RC)
+      !IF (RC /= CC_SUCCESS) RETURN
 
-      DEALLOCATE( DryDepState%SchemeOpt, STAT=RC )
-      CALL CC_CheckVar('DryDepState%SchemeOpt', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
-
-      DEALLOCATE( DryDepState%Resuspension, STAT=RC )
-      CALL CC_CheckVar('DryDepState%Resuspension', 0, RC)
-      IF (RC /= CC_SUCCESS) RETURN
 
    end subroutine CCPr_DryDep_Finalize
 
