@@ -196,9 +196,6 @@ CONTAINS
             !-------------------------
             if (ChemState%nSpeciesAeroDryDep > 0) then
 
-               ! call PrepMetVarsForGOCART(MetState, tmpu, rhoa, hghte, lwi, ustar, &
-               !    pblh, hflux, z0h, u10m, v10m, fraclake, gwettop, rc)
-
                ! loop through aerosol species
                do i = 1, ChemState%nSpeciesAeroDryDep
 
@@ -236,8 +233,8 @@ CONTAINS
                   ! Fill Diagnostic Variables
                   !--------------------------
                   !!!!FIXME: COME BACK TO THIS LATER
-                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf
-                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf
+                  DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf
+                  DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
@@ -286,6 +283,17 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
 
+      DEALLOCATE( DryDepState%Activate, STAT=RC )
+      CALL CC_CheckVar('DryDepState%Activate', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
+
+      DEALLOCATE( DryDepState%SchemeOpt, STAT=RC )
+      CALL CC_CheckVar('DryDepState%SchemeOpt', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
+
+      DEALLOCATE( DryDepState%Resuspension, STAT=RC )
+      CALL CC_CheckVar('DryDepState%Resuspension', 0, RC)
+      IF (RC /= CC_SUCCESS) RETURN
 
    end subroutine CCPr_DryDep_Finalize
 
