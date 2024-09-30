@@ -96,7 +96,7 @@ contains
       real, pointer :: GOCART_V10(:,:)
       real, pointer :: GOCART_FRACLAKE(:,:)
       real, pointer :: GOCART_GWETTOP(:,:)
-      real, pointer :: GOCART_DRYDEPF(:,:)
+
       character(len=256) :: errMsg
       character(len=256) :: thisLoc
 
