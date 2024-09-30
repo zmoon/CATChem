@@ -234,25 +234,15 @@ contains
       REAL, intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
       REAL, intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
 
-      ! OUTPUTS
-      INTEGER :: rc !< Return code
+      ! OUTPUTS - Add error handling back in late
+      !INTEGER :: rc !< Return code
 
       ! Error handling
-      character(len=255) :: errMsg
-      character(len=255) :: thisloc
+      !character(len=255) :: thisloc
 
-      integer :: sz
-
-      !print *, "Size of tmpu: ", size(tmpu)
-      !print *, "Size of rhoa: ", size(rhoa)
-      !print *, "Size of hghte: ", size(hghte)
-      !print *, "km =: ", km
-
-
-      sz = size(tmpu)   ! should be same as km
-      allocate(GOCART_TMPU(1, 1, sz))
-      allocate(GOCART_RHOA(1, 1, sz))
-      allocate(GOCART_HGHTE(1, 1, sz))
+      allocate(GOCART_TMPU(1, 1, km))
+      allocate(GOCART_RHOA(1, 1, km))
+      allocate(GOCART_HGHTE(1, 1, km))
       allocate(GOCART_U10(1, 1))
       allocate(GOCART_V10(1, 1))
       allocate(GOCART_FRACLAKE(1, 1))
@@ -275,7 +265,6 @@ contains
       GOCART_V10 = v10m         ! meridional wind component (N/S) [m/s]
       GOCART_FRACLAKE = fraclake   ! unitless, lake fraction (0-1)
       GOCART_GWETTOP = gwettop     ! unitless, soil moisture fraction (0-1)
-
 
 
    end subroutine PrepMetVarsForGOCART
