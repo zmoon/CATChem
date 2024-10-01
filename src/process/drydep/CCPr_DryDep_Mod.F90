@@ -242,6 +242,8 @@ CONTAINS
                   !print *, "drydepf(1,1) = ", drydepf(1,1)
                   DryDepState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
                   DryDepState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
+                  DiagState%drydep_frequency= DryDepState%drydep_frequency(ChemState%DryDepIndex(i))
+                  DiagState%drydep_vel = DryDepState%drydep_vel(ChemState%DryDepIndex(i))
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
