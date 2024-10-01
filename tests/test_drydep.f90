@@ -134,7 +134,7 @@ program test_drydep
    end if
 
    call print_info(Config, DryDepState, MetState, title)
-   call assert((DiagState%drydep_frequency(1)), 0.0_fp, "Test 2 GOCART drydep Scheme (resuspension activated)")
+   call assert(DiagState%drydep_frequency(1) > 0.0_fp), "Test 2 GOCART drydep Scheme (resuspension activated)")
 
 
 
