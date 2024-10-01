@@ -106,6 +106,7 @@ CONTAINS
       endif
 
       ! If dry deposition process is activated then allocate dry dep related diagnostics
+      print *, "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
       if (Config%drydep_activate) then
          Allocate(DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
