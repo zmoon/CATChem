@@ -112,7 +112,7 @@ CONTAINS
             ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          else
-            print *, "Size(ChemState%nSpeciesAeroDryDep)=", Size(ChemState%nSpeciesAeroDryDep)
+            print *, "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
             print *, "allocated DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep) "
          ENDIF
          DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)= ZERO
