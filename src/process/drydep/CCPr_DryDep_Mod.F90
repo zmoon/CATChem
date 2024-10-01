@@ -51,8 +51,8 @@ MODULE CCPR_DryDep_mod
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
       real                            :: particleradius
       real                            :: particledensity
-      real                            :: drydep_frequency      ! could have one per chem species, revisit later
-      real                            :: drydep_vel            ! could have one per chem species, revisit later
+      real, allocatable               :: drydep_frequency(:)      ! could have one per chem species, revisit later
+      real, allocatable               :: drydep_vel(:)            ! could have one per chem species, revisit later
 
 
    END TYPE DryDepStateType
@@ -112,8 +112,10 @@ CONTAINS
          ! Activate Process
          !------------------
          DryDepState%Activate = .true.
-         DryDepState%drydep_frequency = 0
-         DryDepState%drydep_vel = 0
+         allocate(DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep))
+         DryDepState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)=0
+         allocate(DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep))
+         DryDepState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)=0
 
          ! Set scheme option
          !------------------
