@@ -233,7 +233,9 @@ CONTAINS
                   ! Fill Diagnostic Variables
                   !--------------------------
                   !!!!FIXME: COME BACK TO THIS LATER
-                  DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
+                  print *, "DiagState%drydep_frequency(ChemState%DryDepIndex(i))=", DiagState%drydep_frequency(ChemState%DryDepIndex(i))
+                  print *, "drydepf(1,1) = ", drydepf(1,1)
+                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
                   DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
                   ! apply drydep velocities/freq to chem species
