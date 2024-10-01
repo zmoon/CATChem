@@ -51,8 +51,8 @@ MODULE CCPR_DryDep_mod
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
       real                            :: particleradius
       real                            :: particledensity
-      real                            :: drydep_frequency
-      real                            :: drydep_vel
+      real                            :: drydep_frequency      ! could have one per chem species, revisit later
+      real                            :: drydep_vel            ! could have one per chem species, revisit later
 
 
    END TYPE DryDepStateType
@@ -112,6 +112,8 @@ CONTAINS
          ! Activate Process
          !------------------
          DryDepState%Activate = .true.
+         DryDepState%drydep_frequency = 0
+         DryDepState%drydep_vel = 0
 
          ! Set scheme option
          !------------------
@@ -233,11 +235,11 @@ CONTAINS
                   ! Fill Diagnostic Variables
                   !--------------------------
                   !!!!FIXME: COME BACK TO THIS LATER
-                  print *, "size(DiagState%drydep_frequency)=", size(DiagState%drydep_frequency)
-                  print *, "ChemState%DryDepIndex(i)=", ChemState%DryDepIndex(i)
-                  print *, "drydepf(1,1) = ", drydepf(1,1)
-                  !DiagState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
-                  !DiagState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
+                  !print *, "size(DiagState%drydep_frequency)=", size(DiagState%drydep_frequency)
+                  !print *, "ChemState%DryDepIndex(i)=", ChemState%DryDepIndex(i)
+                  !print *, "drydepf(1,1) = ", drydepf(1,1)
+                  DryDepState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
+                  DryDepState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
 
                   ! apply drydep velocities/freq to chem species
                   dqa = 0.
