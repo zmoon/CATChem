@@ -72,6 +72,7 @@ CONTAINS
       ! USES
       ! USE GridState_Mod, ONLY : GridStateType
       USE Config_Opt_Mod, ONLY : ConfigType
+      use ChemState_Mod, only : ChemStateType
 
       ! Arguments
       type(ConfigType),    INTENT(IN)    :: Config
@@ -106,19 +107,19 @@ CONTAINS
 
       ! If dry deposition process is activated then allocate dry dep related diagnostics
       if (Config%drydep_activate) then
-         Allocate(diagstate%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
+         Allocate(DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
          DiagState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)= ZERO
-         Allocate(diagstate%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
+
+         Allocate(DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
          DiagState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)= ZERO
-
 
       endif
 
