@@ -106,15 +106,15 @@ CONTAINS
       endif
 
       ! If dry deposition process is activated then allocate dry dep related diagnostics
-      print *, "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
+      write (*,*) "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
       if (Config%drydep_activate) then
          Allocate(DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          else
-            print *, "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
-            print *, "allocated DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep) "
+            write (*,*) "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
+            write (*,*) "allocated DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep) "
          ENDIF
          DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)= ZERO
 
