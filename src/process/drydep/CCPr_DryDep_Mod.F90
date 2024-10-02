@@ -117,14 +117,14 @@ CONTAINS
             ErrMsg = 'Could not Allocate DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, ThisLoc )
          ENDIF
-         DryDepState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)=0
+         DryDepState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)=ZERO
 
          allocate(DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, ThisLoc )
          ENDIF
-         DryDepState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)=0
+         DryDepState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)=ZERO
 
          ! Set scheme option
          !------------------
