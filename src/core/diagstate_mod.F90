@@ -112,9 +112,6 @@ CONTAINS
          IF ( RC /= CC_SUCCESS ) THEN
             ErrMsg = 'Could not Allocate DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, thisLoc )
-            ! else
-            !    write (*,*) "ChemState%nSpeciesAeroDryDep=", ChemState%nSpeciesAeroDryDep
-            !    write (*,*) "allocated DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep) "
          ENDIF
          DiagState%drydep_frequency(ChemState%nSpeciesAeroDryDep)= ZERO
 
