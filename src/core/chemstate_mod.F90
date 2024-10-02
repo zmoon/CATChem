@@ -101,7 +101,6 @@ CONTAINS
       ! USES
       USE GridState_Mod,  ONLY : GridStateType
       USE Species_Mod,    Only : SpeciesType
-      USE Metstate_Mod
 
       IMPLICIT NONE
 
