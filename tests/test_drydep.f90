@@ -159,7 +159,7 @@ contains
       write(*,*) 'Config%drydep_scheme = ', Config_%drydep_scheme
       write(*,*) 'Config%drydep_resuspension = ', Config_%drydep_resuspension
 
-      if (DryDepState%Activate) then
+      if (DryDepState_%Activate) then
 
          write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
          write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
