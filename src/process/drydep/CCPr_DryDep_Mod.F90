@@ -49,8 +49,8 @@ MODULE CCPR_DryDep_mod
       LOGICAL                         :: Activate              ! Activate Process (True/False)
       LOGICAL                         :: Resuspension          ! Activate resuspension  (True/False)
       INTEGER                         :: SchemeOpt             ! Scheme Option (if there is only one SchemeOpt always = 1)
-      real                            :: particleradius
-      real                            :: particledensity
+      real                            :: particleradius        ! Particle radius (m)
+      real                            :: particledensity       ! Particle density (kg/m^3)
       real, allocatable               :: drydep_frequency(:)      ! could have one per chem species, revisit later
       real, allocatable               :: drydep_vel(:)            ! could have one per chem species, revisit later
 
