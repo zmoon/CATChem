@@ -112,9 +112,18 @@ CONTAINS
          ! Activate Process
          !------------------
          DryDepState%Activate = .true.
-         allocate(DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep))
+         allocate(DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep), STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate DryDepState%drydep_frequency(ChemState%nSpeciesAeroDryDep)'
+            CALL CC_Error( ErrMsg, RC, ThisLoc )
+         ENDIF
          DryDepState%drydep_frequency(1:ChemState%nSpeciesAeroDryDep)=0
-         allocate(DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep))
+
+         allocate(DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
+         IF ( RC /= CC_SUCCESS ) THEN
+            ErrMsg = 'Could not Allocate DryDepState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
+            CALL CC_Error( ErrMsg, RC, ThisLoc )
+         ENDIF
          DryDepState%drydep_vel(1:ChemState%nSpeciesAeroDryDep)=0
 
          ! Set scheme option
@@ -292,10 +301,17 @@ CONTAINS
       errMsg = ''
       thisLoc = ' -> at CCPr_DryDep_Finalize (in process/drydep/ccpr_DryDep_mod.F90)'
 
-      ! FIXME:  Do we need to include Dry Dep Freq/Vel as a member of DryDepState???
-      !DEALLOCATE( DryDepState%Activate, STAT=RC )
-      !CALL CC_CheckVar('DryDepState%Activate', 0, RC)
-      !IF (RC /= CC_SUCCESS) RETURN
+      DEALLOCATE( DryDepState%drydep_frequency, STAT=RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         ErrMsg = 'Could not Deallocate DryDepState%drydep_frequency'
+         CALL CC_Error( ErrMsg, RC, ThisLoc )
+      ENDIF
+
+      DEALLOCATE( DryDepState%drydep_vel, STAT=RC )
+      IF ( RC /= CC_SUCCESS ) THEN
+         ErrMsg = 'Could not Deallocate DryDepState%drydep_vel'
+         CALL CC_Error( ErrMsg, RC, ThisLoc )
+      ENDIF
 
 
    end subroutine CCPr_DryDep_Finalize
