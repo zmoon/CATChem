@@ -90,6 +90,13 @@ program test_drydep
    ! Turn off resuspension
    DryDepState%Resuspension = .FALSE.
 
+   ! Allocate DiagState
+   call cc_allocate_diagstate(Config, DiagState, ChemState, RC)
+   if (rc /= CC_SUCCESS) then
+      errMsg = 'Error in cc_allocate_diagstate'
+      stop 1
+   endif
+
    title = "DryDep Test 2 | Test GOCART DryDep defaults"
 
    call cc_drydep_init(Config, DryDepState, ChemState, rc)
