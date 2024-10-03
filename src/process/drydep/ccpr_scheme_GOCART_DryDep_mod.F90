@@ -149,9 +149,6 @@ contains
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC)
       endif
 
-      if (allocated(TMPU)) deallocate(TMPU)
-      if (allocated(RHOA)) deallocate(RHOA)
-      if (allocated(HGHTE)) deallocate(HGHTE)
       if (associated(GOCART_TMPU)) nullify(GOCART_TMPU)
       if (associated(GOCART_RHOA)) nullify(GOCART_RHOA)
       if (associated(GOCART_HGHTE)) nullify(GOCART_HGHTE)
