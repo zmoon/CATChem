@@ -73,9 +73,6 @@ CONTAINS
    !!!>
    SUBROUTINE CCPR_DryDep_Init( Config, DryDepState, ChemState, RC )
       ! USE
-      USE ChemState_Mod, ONLY : ChemStateType
-      use Config_Opt_Mod, only : ConfigType
-      use DiagState_Mod, only : DiagStateType
 
 
       IMPLICIT NONE
