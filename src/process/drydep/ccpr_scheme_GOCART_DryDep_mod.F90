@@ -149,8 +149,20 @@ contains
             GOCART_PBLH, GOCART_HFLUX, von_karman, cp, g0, GOCART_Z0H, DRYDEPF, RC)
       endif
 
+      deallocate(GOCART_TMPU)
+      deallocate(GOCART_RHOA)
+      deallocate(GOCART_HGHTE)
+      deallocate(GOCART_U10)
+      deallocate(GOCART_V10)
+      deallocate(GOCART_FRACLAKE)
+      deallocate(GOCART_GWETTOP)
+      deallocate(GOCART_LWI)
+      deallocate(GOCART_USTAR)
+      deallocate(GOCART_PBLH)
+      deallocate(GOCART_HFLUX)
+      deallocate(GOCART_Z0H)
 
-      ! End GOCART Code
+! End GOCART Code
 
 
    end subroutine CCPr_Scheme_GOCART_DryDep
