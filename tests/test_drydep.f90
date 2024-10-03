@@ -163,6 +163,7 @@ contains
 
          write(*,*) 'DryDepState%Activate = ', DryDepState_%Activate
          write(*,*) 'DryDepState%SchemeOpt = ', DryDepState_%SchemeOpt
+         write(*,*) 'DryDepState%Resuspension = ', DryDepState_%Resuspension
 
          if (DryDepState_%Resuspension) then
             write(*,*) 'MetState%GWETTOP =', MetState_%GWETTOP
