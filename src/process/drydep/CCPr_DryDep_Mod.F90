@@ -136,13 +136,7 @@ CONTAINS
          else
             DryDepState%SchemeOpt = 1
          end if
-         if (Config%drydep_resuspension) then
-            ! Activate resuspension
-            !------------------
-            DryDepState%Resuspension = .true.
-         else
-            DryDepState%Resuspension = .false.
-         end if
+         DryDepState%Resuspension = Config%drydep_resuspension
       else
          DryDepState%Activate = .false.
       end if
