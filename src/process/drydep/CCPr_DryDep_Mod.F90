@@ -129,8 +129,6 @@ CONTAINS
          ! Set scheme option
          !------------------
          ! For now, the only option is SchemeOpt = 1
-         ! Yes, this is hard-coded for now
-
          if (Config%drydep_scheme==1) then
             DryDepState%SchemeOpt = 1
          else
