@@ -117,7 +117,7 @@ CONTAINS
 
          Allocate(DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep), STAT=RC)
          IF ( RC /= CC_SUCCESS ) THEN
-            ErrMsg = 'Could not Allocate ChemState%ChemSpecies(i)%conc'
+            ErrMsg = 'Could not Allocate DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)'
             CALL CC_Error( ErrMsg, RC, thisLoc )
          ENDIF
          DiagState%drydep_vel(ChemState%nSpeciesAeroDryDep)= ZERO
