@@ -75,6 +75,8 @@ program test_drydep
    Metstate%TSTEP = 60
    Metstate%U10M = 3.0
    Metstate%V10M = 3.0
+   Metstate%FRLAKE = 0.0
+   Metstate%GWETTOP = 0.00001
    allocate(MetState%AIRDEN(MetState%NLEVS))
    allocate(MetState%T(MetState%NLEVS))
    allocate(MetState%ZMID(MetState%NLEVS))
