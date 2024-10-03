@@ -100,7 +100,7 @@ MODULE Config_Opt_Mod
       ! DryDeposition Process
       LOGICAL                     :: drydep_activate
       INTEGER                     :: drydep_scheme
-      LOGICAL                     :: drydep_resuspension  ! Turn on resuspension
+      LOGICAL                     :: drydep_resuspension  !< Turn on resuspension
 
    END TYPE ConfigType
 
