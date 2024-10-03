@@ -233,10 +233,6 @@ CONTAINS
 
                   ! Fill Diagnostic Variables
                   !--------------------------
-                  !!!!FIXME: COME BACK TO THIS LATER
-                  !print *, "size(DiagState%drydep_frequency)=", size(DiagState%drydep_frequency)
-                  !print *, "ChemState%DryDepIndex(i)=", ChemState%DryDepIndex(i)
-                  !print *, "drydepf(1,1) = ", drydepf(1,1)
                   DryDepState%drydep_frequency(ChemState%DryDepIndex(i)) = drydepf(1,1)
                   DryDepState%drydep_vel(ChemState%DryDepIndex(i)) = MetState%ZMID(1) * drydepf(1,1)
                   DiagState%drydep_frequency(i)= drydepf(1,1)
