@@ -156,10 +156,6 @@ CONTAINS
 
       ! USE
       USE constants
-      USE precision_MOD
-      use MetState_Mod, only : MetStateType
-      use DiagState_Mod, only : DiagStateType
-      use ChemState_Mod, only : ChemStateType
       use CCPr_Scheme_GOCART_DryDep_Mod, only : CCPr_Scheme_GOCART_DryDep
 
       IMPLICIT NONE
