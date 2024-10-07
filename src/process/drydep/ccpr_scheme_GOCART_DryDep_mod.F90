@@ -267,7 +267,7 @@ contains
       GOCART_TMPU(1,1,:) = tmpu ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
-      GOCART_LWI = real(LWI, kind=fp)     ! orography flag; Land, ocean, ice mask
+      GOCART_LWI = real(LWI)     ! orography flag; Land, ocean, ice mask
       GOCART_USTAR  = ustar     ! friction speed [m/sec]
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
