@@ -152,7 +152,7 @@ CONTAINS
    SUBROUTINE CCPr_DryDep_Run( MetState, DiagState, DryDepState, ChemState, RC )
 
       ! USE
-      USE constants
+      USE constants, only : Cp, g0, VON_KARMAN
       use CCPr_Scheme_GOCART_DryDep_Mod, only : CCPr_Scheme_GOCART_DryDep
 
       IMPLICIT NONE
