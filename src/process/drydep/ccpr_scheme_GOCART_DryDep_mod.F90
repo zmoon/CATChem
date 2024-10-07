@@ -61,7 +61,7 @@ contains
 
       ! Arguments
       INTEGER, intent(in)                     :: km            ! number of vertical levels
-      real, intent(in)            :: lwi                       ! orography flag; Land, ocean, ice mask
+      INTEGER, intent(in)             :: lwi                   ! orography flag; Land, ocean, ice mask
       REAL, allocatable, intent(in), DIMENSION(:) :: tmpu   ! Temperature [K]
       REAL, allocatable, intent(in), DIMENSION(:) :: rhoa   ! Air density [kg/m^3]
       REAL, allocatable, intent(in), DIMENSION(:) :: hghte  ! Height [m]
@@ -218,7 +218,7 @@ contains
 
       ! INPUTS
       INTEGER, intent(in)                     :: km     ! number of vertical levels
-      real,  intent(in)                      :: lwi                                    ! orography flag; Land, ocean, ice mask
+      INTEGER,  intent(in)                    :: lwi                                    ! orography flag; Land, ocean, ice mask
       REAL,  intent(in), DIMENSION(:), target :: tmpu   ! Temperature [K]
       REAL,  intent(in), DIMENSION(:), target :: rhoa   ! Air density [kg/m^3]
       REAL,  intent(in), DIMENSION(:), target :: hghte  ! Height [m]
@@ -267,7 +267,7 @@ contains
       GOCART_TMPU(1,1,:) = tmpu ! temperature [K]
       GOCART_RHOA = reshape(rhoa, (/1, 1, km/)) ! air density [kg/m^3]
       GOCART_HGHTE = reshape(hghte, (/1, 1, km/))    ! top of layer geopotential height [m]
-      GOCART_LWI = LWI       ! orography flag; Land, ocean, ice mask
+      GOCART_LWI = real(LWI, kind=fp)     ! orography flag; Land, ocean, ice mask
       GOCART_USTAR  = ustar     ! friction speed [m/sec]
       GOCART_PBLH   = pblh      ! PBL height [m]
       GOCART_HFLUX = hflux     ! sfc. sens. heat flux [W m-2]
