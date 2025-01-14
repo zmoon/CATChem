@@ -13,10 +13,10 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/zmoon/findent-pre-commit
-    rev: "65627b8"
+    rev: "17b1b07"
     hooks:
-      # NOTE: doesn't work on Windows currently
       - id: findent-pypi
+        additional_dependencies: [findent==4.3.1]
         args: ['-i3']
         exclude: |
             (?x)^(
