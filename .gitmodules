@@ -1,3 +1,6 @@
 [submodule "src/external/GOCART"]
 	path = src/external/GOCART
 	url = https://github.com/GEOS-ESM/GOCART
+[submodule "src/external/micm"]
+	path = src/external/micm
+	url = https://github.com/NCAR/micm
