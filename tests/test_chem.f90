@@ -1,4 +1,4 @@
-program test_micm
+program test_chem
    use CATChem, only: cc_get_micm_version
    use testing_mod, only: assert
    implicit none
@@ -11,4 +11,4 @@ program test_micm
    call assert(micm_version == expected_micm_version, &
       "MICM version should be "//expected_micm_version)
 
-end program test_micm
+end program test_chem
