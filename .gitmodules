@@ -4,6 +4,3 @@
 [submodule "src/external/micm"]
 	path = src/external/micm
 	url = https://github.com/NCAR/micm
-[submodule "src/external/musica"]
-	path = src/external/musica
-	url = https://github.com/NCAR/musica.git
