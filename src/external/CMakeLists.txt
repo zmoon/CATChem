@@ -1,5 +1,5 @@
 #
-# GOCART2G Process Library
+# GOCART-2G Process Library
 #
 
 set(
